@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <!--font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+
+        <title> Pokemon Lookup </title>
+        <link rel="stylesheet" href="pokemon.css">
+    </head>
+    <body>
+        <div class="header">
+            <input type="text" id="pokemonLookupInpt" placeholder="Enter Pokémon name">
+            <button class="btn" onclick="fetchData()" id="getPokemonBtn">Get Pokémon</button>
+            <button class="btn" onclick="clearFields()" id="clearDataBtn">Clear</button>
+
+            <div class="hidden" id="pokemonCardContainer">
+                <div class="header" id="pokemonHeader">
+                    <h1 id="headerTitle"> Pokémon Info </h1>
+                </div>
+                <div id="pokemonDetailsContainer">
+                    <div id="pokemonSpriteContainer">
+                        <img class="order3" src="" id="pokemonSprite" alt="Pokémon Image" style="display:none;" >
+                    </div>
+                    <h1 id="pokemonName"> 
+                    </h1>
+                    <h3 id="pokemonNumber">
+                    </h3>
+                    <div id="pokemonTypeContainer">
+                        <img class="typeIcon" src="" id="pokemonType1" alt="Pokémon Type" style="display:none;" width="60" height="60">
+                        <img class="typeIcon" src="" id="pokemonType2" alt="Pokémon Type" style="display:none;" width="60" height="60">
+                    </div> 
+                    <p id="pokemonAbility">  
+                    </p>
+                </div>
+            </div>
+        </div>
+        <script src="pokemon.js"></script>
+    </body>
+</html>
