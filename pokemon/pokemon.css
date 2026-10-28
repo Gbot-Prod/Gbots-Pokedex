@@ -6,9 +6,9 @@ body {
     background-color: #88A8D0;
 }
 
-#pokemonlookupInpt {
+#pokemonLookupInpt {
     font-family: inter, arial, sans-serif;
-    font-style: bold;
+    font-weight: 700;
     font-size: 1.2rem;
     text-align: center;
     padding: 1rem;
