@@ -10,6 +10,7 @@
     --surface-solid: #ffffff;
     --tile-bg: #9EBEE8;
     --tile-hover: #b6d0f0;
+    --win: #1a7a42;
 }
 
 :root[data-theme="dark"] {
@@ -22,6 +23,7 @@
     --surface-solid: #2c3650;
     --tile-bg: #1f2940;
     --tile-hover: #2a3654;
+    --win: #6be39a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,6 +37,7 @@
         --surface-solid: #2c3650;
         --tile-bg: #1f2940;
         --tile-hover: #2a3654;
+        --win: #6be39a;
     }
 }
 
@@ -449,13 +452,15 @@ body {
 
 #compareTable td.compareWinner {
     font-weight: 800;
-    color: #1f8a4c;
+    color: var(--win);
 }
 
 #favoriteBtn {
     border: none;
     background: none;
     color: #f2b705;
+    /* dark outline keeps the star visible on yellow (Electric) cards */
+    text-shadow: 0 0 1px #3a2a00, 0 0 2px #3a2a00;
     font-size: 2rem;
     line-height: 1;
     cursor: pointer;

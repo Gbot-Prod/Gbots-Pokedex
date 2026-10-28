@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Favorite ☆ is hard to see on yellow (Electric) cards and the compare "winner" green is low-contrast in dark mode
 
 ## 2. Code quality
 - [ ] Commit an automated smoke test: Playwright script + mocked PokéAPI fixtures, runnable with `npm test` (search, not-found, prev/next, favorites)
@@ -88,3 +87,4 @@ Rules for each run:
 - [x] Compare two Pokémon side by side (2026-10-28) — Compare section with two autocompleting inputs → table of stats/total/height/weight with the higher value highlighted; ⚖️ on the card pre-fills the current Pokémon
 - [x] Names with punctuation fail: "Farfetch'd", "Mr. Mime", "Nidoran♀", "Type: Null" must map to the API slugs (`farfetchd`, `mr-mime`, `nidoran-f`, `type-null`) (2026-10-28) — normalizeQuery maps ♀/♂, strips accents and . ' ’ : so official spellings resolve to API slugs
 - [x] After a number/random/prev/next search the input shows the number (e.g. "95"); show the loaded Pokémon's name instead (2026-10-28) — input is replaced with the loaded name unless the user has started typing a different search
+- [x] Favorite ☆ is hard to see on yellow (Electric) cards and the compare "winner" green is low-contrast in dark mode (2026-10-28) — dark text-shadow outline on the star; compare winner colour is a --win token with a lighter green in dark mode
