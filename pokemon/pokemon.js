@@ -4,6 +4,7 @@ const numberElement = document.getElementById("pokemonNumber");
 const type1IconElement = document.getElementById("pokemonType1");
 const type2IconElement = document.getElementById("pokemonType2");
 const pokemonCard = document.getElementById("pokemonCardContainer");
+const errorElement = document.getElementById("errorMessage");
 
 async function fetchData() {
     try {
@@ -13,7 +14,9 @@ async function fetchData() {
         const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonNameInput);   
         
         if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+            const err = new Error('Network response was not ok ' + response.statusText);
+            err.status = response.status;
+            throw err;
         } 
         
         const data = await response.json();
@@ -36,9 +39,11 @@ async function fetchData() {
         const pkmnSprite = data.sprites.other.home.front_default;
         imgElement.src = pkmnSprite;
         imgElement.style.display = "block";
+
+        pokemonCard.classList.remove("hidden");
     }
     catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
+        showError(isNotFound(error) ? "Pokémon not found. Check the spelling and try again." : "Couldn't reach the Pokédex. Please try again.");
     }
 
     function fetchPKMNType(pkmnType, pkmnType2) {
@@ -196,11 +201,20 @@ async function fetchData() {
                 return "none";
         }    
     }
+}
 
-    pokemonCard.classList.remove("hidden");
+function isNotFound(error) {
+    return error.status === 404;
+}
+
+function showError(message) {
+    errorElement.textContent = message;
+    errorElement.classList.remove("hidden");
 }
 
 function clearFields() {
     pokemonCard.classList.add("hidden");
+    errorElement.classList.add("hidden");
+    errorElement.textContent = "";
 }
 

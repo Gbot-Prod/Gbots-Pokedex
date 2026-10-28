@@ -1,7 +1,8 @@
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding-top: 2rem;
     background-color: #88A8D0;
 }
 
@@ -49,6 +50,21 @@ body {
 
 .btn:active {
   scale: 0.9;
+}
+
+#errorMessage {
+    font-family: inter, arial, sans-serif;
+    font-weight: 700;
+    margin-top: 20px;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    background-color: #ffe3e3;
+    color: #9b1c1c;
+    text-align: center;
+}
+
+#errorMessage.hidden {
+    display: none;
 }
 
 #pokemonCardContainer {
