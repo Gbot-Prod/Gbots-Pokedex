@@ -1,14 +1,16 @@
 # Pokédex Website — Improvement To-Do List
 
 A living backlog for continually improving the Pokédex site in `pokemon/`.
-Each improvement run should take the **first unchecked item** (top to bottom),
-implement it, check it off with a short note, and add any new ideas it
-discovers to the right section.
+Each improvement run works through the list **top to bottom, completing as
+many items as it can in one session**, and keeps the backlog growing with new
+ideas it discovers.
 
 Rules for each run:
-- One item per run. Keep the change small and working.
-- Don't break existing features; open `pokemon/pokemon.html` in a headless browser to check.
-- Commit with a clear message describing the item.
+- Keep going: finish an item, verify, commit, push, then immediately start the next one. Stop only after ~45 minutes of work (so runs don't overlap) or when the list is empty.
+- Each item gets its own commit and push, so progress is saved even if the session ends early.
+- Don't break existing features; load the site in a headless browser after every item to check.
+- After each item, check it off (move it to "Done" with the date) and add any new ideas it revealed.
+- Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
 - [ ] Fix `type2iconElement` typo (lowercase `i`) in `pokemon.js` — it throws a ReferenceError for Rock, Ghost and Dark types
