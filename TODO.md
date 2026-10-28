@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Loading state/spinner while fetching
 - [ ] Show abilities (the `#pokemonAbility` element exists but is never filled)
 - [ ] Show height and weight
 - [ ] Show base stats (HP, Attack, Defense, Sp. Atk, Sp. Def, Speed) as bars
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Move repeated button/font CSS into a shared `.btn` class (2026-10-28) — shared .btn rule; buttons only set their colour; removed duplicate .hidden rule
 - [x] Add a README describing the project and how to run it (2026-10-28) — README.md with layout, how to run and how to contribute
 - [x] Search on Enter key (2026-10-28) — search controls wrapped in a <form role=search>; Enter and the button both submit
+- [x] Loading state/spinner while fetching (2026-10-28) — CSS spinner with role=status; search button disabled while fetching

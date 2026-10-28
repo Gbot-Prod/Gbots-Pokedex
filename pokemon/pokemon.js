@@ -5,6 +5,8 @@ const type1IconElement = document.getElementById("pokemonType1");
 const type2IconElement = document.getElementById("pokemonType2");
 const pokemonCard = document.getElementById("pokemonCardContainer");
 const errorElement = document.getElementById("errorMessage");
+const loadingElement = document.getElementById("loadingIndicator");
+const searchButton = document.getElementById("getPokemonBtn");
 
 async function fetchData() {
     try {
@@ -13,6 +15,7 @@ async function fetchData() {
             return;
         }
         clearFields();
+        setLoading(true);
 
         const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonNameInput);   
         
@@ -46,6 +49,9 @@ async function fetchData() {
     }
     catch (error) {
         showError(isNotFound(error) ? "Pokémon not found. Check the spelling and try again." : "Couldn't reach the Pokédex. Please try again.");
+    }
+    finally {
+        setLoading(false);
     }
 }
 
@@ -84,6 +90,11 @@ function setTypeIcon(iconElement, type) {
 function fetchPKMNType(pkmnType, pkmnType2) {
     setTypeIcon(type1IconElement, pkmnType);
     setTypeIcon(type2IconElement, pkmnType2);
+}
+
+function setLoading(isLoading) {
+    loadingElement.classList.toggle("hidden", !isLoading);
+    searchButton.disabled = isLoading;
 }
 
 function isNotFound(error) {
