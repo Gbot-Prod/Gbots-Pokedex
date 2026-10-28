@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Evolution chain display
 
 ## 4. Browsing & discovery
 - [ ] Autocomplete suggestions while typing (cache the full name list)
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Random Pokémon button (2026-10-28) — green Random button picks a dex number 1–1025
 - [x] Shiny sprite toggle (2026-10-28) — ✨ Shiny toggle (aria-pressed) over the sprite; choice persists while browsing; sprite fallback chain moved to pickSprite
 - [x] Pokédex flavor text / description (species endpoint) (2026-10-28) — genus (e.g. 'Shadow Pokémon') and latest English Pokédex entry from the species endpoint, loaded after the main card
+- [x] Evolution chain display (2026-10-28) — clickable stages with sprites and method (Lv. 16 / Water Stone / Friendship); branching families wrap into a grid; hidden for single-stage Pokémon

@@ -351,6 +351,73 @@ body {
     padding-top: 0.4rem;
 }
 
+#pokemonEvolution {
+    width: 100%;
+    padding: 0 1rem 1rem;
+    box-sizing: border-box;
+}
+
+#evolutionHeading {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem;
+}
+
+#evolutionList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.evolutionStage {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.evolutionStage.branching {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+}
+
+.evolutionArrow {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.evolutionMember {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.3rem 0.6rem 0.5rem;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: inherit;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.evolutionMember:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.evolutionMember.current {
+    border-color: #6884E3;
+    background-color: #ffffff;
+}
+
+.evolutionMember small {
+    font-weight: 500;
+    opacity: 0.8;
+}
+
 .typeIcon {
     padding: 5px;
 }

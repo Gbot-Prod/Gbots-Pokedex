@@ -16,7 +16,11 @@ const searchInput = document.getElementById("pokemonLookupInpt");
 const genusElement = document.getElementById("pokemonGenus");
 const flavorTextElement = document.getElementById("pokemonFlavorText");
 
+const evolutionSection = document.getElementById("pokemonEvolution");
+const evolutionListElement = document.getElementById("evolutionList");
+
 const API_BASE = "https://pokeapi.co/api/v2/";
+const SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
 const prevButton = document.getElementById("prevPokemonBtn");
 const nextButton = document.getElementById("nextPokemonBtn");
@@ -87,16 +91,110 @@ async function fetchJson(url) {
 async function loadSpecies(url, requestId) {
     try {
         const species = await fetchJson(url);
+        if (requestId !== latestRequest) {
+            return;
+        }
+        renderSpecies(species);
+
+        const chain = await fetchJson(species.evolution_chain.url);
         if (requestId === latestRequest) {
-            renderSpecies(species);
+            renderEvolutionChain(chain.chain);
         }
     }
     catch (error) {
         if (requestId === latestRequest) {
             genusElement.textContent = "";
             flavorTextElement.textContent = "";
+            evolutionSection.hidden = true;
         }
     }
+}
+
+function idFromUrl(url) {
+    return Number(url.split("/").filter(Boolean).pop());
+}
+
+// Summarises how a Pokémon evolves, e.g. "Lv. 16", "Thunder Stone", "Trade".
+function describeEvolution(details) {
+    const detail = details[0];
+    if (!detail) {
+        return "";
+    }
+    if (detail.min_level) {
+        return "Lv. " + detail.min_level;
+    }
+    if (detail.item) {
+        return formatName(detail.item.name);
+    }
+    if (detail.min_happiness) {
+        return "Friendship";
+    }
+    return formatName(detail.trigger.name);
+}
+
+// Flattens the evolution tree into stages so branching families (Eevee) show side by side.
+function renderEvolutionChain(root) {
+    const stages = [];
+    let level = [root];
+    while (level.length) {
+        stages.push(level);
+        level = level.flatMap((node) => node.evolves_to);
+    }
+
+    evolutionListElement.replaceChildren();
+    evolutionSection.hidden = stages.length < 2;
+
+    stages.forEach((stage, index) => {
+        if (index > 0) {
+            const arrow = document.createElement("li");
+            arrow.className = "evolutionArrow";
+            arrow.setAttribute("aria-hidden", "true");
+            arrow.textContent = "→";
+            evolutionListElement.append(arrow);
+        }
+
+        const stageItem = document.createElement("li");
+        stageItem.className = "evolutionStage";
+        // Large branches (Eevee) wrap into a grid instead of one tall column.
+        stageItem.classList.toggle("branching", stage.length > 3);
+        for (const node of stage) {
+            stageItem.append(createEvolutionButton(node));
+        }
+        evolutionListElement.append(stageItem);
+    });
+}
+
+function createEvolutionButton(node) {
+    const dexNumber = idFromUrl(node.species.url);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "evolutionMember";
+    if (dexNumber === currentDexNumber) {
+        button.classList.add("current");
+        button.setAttribute("aria-current", "true");
+    }
+
+    const sprite = document.createElement("img");
+    sprite.src = SPRITE_BASE + dexNumber + ".png";
+    sprite.alt = "";
+    sprite.width = 72;
+    sprite.height = 72;
+    sprite.loading = "lazy";
+
+    const name = document.createElement("span");
+    name.textContent = formatName(node.species.name);
+
+    button.append(sprite, name);
+
+    const method = describeEvolution(node.evolution_details);
+    if (method) {
+        const methodLabel = document.createElement("small");
+        methodLabel.textContent = method;
+        button.append(methodLabel);
+    }
+
+    button.addEventListener("click", () => goToDexNumber(dexNumber));
+    return button;
 }
 
 function renderSpecies(species) {
@@ -112,7 +210,7 @@ function renderSpecies(species) {
 
 function renderPokemon(data) {
     // Alternate forms (e.g. id 10034) navigate relative to their species' dex number.
-    currentDexNumber = Number(data.species.url.split("/").filter(Boolean).pop()) || data.id;
+    currentDexNumber = idFromUrl(data.species.url) || data.id;
     prevButton.disabled = currentDexNumber <= 1;
     nextButton.disabled = currentDexNumber >= MAX_DEX_NUMBER;
 
@@ -125,6 +223,7 @@ function renderPokemon(data) {
     //species info arrives separately; clear the previous Pokémon's text meanwhile
     genusElement.textContent = "";
     flavorTextElement.textContent = "";
+    evolutionSection.hidden = true;
 
     //fetch pokemon type
     const pkmnType = data.types[0].type.name;
