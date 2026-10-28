@@ -12,61 +12,90 @@ const errorElement = document.getElementById("errorMessage");
 const loadingElement = document.getElementById("loadingIndicator");
 const searchButton = document.getElementById("getPokemonBtn");
 
-async function fetchData() {
+const searchInput = document.getElementById("pokemonLookupInpt");
+
+let currentPokemonId = null;
+let latestRequest = 0;
+
+// Accepts names ("Pikachu", "mr mime") and Pokédex numbers ("25", "#025").
+function normalizeQuery(rawQuery) {
+    const query = rawQuery.trim().toLowerCase().replace(/^#/, "");
+    if (/^\d+$/.test(query)) {
+        return String(parseInt(query, 10));
+    }
+    return query.replace(/\s+/g, "-");
+}
+
+function fetchData() {
+    const query = normalizeQuery(searchInput.value);
+    if (!query || query === "0") {
+        return;
+    }
+    loadPokemon(query);
+}
+
+async function loadPokemon(query) {
+    const requestId = ++latestRequest;
     try {
-        const pokemonNameInput = document.getElementById('pokemonLookupInpt').value.trim().toLowerCase();
-        if (!pokemonNameInput) {
-            return;
-        }
         clearFields();
         setLoading(true);
 
-        const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonNameInput);   
-        
+        const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + encodeURIComponent(query));
+
         if (!response.ok) {
             const err = new Error('Network response was not ok ' + response.statusText);
             err.status = response.status;
             throw err;
-        } 
-        
+        }
+
         const data = await response.json();
-
-        //fetch pokemon name
-        const pkmnName = data.name;
-        nameElement.textContent = formatName(pkmnName);
-
-        //fetch pokemon number
-        const pkmnNumber = data.id;
-        numberElement.textContent = "Pokemon no#" + pkmnNumber;
-
-        //fetch pokemon type
-        const pkmnType = data.types[0].type.name;
-        const pkmnType2 = data.types[1]?.type.name || "none";
-        fetchPKMNType(pkmnType, pkmnType2);
-
-        //fetch pokemon height (decimetres) and weight (hectograms)
-        heightElement.textContent = (data.height / 10).toFixed(1) + " m";
-        weightElement.textContent = (data.weight / 10).toFixed(1) + " kg";
-
-        //fetch pokemon abilities
-        renderAbilities(data.abilities);
-
-        //fetch pokemon base stats
-        renderStats(data.stats);
-
-        //fetch pokemon sprite
-        const pkmnSprite = data.sprites.other.home.front_default;
-        imgElement.src = pkmnSprite;
-        imgElement.style.display = "block";
-
-        pokemonCard.classList.remove("hidden");
+        if (requestId !== latestRequest) {
+            return; // a newer search has started; drop this stale result
+        }
+        renderPokemon(data);
     }
     catch (error) {
-        showError(isNotFound(error) ? "Pokémon not found. Check the spelling and try again." : "Couldn't reach the Pokédex. Please try again.");
+        if (requestId === latestRequest) {
+            showError(isNotFound(error) ? "Pokémon not found. Check the spelling or number and try again." : "Couldn't reach the Pokédex. Please try again.");
+        }
     }
     finally {
-        setLoading(false);
+        if (requestId === latestRequest) {
+            setLoading(false);
+        }
     }
+}
+
+function renderPokemon(data) {
+    currentPokemonId = data.id;
+
+    //fetch pokemon name
+    nameElement.textContent = formatName(data.name);
+
+    //fetch pokemon number
+    numberElement.textContent = "Pokemon no#" + data.id;
+
+    //fetch pokemon type
+    const pkmnType = data.types[0].type.name;
+    const pkmnType2 = data.types[1]?.type.name || "none";
+    fetchPKMNType(pkmnType, pkmnType2);
+
+    //fetch pokemon height (decimetres) and weight (hectograms)
+    heightElement.textContent = (data.height / 10).toFixed(1) + " m";
+    weightElement.textContent = (data.weight / 10).toFixed(1) + " kg";
+
+    //fetch pokemon abilities
+    renderAbilities(data.abilities);
+
+    //fetch pokemon base stats
+    renderStats(data.stats);
+
+    //fetch pokemon sprite (not every form has a HOME render)
+    const sprites = data.sprites;
+    imgElement.src = sprites.other.home.front_default || sprites.other["official-artwork"].front_default || sprites.front_default || "";
+    imgElement.style.display = imgElement.src ? "block" : "none";
+
+    pokemonCard.classList.remove("hidden");
 }
 
 // "lightning-rod" -> "Lightning Rod"
