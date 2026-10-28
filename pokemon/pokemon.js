@@ -261,6 +261,9 @@ function goToDexNumber(dexNumber) {
     loadPokemon(String(dexNumber));
 }
 
+document.getElementById("randomPokemonBtn").addEventListener("click", () => {
+    goToDexNumber(1 + Math.floor(Math.random() * MAX_DEX_NUMBER));
+});
 prevButton.addEventListener("click", () => goToDexNumber(currentDexNumber - 1));
 nextButton.addEventListener("click", () => goToDexNumber(currentDexNumber + 1));
 document.getElementById("clearDataBtn").addEventListener("click", clearFields);
