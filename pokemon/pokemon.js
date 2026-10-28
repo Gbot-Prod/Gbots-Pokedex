@@ -13,6 +13,10 @@ const loadingElement = document.getElementById("loadingIndicator");
 const searchButton = document.getElementById("getPokemonBtn");
 
 const searchInput = document.getElementById("pokemonLookupInpt");
+const genusElement = document.getElementById("pokemonGenus");
+const flavorTextElement = document.getElementById("pokemonFlavorText");
+
+const API_BASE = "https://pokeapi.co/api/v2/";
 
 const prevButton = document.getElementById("prevPokemonBtn");
 const nextButton = document.getElementById("nextPokemonBtn");
@@ -50,19 +54,12 @@ async function loadPokemon(query) {
         clearFields();
         setLoading(true);
 
-        const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + encodeURIComponent(query));
-
-        if (!response.ok) {
-            const err = new Error('Network response was not ok ' + response.statusText);
-            err.status = response.status;
-            throw err;
-        }
-
-        const data = await response.json();
+        const data = await fetchJson(API_BASE + "pokemon/" + encodeURIComponent(query));
         if (requestId !== latestRequest) {
             return; // a newer search has started; drop this stale result
         }
         renderPokemon(data);
+        loadSpecies(data.species.url, requestId);
     }
     catch (error) {
         if (requestId === latestRequest) {
@@ -76,6 +73,43 @@ async function loadPokemon(query) {
     }
 }
 
+async function fetchJson(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        const err = new Error('Network response was not ok ' + response.statusText);
+        err.status = response.status;
+        throw err;
+    }
+    return response.json();
+}
+
+// Species data (description, genus) is secondary, so a failure here only hides that section.
+async function loadSpecies(url, requestId) {
+    try {
+        const species = await fetchJson(url);
+        if (requestId === latestRequest) {
+            renderSpecies(species);
+        }
+    }
+    catch (error) {
+        if (requestId === latestRequest) {
+            genusElement.textContent = "";
+            flavorTextElement.textContent = "";
+        }
+    }
+}
+
+function renderSpecies(species) {
+    const genus = species.genera.find((entry) => entry.language.name === "en");
+    genusElement.textContent = genus ? genus.genus : "";
+
+    // Entries are oldest-first; show the most recent English one.
+    const entries = species.flavor_text_entries.filter((entry) => entry.language.name === "en");
+    const latest = entries[entries.length - 1];
+    // Game text uses form feeds and hard line breaks; collapse them into normal spaces.
+    flavorTextElement.textContent = latest ? latest.flavor_text.replace(/[\f\n\r\u00ad]+/g, " ").replace(/\s+/g, " ").trim() : "";
+}
+
 function renderPokemon(data) {
     // Alternate forms (e.g. id 10034) navigate relative to their species' dex number.
     currentDexNumber = Number(data.species.url.split("/").filter(Boolean).pop()) || data.id;
@@ -87,6 +121,10 @@ function renderPokemon(data) {
 
     //fetch pokemon number
     numberElement.textContent = "Pokemon no#" + data.id;
+
+    //species info arrives separately; clear the previous Pokémon's text meanwhile
+    genusElement.textContent = "";
+    flavorTextElement.textContent = "";
 
     //fetch pokemon type
     const pkmnType = data.types[0].type.name;
