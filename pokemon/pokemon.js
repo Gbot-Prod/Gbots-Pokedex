@@ -3,6 +3,7 @@ const nameElement = document.getElementById("pokemonName");
 const numberElement = document.getElementById("pokemonNumber");
 const type1IconElement = document.getElementById("pokemonType1");
 const type2IconElement = document.getElementById("pokemonType2");
+const abilityElement = document.getElementById("pokemonAbility");
 const pokemonCard = document.getElementById("pokemonCardContainer");
 const errorElement = document.getElementById("errorMessage");
 const loadingElement = document.getElementById("loadingIndicator");
@@ -29,7 +30,7 @@ async function fetchData() {
 
         //fetch pokemon name
         const pkmnName = data.name;
-        nameElement.textContent = pkmnName.charAt(0).toUpperCase() + pkmnName.slice(1);
+        nameElement.textContent = formatName(pkmnName);
 
         //fetch pokemon number
         const pkmnNumber = data.id;
@@ -39,6 +40,9 @@ async function fetchData() {
         const pkmnType = data.types[0].type.name;
         const pkmnType2 = data.types[1]?.type.name || "none";
         fetchPKMNType(pkmnType, pkmnType2);
+
+        //fetch pokemon abilities
+        renderAbilities(data.abilities);
 
         //fetch pokemon sprite
         const pkmnSprite = data.sprites.other.home.front_default;
@@ -52,6 +56,30 @@ async function fetchData() {
     }
     finally {
         setLoading(false);
+    }
+}
+
+// "lightning-rod" -> "Lightning Rod"
+function formatName(name) {
+    return name
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+}
+
+function renderAbilities(abilities) {
+    abilityElement.replaceChildren();
+
+    const label = document.createElement("span");
+    label.className = "abilityLabel";
+    label.textContent = abilities.length === 1 ? "Ability:" : "Abilities:";
+    abilityElement.append(label);
+
+    for (const { ability, is_hidden } of abilities) {
+        const chip = document.createElement("span");
+        chip.className = "abilityChip" + (is_hidden ? " hiddenAbility" : "");
+        chip.textContent = formatName(ability.name) + (is_hidden ? " (hidden)" : "");
+        abilityElement.append(chip);
     }
 }
 

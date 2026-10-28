@@ -174,6 +174,31 @@ body {
     padding: 6px 12px;
 }
 
+#pokemonAbility {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 1rem;
+}
+
+.abilityLabel {
+    font-weight: 700;
+}
+
+.abilityChip {
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background-color: #ffffff;
+    font-weight: 600;
+}
+
+.abilityChip.hiddenAbility {
+    background-color: transparent;
+    border: 2px dashed #ffffff;
+}
+
 .typeIcon {
     padding: 5px;
 }
