@@ -13,16 +13,33 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
+- [ ] Names with punctuation fail: "Farfetch'd", "Mr. Mime", "Nidoran♀", "Type: Null" must map to the API slugs (`farfetchd`, `mr-mime`, `nidoran-f`, `type-null`)
+- [ ] After a number/random/prev/next search the input shows the number (e.g. "95"); show the loaded Pokémon's name instead
+- [ ] Favorite ☆ is hard to see on yellow (Electric) cards and the compare "winner" green is low-contrast in dark mode
 
 ## 2. Code quality
+- [ ] Commit an automated smoke test: Playwright script + mocked PokéAPI fixtures, runnable with `npm test` (search, not-found, prev/next, favorites)
+- [ ] Add ESLint + Prettier with an `npm run lint` script and fix what it reports
+- [ ] Split `pokemon.js` (~1,100 lines) into ES modules (api, card, browse, favorites, compare); needs a dev server (`npx serve`) since modules don't load over `file://` — or move to Vite at the same time
 
 ## 3. Core Pokédex features
+- [ ] Shareable URLs: reflect the current Pokémon in `?pokemon=gengar` and support Back/Forward
+- [ ] Keyboard shortcuts: ←/→ for previous/next, `/` to focus search, `s` to toggle shiny
+- [ ] Alternate forms switcher (Mega, Alolan, Galarian…) from `species.varieties`
+- [ ] Play the Pokémon's cry (`cries.latest`) with a small speaker button
+- [ ] Moves list (level-up moves with level, type and power) in a collapsible section
 
 ## 4. Browsing & discovery
+- [ ] Show type icons on browse tiles and allow sorting by number / name
+- [ ] "Did you mean" should also match substrings/subsequences (e.g. "charz" → Charizard)
 
 ## 5. Design & UX
+- [ ] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items
+- [ ] Metric/imperial toggle for height and weight
 
 ## 6. Performance, accessibility & polish
+- [ ] Cache by canonical id: "gengar" and "94" currently fetch the same Pokémon twice
+- [ ] Offline support: service worker caching the app shell and recently viewed Pokémon (PWA manifest)
 
 ## Done
 <!-- Move completed items here with the date and commit, e.g.
