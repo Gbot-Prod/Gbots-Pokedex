@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Cache API responses in memory/`sessionStorage` to avoid repeat fetches
 - [ ] Meaningful `alt` text (e.g. "Pikachu sprite", "Electric type")
 - [ ] Keyboard focus styles and ARIA live region for results
 - [ ] Favicon and page title that updates with the current Pokémon
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Dark mode (2026-10-28) — colour tokens on :root; follows prefers-color-scheme, with a 🌙/☀️ toggle saved in localStorage (applied before first paint); card body becomes a dark tint of the type colour
 - [x] Smooth card animations and image fade-in (2026-10-28) — card fades/slides in, tiles stagger in, sprites fade in once loaded (fadeInImage); all motion disabled under prefers-reduced-motion
 - [x] Friendly "Pokémon not found" state (2026-10-28) — names the failed query, explains valid number range, and offers up to 3 'Did you mean' buttons (prefix match + edit distance); network errors get their own message
+- [x] Cache API responses in memory/`sessionStorage` to avoid repeat fetches (2026-10-28) — fetchJson keeps an in-memory promise cache (dedupes in-flight requests) plus sessionStorage for payloads ≤150k chars; failures aren't cached

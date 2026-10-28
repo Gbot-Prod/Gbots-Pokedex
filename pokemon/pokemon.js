@@ -82,14 +82,50 @@ async function loadPokemon(query) {
     }
 }
 
-async function fetchJson(url) {
+// Responses are cached in memory for this page, and in sessionStorage (when small
+// enough) so going back to a Pokémon after a reload doesn't refetch it.
+const responseCache = new Map();
+const SESSION_CACHE_PREFIX = "pokedex:api:";
+const MAX_SESSION_ENTRY_LENGTH = 150000; // characters; full /pokemon payloads with move lists are skipped
+
+function fetchJson(url) {
+    if (!responseCache.has(url)) {
+        const request = fetchJsonUncached(url).catch((error) => {
+            responseCache.delete(url); // don't cache failures
+            throw error;
+        });
+        responseCache.set(url, request);
+    }
+    return responseCache.get(url);
+}
+
+async function fetchJsonUncached(url) {
+    try {
+        const stored = sessionStorage.getItem(SESSION_CACHE_PREFIX + url);
+        if (stored) {
+            return JSON.parse(stored);
+        }
+    }
+    catch (error) {
+        // storage unavailable or corrupt; fetch instead
+    }
+
     const response = await fetch(url);
     if (!response.ok) {
         const err = new Error('Network response was not ok ' + response.statusText);
         err.status = response.status;
         throw err;
     }
-    return response.json();
+    const text = await response.text();
+    if (text.length <= MAX_SESSION_ENTRY_LENGTH) {
+        try {
+            sessionStorage.setItem(SESSION_CACHE_PREFIX + url, text);
+        }
+        catch (error) {
+            // quota exceeded; the in-memory cache still helps
+        }
+    }
+    return JSON.parse(text);
 }
 
 // Species data (description, genus) is secondary, so a failure here only hides that section.
