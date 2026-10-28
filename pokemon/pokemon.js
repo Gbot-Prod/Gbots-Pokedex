@@ -176,7 +176,7 @@ function createEvolutionButton(node) {
     }
 
     const sprite = document.createElement("img");
-    sprite.src = SPRITE_BASE + dexNumber + ".png";
+    fadeInImage(sprite, SPRITE_BASE + dexNumber + ".png");
     sprite.alt = "";
     sprite.width = 72;
     sprite.height = 72;
@@ -266,7 +266,7 @@ function renderSprite() {
     shinyButton.hidden = !shinySrc;
     const src = showShiny && shinySrc ? shinySrc : pickSprite(currentSprites, false);
     if (src) {
-        imgElement.src = src;
+        fadeInImage(imgElement, src);
         imgElement.style.display = "block";
     } else {
         imgElement.removeAttribute("src");
@@ -274,6 +274,17 @@ function renderSprite() {
     }
     shinyButton.setAttribute("aria-pressed", String(showShiny));
     shinyButton.classList.toggle("active", showShiny);
+}
+
+// Hides an image until it has loaded so it can fade in instead of popping.
+function fadeInImage(image, src) {
+    if (image.getAttribute("src") === src) {
+        return;
+    }
+    image.classList.add("pending");
+    image.addEventListener("load", () => image.classList.remove("pending"), { once: true });
+    image.addEventListener("error", () => image.classList.remove("pending"), { once: true });
+    image.src = src;
 }
 
 // "lightning-rod" -> "Lightning Rod"
@@ -625,7 +636,7 @@ function createBrowseTile(entry) {
     button.className = "browseTile";
 
     const sprite = document.createElement("img");
-    sprite.src = SPRITE_BASE + entry.id + ".png";
+    fadeInImage(sprite, SPRITE_BASE + entry.id + ".png");
     sprite.alt = "";
     sprite.width = 96;
     sprite.height = 96;

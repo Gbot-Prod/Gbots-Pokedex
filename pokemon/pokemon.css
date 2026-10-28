@@ -169,8 +169,7 @@ body {
     margin-top: 20px;
     text-align: center;
 
-    transform-origin: top;
-    animation: cardReveal 0.5s;
+    animation: cardReveal 0.35s ease-out;
 }
 
 #pokemonCardContainer.hidden {
@@ -179,10 +178,45 @@ body {
 
 @keyframes cardReveal {
     from {
-        transform: scaleY(0);
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
     }
     to {
-        transform: scaleY(1);
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Images fade in once loaded (the "pending" class is set from pokemon.js) */
+#pokemonSprite,
+.tileGrid img,
+.evolutionMember img {
+    transition: opacity 0.35s ease-out;
+}
+
+#pokemonSprite.pending,
+.tileGrid img.pending,
+.evolutionMember img.pending {
+    opacity: 0;
+}
+
+.tileGrid li {
+    animation: tileIn 0.3s ease-out both;
+}
+
+@keyframes tileIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
