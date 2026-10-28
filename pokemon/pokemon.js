@@ -481,21 +481,64 @@ const browsePageLabel = document.getElementById("browsePageLabel");
 const browsePrevButton = document.getElementById("browsePrevBtn");
 const browseNextButton = document.getElementById("browseNextBtn");
 const browseStatusElement = document.getElementById("browseStatus");
+const typeFilterElement = document.getElementById("typeFilter");
+let nationalDexEntries = [];
 let browseEntries = [];
 let browsePage = 0;
+const typeMembersCache = new Map();
 
 async function initBrowse() {
+    for (const type of Object.keys(TYPE_ICONS)) {
+        const option = document.createElement("option");
+        option.value = type;
+        option.textContent = formatName(type);
+        typeFilterElement.append(option);
+    }
+
     browseStatusElement.textContent = "Loading Pokémon…";
     try {
         const entries = await getAllPokemonEntries();
         // Only the National Dex here; alternate forms are reachable through search.
-        browseEntries = entries.filter((entry) => entry.id <= MAX_DEX_NUMBER);
-        browseStatusElement.textContent = "";
-        renderBrowsePage();
+        nationalDexEntries = entries.filter((entry) => entry.id <= MAX_DEX_NUMBER);
+        await applyBrowseFilters();
     }
     catch (error) {
         browseStatusElement.textContent = "Couldn't load the Pokémon list.";
     }
+}
+
+// Ids of every Pokémon with the given type, fetched once per type.
+async function getTypeMemberIds(type) {
+    if (!typeMembersCache.has(type)) {
+        const data = await fetchJson(API_BASE + "type/" + type);
+        typeMembersCache.set(type, new Set(data.pokemon.map((entry) => idFromUrl(entry.pokemon.url))));
+    }
+    return typeMembersCache.get(type);
+}
+
+async function applyBrowseFilters() {
+    const type = typeFilterElement.value;
+    let entries = nationalDexEntries;
+
+    try {
+        if (type) {
+            browseStatusElement.textContent = "Loading " + formatName(type) + " Pokémon…";
+            const members = await getTypeMemberIds(type);
+            if (type !== typeFilterElement.value) {
+                return; // the filter changed while we were waiting
+            }
+            entries = entries.filter((entry) => members.has(entry.id));
+        }
+    }
+    catch (error) {
+        browseStatusElement.textContent = "Couldn't load that filter. Please try again.";
+        return;
+    }
+
+    browseEntries = entries;
+    browsePage = 0;
+    browseStatusElement.textContent = entries.length ? "" : "No Pokémon match these filters.";
+    renderBrowsePage();
 }
 
 function renderBrowsePage() {
@@ -537,6 +580,7 @@ function createBrowseTile(entry) {
     return item;
 }
 
+typeFilterElement.addEventListener("change", applyBrowseFilters);
 browsePrevButton.addEventListener("click", () => {
     browsePage--;
     renderBrowsePage();

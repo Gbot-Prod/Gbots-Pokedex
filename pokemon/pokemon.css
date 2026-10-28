@@ -433,6 +433,27 @@ body {
     margin: 0 0 1rem;
 }
 
+#browseFilters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+#browseFilters select {
+    padding: 0.5rem 0.8rem;
+    border: none;
+    border-radius: 0.4rem;
+    background-color: #b6dff0;
+    color: rgb(18, 40, 112);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
 #browseStatus:empty {
     display: none;
 }

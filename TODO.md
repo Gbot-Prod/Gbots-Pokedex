@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Filter by type
 - [ ] Filter by generation
 - [ ] Favorites list saved in `localStorage`
 - [ ] Recently viewed list
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Evolution chain display (2026-10-28) — clickable stages with sprites and method (Lv. 16 / Water Stone / Friendship); branching families wrap into a grid; hidden for single-stage Pokémon
 - [x] Autocomplete suggestions while typing (cache the full name list) (2026-10-28) — native <datalist> filled on first focus from /pokemon?limit=2000, cached in localStorage
 - [x] Browse grid of Pokémon with pagination or infinite scroll (2026-10-28) — paginated grid (24/page, 43 pages) of National Dex tiles built from the cached entry list; tiles load the Pokémon. Also: hidden card is now display:none with a reveal animation (it left a big empty gap)
+- [x] Filter by type (2026-10-28) — type <select> on the browse grid; /type/{name} members cached per type
