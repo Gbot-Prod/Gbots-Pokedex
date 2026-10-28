@@ -114,6 +114,10 @@ body {
 }
 
 #pokemonCardContainer {
+    /* Default (blue) theme; overridden per primary type from pokemon.js */
+    --type-strong: #6884E3;
+    --type-light: #9EBEE8;
+    --type-deep: #336EBA;
     display: flex;
     flex-direction: column;
     justify-content: center; 
@@ -150,11 +154,12 @@ body {
     text-align: center;
     color: #ffffff;
 
-    border: 2px solid #6884E3;
-    background-color: #6884E3;
+    border: 2px solid var(--type-strong);
+    background-color: var(--type-strong);
     border-radius: 10px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+    transition: background-color 0.4s, border-color 0.4s;
 }
 
 .navBtn {
@@ -190,14 +195,14 @@ body {
     text-align: center;
     color: rgb(18, 40, 112);
     
-    border: 2px solid #9EBEE8;
-    background-color: #9EBEE8;
+    border: 2px solid var(--type-light);
+    background-color: var(--type-light);
     border-radius: 0px 0px 10px 10px;
 }
 
 #pokemonSpriteContainer {
     border: 10px solid transparent;
-    background-image: linear-gradient(to top, #9EBEE8, #336EBA) ;
+    background-image: linear-gradient(to top, var(--type-light), var(--type-deep));
     border: none;
     border-radius: 10px;
     margin-top: 20px;
@@ -242,7 +247,7 @@ body {
     justify-content: space-evenly;
 
     border: 10px solid transparent;
-    background-image: linear-gradient(to top, #9EBEE8, #336EBA) ;
+    background-image: linear-gradient(to top, var(--type-light), var(--type-deep));
     border: none;
     border-radius: 10px;
     padding: 6px 12px;
@@ -448,7 +453,7 @@ body {
 }
 
 .evolutionMember.current {
-    border-color: #6884E3;
+    border-color: var(--type-strong);
     background-color: #ffffff;
 }
 
