@@ -255,6 +255,7 @@ function renderPokemon(data) {
     currentPokemon = { id: data.id, name: data.name };
     updateFavoriteButton();
     addToRecent(currentPokemon);
+    announceResult(data);
     prevButton.disabled = currentDexNumber <= 1;
     nextButton.disabled = currentDexNumber >= MAX_DEX_NUMBER;
 
@@ -481,6 +482,13 @@ function setTypeIcon(iconElement, type) {
         iconElement.removeAttribute("src");
         iconElement.style.display = "none";
     }
+}
+
+// Screen readers don't notice the card changing, so summarise each result in a live region.
+function announceResult(data) {
+    const types = data.types.map((entry) => formatName(entry.type.name)).join(" and ");
+    document.getElementById("resultAnnouncer").textContent =
+        "Showing " + formatName(data.name) + ", number " + data.id + ", " + types + " type.";
 }
 
 function fetchPKMNType(pkmnType, pkmnType2) {
