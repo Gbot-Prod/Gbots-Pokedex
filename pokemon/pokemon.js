@@ -413,6 +413,56 @@ function clearFields() {
     errorElement.textContent = "";
 }
 
+// --- Autocomplete -------------------------------------------------------
+
+const NAME_LIST_CACHE_KEY = "pokedex:names:v1";
+const nameListElement = document.getElementById("pokemonNameList");
+let nameListLoaded = false;
+
+async function getAllPokemonNames() {
+    try {
+        const cached = localStorage.getItem(NAME_LIST_CACHE_KEY);
+        if (cached) {
+            return JSON.parse(cached);
+        }
+    }
+    catch (error) {
+        // storage unavailable (private mode) or corrupt; fall through to the network
+    }
+
+    const data = await fetchJson(API_BASE + "pokemon?limit=2000");
+    const names = data.results.map((entry) => entry.name);
+    try {
+        localStorage.setItem(NAME_LIST_CACHE_KEY, JSON.stringify(names));
+    }
+    catch (error) {
+        // ignore quota/storage errors; suggestions still work for this visit
+    }
+    return names;
+}
+
+// The full list is only fetched once the user starts interacting with the search box.
+async function loadNameSuggestions() {
+    if (nameListLoaded) {
+        return;
+    }
+    nameListLoaded = true;
+    try {
+        const names = await getAllPokemonNames();
+        const options = names.map((name) => {
+            const option = document.createElement("option");
+            option.value = formatName(name);
+            return option;
+        });
+        nameListElement.replaceChildren(...options);
+    }
+    catch (error) {
+        nameListLoaded = false; // allow a retry on the next focus
+    }
+}
+
+searchInput.addEventListener("focus", loadNameSuggestions);
+
 document.getElementById("searchForm").addEventListener("submit", (event) => {
     event.preventDefault();
     fetchData();

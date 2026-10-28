@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Autocomplete suggestions while typing (cache the full name list)
 - [ ] Browse grid of Pokémon with pagination or infinite scroll
 - [ ] Filter by type
 - [ ] Filter by generation
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Shiny sprite toggle (2026-10-28) — ✨ Shiny toggle (aria-pressed) over the sprite; choice persists while browsing; sprite fallback chain moved to pickSprite
 - [x] Pokédex flavor text / description (species endpoint) (2026-10-28) — genus (e.g. 'Shadow Pokémon') and latest English Pokédex entry from the species endpoint, loaded after the main card
 - [x] Evolution chain display (2026-10-28) — clickable stages with sprites and method (Lv. 16 / Water Stone / Friendship); branching families wrap into a grid; hidden for single-stage Pokémon
+- [x] Autocomplete suggestions while typing (cache the full name list) (2026-10-28) — native <datalist> filled on first focus from /pokemon?limit=2000, cached in localStorage
