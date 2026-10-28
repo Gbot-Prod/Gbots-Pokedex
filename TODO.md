@@ -16,7 +16,6 @@ Rules for each run:
 
 ## 2. Code quality
 - [ ] Split `pokemon.js` into ES modules, in steps:
-  - [ ] Step 2: move PokéAPI access + caching (`fetchJson`, entries list) into `api.js`
   - [ ] Step 3: move browse/favorites/recent tiles into `lists.js` and compare into `compare.js`
   - [ ] Step 4: consider Vite (dev server + bundling) once there are several modules
 
@@ -43,7 +42,6 @@ Rules for each run:
 ## Done
 <!-- Move completed items here with the date and commit, e.g.
 - [x] Fix typo … (2026-10-28, abc1234) -->
-- [x] Split pokemon.js — step 1: page loads as an ES module; pure helpers moved to utils.js with 6 node:test unit tests (2026-10-28) — README now says to serve over HTTP (npm start)
 - [x] Fix `type2iconElement` typo (lowercase `i`) in `pokemon.js` — it throws a ReferenceError for Rock, Ghost and Dark types (2026-10-28) — renamed to type2IconElement; Rock/Ghost/Dark no longer throw
 - [x] Rock/Ghost/Dark in the *first* type switch set the second icon instead of the first (2026-10-28) — first switch now sets type1IconElement for these types
 - [x] Psychic icon path is `PsychicIcon.png` (missing `assets/`), and the file is actually named `PsychIconIcon.png` — rename asset to `PsychicIcon.png` and fix path (2026-10-28) — renamed asset to PsychicIcon.png and added assets/ prefix
@@ -92,3 +90,5 @@ Rules for each run:
 - [x] Favorite ☆ is hard to see on yellow (Electric) cards and the compare "winner" green is low-contrast in dark mode (2026-10-28) — dark text-shadow outline on the star; compare winner colour is a --win token with a lighter green in dark mode
 - [x] Commit an automated smoke test: Playwright script + mocked PokéAPI fixtures, runnable with `npm test` (search, not-found, prev/next, favorites) (2026-10-28) — tests/smoke.test.js (node:test + Playwright) with trimmed fixtures in tests/fixtures; 5 tests pass via npm test; README documents it
 - [x] Add ESLint + Prettier with an `npm run lint` script and fix what it reports (2026-10-28) — eslint.config.js (recommended rules) + .prettierrc (4 spaces, 120 cols); npm run lint / npm run format; fixed unused catch bindings and formatted the code
+- [x] Split pokemon.js — step 1: page loads as an ES module; pure helpers moved to utils.js with 6 node:test unit tests (2026-10-28) — README now says to serve over HTTP (npm start)
+- [x] Split pokemon.js — step 2: PokéAPI access, response caching and the cached entry list moved to `api.js` (2026-10-28) — pokemon.js imports fetchJson/getAllPokemonEntries
