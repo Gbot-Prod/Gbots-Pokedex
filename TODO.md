@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Meaningful `alt` text (e.g. "Pikachu sprite", "Electric type")
 - [ ] Keyboard focus styles and ARIA live region for results
 - [ ] Favicon and page title that updates with the current Pokémon
 - [ ] Type effectiveness chart (weaknesses/resistances)
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Smooth card animations and image fade-in (2026-10-28) — card fades/slides in, tiles stagger in, sprites fade in once loaded (fadeInImage); all motion disabled under prefers-reduced-motion
 - [x] Friendly "Pokémon not found" state (2026-10-28) — names the failed query, explains valid number range, and offers up to 3 'Did you mean' buttons (prefix match + edit distance); network errors get their own message
 - [x] Cache API responses in memory/`sessionStorage` to avoid repeat fetches (2026-10-28) — fetchJson keeps an in-memory promise cache (dedupes in-flight requests) plus sessionStorage for payloads ≤150k chars; failures aren't cached
+- [x] Meaningful `alt` text (e.g. "Pikachu sprite", "Electric type") (2026-10-28) — sprite alt 'Gengar sprite' / 'Shiny Gengar sprite', type icons 'Ghost type' (+ title tooltip); decorative tile sprites keep alt="" since the name is next to them

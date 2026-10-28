@@ -307,6 +307,8 @@ function renderSprite() {
     const src = showShiny && shinySrc ? shinySrc : pickSprite(currentSprites, false);
     if (src) {
         fadeInImage(imgElement, src);
+        const showingShiny = showShiny && src === shinySrc;
+        imgElement.alt = (showingShiny ? "Shiny " : "") + nameElement.textContent.trim() + " sprite";
         imgElement.style.display = "block";
     } else {
         imgElement.removeAttribute("src");
@@ -472,6 +474,8 @@ function setTypeIcon(iconElement, type) {
     const icon = TYPE_ICONS[type];
     if (icon) {
         iconElement.src = "assets/" + icon;
+        iconElement.alt = formatName(type) + " type";
+        iconElement.title = formatName(type);
         iconElement.style.display = "block";
     } else {
         iconElement.removeAttribute("src");
