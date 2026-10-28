@@ -47,6 +47,9 @@ async function fetchData() {
     }
 
     function fetchPKMNType(pkmnType, pkmnType2) {
+        type1IconElement.style.display = "none";
+        type2IconElement.style.display = "none";
+
         switch (pkmnType) {
             case "normal":
                 type1IconElement.src = "assets/NormalIcon.png";

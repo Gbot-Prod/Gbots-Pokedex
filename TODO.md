@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Second type icon from a previous search stays visible when the next Pokémon has one type
 - [ ] CSS selector `#pokemonlookupInpt` doesn't match the id `pokemonLookupInpt`, so the input is unstyled
 - [ ] Trim whitespace from the search input; ignore empty searches
 - [ ] Add `<!DOCTYPE html>`, `<meta charset>` and a viewport meta tag
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Electric icon file is named `ElectrIconIcon.png` but code loads `ElectricIcon.png` — rename asset (2026-10-28) — renamed asset to ElectricIcon.png
 - [x] Second type switch: `"normal"` case is missing `break` (falls through to Fire) (2026-10-28) — added the missing break
 - [x] Card is revealed even when the fetch fails — show an error message instead (2026-10-28) — card only shown on success; 404 vs network errors get a role=alert message; body no longer vertically centred (header was pushed off-screen)
+- [x] Second type icon from a previous search stays visible when the next Pokémon has one type (2026-10-28) — both type icons are hidden before the new types are applied
