@@ -23,7 +23,6 @@ async function fetchData() {
         } 
         
         const data = await response.json();
-        console.log(data);
 
         //fetch pokemon name
         const pkmnName = data.name;
