@@ -1,8 +1,11 @@
 # Gbot's Pokédex
 
-A small Pokédex website built with plain HTML, CSS and JavaScript. Type a
-Pokémon's name and it fetches the data from [PokéAPI](https://pokeapi.co)
-and shows its sprite, Pokédex number and type icons.
+A Pokédex website built with plain HTML, CSS and JavaScript on top of
+[PokéAPI](https://pokeapi.co). Search by name or number to see a Pokémon's
+sprite (and shiny), types, description, abilities, base stats, type matchups
+and evolution chain. You can also browse the whole National Dex with type and
+generation filters, keep favorites, compare two Pokémon, and switch to dark
+mode.
 
 ## Project layout
 
@@ -12,6 +15,9 @@ pokemon/
   pokemon.css    styles
   pokemon.js     fetches data from PokéAPI and fills in the card
   assets/        type icons (one PNG per type, e.g. FireIcon.png)
+tests/
+  smoke.test.js  browser tests (Playwright) against mocked PokéAPI data
+  fixtures/      trimmed PokéAPI responses used by the tests
 TODO.md          living improvement backlog
 ```
 
@@ -29,6 +35,17 @@ python3 -m http.server 8000
 
 An internet connection is needed, since all Pokémon data and sprites come
 from PokéAPI.
+
+## Tests
+
+The smoke tests drive the page in headless Chromium with PokéAPI mocked out,
+so they run offline:
+
+```sh
+npm install                 # installs Playwright
+npx playwright install chromium   # first time only
+npm test
+```
 
 ## Contributing
 
