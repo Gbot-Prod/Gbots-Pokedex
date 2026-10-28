@@ -74,7 +74,7 @@ async function loadPokemon(query) {
         if (requestId !== latestRequest) {
             return; // a newer search has started; drop this stale result
         }
-        renderPokemon(data);
+        renderPokemon(data, query);
         loadSpecies(data.species.url, requestId);
         loadMatchups(data.types.map((entry) => entry.type.name), requestId);
     }
@@ -341,7 +341,7 @@ function renderSpecies(species) {
     flavorTextElement.textContent = latest ? latest.flavor_text.replace(/[\f\n\r\u00ad]+/g, " ").replace(/\s+/g, " ").trim() : "";
 }
 
-function renderPokemon(data) {
+function renderPokemon(data, query) {
     // Alternate forms (e.g. id 10034) navigate relative to their species' dex number.
     currentDexNumber = idFromUrl(data.species.url) || data.id;
     currentPokemon = { id: data.id, name: data.name };
@@ -354,6 +354,10 @@ function renderPokemon(data) {
 
     //fetch pokemon name
     nameElement.textContent = formatName(data.name);
+    // Show what was loaded (e.g. after "25", Random or Next), unless the user is typing a new search.
+    if (document.activeElement !== searchInput || normalizeQuery(searchInput.value) === query) {
+        searchInput.value = formatName(data.name);
+    }
 
     //fetch pokemon number
     numberElement.textContent = "Pokemon no#" + data.id;
@@ -1115,7 +1119,6 @@ document.getElementById("compareCurrentBtn").addEventListener("click", () => {
 
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
 function showPokemon(id) {
-    searchInput.value = id;
     loadPokemon(String(id));
 }
 
@@ -1123,7 +1126,6 @@ function goToDexNumber(dexNumber) {
     if (dexNumber < 1 || dexNumber > MAX_DEX_NUMBER) {
         return;
     }
-    searchInput.value = dexNumber;
     loadPokemon(String(dexNumber));
 }
 
