@@ -92,15 +92,15 @@ async function fetchData() {
                 type1IconElement.style.display = "block";
                 break
             case "rock":
-                type2IconElement.src = "assets/RockIcon.png";
+                type1IconElement.src = "assets/RockIcon.png";
                 type1IconElement.style.display = "block";
                 break
             case "ghost":
-                type2IconElement.src = "assets/GhostIcon.png";
+                type1IconElement.src = "assets/GhostIcon.png";
                 type1IconElement.style.display = "block";
                 break
             case "dark":
-                type2IconElement.src = "assets/DarkIcon.png";
+                type1IconElement.src = "assets/DarkIcon.png";
                 type1IconElement.style.display = "block";
                 break
             case "dragon":
