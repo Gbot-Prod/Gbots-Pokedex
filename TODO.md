@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Compare two Pokémon side by side
 
 ## Done
 <!-- Move completed items here with the date and commit, e.g.
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Keyboard focus styles and ARIA live region for results (2026-10-28) — removed outline:none overrides; yellow :focus-visible ring; visually-hidden aria-live region announces each loaded Pokémon
 - [x] Favicon and page title that updates with the current Pokémon (2026-10-28) — Poké Ball SVG favicon; title becomes 'Gengar #94 · Pokédex' and resets on Clear
 - [x] Type effectiveness chart (weaknesses/resistances) (2026-10-28) — 'Type matchups' section: weak to / resists / immune with type icons and 4×–0× multipliers, computed from each type's damage_relations
+- [x] Compare two Pokémon side by side (2026-10-28) — Compare section with two autocompleting inputs → table of stats/total/height/weight with the higher value highlighted; ⚖️ on the card pre-fills the current Pokémon

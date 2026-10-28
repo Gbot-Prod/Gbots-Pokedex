@@ -55,6 +55,7 @@
                     <div id="pokemonNameRow">
                         <h1 id="pokemonName">
                         </h1>
+                        <button type="button" id="compareCurrentBtn" title="Compare with another Pokémon" aria-label="Compare with another Pokémon">⚖️</button>
                         <button type="button" id="favoriteBtn" aria-pressed="false" aria-label="Favorite" title="Add to favorites">☆</button>
                     </div>
                     <h3 id="pokemonNumber">
@@ -91,6 +92,23 @@
                     </section>
                 </div>
             </div>
+
+            <section id="compareSection" class="tileSection" aria-labelledby="compareHeading">
+                <h2 id="compareHeading">Compare Pokémon</h2>
+                <form id="compareForm">
+                    <input type="text" id="compareLeftInput" class="compareInput" placeholder="First Pokémon" aria-label="First Pokémon" list="pokemonNameList" autocomplete="off">
+                    <span aria-hidden="true">vs</span>
+                    <input type="text" id="compareRightInput" class="compareInput" placeholder="Second Pokémon" aria-label="Second Pokémon" list="pokemonNameList" autocomplete="off">
+                    <button type="submit" class="btn" id="compareBtn">Compare</button>
+                </form>
+                <p id="compareStatus" role="status"></p>
+                <div id="compareResult" hidden>
+                    <table id="compareTable">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
 
             <section id="recentSection" class="tileSection" aria-labelledby="recentHeading" hidden>
                 <div class="sectionHeader">

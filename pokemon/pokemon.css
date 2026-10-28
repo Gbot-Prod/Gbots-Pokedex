@@ -358,6 +358,100 @@ body {
     gap: 0.5rem;
 }
 
+#compareCurrentBtn {
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+#compareCurrentBtn:hover {
+    transform: scale(1.2);
+}
+
+#compareForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+}
+
+.compareInput {
+    flex: 1 1 10rem;
+    min-width: 0;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 0.4rem;
+    background-color: var(--input-bg);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+#compareBtn {
+    background-color: #6885e3;
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+}
+
+#compareStatus:empty {
+    display: none;
+}
+
+#compareResult {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+#compareTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: var(--tile-bg);
+    color: var(--ink);
+}
+
+#compareTable th,
+#compareTable td {
+    padding: 0.4rem 0.8rem;
+}
+
+#compareTable thead th {
+    vertical-align: bottom;
+}
+
+#compareTable thead th img,
+#compareTable thead th span,
+#compareTable thead th small {
+    display: block;
+    margin: 0 auto;
+}
+
+#compareTable thead th small {
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+#compareTable tbody th {
+    text-align: left;
+}
+
+#compareTable tbody tr:nth-child(odd) {
+    background-color: var(--surface);
+}
+
+#compareTable td.compareWinner {
+    font-weight: 800;
+    color: #1f8a4c;
+}
+
 #favoriteBtn {
     border: none;
     background: none;
