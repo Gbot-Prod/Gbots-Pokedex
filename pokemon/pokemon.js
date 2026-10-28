@@ -8,12 +8,12 @@ const errorElement = document.getElementById("errorMessage");
 
 async function fetchData() {
     try {
-        clearFields(); 
-
         const pokemonNameInput = document.getElementById('pokemonLookupInpt').value.trim().toLowerCase();
         if (!pokemonNameInput) {
             return;
         }
+        clearFields();
+
         const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonNameInput);   
         
         if (!response.ok) {
