@@ -13,19 +13,21 @@ mode.
 pokemon/
   pokemon.html   page markup
   pokemon.css    styles
-  pokemon.js     fetches data from PokéAPI and fills in the card
+  pokemon.js     page logic (ES module): fetching, rendering, browse, favorites…
+  utils.js       pure helpers (name formatting, query normalisation, …)
   assets/        type icons (one PNG per type, e.g. FireIcon.png)
 tests/
   smoke.test.js  browser tests (Playwright) against mocked PokéAPI data
+  utils.test.mjs unit tests for utils.js
   fixtures/      trimmed PokéAPI responses used by the tests
 TODO.md          living improvement backlog
 ```
 
 ## Running it
 
-There's no build step. Either open `pokemon/pokemon.html` in a browser, or
-serve the folder locally (recommended, so the browser treats it like a real
-site):
+There's no build step, but the page uses ES modules, so it has to be served
+over HTTP (opening the file directly with `file://` won't load the scripts).
+Run `npm start`, or:
 
 ```sh
 cd pokemon

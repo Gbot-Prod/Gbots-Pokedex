@@ -1,3 +1,5 @@
+import { describeEvolution, editDistance, formatMultiplier, formatName, idFromUrl, normalizeQuery } from "./utils.js";
+
 const imgElement = document.getElementById("pokemonSprite");
 const nameElement = document.getElementById("pokemonName");
 const numberElement = document.getElementById("pokemonNumber");
@@ -36,25 +38,6 @@ let currentPokemon = null; // { id, name } of the Pokémon on the card
 let currentSprites = null;
 let showShiny = false;
 let latestRequest = 0;
-
-// Accepts names ("Pikachu", "mr mime") and Pokédex numbers ("25", "#025").
-function normalizeQuery(rawQuery) {
-    const query = rawQuery.trim().toLowerCase().replace(/^#/, "");
-    if (/^\d+$/.test(query)) {
-        return String(parseInt(query, 10));
-    }
-    // Turn display names into API slugs: "Farfetch'd" -> "farfetchd", "Mr. Mime" -> "mr-mime",
-    // "Nidoran♀" -> "nidoran-f", "Type: Null" -> "type-null", "Flabébé" -> "flabebe".
-    return query
-        .replace(/♀/g, "-f")
-        .replace(/♂/g, "-m")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[.'’:]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
-}
 
 function fetchData() {
     const query = normalizeQuery(searchInput.value);
@@ -200,10 +183,6 @@ async function loadMatchups(types, requestId) {
     }
 }
 
-function formatMultiplier(multiplier) {
-    return { 0.25: "¼", 0.5: "½" }[multiplier] ?? String(multiplier);
-}
-
 function renderMatchups(multipliers) {
     matchupsListElement.replaceChildren();
 
@@ -238,28 +217,6 @@ function renderMatchups(multipliers) {
         matchupsListElement.append(term, definition);
     }
     matchupsSection.hidden = false;
-}
-
-function idFromUrl(url) {
-    return Number(url.split("/").filter(Boolean).pop());
-}
-
-// Summarises how a Pokémon evolves, e.g. "Lv. 16", "Thunder Stone", "Trade".
-function describeEvolution(details) {
-    const detail = details[0];
-    if (!detail) {
-        return "";
-    }
-    if (detail.min_level) {
-        return "Lv. " + detail.min_level;
-    }
-    if (detail.item) {
-        return formatName(detail.item.name);
-    }
-    if (detail.min_happiness) {
-        return "Friendship";
-    }
-    return formatName(detail.trigger.name);
 }
 
 // Flattens the evolution tree into stages so branching families (Eevee) show side by side.
@@ -427,14 +384,6 @@ function fadeInImage(image, src) {
     image.addEventListener("load", () => image.classList.remove("pending"), { once: true });
     image.addEventListener("error", () => image.classList.remove("pending"), { once: true });
     image.src = src;
-}
-
-// "lightning-rod" -> "Lightning Rod"
-function formatName(name) {
-    return name
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
 }
 
 function renderAbilities(abilities) {
@@ -620,23 +569,6 @@ function showNotFound(query, requestId) {
     }
     showError("No Pokémon called \u201c" + formatName(query) + "\u201d. Check the spelling and try again.");
     addNameSuggestions(query, requestId);
-}
-
-// Classic edit distance, used to suggest names close to a misspelled search.
-function editDistance(a, b) {
-    let previous = Array.from({ length: b.length + 1 }, (_, i) => i);
-    for (let i = 1; i <= a.length; i++) {
-        const current = [i];
-        for (let j = 1; j <= b.length; j++) {
-            current[j] = Math.min(
-                previous[j] + 1,
-                current[j - 1] + 1,
-                previous[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
-            );
-        }
-        previous = current;
-    }
-    return previous[b.length];
 }
 
 async function addNameSuggestions(query, requestId) {

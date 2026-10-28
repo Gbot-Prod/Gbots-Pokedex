@@ -7,8 +7,16 @@ module.exports = [
         files: ["pokemon/**/*.js"],
         languageOptions: {
             ecmaVersion: 2022,
-            sourceType: "script",
+            sourceType: "module",
             globals: globals.browser,
+        },
+    },
+    {
+        files: ["tests/**/*.mjs"],
+        languageOptions: {
+            ecmaVersion: 2022,
+            sourceType: "module",
+            globals: globals.node,
         },
     },
     {

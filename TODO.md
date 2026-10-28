@@ -15,7 +15,10 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Split `pokemon.js` (~1,100 lines) into ES modules (api, card, browse, favorites, compare); needs a dev server (`npx serve`) since modules don't load over `file://` — or move to Vite at the same time
+- [ ] Split `pokemon.js` into ES modules, in steps:
+  - [ ] Step 2: move PokéAPI access + caching (`fetchJson`, entries list) into `api.js`
+  - [ ] Step 3: move browse/favorites/recent tiles into `lists.js` and compare into `compare.js`
+  - [ ] Step 4: consider Vite (dev server + bundling) once there are several modules
 
 ## 3. Core Pokédex features
 - [ ] Shareable URLs: reflect the current Pokémon in `?pokemon=gengar` and support Back/Forward
@@ -40,6 +43,7 @@ Rules for each run:
 ## Done
 <!-- Move completed items here with the date and commit, e.g.
 - [x] Fix typo … (2026-10-28, abc1234) -->
+- [x] Split pokemon.js — step 1: page loads as an ES module; pure helpers moved to utils.js with 6 node:test unit tests (2026-10-28) — README now says to serve over HTTP (npm start)
 - [x] Fix `type2iconElement` typo (lowercase `i`) in `pokemon.js` — it throws a ReferenceError for Rock, Ghost and Dark types (2026-10-28) — renamed to type2IconElement; Rock/Ghost/Dark no longer throw
 - [x] Rock/Ghost/Dark in the *first* type switch set the second icon instead of the first (2026-10-28) — first switch now sets type1IconElement for these types
 - [x] Psychic icon path is `PsychicIcon.png` (missing `assets/`), and the file is actually named `PsychIconIcon.png` — rename asset to `PsychicIcon.png` and fix path (2026-10-28) — renamed asset to PsychicIcon.png and added assets/ prefix
