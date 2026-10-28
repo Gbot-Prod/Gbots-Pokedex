@@ -123,6 +123,7 @@ async function fetchData() {
             case "normal":
                 type2IconElement.src = "assets/NormalIcon.png";
                 type2IconElement.style.display = "block";
+                break
             case "fire":
                 type2IconElement.src = "assets/FireIcon.png";
                 type2IconElement.style.display = "block";

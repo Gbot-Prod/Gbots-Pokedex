@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Second type switch: `"normal"` case is missing `break` (falls through to Fire)
 - [ ] Card is revealed even when the fetch fails — show an error message instead
 - [ ] Second type icon from a previous search stays visible when the next Pokémon has one type
 - [ ] CSS selector `#pokemonlookupInpt` doesn't match the id `pokemonLookupInpt`, so the input is unstyled
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Rock/Ghost/Dark in the *first* type switch set the second icon instead of the first (2026-10-28) — first switch now sets type1IconElement for these types
 - [x] Psychic icon path is `PsychicIcon.png` (missing `assets/`), and the file is actually named `PsychIconIcon.png` — rename asset to `PsychicIcon.png` and fix path (2026-10-28) — renamed asset to PsychicIcon.png and added assets/ prefix
 - [x] Electric icon file is named `ElectrIconIcon.png` but code loads `ElectricIcon.png` — rename asset (2026-10-28) — renamed asset to ElectricIcon.png
+- [x] Second type switch: `"normal"` case is missing `break` (falls through to Fire) (2026-10-28) — added the missing break
