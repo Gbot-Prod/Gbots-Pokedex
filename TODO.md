@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Show height and weight
 - [ ] Show base stats (HP, Attack, Defense, Sp. Atk, Sp. Def, Speed) as bars
 - [ ] Search by Pokédex number as well as name (document it in the placeholder)
 - [ ] Previous / Next buttons to step through Pokédex numbers
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Search on Enter key (2026-10-28) — search controls wrapped in a <form role=search>; Enter and the button both submit
 - [x] Loading state/spinner while fetching (2026-10-28) — CSS spinner with role=status; search button disabled while fetching
 - [x] Show abilities (the `#pokemonAbility` element exists but is never filled) (2026-10-28) — ability chips (hidden ability dashed); added formatName helper for hyphenated names
+- [x] Show height and weight (2026-10-28) — metric height/weight tiles (API dm/hg converted to m/kg)

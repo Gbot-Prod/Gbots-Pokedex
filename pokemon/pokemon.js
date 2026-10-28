@@ -3,6 +3,8 @@ const nameElement = document.getElementById("pokemonName");
 const numberElement = document.getElementById("pokemonNumber");
 const type1IconElement = document.getElementById("pokemonType1");
 const type2IconElement = document.getElementById("pokemonType2");
+const heightElement = document.getElementById("pokemonHeight");
+const weightElement = document.getElementById("pokemonWeight");
 const abilityElement = document.getElementById("pokemonAbility");
 const pokemonCard = document.getElementById("pokemonCardContainer");
 const errorElement = document.getElementById("errorMessage");
@@ -40,6 +42,10 @@ async function fetchData() {
         const pkmnType = data.types[0].type.name;
         const pkmnType2 = data.types[1]?.type.name || "none";
         fetchPKMNType(pkmnType, pkmnType2);
+
+        //fetch pokemon height (decimetres) and weight (hectograms)
+        heightElement.textContent = (data.height / 10).toFixed(1) + " m";
+        weightElement.textContent = (data.weight / 10).toFixed(1) + " kg";
 
         //fetch pokemon abilities
         renderAbilities(data.abilities);
