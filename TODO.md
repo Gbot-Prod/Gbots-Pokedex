@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Add `<!DOCTYPE html>`, `<meta charset>` and a viewport meta tag
 
 ## 2. Code quality
 - [ ] Replace both 18-case `switch` blocks with a single type → icon lookup map
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Second type icon from a previous search stays visible when the next Pokémon has one type (2026-10-28) — both type icons are hidden before the new types are applied
 - [x] CSS selector `#pokemonlookupInpt` doesn't match the id `pokemonLookupInpt`, so the input is unstyled (2026-10-28) — fixed the id case so the input gets its styling (also font-style: bold → font-weight: 700)
 - [x] Trim whitespace from the search input; ignore empty searches (2026-10-28) — input is trimmed; empty searches do nothing
+- [x] Add `<!DOCTYPE html>`, `<meta charset>` and a viewport meta tag (2026-10-28) — added doctype, lang, UTF-8 charset (fixes 'PokÃ©mon' mojibake) and viewport meta
