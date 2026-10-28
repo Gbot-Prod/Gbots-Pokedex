@@ -214,6 +214,7 @@ function renderPokemon(data) {
     currentDexNumber = idFromUrl(data.species.url) || data.id;
     currentPokemon = { id: data.id, name: data.name };
     updateFavoriteButton();
+    addToRecent(currentPokemon);
     prevButton.disabled = currentDexNumber <= 1;
     nextButton.disabled = currentDexNumber >= MAX_DEX_NUMBER;
 
@@ -688,6 +689,33 @@ function renderFavorites() {
 
 favoriteButton.addEventListener("click", toggleFavorite);
 renderFavorites();
+
+// --- Recently viewed --------------------------------------------------------
+
+const RECENT_KEY = "pokedex:recent:v1";
+const MAX_RECENT = 10;
+const recentSection = document.getElementById("recentSection");
+const recentListElement = document.getElementById("recentList");
+
+let recentPokemon = loadStoredList(RECENT_KEY);
+
+function addToRecent(pokemon) {
+    recentPokemon = [pokemon, ...recentPokemon.filter((entry) => entry.id !== pokemon.id)].slice(0, MAX_RECENT);
+    saveStoredList(RECENT_KEY, recentPokemon);
+    renderRecent();
+}
+
+function renderRecent() {
+    recentSection.hidden = recentPokemon.length === 0;
+    recentListElement.replaceChildren(...recentPokemon.map(createBrowseTile));
+}
+
+document.getElementById("clearRecentBtn").addEventListener("click", () => {
+    recentPokemon = [];
+    saveStoredList(RECENT_KEY, recentPokemon);
+    renderRecent();
+});
+renderRecent();
 
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
 function showPokemon(id) {

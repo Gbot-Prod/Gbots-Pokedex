@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Recently viewed list
 
 ## 5. Design & UX
 - [ ] Responsive layout for phones
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Filter by type (2026-10-28) — type <select> on the browse grid; /type/{name} members cached per type
 - [x] Filter by generation (2026-10-28) — generation <select> (Gen 1 Kanto … Gen 9 Paldea) using static dex ranges; combines with the type filter
 - [x] Favorites list saved in `localStorage` (2026-10-28) — ☆/★ toggle next to the name; favorites grid above Browse persists in localStorage (shared .tileGrid styles)
+- [x] Recently viewed list (2026-10-28) — last 10 Pokémon (deduped, newest first) in a compact grid, stored in localStorage, with Clear history

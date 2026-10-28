@@ -478,6 +478,32 @@ body {
     display: none;
 }
 
+.sectionHeader {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.linkBtn {
+    border: none;
+    background: none;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.tileGrid.compact {
+    grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+}
+
+.tileGrid.compact img {
+    width: 64px;
+    height: 64px;
+}
+
 .tileGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
