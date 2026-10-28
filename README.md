@@ -42,10 +42,13 @@ The smoke tests drive the page in headless Chromium with PokéAPI mocked out,
 so they run offline:
 
 ```sh
-npm install                 # installs Playwright
+npm install                       # installs Playwright, ESLint and Prettier
 npx playwright install chromium   # first time only
 npm test
 ```
+
+Lint and formatting checks (ESLint + Prettier) run with `npm run lint`;
+`npm run format` rewrites files in the house style.
 
 ## Contributing
 

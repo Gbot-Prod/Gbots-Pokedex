@@ -76,9 +76,11 @@ async function loadPokemon(query) {
         }
         renderPokemon(data, query);
         loadSpecies(data.species.url, requestId);
-        loadMatchups(data.types.map((entry) => entry.type.name), requestId);
-    }
-    catch (error) {
+        loadMatchups(
+            data.types.map((entry) => entry.type.name),
+            requestId,
+        );
+    } catch (error) {
         if (requestId === latestRequest) {
             if (isNotFound(error)) {
                 showNotFound(query, requestId);
@@ -86,8 +88,7 @@ async function loadPokemon(query) {
                 showError("Couldn't reach the Pokédex. Check your connection and try again.");
             }
         }
-    }
-    finally {
+    } finally {
         if (requestId === latestRequest) {
             setLoading(false);
         }
@@ -117,14 +118,13 @@ async function fetchJsonUncached(url) {
         if (stored) {
             return JSON.parse(stored);
         }
-    }
-    catch (error) {
+    } catch {
         // storage unavailable or corrupt; fetch instead
     }
 
     const response = await fetch(url);
     if (!response.ok) {
-        const err = new Error('Network response was not ok ' + response.statusText);
+        const err = new Error("Network response was not ok " + response.statusText);
         err.status = response.status;
         throw err;
     }
@@ -132,8 +132,7 @@ async function fetchJsonUncached(url) {
     if (text.length <= MAX_SESSION_ENTRY_LENGTH) {
         try {
             sessionStorage.setItem(SESSION_CACHE_PREFIX + url, text);
-        }
-        catch (error) {
+        } catch {
             // quota exceeded; the in-memory cache still helps
         }
     }
@@ -153,8 +152,7 @@ async function loadSpecies(url, requestId) {
         if (requestId === latestRequest) {
             renderEvolutionChain(chain.chain);
         }
-    }
-    catch (error) {
+    } catch {
         if (requestId === latestRequest) {
             genusElement.textContent = "";
             flavorTextElement.textContent = "";
@@ -197,8 +195,7 @@ async function loadMatchups(types, requestId) {
             }
         }
         renderMatchups(multipliers);
-    }
-    catch (error) {
+    } catch {
         // matchups are optional; leave the section hidden
     }
 }
@@ -338,7 +335,12 @@ function renderSpecies(species) {
     const entries = species.flavor_text_entries.filter((entry) => entry.language.name === "en");
     const latest = entries[entries.length - 1];
     // Game text uses form feeds and hard line breaks; collapse them into normal spaces.
-    flavorTextElement.textContent = latest ? latest.flavor_text.replace(/[\f\n\r\u00ad]+/g, " ").replace(/\s+/g, " ").trim() : "";
+    flavorTextElement.textContent = latest
+        ? latest.flavor_text
+              .replace(/[\f\n\r\u00ad]+/g, " ")
+              .replace(/\s+/g, " ")
+              .trim()
+        : "";
 }
 
 function renderPokemon(data, query) {
@@ -452,12 +454,12 @@ function renderAbilities(abilities) {
 }
 
 const STAT_LABELS = {
-    "hp": "HP",
-    "attack": "Attack",
-    "defense": "Defense",
+    hp: "HP",
+    attack: "Attack",
+    defense: "Defense",
     "special-attack": "Sp. Atk",
     "special-defense": "Sp. Def",
-    "speed": "Speed",
+    speed: "Speed",
 };
 // Highest single base stat in the games (Blissey's HP), used to scale the bars.
 const MAX_BASE_STAT = 255;
@@ -468,7 +470,9 @@ function renderStats(stats) {
 
     for (const { stat, base_stat } of stats) {
         total += base_stat;
-        statsListElement.append(createStatRow(STAT_LABELS[stat.name] || formatName(stat.name), base_stat, MAX_BASE_STAT));
+        statsListElement.append(
+            createStatRow(STAT_LABELS[stat.name] || formatName(stat.name), base_stat, MAX_BASE_STAT),
+        );
     }
 
     const totalRow = createStatRow("Total", total);
@@ -503,7 +507,7 @@ function createStatRow(label, value, max) {
         fill.className = "statFill";
         fill.style.width = Math.min(100, (value / max) * 100) + "%";
         // red (low) -> green (high)
-        fill.style.backgroundColor = "hsl(" + Math.round(Math.min(value, 150) / 150 * 120) + ", 70%, 45%)";
+        fill.style.backgroundColor = "hsl(" + Math.round((Math.min(value, 150) / 150) * 120) + ", 70%, 45%)";
 
         bar.append(fill);
         row.append(bar);
@@ -627,7 +631,7 @@ function editDistance(a, b) {
             current[j] = Math.min(
                 previous[j] + 1,
                 current[j - 1] + 1,
-                previous[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+                previous[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
             );
         }
         previous = current;
@@ -639,8 +643,7 @@ async function addNameSuggestions(query, requestId) {
     let entries;
     try {
         entries = await getAllPokemonEntries();
-    }
-    catch (error) {
+    } catch {
         return; // suggestions are a bonus; the message is already shown
     }
     if (requestId !== latestRequest) {
@@ -710,8 +713,7 @@ async function fetchAllPokemonEntries() {
         if (cached) {
             return JSON.parse(cached);
         }
-    }
-    catch (error) {
+    } catch {
         // storage unavailable (private mode) or corrupt; fall through to the network
     }
 
@@ -719,8 +721,7 @@ async function fetchAllPokemonEntries() {
     const entries = data.results.map((entry) => ({ name: entry.name, id: idFromUrl(entry.url) }));
     try {
         localStorage.setItem(NAME_LIST_CACHE_KEY, JSON.stringify(entries));
-    }
-    catch (error) {
+    } catch {
         // ignore quota/storage errors; suggestions still work for this visit
     }
     return entries;
@@ -740,8 +741,7 @@ async function loadNameSuggestions() {
             return option;
         });
         nameListElement.replaceChildren(...options);
-    }
-    catch (error) {
+    } catch {
         nameListLoaded = false; // allow a retry on the next focus
     }
 }
@@ -795,8 +795,7 @@ async function initBrowse() {
         // Only the National Dex here; alternate forms are reachable through search.
         nationalDexEntries = entries.filter((entry) => entry.id <= MAX_DEX_NUMBER);
         await applyBrowseFilters();
-    }
-    catch (error) {
+    } catch {
         browseStatusElement.textContent = "Couldn't load the Pokémon list.";
     }
 }
@@ -823,13 +822,15 @@ async function applyBrowseFilters() {
         if (type) {
             browseStatusElement.textContent = "Loading " + formatName(type) + " Pokémon…";
             const members = await getTypeMemberIds(type);
-            if (type !== typeFilterElement.value || generationFilterElement.value !== (generation ? String(generation.number) : "")) {
+            if (
+                type !== typeFilterElement.value ||
+                generationFilterElement.value !== (generation ? String(generation.number) : "")
+            ) {
                 return; // the filter changed while we were waiting
             }
             entries = entries.filter((entry) => members.has(entry.id));
         }
-    }
-    catch (error) {
+    } catch {
         browseStatusElement.textContent = "Couldn't load that filter. Please try again.";
         return;
     }
@@ -909,8 +910,7 @@ function loadStoredList(key) {
     try {
         const list = JSON.parse(localStorage.getItem(key));
         return Array.isArray(list) ? list : [];
-    }
-    catch (error) {
+    } catch {
         return [];
     }
 }
@@ -918,8 +918,7 @@ function loadStoredList(key) {
 function saveStoredList(key, list) {
     try {
         localStorage.setItem(key, JSON.stringify(list));
-    }
-    catch (error) {
+    } catch {
         // storage full or unavailable; the list still works until the page closes
     }
 }
@@ -1007,8 +1006,7 @@ themeToggleButton.addEventListener("click", () => {
     document.documentElement.dataset.theme = next;
     try {
         localStorage.setItem(THEME_KEY, next);
-    }
-    catch (error) {
+    } catch {
         // theme just won't persist
     }
     updateThemeButton();
@@ -1035,7 +1033,9 @@ async function comparePokemon() {
 
     const compareId = ++latestCompare;
     compareStatusElement.textContent = "Loading…";
-    const results = await Promise.allSettled(queries.map((query) => fetchJson(API_BASE + "pokemon/" + encodeURIComponent(query))));
+    const results = await Promise.allSettled(
+        queries.map((query) => fetchJson(API_BASE + "pokemon/" + encodeURIComponent(query))),
+    );
     if (compareId !== latestCompare) {
         return;
     }
@@ -1043,7 +1043,8 @@ async function comparePokemon() {
     const missing = queries.filter((query, index) => results[index].status === "rejected");
     if (missing.length) {
         compareResultElement.hidden = true;
-        compareStatusElement.textContent = "Couldn't find " + missing.map((query) => "\u201c" + formatName(query) + "\u201d").join(" or ") + ".";
+        compareStatusElement.textContent =
+            "Couldn't find " + missing.map((query) => "\u201c" + formatName(query) + "\u201d").join(" or ") + ".";
         return;
     }
 
@@ -1075,8 +1076,13 @@ function renderComparison([left, right]) {
         headRow.append(cell);
     }
 
-    const statValue = (pokemon, statName) => pokemon.stats.find((entry) => entry.stat.name === statName)?.base_stat ?? 0;
-    const rows = Object.keys(STAT_LABELS).map((statName) => [STAT_LABELS[statName], statValue(left, statName), statValue(right, statName)]);
+    const statValue = (pokemon, statName) =>
+        pokemon.stats.find((entry) => entry.stat.name === statName)?.base_stat ?? 0;
+    const rows = Object.keys(STAT_LABELS).map((statName) => [
+        STAT_LABELS[statName],
+        statValue(left, statName),
+        statValue(right, statName),
+    ]);
     const total = (pokemon) => pokemon.stats.reduce((sum, entry) => sum + entry.base_stat, 0);
     rows.push(["Total", total(left), total(right)]);
     rows.push(["Height (m)", left.height / 10, right.height / 10]);
@@ -1088,7 +1094,10 @@ function renderComparison([left, right]) {
         header.scope = "row";
         header.textContent = label;
         row.append(header);
-        for (const [value, other] of [[leftValue, rightValue], [rightValue, leftValue]]) {
+        for (const [value, other] of [
+            [leftValue, rightValue],
+            [rightValue, leftValue],
+        ]) {
             const cell = row.insertCell();
             cell.textContent = value;
             if (value > other) {

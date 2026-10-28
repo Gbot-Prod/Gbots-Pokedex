@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Add ESLint + Prettier with an `npm run lint` script and fix what it reports
 - [ ] Split `pokemon.js` (~1,100 lines) into ES modules (api, card, browse, favorites, compare); needs a dev server (`npx serve`) since modules don't load over `file://` — or move to Vite at the same time
 
 ## 3. Core Pokédex features
@@ -88,3 +87,4 @@ Rules for each run:
 - [x] After a number/random/prev/next search the input shows the number (e.g. "95"); show the loaded Pokémon's name instead (2026-10-28) — input is replaced with the loaded name unless the user has started typing a different search
 - [x] Favorite ☆ is hard to see on yellow (Electric) cards and the compare "winner" green is low-contrast in dark mode (2026-10-28) — dark text-shadow outline on the star; compare winner colour is a --win token with a lighter green in dark mode
 - [x] Commit an automated smoke test: Playwright script + mocked PokéAPI fixtures, runnable with `npm test` (search, not-found, prev/next, favorites) (2026-10-28) — tests/smoke.test.js (node:test + Playwright) with trimmed fixtures in tests/fixtures; 5 tests pass via npm test; README documents it
+- [x] Add ESLint + Prettier with an `npm run lint` script and fix what it reports (2026-10-28) — eslint.config.js (recommended rules) + .prettierrc (4 spaces, 120 cols); npm run lint / npm run format; fixed unused catch bindings and formatted the code

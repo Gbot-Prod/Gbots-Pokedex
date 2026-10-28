@@ -3,6 +3,8 @@
 // images are stubbed, so the suite runs offline and gives stable results.
 // Run with: npm test
 
+/* global document -- used inside page.waitForFunction callbacks, which run in the browser */
+
 const { test, before, after, beforeEach } = require("node:test");
 const assert = require("node:assert/strict");
 const http = require("node:http");
@@ -12,9 +14,18 @@ const { chromium } = require("playwright");
 
 const SITE_ROOT = path.join(__dirname, "..", "pokemon");
 const FIXTURES = path.join(__dirname, "fixtures");
-const CONTENT_TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".png": "image/png", ".svg": "image/svg+xml" };
+const CONTENT_TYPES = {
+    ".html": "text/html",
+    ".js": "text/javascript",
+    ".css": "text/css",
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
+};
 // 1x1 transparent PNG used for every remote sprite.
-const BLANK_PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", "base64");
+const BLANK_PNG = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+    "base64",
+);
 
 const pokemonList = JSON.parse(fs.readFileSync(path.join(FIXTURES, "pokemon-list.json"), "utf8")).results;
 
@@ -27,7 +38,10 @@ let pageErrors;
 // Maps a PokéAPI URL to a fixture file, e.g. /api/v2/pokemon/pikachu -> pokemon-25.json.
 function fixtureFor(url) {
     const { pathname } = new URL(url);
-    const [resource, key] = pathname.replace(/^\/api\/v2\//, "").split("/").filter(Boolean);
+    const [resource, key] = pathname
+        .replace(/^\/api\/v2\//, "")
+        .split("/")
+        .filter(Boolean);
     if (resource === "pokemon" && !key) {
         return "pokemon-list.json";
     }
@@ -47,7 +61,9 @@ before(async () => {
                 response.end();
                 return;
             }
-            response.writeHead(200, { "Content-Type": CONTENT_TYPES[path.extname(filePath)] || "application/octet-stream" });
+            response.writeHead(200, {
+                "Content-Type": CONTENT_TYPES[path.extname(filePath)] || "application/octet-stream",
+            });
             response.end(data);
         });
     });
@@ -75,7 +91,9 @@ beforeEach(async () => {
             route.fulfill({ status: 404, body: "Not Found" });
         }
     });
-    await page.route("https://raw.githubusercontent.com/**", (route) => route.fulfill({ status: 200, contentType: "image/png", body: BLANK_PNG }));
+    await page.route("https://raw.githubusercontent.com/**", (route) =>
+        route.fulfill({ status: 200, contentType: "image/png", body: BLANK_PNG }),
+    );
     await page.goto(baseUrl);
 });
 

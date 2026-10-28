@@ -1,17 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!--font-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+            rel="stylesheet"
+        />
 
         <title>Pokédex</title>
-        <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-        <link rel="stylesheet" href="pokemon.css">
+        <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+        <link rel="stylesheet" href="pokemon.css" />
         <script>
             // Apply a saved theme before first paint to avoid a flash of the wrong colours.
             try {
@@ -26,7 +28,14 @@
         <button type="button" id="themeToggleBtn" aria-label="Toggle dark mode">🌙</button>
         <main class="page">
             <form id="searchForm" role="search">
-                <input type="text" id="pokemonLookupInpt" placeholder="Name or number, e.g. 25" aria-label="Pokémon name or Pokédex number" autocomplete="off" list="pokemonNameList">
+                <input
+                    type="text"
+                    id="pokemonLookupInpt"
+                    placeholder="Name or number, e.g. 25"
+                    aria-label="Pokémon name or Pokédex number"
+                    autocomplete="off"
+                    list="pokemonNameList"
+                />
                 <datalist id="pokemonNameList"></datalist>
                 <button type="submit" class="btn" id="getPokemonBtn">Get Pokémon</button>
                 <button type="button" class="btn" id="randomPokemonBtn">Random</button>
@@ -44,27 +53,58 @@
             <div class="hidden" id="pokemonCardContainer">
                 <div class="header" id="pokemonHeader">
                     <button type="button" class="navBtn" id="prevPokemonBtn" aria-label="Previous Pokémon">‹</button>
-                    <h1 id="headerTitle"> Pokémon Info </h1>
+                    <h1 id="headerTitle">Pokémon Info</h1>
                     <button type="button" class="navBtn" id="nextPokemonBtn" aria-label="Next Pokémon">›</button>
                 </div>
                 <div id="pokemonDetailsContainer">
                     <div id="pokemonSpriteContainer">
-                        <img class="order3" src="" id="pokemonSprite" alt="" style="display:none;" >
-                        <button type="button" id="shinyToggleBtn" aria-pressed="false" title="Show shiny sprite">✨ Shiny</button>
+                        <img class="order3" src="" id="pokemonSprite" alt="" style="display: none" />
+                        <button type="button" id="shinyToggleBtn" aria-pressed="false" title="Show shiny sprite">
+                            ✨ Shiny
+                        </button>
                     </div>
                     <div id="pokemonNameRow">
-                        <h1 id="pokemonName">
-                        </h1>
-                        <button type="button" id="compareCurrentBtn" title="Compare with another Pokémon" aria-label="Compare with another Pokémon">⚖️</button>
-                        <button type="button" id="favoriteBtn" aria-pressed="false" aria-label="Favorite" title="Add to favorites">☆</button>
+                        <h1 id="pokemonName"></h1>
+                        <button
+                            type="button"
+                            id="compareCurrentBtn"
+                            title="Compare with another Pokémon"
+                            aria-label="Compare with another Pokémon"
+                        >
+                            ⚖️
+                        </button>
+                        <button
+                            type="button"
+                            id="favoriteBtn"
+                            aria-pressed="false"
+                            aria-label="Favorite"
+                            title="Add to favorites"
+                        >
+                            ☆
+                        </button>
                     </div>
-                    <h3 id="pokemonNumber">
-                    </h3>
+                    <h3 id="pokemonNumber"></h3>
                     <p id="pokemonGenus"></p>
                     <div id="pokemonTypeContainer">
-                        <img class="typeIcon" src="" id="pokemonType1" alt="" style="display:none;" width="60" height="60">
-                        <img class="typeIcon" src="" id="pokemonType2" alt="" style="display:none;" width="60" height="60">
-                    </div> 
+                        <img
+                            class="typeIcon"
+                            src=""
+                            id="pokemonType1"
+                            alt=""
+                            style="display: none"
+                            width="60"
+                            height="60"
+                        />
+                        <img
+                            class="typeIcon"
+                            src=""
+                            id="pokemonType2"
+                            alt=""
+                            style="display: none"
+                            width="60"
+                            height="60"
+                        />
+                    </div>
                     <p id="pokemonFlavorText"></p>
                     <dl id="pokemonMeasurements">
                         <div>
@@ -76,8 +116,7 @@
                             <dd id="pokemonWeight"></dd>
                         </div>
                     </dl>
-                    <p id="pokemonAbility">
-                    </p>
+                    <p id="pokemonAbility"></p>
                     <section id="pokemonStats" aria-labelledby="statsHeading">
                         <h2 id="statsHeading">Base stats</h2>
                         <ul id="statsList"></ul>
@@ -96,9 +135,25 @@
             <section id="compareSection" class="tileSection" aria-labelledby="compareHeading">
                 <h2 id="compareHeading">Compare Pokémon</h2>
                 <form id="compareForm">
-                    <input type="text" id="compareLeftInput" class="compareInput" placeholder="First Pokémon" aria-label="First Pokémon" list="pokemonNameList" autocomplete="off">
+                    <input
+                        type="text"
+                        id="compareLeftInput"
+                        class="compareInput"
+                        placeholder="First Pokémon"
+                        aria-label="First Pokémon"
+                        list="pokemonNameList"
+                        autocomplete="off"
+                    />
                     <span aria-hidden="true">vs</span>
-                    <input type="text" id="compareRightInput" class="compareInput" placeholder="Second Pokémon" aria-label="Second Pokémon" list="pokemonNameList" autocomplete="off">
+                    <input
+                        type="text"
+                        id="compareRightInput"
+                        class="compareInput"
+                        placeholder="Second Pokémon"
+                        aria-label="Second Pokémon"
+                        list="pokemonNameList"
+                        autocomplete="off"
+                    />
                     <button type="submit" class="btn" id="compareBtn">Compare</button>
                 </form>
                 <p id="compareStatus" role="status"></p>

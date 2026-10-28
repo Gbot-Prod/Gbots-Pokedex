@@ -1,14 +1,14 @@
 /* Page-level colour tokens. Dark values apply via the OS setting or the theme toggle. */
 :root {
     color-scheme: light;
-    --page-bg: #88A8D0;
+    --page-bg: #88a8d0;
     --input-bg: #b6dff0;
     --ink: rgb(18, 40, 112);
     --ink-on-accent: rgb(18, 40, 112);
     --surface: rgba(255, 255, 255, 0.5);
     --surface-hover: rgba(255, 255, 255, 0.8);
     --surface-solid: #ffffff;
-    --tile-bg: #9EBEE8;
+    --tile-bg: #9ebee8;
     --tile-hover: #b6d0f0;
     --win: #1a7a42;
 }
@@ -101,7 +101,7 @@ body {
 }
 
 .btn:active {
-  scale: 0.9;
+    scale: 0.9;
 }
 
 .btn:disabled {
@@ -182,14 +182,14 @@ body {
 
 #pokemonCardContainer {
     /* Default (blue) theme; overridden per primary type from pokemon.js */
-    --type-strong: #6884E3;
-    --type-light: #9EBEE8;
-    --type-deep: #336EBA;
+    --type-strong: #6884e3;
+    --type-light: #9ebee8;
+    --type-deep: #336eba;
     --card-body: var(--type-light);
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-     
+    justify-content: center;
+
     font-family: inter, arial, sans-serif;
     color: #ffffff;
 
@@ -261,7 +261,9 @@ body {
     border-radius: 10px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-    transition: background-color 0.4s, border-color 0.4s;
+    transition:
+        background-color 0.4s,
+        border-color 0.4s;
 }
 
 .navBtn {
@@ -289,14 +291,14 @@ body {
 #pokemonDetailsContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
 
     font-family: inter, arial, sans-serif;
     font-size: 16px;
     text-align: center;
     color: var(--ink);
-    
+
     border: 2px solid var(--card-body);
     background-color: var(--card-body);
     border-radius: 0px 0px 10px 10px;
@@ -460,7 +462,9 @@ body {
     background: none;
     color: #f2b705;
     /* dark outline keeps the star visible on yellow (Electric) cards */
-    text-shadow: 0 0 1px #3a2a00, 0 0 2px #3a2a00;
+    text-shadow:
+        0 0 1px #3a2a00,
+        0 0 2px #3a2a00;
     font-size: 2rem;
     line-height: 1;
     cursor: pointer;
@@ -791,7 +795,9 @@ body {
     font-family: inherit;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.15s, background-color 0.15s;
+    transition:
+        transform 0.15s,
+        background-color 0.15s;
 }
 
 .browseTile:hover {
