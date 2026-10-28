@@ -31,6 +31,7 @@ const MAX_DEX_NUMBER = 1025;
 const shinyButton = document.getElementById("shinyToggleBtn");
 
 let currentDexNumber = null;
+let currentPokemon = null; // { id, name } of the Pokémon on the card
 let currentSprites = null;
 let showShiny = false;
 let latestRequest = 0;
@@ -211,6 +212,8 @@ function renderSpecies(species) {
 function renderPokemon(data) {
     // Alternate forms (e.g. id 10034) navigate relative to their species' dex number.
     currentDexNumber = idFromUrl(data.species.url) || data.id;
+    currentPokemon = { id: data.id, name: data.name };
+    updateFavoriteButton();
     prevButton.disabled = currentDexNumber <= 1;
     nextButton.disabled = currentDexNumber >= MAX_DEX_NUMBER;
 
@@ -599,7 +602,7 @@ function createBrowseTile(entry) {
 
     button.append(sprite, number, name);
     button.addEventListener("click", () => {
-        goToDexNumber(entry.id);
+        showPokemon(entry.id);
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
     item.append(button);
@@ -625,6 +628,73 @@ document.getElementById("searchForm").addEventListener("submit", (event) => {
     event.preventDefault();
     fetchData();
 });
+// --- Favorites ------------------------------------------------------------
+
+const FAVORITES_KEY = "pokedex:favorites:v1";
+const favoriteButton = document.getElementById("favoriteBtn");
+const favoritesSection = document.getElementById("favoritesSection");
+const favoritesListElement = document.getElementById("favoritesList");
+
+function loadStoredList(key) {
+    try {
+        const list = JSON.parse(localStorage.getItem(key));
+        return Array.isArray(list) ? list : [];
+    }
+    catch (error) {
+        return [];
+    }
+}
+
+function saveStoredList(key, list) {
+    try {
+        localStorage.setItem(key, JSON.stringify(list));
+    }
+    catch (error) {
+        // storage full or unavailable; the list still works until the page closes
+    }
+}
+
+let favorites = loadStoredList(FAVORITES_KEY);
+
+function isFavorite(id) {
+    return favorites.some((entry) => entry.id === id);
+}
+
+function toggleFavorite() {
+    if (!currentPokemon) {
+        return;
+    }
+    if (isFavorite(currentPokemon.id)) {
+        favorites = favorites.filter((entry) => entry.id !== currentPokemon.id);
+    } else {
+        favorites = [...favorites, currentPokemon].sort((a, b) => a.id - b.id);
+    }
+    saveStoredList(FAVORITES_KEY, favorites);
+    updateFavoriteButton();
+    renderFavorites();
+}
+
+function updateFavoriteButton() {
+    const active = currentPokemon !== null && isFavorite(currentPokemon.id);
+    favoriteButton.textContent = active ? "★" : "☆";
+    favoriteButton.setAttribute("aria-pressed", String(active));
+    favoriteButton.title = active ? "Remove from favorites" : "Add to favorites";
+}
+
+function renderFavorites() {
+    favoritesSection.hidden = favorites.length === 0;
+    favoritesListElement.replaceChildren(...favorites.map(createBrowseTile));
+}
+
+favoriteButton.addEventListener("click", toggleFavorite);
+renderFavorites();
+
+// Loads any Pokémon by id, including alternate forms above the National Dex range.
+function showPokemon(id) {
+    searchInput.value = id;
+    loadPokemon(String(id));
+}
+
 function goToDexNumber(dexNumber) {
     if (dexNumber < 1 || dexNumber > MAX_DEX_NUMBER) {
         return;

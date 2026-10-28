@@ -40,8 +40,11 @@
                         <img class="order3" src="" id="pokemonSprite" alt="Pokémon Image" style="display:none;" >
                         <button type="button" id="shinyToggleBtn" aria-pressed="false" title="Show shiny sprite">✨ Shiny</button>
                     </div>
-                    <h1 id="pokemonName"> 
-                    </h1>
+                    <div id="pokemonNameRow">
+                        <h1 id="pokemonName">
+                        </h1>
+                        <button type="button" id="favoriteBtn" aria-pressed="false" aria-label="Favorite" title="Add to favorites">☆</button>
+                    </div>
                     <h3 id="pokemonNumber">
                     </h3>
                     <p id="pokemonGenus"></p>
@@ -73,7 +76,12 @@
                 </div>
             </div>
 
-            <section id="browseSection" aria-labelledby="browseHeading">
+            <section id="favoritesSection" class="tileSection" aria-labelledby="favoritesHeading" hidden>
+                <h2 id="favoritesHeading">Favorites</h2>
+                <ul id="favoritesList" class="tileGrid"></ul>
+            </section>
+
+            <section id="browseSection" class="tileSection" aria-labelledby="browseHeading">
                 <h2 id="browseHeading">Browse the Pokédex</h2>
                 <div id="browseFilters">
                     <label for="typeFilter">Type</label>
@@ -86,7 +94,7 @@
                     </select>
                 </div>
                 <p id="browseStatus" role="status"></p>
-                <ul id="browseGrid"></ul>
+                <ul id="browseGrid" class="tileGrid"></ul>
                 <nav id="browsePagination" aria-label="Browse pages">
                     <button type="button" class="btn" id="browsePrevBtn">‹ Prev</button>
                     <span id="browsePageLabel"></span>

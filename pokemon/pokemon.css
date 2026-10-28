@@ -229,6 +229,26 @@ body {
     padding: 6px 12px;
 }
 
+#pokemonNameRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#favoriteBtn {
+    border: none;
+    background: none;
+    color: #f2b705;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+#favoriteBtn:hover {
+    transform: scale(1.2);
+}
+
 #pokemonGenus {
     margin: -0.5rem 0 0.8rem;
     font-style: italic;
@@ -422,14 +442,14 @@ body {
     padding: 5px;
 }
 
-#browseSection {
+.tileSection {
     margin: 2rem 0;
     font-family: inter, arial, sans-serif;
     color: #ffffff;
     text-align: center;
 }
 
-#browseHeading {
+.tileSection h2 {
     margin: 0 0 1rem;
 }
 
@@ -458,7 +478,7 @@ body {
     display: none;
 }
 
-#browseGrid {
+.tileGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
     gap: 0.6rem;
