@@ -494,6 +494,49 @@ body {
     padding-top: 0.4rem;
 }
 
+#pokemonMatchups {
+    width: 100%;
+    max-width: 28rem;
+    padding: 0 1rem 1rem;
+    box-sizing: border-box;
+}
+
+#matchupsHeading {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem;
+}
+
+#matchupsList {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.4rem 0.8rem;
+    align-items: center;
+    margin: 0;
+    text-align: left;
+}
+
+#matchupsList dt {
+    font-weight: 700;
+}
+
+#matchupsList dd {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin: 0;
+}
+
+.matchupBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.1rem 0.5rem 0.1rem 0.1rem;
+    border-radius: 999px;
+    background-color: var(--surface);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
 #pokemonEvolution {
     width: 100%;
     padding: 0 1rem 1rem;

@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Type effectiveness chart (weaknesses/resistances)
 - [ ] Compare two Pokémon side by side
 
 ## Done
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Meaningful `alt` text (e.g. "Pikachu sprite", "Electric type") (2026-10-28) — sprite alt 'Gengar sprite' / 'Shiny Gengar sprite', type icons 'Ghost type' (+ title tooltip); decorative tile sprites keep alt="" since the name is next to them
 - [x] Keyboard focus styles and ARIA live region for results (2026-10-28) — removed outline:none overrides; yellow :focus-visible ring; visually-hidden aria-live region announces each loaded Pokémon
 - [x] Favicon and page title that updates with the current Pokémon (2026-10-28) — Poké Ball SVG favicon; title becomes 'Gengar #94 · Pokédex' and resets on Clear
+- [x] Type effectiveness chart (weaknesses/resistances) (2026-10-28) — 'Type matchups' section: weak to / resists / immune with type icons and 4×–0× multipliers, computed from each type's damage_relations

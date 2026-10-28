@@ -66,6 +66,7 @@ async function loadPokemon(query) {
         }
         renderPokemon(data);
         loadSpecies(data.species.url, requestId);
+        loadMatchups(data.types.map((entry) => entry.type.name), requestId);
     }
     catch (error) {
         if (requestId === latestRequest) {
@@ -150,6 +151,86 @@ async function loadSpecies(url, requestId) {
             evolutionSection.hidden = true;
         }
     }
+}
+
+// --- Type effectiveness -----------------------------------------------------
+
+const matchupsSection = document.getElementById("pokemonMatchups");
+const matchupsListElement = document.getElementById("matchupsList");
+
+const MATCHUP_GROUPS = [
+    { label: "Weak to", test: (multiplier) => multiplier > 1 },
+    { label: "Resists", test: (multiplier) => multiplier > 0 && multiplier < 1 },
+    { label: "Immune to", test: (multiplier) => multiplier === 0 },
+];
+
+// Multiplies damage relations across the Pokémon's types to get the damage
+// each attacking type deals to it (e.g. Ground vs. Electric/Flying = 0×).
+async function loadMatchups(types, requestId) {
+    matchupsSection.hidden = true;
+    try {
+        const typeData = await Promise.all(types.map((type) => fetchJson(API_BASE + "type/" + type)));
+        if (requestId !== latestRequest) {
+            return;
+        }
+
+        const multipliers = Object.fromEntries(Object.keys(TYPE_ICONS).map((type) => [type, 1]));
+        for (const { damage_relations: relations } of typeData) {
+            for (const { name } of relations.double_damage_from) {
+                multipliers[name] *= 2;
+            }
+            for (const { name } of relations.half_damage_from) {
+                multipliers[name] *= 0.5;
+            }
+            for (const { name } of relations.no_damage_from) {
+                multipliers[name] = 0;
+            }
+        }
+        renderMatchups(multipliers);
+    }
+    catch (error) {
+        // matchups are optional; leave the section hidden
+    }
+}
+
+function formatMultiplier(multiplier) {
+    return { 0.25: "¼", 0.5: "½" }[multiplier] ?? String(multiplier);
+}
+
+function renderMatchups(multipliers) {
+    matchupsListElement.replaceChildren();
+
+    for (const group of MATCHUP_GROUPS) {
+        const types = Object.keys(multipliers)
+            .filter((type) => type in TYPE_ICONS && group.test(multipliers[type]))
+            .sort((a, b) => multipliers[b] - multipliers[a]);
+        if (!types.length) {
+            continue;
+        }
+
+        const term = document.createElement("dt");
+        term.textContent = group.label;
+        const definition = document.createElement("dd");
+        for (const type of types) {
+            const badge = document.createElement("span");
+            badge.className = "matchupBadge";
+            badge.title = formatName(type) + ": " + formatMultiplier(multipliers[type]) + "× damage";
+
+            const icon = document.createElement("img");
+            icon.src = "assets/" + TYPE_ICONS[type];
+            icon.alt = formatName(type);
+            icon.width = 28;
+            icon.height = 28;
+
+            const value = document.createElement("span");
+            value.textContent = formatMultiplier(multipliers[type]) + "×";
+
+            badge.append(icon, value);
+            definition.append(badge);
+        }
+        matchupsListElement.append(term, definition);
+    }
+    matchupsSection.hidden = false;
 }
 
 function idFromUrl(url) {
