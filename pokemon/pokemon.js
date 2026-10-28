@@ -84,7 +84,7 @@ async function fetchData() {
                 type1IconElement.style.display = "block";
                 break
             case "psychic":
-                type1IconElement.src = "PsychicIcon.png";
+                type1IconElement.src = "assets/PsychicIcon.png";
                 type1IconElement.style.display = "block";
                 break
             case "bug":
@@ -160,7 +160,7 @@ async function fetchData() {
                 type2IconElement.style.display = "block";
                 break
             case "psychic":
-                type2IconElement.src = "PsychicIcon.png";
+                type2IconElement.src = "assets/PsychicIcon.png";
                 type2IconElement.style.display = "block";
                 break
             case "bug":
