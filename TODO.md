@@ -21,7 +21,6 @@ Rules for each run:
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
-- [ ] Friendly "Pokémon not found" state
 
 ## 6. Performance, accessibility & polish
 - [ ] Cache API responses in memory/`sessionStorage` to avoid repeat fetches
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Card colors themed by the Pokémon's primary type (2026-10-28) — CSS custom properties (--type-strong/light/deep) set from a TYPE_COLORS map for the primary type
 - [x] Dark mode (2026-10-28) — colour tokens on :root; follows prefers-color-scheme, with a 🌙/☀️ toggle saved in localStorage (applied before first paint); card body becomes a dark tint of the type colour
 - [x] Smooth card animations and image fade-in (2026-10-28) — card fades/slides in, tiles stagger in, sprites fade in once loaded (fadeInImage); all motion disabled under prefers-reduced-motion
+- [x] Friendly "Pokémon not found" state (2026-10-28) — names the failed query, explains valid number range, and offers up to 3 'Did you mean' buttons (prefix match + edit distance); network errors get their own message

@@ -149,6 +149,32 @@ body {
     text-align: center;
 }
 
+#errorMessage p {
+    margin: 0;
+}
+
+#errorMessage .suggestions {
+    margin-top: 0.6rem;
+    font-weight: 500;
+}
+
+.suggestionBtn {
+    margin: 0 0.2rem;
+    padding: 0.2rem 0.7rem;
+    border: 2px solid #9b1c1c;
+    border-radius: 999px;
+    background: none;
+    color: #9b1c1c;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.suggestionBtn:hover {
+    background-color: #9b1c1c;
+    color: #ffffff;
+}
+
 #errorMessage.hidden {
     display: none;
 }

@@ -68,7 +68,11 @@ async function loadPokemon(query) {
     }
     catch (error) {
         if (requestId === latestRequest) {
-            showError(isNotFound(error) ? "Pokémon not found. Check the spelling or number and try again." : "Couldn't reach the Pokédex. Please try again.");
+            if (isNotFound(error)) {
+                showNotFound(query, requestId);
+            } else {
+                showError("Couldn't reach the Pokédex. Check your connection and try again.");
+            }
         }
     }
     finally {
@@ -454,14 +458,86 @@ function isNotFound(error) {
 }
 
 function showError(message) {
-    errorElement.textContent = message;
+    const text = document.createElement("p");
+    text.textContent = message;
+    errorElement.replaceChildren(text);
     errorElement.classList.remove("hidden");
+}
+
+function showNotFound(query, requestId) {
+    if (/^\d+$/.test(query)) {
+        showError("There's no Pokémon #" + query + ". Try a number from 1 to " + MAX_DEX_NUMBER + ".");
+        return;
+    }
+    showError("No Pokémon called \u201c" + formatName(query) + "\u201d. Check the spelling and try again.");
+    addNameSuggestions(query, requestId);
+}
+
+// Classic edit distance, used to suggest names close to a misspelled search.
+function editDistance(a, b) {
+    let previous = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+        const current = [i];
+        for (let j = 1; j <= b.length; j++) {
+            current[j] = Math.min(
+                previous[j] + 1,
+                current[j - 1] + 1,
+                previous[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+            );
+        }
+        previous = current;
+    }
+    return previous[b.length];
+}
+
+async function addNameSuggestions(query, requestId) {
+    let entries;
+    try {
+        entries = await getAllPokemonEntries();
+    }
+    catch (error) {
+        return; // suggestions are a bonus; the message is already shown
+    }
+    if (requestId !== latestRequest) {
+        return;
+    }
+
+    const maxDistance = Math.max(2, Math.floor(query.length / 3));
+    const suggestions = entries
+        .map((entry) => ({
+            entry,
+            // Names that start with the query (e.g. "pika") rank first.
+            score: entry.name.startsWith(query) ? 0 : editDistance(query, entry.name),
+        }))
+        .filter((candidate) => candidate.score <= maxDistance)
+        .sort((a, b) => a.score - b.score || a.entry.id - b.entry.id)
+        .slice(0, 3);
+
+    if (!suggestions.length) {
+        return;
+    }
+
+    const line = document.createElement("p");
+    line.className = "suggestions";
+    line.append("Did you mean ");
+    suggestions.forEach(({ entry }, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "suggestionBtn";
+        button.textContent = formatName(entry.name);
+        button.addEventListener("click", () => {
+            searchInput.value = formatName(entry.name);
+            loadPokemon(entry.name);
+        });
+        line.append(button, index < suggestions.length - 1 ? " " : "?");
+    });
+    errorElement.append(line);
 }
 
 function clearFields() {
     pokemonCard.classList.add("hidden");
     errorElement.classList.add("hidden");
-    errorElement.textContent = "";
+    errorElement.replaceChildren();
 }
 
 // --- Autocomplete -------------------------------------------------------
