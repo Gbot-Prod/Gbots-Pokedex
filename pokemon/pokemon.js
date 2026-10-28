@@ -48,165 +48,43 @@ async function fetchData() {
     catch (error) {
         showError(isNotFound(error) ? "Pokémon not found. Check the spelling and try again." : "Couldn't reach the Pokédex. Please try again.");
     }
+}
 
-    function fetchPKMNType(pkmnType, pkmnType2) {
-        type1IconElement.style.display = "none";
-        type2IconElement.style.display = "none";
+const TYPE_ICONS = {
+    normal: "NormalIcon.png",
+    fire: "FireIcon.png",
+    water: "WaterIcon.png",
+    grass: "GrassIcon.png",
+    electric: "ElectricIcon.png",
+    ice: "IceIcon.png",
+    fighting: "FightingIcon.png",
+    poison: "PoisonIcon.png",
+    ground: "GroundIcon.png",
+    flying: "FlyingIcon.png",
+    psychic: "PsychicIcon.png",
+    bug: "BugIcon.png",
+    rock: "RockIcon.png",
+    ghost: "GhostIcon.png",
+    dark: "DarkIcon.png",
+    dragon: "DragonIcon.png",
+    steel: "SteelIcon.png",
+    fairy: "FairyIcon.png",
+};
 
-        switch (pkmnType) {
-            case "normal":
-                type1IconElement.src = "assets/NormalIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "fire":
-                type1IconElement.src = "assets/FireIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "water":
-                type1IconElement.src = "assets/WaterIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "grass":
-                type1IconElement.src = "assets/GrassIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "electric":
-                type1IconElement.src = "assets/ElectricIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "ice":
-                type1IconElement.src = "assets/IceIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "fighting":
-                type1IconElement.src = "assets/FightingIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "poison":
-                type1IconElement.src = "assets/PoisonIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "ground":
-                type1IconElement.src = "assets/GroundIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "flying":
-                type1IconElement.src = "assets/FlyingIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "psychic":
-                type1IconElement.src = "assets/PsychicIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "bug":
-                type1IconElement.src = "assets/BugIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "rock":
-                type1IconElement.src = "assets/RockIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "ghost":
-                type1IconElement.src = "assets/GhostIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "dark":
-                type1IconElement.src = "assets/DarkIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "dragon":
-                type1IconElement.src = "assets/DragonIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "steel":
-                type1IconElement.src = "assets/SteelIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            case "fairy":
-                type1IconElement.src = "assets/FairyIcon.png";
-                type1IconElement.style.display = "block";
-                break
-            default:
-                return "none";
-        }
-
-        switch (pkmnType2) {
-            case "normal":
-                type2IconElement.src = "assets/NormalIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "fire":
-                type2IconElement.src = "assets/FireIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "water":
-                type2IconElement.src = "assets/WaterIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "grass":
-                type2IconElement.src = "assets/GrassIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "electric":
-                type2IconElement.src = "assets/ElectricIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "ice":
-                type2IconElement.src = "assets/IceIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "fighting":
-                type2IconElement.src = "assets/FightingIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "poison":
-                type2IconElement.src = "assets/PoisonIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "ground":
-                type2IconElement.src = "assets/GroundIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "flying":
-                type2IconElement.src = "assets/FlyingIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "psychic":
-                type2IconElement.src = "assets/PsychicIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "bug":
-                type2IconElement.src = "assets/BugIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "rock":
-                type2IconElement.src = "assets/RockIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "ghost":
-                type2IconElement.src = "assets/GhostIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "dark":
-                type2IconElement.src = "assets/DarkIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "dragon":
-                type2IconElement.src = "assets/DragonIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "steel":
-                type2IconElement.src = "assets/SteelIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            case "fairy":
-                type2IconElement.src = "assets/FairyIcon.png";
-                type2IconElement.style.display = "block";
-                break
-            default:
-                return "none";
-        }    
+function setTypeIcon(iconElement, type) {
+    const icon = TYPE_ICONS[type];
+    if (icon) {
+        iconElement.src = "assets/" + icon;
+        iconElement.style.display = "block";
+    } else {
+        iconElement.removeAttribute("src");
+        iconElement.style.display = "none";
     }
+}
+
+function fetchPKMNType(pkmnType, pkmnType2) {
+    setTypeIcon(type1IconElement, pkmnType);
+    setTypeIcon(type2IconElement, pkmnType2);
 }
 
 function isNotFound(error) {

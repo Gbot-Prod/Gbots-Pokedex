@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Replace both 18-case `switch` blocks with a single type → icon lookup map
 - [ ] Remove `console.log(data)` and stray debug output
 - [ ] Replace inline `onclick` handlers with `addEventListener`
 - [ ] Move repeated button/font CSS into a shared `.btn` class
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] CSS selector `#pokemonlookupInpt` doesn't match the id `pokemonLookupInpt`, so the input is unstyled (2026-10-28) — fixed the id case so the input gets its styling (also font-style: bold → font-weight: 700)
 - [x] Trim whitespace from the search input; ignore empty searches (2026-10-28) — input is trimmed; empty searches do nothing
 - [x] Add `<!DOCTYPE html>`, `<meta charset>` and a viewport meta tag (2026-10-28) — added doctype, lang, UTF-8 charset (fixes 'PokÃ©mon' mojibake) and viewport meta
+- [x] Replace both 18-case `switch` blocks with a single type → icon lookup map (2026-10-28) — single TYPE_ICONS map + setTypeIcon helper (~150 lines removed)
