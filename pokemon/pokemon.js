@@ -1,5 +1,15 @@
 import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries } from "./api.js";
-import { describeEvolution, editDistance, formatMultiplier, formatName, idFromUrl, normalizeQuery } from "./utils.js";
+import { initCompare } from "./compare.js";
+import {
+    STAT_LABELS,
+    pickSprite,
+    describeEvolution,
+    editDistance,
+    formatMultiplier,
+    formatName,
+    idFromUrl,
+    normalizeQuery,
+} from "./utils.js";
 
 const imgElement = document.getElementById("pokemonSprite");
 const nameElement = document.getElementById("pokemonName");
@@ -304,12 +314,6 @@ function renderPokemon(data, query) {
     pokemonCard.classList.remove("hidden");
 }
 
-// Not every form has a HOME render, so fall back to official artwork, then the game sprite.
-function pickSprite(sprites, shiny) {
-    const key = shiny ? "front_shiny" : "front_default";
-    return sprites.other.home[key] || sprites.other["official-artwork"][key] || sprites[key] || "";
-}
-
 function renderSprite() {
     if (!currentSprites) {
         return;
@@ -357,14 +361,6 @@ function renderAbilities(abilities) {
     }
 }
 
-const STAT_LABELS = {
-    hp: "HP",
-    attack: "Attack",
-    defense: "Defense",
-    "special-attack": "Sp. Atk",
-    "special-defense": "Sp. Def",
-    speed: "Speed",
-};
 // Highest single base stat in the games (Blissey's HP), used to scale the bars.
 const MAX_BASE_STAT = 255;
 
@@ -868,117 +864,7 @@ themeToggleButton.addEventListener("click", () => {
 prefersDark.addEventListener("change", updateThemeButton);
 updateThemeButton();
 
-// --- Compare ----------------------------------------------------------------
-
-const compareForm = document.getElementById("compareForm");
-const compareLeftInput = document.getElementById("compareLeftInput");
-const compareRightInput = document.getElementById("compareRightInput");
-const compareStatusElement = document.getElementById("compareStatus");
-const compareResultElement = document.getElementById("compareResult");
-const compareTable = document.getElementById("compareTable");
-let latestCompare = 0;
-
-async function comparePokemon() {
-    const queries = [normalizeQuery(compareLeftInput.value), normalizeQuery(compareRightInput.value)];
-    if (queries.some((query) => !query)) {
-        compareStatusElement.textContent = "Enter two Pokémon to compare.";
-        return;
-    }
-
-    const compareId = ++latestCompare;
-    compareStatusElement.textContent = "Loading…";
-    const results = await Promise.allSettled(
-        queries.map((query) => fetchJson(API_BASE + "pokemon/" + encodeURIComponent(query))),
-    );
-    if (compareId !== latestCompare) {
-        return;
-    }
-
-    const missing = queries.filter((query, index) => results[index].status === "rejected");
-    if (missing.length) {
-        compareResultElement.hidden = true;
-        compareStatusElement.textContent =
-            "Couldn't find " + missing.map((query) => "\u201c" + formatName(query) + "\u201d").join(" or ") + ".";
-        return;
-    }
-
-    compareStatusElement.textContent = "";
-    renderComparison(results.map((result) => result.value));
-}
-
-function renderComparison([left, right]) {
-    const head = compareTable.tHead;
-    const body = compareTable.tBodies[0];
-    head.replaceChildren();
-    body.replaceChildren();
-
-    const headRow = head.insertRow();
-    headRow.append(document.createElement("th"));
-    for (const pokemon of [left, right]) {
-        const cell = document.createElement("th");
-        cell.scope = "col";
-        const sprite = document.createElement("img");
-        sprite.src = pickSprite(pokemon.sprites, false);
-        sprite.alt = formatName(pokemon.name) + " sprite";
-        sprite.width = 96;
-        sprite.height = 96;
-        const name = document.createElement("span");
-        name.textContent = formatName(pokemon.name);
-        const types = document.createElement("small");
-        types.textContent = pokemon.types.map((entry) => formatName(entry.type.name)).join(" / ");
-        cell.append(sprite, name, types);
-        headRow.append(cell);
-    }
-
-    const statValue = (pokemon, statName) =>
-        pokemon.stats.find((entry) => entry.stat.name === statName)?.base_stat ?? 0;
-    const rows = Object.keys(STAT_LABELS).map((statName) => [
-        STAT_LABELS[statName],
-        statValue(left, statName),
-        statValue(right, statName),
-    ]);
-    const total = (pokemon) => pokemon.stats.reduce((sum, entry) => sum + entry.base_stat, 0);
-    rows.push(["Total", total(left), total(right)]);
-    rows.push(["Height (m)", left.height / 10, right.height / 10]);
-    rows.push(["Weight (kg)", left.weight / 10, right.weight / 10]);
-
-    for (const [label, leftValue, rightValue] of rows) {
-        const row = body.insertRow();
-        const header = document.createElement("th");
-        header.scope = "row";
-        header.textContent = label;
-        row.append(header);
-        for (const [value, other] of [
-            [leftValue, rightValue],
-            [rightValue, leftValue],
-        ]) {
-            const cell = row.insertCell();
-            cell.textContent = value;
-            if (value > other) {
-                cell.className = "compareWinner";
-            }
-        }
-    }
-
-    compareResultElement.hidden = false;
-}
-
-compareForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    comparePokemon();
-});
-compareLeftInput.addEventListener("focus", loadNameSuggestions);
-compareRightInput.addEventListener("focus", loadNameSuggestions);
-
-document.getElementById("compareCurrentBtn").addEventListener("click", () => {
-    if (!currentPokemon) {
-        return;
-    }
-    compareLeftInput.value = formatName(currentPokemon.name);
-    compareRightInput.value = "";
-    document.getElementById("compareSection").scrollIntoView({ behavior: "smooth" });
-    compareRightInput.focus({ preventScroll: true });
-});
+initCompare({ getCurrentPokemon: () => currentPokemon, loadNameSuggestions });
 
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
 function showPokemon(id) {

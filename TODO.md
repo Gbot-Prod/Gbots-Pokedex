@@ -16,7 +16,7 @@ Rules for each run:
 
 ## 2. Code quality
 - [ ] Split `pokemon.js` into ES modules, in steps:
-  - [ ] Step 3: move browse/favorites/recent tiles into `lists.js` and compare into `compare.js`
+  - [ ] Step 3b: move browse/favorites/recent tiles into `lists.js`
   - [ ] Step 4: consider Vite (dev server + bundling) once there are several modules
 
 ## 3. Core Pokédex features
@@ -92,3 +92,4 @@ Rules for each run:
 - [x] Add ESLint + Prettier with an `npm run lint` script and fix what it reports (2026-10-28) — eslint.config.js (recommended rules) + .prettierrc (4 spaces, 120 cols); npm run lint / npm run format; fixed unused catch bindings and formatted the code
 - [x] Split pokemon.js — step 1: page loads as an ES module; pure helpers moved to utils.js with 6 node:test unit tests (2026-10-28) — README now says to serve over HTTP (npm start)
 - [x] Split pokemon.js — step 2: PokéAPI access, response caching and the cached entry list moved to `api.js` (2026-10-28) — pokemon.js imports fetchJson/getAllPokemonEntries
+- [x] Split pokemon.js — step 3a: comparison moved to `compare.js` (`initCompare`), `pickSprite`/`STAT_LABELS` moved to utils.js (2026-10-28)

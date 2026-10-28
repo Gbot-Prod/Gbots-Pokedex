@@ -14,6 +14,7 @@ pokemon/
   pokemon.html   page markup
   pokemon.css    styles
   pokemon.js     page logic (ES module): fetching, rendering, browse, favorites…
+  compare.js     side-by-side comparison table
   api.js         PokéAPI requests with in-memory/sessionStorage caching
   utils.js       pure helpers (name formatting, query normalisation, …)
   assets/        type icons (one PNG per type, e.g. FireIcon.png)

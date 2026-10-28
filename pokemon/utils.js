@@ -69,3 +69,18 @@ export function editDistance(a, b) {
     }
     return previous[b.length];
 }
+
+export const STAT_LABELS = {
+    hp: "HP",
+    attack: "Attack",
+    defense: "Defense",
+    "special-attack": "Sp. Atk",
+    "special-defense": "Sp. Def",
+    speed: "Speed",
+};
+
+// Not every form has a HOME render, so fall back to official artwork, then the game sprite.
+export function pickSprite(sprites, shiny) {
+    const key = shiny ? "front_shiny" : "front_default";
+    return sprites.other.home[key] || sprites.other["official-artwork"][key] || sprites[key] || "";
+}
