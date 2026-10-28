@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Favicon and page title that updates with the current Pokémon
 - [ ] Type effectiveness chart (weaknesses/resistances)
 - [ ] Compare two Pokémon side by side
 
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Cache API responses in memory/`sessionStorage` to avoid repeat fetches (2026-10-28) — fetchJson keeps an in-memory promise cache (dedupes in-flight requests) plus sessionStorage for payloads ≤150k chars; failures aren't cached
 - [x] Meaningful `alt` text (e.g. "Pikachu sprite", "Electric type") (2026-10-28) — sprite alt 'Gengar sprite' / 'Shiny Gengar sprite', type icons 'Ghost type' (+ title tooltip); decorative tile sprites keep alt="" since the name is next to them
 - [x] Keyboard focus styles and ARIA live region for results (2026-10-28) — removed outline:none overrides; yellow :focus-visible ring; visually-hidden aria-live region announces each loaded Pokémon
+- [x] Favicon and page title that updates with the current Pokémon (2026-10-28) — Poké Ball SVG favicon; title becomes 'Gengar #94 · Pokédex' and resets on Clear

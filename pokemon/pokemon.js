@@ -19,6 +19,7 @@ const flavorTextElement = document.getElementById("pokemonFlavorText");
 const evolutionSection = document.getElementById("pokemonEvolution");
 const evolutionListElement = document.getElementById("evolutionList");
 
+const DEFAULT_TITLE = document.title;
 const API_BASE = "https://pokeapi.co/api/v2/";
 const SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
@@ -256,6 +257,7 @@ function renderPokemon(data) {
     updateFavoriteButton();
     addToRecent(currentPokemon);
     announceResult(data);
+    document.title = formatName(data.name) + " #" + data.id + " · Pokédex";
     prevButton.disabled = currentDexNumber <= 1;
     nextButton.disabled = currentDexNumber >= MAX_DEX_NUMBER;
 
@@ -584,6 +586,7 @@ async function addNameSuggestions(query, requestId) {
 
 function clearFields() {
     pokemonCard.classList.add("hidden");
+    document.title = DEFAULT_TITLE;
     errorElement.classList.add("hidden");
     errorElement.replaceChildren();
 }
