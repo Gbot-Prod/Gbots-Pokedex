@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Move repeated button/font CSS into a shared `.btn` class
 - [ ] Add a README describing the project and how to run it
 
 ## 3. Core Pokédex features
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Replace both 18-case `switch` blocks with a single type → icon lookup map (2026-10-28) — single TYPE_ICONS map + setTypeIcon helper (~150 lines removed)
 - [x] Remove `console.log(data)` and stray debug output (2026-10-28) — removed debug logging
 - [x] Replace inline `onclick` handlers with `addEventListener` (2026-10-28) — buttons wired up with addEventListener in pokemon.js
+- [x] Move repeated button/font CSS into a shared `.btn` class (2026-10-28) — shared .btn rule; buttons only set their colour; removed duplicate .hidden rule
