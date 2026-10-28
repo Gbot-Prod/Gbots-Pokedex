@@ -482,6 +482,20 @@ const browsePrevButton = document.getElementById("browsePrevBtn");
 const browseNextButton = document.getElementById("browseNextBtn");
 const browseStatusElement = document.getElementById("browseStatus");
 const typeFilterElement = document.getElementById("typeFilter");
+const generationFilterElement = document.getElementById("generationFilter");
+
+// National Dex number ranges introduced by each generation.
+const GENERATIONS = [
+    { number: 1, region: "Kanto", first: 1, last: 151 },
+    { number: 2, region: "Johto", first: 152, last: 251 },
+    { number: 3, region: "Hoenn", first: 252, last: 386 },
+    { number: 4, region: "Sinnoh", first: 387, last: 493 },
+    { number: 5, region: "Unova", first: 494, last: 649 },
+    { number: 6, region: "Kalos", first: 650, last: 721 },
+    { number: 7, region: "Alola", first: 722, last: 809 },
+    { number: 8, region: "Galar", first: 810, last: 905 },
+    { number: 9, region: "Paldea", first: 906, last: 1025 },
+];
 let nationalDexEntries = [];
 let browseEntries = [];
 let browsePage = 0;
@@ -493,6 +507,13 @@ async function initBrowse() {
         option.value = type;
         option.textContent = formatName(type);
         typeFilterElement.append(option);
+    }
+
+    for (const generation of GENERATIONS) {
+        const option = document.createElement("option");
+        option.value = generation.number;
+        option.textContent = "Gen " + generation.number + " (" + generation.region + ")";
+        generationFilterElement.append(option);
     }
 
     browseStatusElement.textContent = "Loading Pokémon…";
@@ -518,13 +539,18 @@ async function getTypeMemberIds(type) {
 
 async function applyBrowseFilters() {
     const type = typeFilterElement.value;
+    const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
     let entries = nationalDexEntries;
+
+    if (generation) {
+        entries = entries.filter((entry) => entry.id >= generation.first && entry.id <= generation.last);
+    }
 
     try {
         if (type) {
             browseStatusElement.textContent = "Loading " + formatName(type) + " Pokémon…";
             const members = await getTypeMemberIds(type);
-            if (type !== typeFilterElement.value) {
+            if (type !== typeFilterElement.value || generationFilterElement.value !== (generation ? String(generation.number) : "")) {
                 return; // the filter changed while we were waiting
             }
             entries = entries.filter((entry) => members.has(entry.id));
@@ -581,6 +607,7 @@ function createBrowseTile(entry) {
 }
 
 typeFilterElement.addEventListener("change", applyBrowseFilters);
+generationFilterElement.addEventListener("change", applyBrowseFilters);
 browsePrevButton.addEventListener("click", () => {
     browsePage--;
     renderBrowsePage();
