@@ -92,15 +92,15 @@ async function fetchData() {
                 type1IconElement.style.display = "block";
                 break
             case "rock":
-                type2iconElement.src = "assets/RockIcon.png";
+                type2IconElement.src = "assets/RockIcon.png";
                 type1IconElement.style.display = "block";
                 break
             case "ghost":
-                type2iconElement.src = "assets/GhostIcon.png";
+                type2IconElement.src = "assets/GhostIcon.png";
                 type1IconElement.style.display = "block";
                 break
             case "dark":
-                type2iconElement.src = "assets/DarkIcon.png";
+                type2IconElement.src = "assets/DarkIcon.png";
                 type1IconElement.style.display = "block";
                 break
             case "dragon":
@@ -168,15 +168,15 @@ async function fetchData() {
                 type2IconElement.style.display = "block";
                 break
             case "rock":
-                type2iconElement.src = "assets/RockIcon.png";
+                type2IconElement.src = "assets/RockIcon.png";
                 type2IconElement.style.display = "block";
                 break
             case "ghost":
-                type2iconElement.src = "assets/GhostIcon.png";
+                type2IconElement.src = "assets/GhostIcon.png";
                 type2IconElement.style.display = "block";
                 break
             case "dark":
-                type2iconElement.src = "assets/DarkIcon.png";
+                type2IconElement.src = "assets/DarkIcon.png";
                 type2IconElement.style.display = "block";
                 break
             case "dragon":

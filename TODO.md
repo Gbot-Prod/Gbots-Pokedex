@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Fix `type2iconElement` typo (lowercase `i`) in `pokemon.js` — it throws a ReferenceError for Rock, Ghost and Dark types
 - [ ] Rock/Ghost/Dark in the *first* type switch set the second icon instead of the first
 - [ ] Psychic icon path is `PsychicIcon.png` (missing `assets/`), and the file is actually named `PsychIconIcon.png` — rename asset to `PsychicIcon.png` and fix path
 - [ ] Electric icon file is named `ElectrIconIcon.png` but code loads `ElectricIcon.png` — rename asset
@@ -70,3 +69,4 @@ Rules for each run:
 ## Done
 <!-- Move completed items here with the date and commit, e.g.
 - [x] Fix typo … (2026-10-28, abc1234) -->
+- [x] Fix `type2iconElement` typo (lowercase `i`) in `pokemon.js` — it throws a ReferenceError for Rock, Ghost and Dark types (2026-10-28) — renamed to type2IconElement; Rock/Ghost/Dark no longer throw
