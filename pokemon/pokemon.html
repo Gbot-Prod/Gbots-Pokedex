@@ -15,7 +15,7 @@
     <body>
         <div class="header">
             <form id="searchForm" role="search">
-                <input type="text" id="pokemonLookupInpt" placeholder="Name or number, e.g. pikachu or 25" aria-label="Pokémon name or Pokédex number" autocomplete="off" list="pokemonNameList">
+                <input type="text" id="pokemonLookupInpt" placeholder="Name or number, e.g. 25" aria-label="Pokémon name or Pokédex number" autocomplete="off" list="pokemonNameList">
                 <datalist id="pokemonNameList"></datalist>
                 <button type="submit" class="btn" id="getPokemonBtn">Get Pokémon</button>
                 <button type="button" class="btn" id="randomPokemonBtn">Random</button>
@@ -72,6 +72,17 @@
                     </section>
                 </div>
             </div>
+
+            <section id="browseSection" aria-labelledby="browseHeading">
+                <h2 id="browseHeading">Browse the Pokédex</h2>
+                <p id="browseStatus" role="status"></p>
+                <ul id="browseGrid"></ul>
+                <nav id="browsePagination" aria-label="Browse pages">
+                    <button type="button" class="btn" id="browsePrevBtn">‹ Prev</button>
+                    <span id="browsePageLabel"></span>
+                    <button type="button" class="btn" id="browseNextBtn">Next ›</button>
+                </nav>
+            </section>
         </div>
         <script src="pokemon.js"></script>
     </body>

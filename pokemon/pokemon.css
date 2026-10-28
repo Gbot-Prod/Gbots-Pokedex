@@ -103,21 +103,26 @@ body {
     justify-content: center; 
      
     font-family: inter, arial, sans-serif;
-    font-style: bold;
     color: #ffffff;
 
     margin-top: 20px;
     text-align: center;
 
-    transform: scaleY(1);
-    transition: transform 0.5s;
     transform-origin: top;
+    animation: cardReveal 0.5s;
 }
 
-#pokemonCardContainer.hidden { 
-    transform: scaleY(0);
-    transition: transform 0.5s;
-    transform-origin: top;
+#pokemonCardContainer.hidden {
+    display: none;
+}
+
+@keyframes cardReveal {
+    from {
+        transform: scaleY(0);
+    }
+    to {
+        transform: scaleY(1);
+    }
 }
 
 #pokemonHeader {
@@ -126,7 +131,6 @@ body {
     justify-content: space-between;
     padding: 0 0.5rem;
     font-family: inter, arial, sans-serif;
-    font-style: bold;
     text-align: center;
     color: #ffffff;
 
@@ -135,10 +139,6 @@ body {
     border-radius: 10px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-
-    transform: scaleY(1);
-    transition: transform 0.5s;
-    transform-origin: top;
 }
 
 .navBtn {
@@ -420,6 +420,72 @@ body {
 
 .typeIcon {
     padding: 5px;
+}
+
+#browseSection {
+    margin: 2rem 0;
+    font-family: inter, arial, sans-serif;
+    color: #ffffff;
+    text-align: center;
+}
+
+#browseHeading {
+    margin: 0 0 1rem;
+}
+
+#browseStatus:empty {
+    display: none;
+}
+
+#browseGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: 0.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.browseTile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 10px;
+    background-color: #9EBEE8;
+    color: rgb(18, 40, 112);
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, background-color 0.15s;
+}
+
+.browseTile:hover {
+    transform: translateY(-2px);
+    background-color: #b6d0f0;
+}
+
+.browseTile small {
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+#browsePagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    font-weight: 700;
+}
+
+#browsePrevBtn,
+#browseNextBtn {
+    background-color: #6885e3;
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
 }
 
 textarea:focus,

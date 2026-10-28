@@ -415,11 +415,23 @@ function clearFields() {
 
 // --- Autocomplete -------------------------------------------------------
 
-const NAME_LIST_CACHE_KEY = "pokedex:names:v1";
+const NAME_LIST_CACHE_KEY = "pokedex:entries:v1";
 const nameListElement = document.getElementById("pokemonNameList");
 let nameListLoaded = false;
+let allEntriesPromise = null;
 
-async function getAllPokemonNames() {
+// Every Pokémon (including alternate forms) as { name, id }, cached in localStorage.
+function getAllPokemonEntries() {
+    if (!allEntriesPromise) {
+        allEntriesPromise = fetchAllPokemonEntries().catch((error) => {
+            allEntriesPromise = null; // allow a retry later
+            throw error;
+        });
+    }
+    return allEntriesPromise;
+}
+
+async function fetchAllPokemonEntries() {
     try {
         const cached = localStorage.getItem(NAME_LIST_CACHE_KEY);
         if (cached) {
@@ -431,14 +443,14 @@ async function getAllPokemonNames() {
     }
 
     const data = await fetchJson(API_BASE + "pokemon?limit=2000");
-    const names = data.results.map((entry) => entry.name);
+    const entries = data.results.map((entry) => ({ name: entry.name, id: idFromUrl(entry.url) }));
     try {
-        localStorage.setItem(NAME_LIST_CACHE_KEY, JSON.stringify(names));
+        localStorage.setItem(NAME_LIST_CACHE_KEY, JSON.stringify(entries));
     }
     catch (error) {
         // ignore quota/storage errors; suggestions still work for this visit
     }
-    return names;
+    return entries;
 }
 
 // The full list is only fetched once the user starts interacting with the search box.
@@ -448,10 +460,10 @@ async function loadNameSuggestions() {
     }
     nameListLoaded = true;
     try {
-        const names = await getAllPokemonNames();
-        const options = names.map((name) => {
+        const entries = await getAllPokemonEntries();
+        const options = entries.map((entry) => {
             const option = document.createElement("option");
-            option.value = formatName(name);
+            option.value = formatName(entry.name);
             return option;
         });
         nameListElement.replaceChildren(...options);
@@ -460,6 +472,81 @@ async function loadNameSuggestions() {
         nameListLoaded = false; // allow a retry on the next focus
     }
 }
+
+// --- Browse grid ----------------------------------------------------------
+
+const BROWSE_PAGE_SIZE = 24;
+const browseGridElement = document.getElementById("browseGrid");
+const browsePageLabel = document.getElementById("browsePageLabel");
+const browsePrevButton = document.getElementById("browsePrevBtn");
+const browseNextButton = document.getElementById("browseNextBtn");
+const browseStatusElement = document.getElementById("browseStatus");
+let browseEntries = [];
+let browsePage = 0;
+
+async function initBrowse() {
+    browseStatusElement.textContent = "Loading Pokémon…";
+    try {
+        const entries = await getAllPokemonEntries();
+        // Only the National Dex here; alternate forms are reachable through search.
+        browseEntries = entries.filter((entry) => entry.id <= MAX_DEX_NUMBER);
+        browseStatusElement.textContent = "";
+        renderBrowsePage();
+    }
+    catch (error) {
+        browseStatusElement.textContent = "Couldn't load the Pokémon list.";
+    }
+}
+
+function renderBrowsePage() {
+    const pageCount = Math.max(1, Math.ceil(browseEntries.length / BROWSE_PAGE_SIZE));
+    browsePage = Math.min(Math.max(browsePage, 0), pageCount - 1);
+    const pageEntries = browseEntries.slice(browsePage * BROWSE_PAGE_SIZE, (browsePage + 1) * BROWSE_PAGE_SIZE);
+
+    browseGridElement.replaceChildren(...pageEntries.map(createBrowseTile));
+    browsePageLabel.textContent = "Page " + (browsePage + 1) + " of " + pageCount;
+    browsePrevButton.disabled = browsePage === 0;
+    browseNextButton.disabled = browsePage >= pageCount - 1;
+}
+
+function createBrowseTile(entry) {
+    const item = document.createElement("li");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "browseTile";
+
+    const sprite = document.createElement("img");
+    sprite.src = SPRITE_BASE + entry.id + ".png";
+    sprite.alt = "";
+    sprite.width = 96;
+    sprite.height = 96;
+    sprite.loading = "lazy";
+
+    const number = document.createElement("small");
+    number.textContent = "#" + String(entry.id).padStart(4, "0");
+
+    const name = document.createElement("span");
+    name.textContent = formatName(entry.name);
+
+    button.append(sprite, number, name);
+    button.addEventListener("click", () => {
+        goToDexNumber(entry.id);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    item.append(button);
+    return item;
+}
+
+browsePrevButton.addEventListener("click", () => {
+    browsePage--;
+    renderBrowsePage();
+});
+browseNextButton.addEventListener("click", () => {
+    browsePage++;
+    renderBrowsePage();
+});
+
+initBrowse();
 
 searchInput.addEventListener("focus", loadNameSuggestions);
 
