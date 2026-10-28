@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Add a README describing the project and how to run it
 
 ## 3. Core Pokédex features
 - [ ] Search on Enter key
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Remove `console.log(data)` and stray debug output (2026-10-28) — removed debug logging
 - [x] Replace inline `onclick` handlers with `addEventListener` (2026-10-28) — buttons wired up with addEventListener in pokemon.js
 - [x] Move repeated button/font CSS into a shared `.btn` class (2026-10-28) — shared .btn rule; buttons only set their colour; removed duplicate .hidden rule
+- [x] Add a README describing the project and how to run it (2026-10-28) — README.md with layout, how to run and how to contribute
