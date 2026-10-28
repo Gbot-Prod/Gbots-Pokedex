@@ -1,10 +1,50 @@
+/* Page-level colour tokens. Dark values apply via the OS setting or the theme toggle. */
+:root {
+    color-scheme: light;
+    --page-bg: #88A8D0;
+    --input-bg: #b6dff0;
+    --ink: rgb(18, 40, 112);
+    --ink-on-accent: rgb(18, 40, 112);
+    --surface: rgba(255, 255, 255, 0.5);
+    --surface-hover: rgba(255, 255, 255, 0.8);
+    --surface-solid: #ffffff;
+    --tile-bg: #9EBEE8;
+    --tile-hover: #b6d0f0;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --page-bg: #121826;
+    --input-bg: #24304a;
+    --ink: #e3e9f7;
+    --surface: rgba(255, 255, 255, 0.08);
+    --surface-hover: rgba(255, 255, 255, 0.16);
+    --surface-solid: #2c3650;
+    --tile-bg: #1f2940;
+    --tile-hover: #2a3654;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --page-bg: #121826;
+        --input-bg: #24304a;
+        --ink: #e3e9f7;
+        --surface: rgba(255, 255, 255, 0.08);
+        --surface-hover: rgba(255, 255, 255, 0.16);
+        --surface-solid: #2c3650;
+        --tile-bg: #1f2940;
+        --tile-hover: #2a3654;
+    }
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     margin: 0;
     padding: 2rem 1rem;
-    background-color: #88A8D0;
+    background-color: var(--page-bg);
 }
 
 .page {
@@ -31,7 +71,7 @@ body {
     border: none;
     outline: none;
     border-radius: 0.4rem;
-    background-color: #b6dff0;
+    background-color: var(--input-bg);
 }
 
 .btn {
@@ -118,6 +158,7 @@ body {
     --type-strong: #6884E3;
     --type-light: #9EBEE8;
     --type-deep: #336EBA;
+    --card-body: var(--type-light);
     display: flex;
     flex-direction: column;
     justify-content: center; 
@@ -193,10 +234,10 @@ body {
     font-family: inter, arial, sans-serif;
     font-size: 16px;
     text-align: center;
-    color: rgb(18, 40, 112);
+    color: var(--ink);
     
-    border: 2px solid var(--type-light);
-    background-color: var(--type-light);
+    border: 2px solid var(--card-body);
+    background-color: var(--card-body);
     border-radius: 0px 0px 10px 10px;
 }
 
@@ -230,7 +271,7 @@ body {
 #shinyToggleBtn.active {
     background-color: #f2c94c;
     border-color: #f2c94c;
-    color: rgb(18, 40, 112);
+    color: var(--ink-on-accent);
 }
 
 #pokemonSprite {
@@ -299,7 +340,7 @@ body {
     min-width: 6rem;
     padding: 0.5rem 1rem;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--surface);
 }
 
 #pokemonMeasurements dt {
@@ -330,7 +371,7 @@ body {
 .abilityChip {
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    background-color: #ffffff;
+    background-color: var(--surface-solid);
     font-weight: 600;
 }
 
@@ -378,7 +419,7 @@ body {
 .statBar {
     height: 0.6rem;
     border-radius: 999px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--surface);
     overflow: hidden;
 }
 
@@ -440,7 +481,7 @@ body {
     padding: 0.3rem 0.6rem 0.5rem;
     border: 2px solid transparent;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--surface);
     color: inherit;
     font-family: inherit;
     font-weight: 700;
@@ -449,12 +490,12 @@ body {
 }
 
 .evolutionMember:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--surface-hover);
 }
 
 .evolutionMember.current {
     border-color: var(--type-strong);
-    background-color: #ffffff;
+    background-color: var(--surface-solid);
 }
 
 .evolutionMember small {
@@ -491,8 +532,8 @@ body {
     padding: 0.5rem 0.8rem;
     border: none;
     border-radius: 0.4rem;
-    background-color: #b6dff0;
-    color: rgb(18, 40, 112);
+    background-color: var(--input-bg);
+    color: var(--ink);
     font-family: inherit;
     font-size: 1rem;
     font-weight: 600;
@@ -545,8 +586,8 @@ body {
     padding: 0.5rem;
     border: none;
     border-radius: 10px;
-    background-color: #9EBEE8;
-    color: rgb(18, 40, 112);
+    background-color: var(--tile-bg);
+    color: var(--ink);
     font-family: inherit;
     font-weight: 700;
     cursor: pointer;
@@ -555,7 +596,7 @@ body {
 
 .browseTile:hover {
     transform: translateY(-2px);
-    background-color: #b6d0f0;
+    background-color: var(--tile-hover);
 }
 
 .browseTile small {
@@ -577,6 +618,33 @@ body {
     background-color: #6885e3;
     font-size: 1rem;
     padding: 0.6rem 1rem;
+}
+
+/* The card body is a dark tint of the type colour in dark mode */
+:root[data-theme="dark"] #pokemonCardContainer {
+    --card-body: color-mix(in srgb, var(--type-light) 22%, #161c2a);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) #pokemonCardContainer {
+        --card-body: color-mix(in srgb, var(--type-light) 22%, #161c2a);
+    }
+}
+
+#themeToggleBtn {
+    position: fixed;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }
 
 @media (max-width: 600px) {

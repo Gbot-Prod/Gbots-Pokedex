@@ -21,7 +21,6 @@ Rules for each run:
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
-- [ ] Dark mode
 - [ ] Smooth card animations and image fade-in
 - [ ] Friendly "Pokémon not found" state
 
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Recently viewed list (2026-10-28) — last 10 Pokémon (deduped, newest first) in a compact grid, stored in localStorage, with Clear history
 - [x] Responsive layout for phones (2026-10-28) — <main class=page> max 44rem; search form wraps under 600px; smaller sprite, vertical evolution flow, denser tile grid; no horizontal scroll at 375px
 - [x] Card colors themed by the Pokémon's primary type (2026-10-28) — CSS custom properties (--type-strong/light/deep) set from a TYPE_COLORS map for the primary type
+- [x] Dark mode (2026-10-28) — colour tokens on :root; follows prefers-color-scheme, with a 🌙/☀️ toggle saved in localStorage (applied before first paint); card body becomes a dark tint of the type colour

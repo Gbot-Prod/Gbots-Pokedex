@@ -11,8 +11,18 @@
 
         <title> Pokemon Lookup </title>
         <link rel="stylesheet" href="pokemon.css">
+        <script>
+            // Apply a saved theme before first paint to avoid a flash of the wrong colours.
+            try {
+                const savedTheme = localStorage.getItem("pokedex:theme");
+                if (savedTheme) {
+                    document.documentElement.dataset.theme = savedTheme;
+                }
+            } catch (error) {}
+        </script>
     </head>
     <body>
+        <button type="button" id="themeToggleBtn" aria-label="Toggle dark mode">🌙</button>
         <main class="page">
             <form id="searchForm" role="search">
                 <input type="text" id="pokemonLookupInpt" placeholder="Name or number, e.g. 25" aria-label="Pokémon name or Pokédex number" autocomplete="off" list="pokemonNameList">

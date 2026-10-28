@@ -753,6 +753,36 @@ document.getElementById("clearRecentBtn").addEventListener("click", () => {
 });
 renderRecent();
 
+// --- Theme ------------------------------------------------------------------
+
+const THEME_KEY = "pokedex:theme";
+const themeToggleButton = document.getElementById("themeToggleBtn");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+function currentTheme() {
+    return document.documentElement.dataset.theme || (prefersDark.matches ? "dark" : "light");
+}
+
+function updateThemeButton() {
+    const dark = currentTheme() === "dark";
+    themeToggleButton.textContent = dark ? "☀️" : "🌙";
+    themeToggleButton.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+}
+
+themeToggleButton.addEventListener("click", () => {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try {
+        localStorage.setItem(THEME_KEY, next);
+    }
+    catch (error) {
+        // theme just won't persist
+    }
+    updateThemeButton();
+});
+prefersDark.addEventListener("change", updateThemeButton);
+updateThemeButton();
+
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
 function showPokemon(id) {
     searchInput.value = id;
