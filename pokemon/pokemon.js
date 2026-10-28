@@ -14,7 +14,13 @@ const searchButton = document.getElementById("getPokemonBtn");
 
 const searchInput = document.getElementById("pokemonLookupInpt");
 
-let currentPokemonId = null;
+const prevButton = document.getElementById("prevPokemonBtn");
+const nextButton = document.getElementById("nextPokemonBtn");
+
+// Highest National Pokédex number in PokéAPI (Pecharunt). Higher ids are alternate forms.
+const MAX_DEX_NUMBER = 1025;
+
+let currentDexNumber = null;
 let latestRequest = 0;
 
 // Accepts names ("Pikachu", "mr mime") and Pokédex numbers ("25", "#025").
@@ -67,7 +73,10 @@ async function loadPokemon(query) {
 }
 
 function renderPokemon(data) {
-    currentPokemonId = data.id;
+    // Alternate forms (e.g. id 10034) navigate relative to their species' dex number.
+    currentDexNumber = Number(data.species.url.split("/").filter(Boolean).pop()) || data.id;
+    prevButton.disabled = currentDexNumber <= 1;
+    nextButton.disabled = currentDexNumber >= MAX_DEX_NUMBER;
 
     //fetch pokemon name
     nameElement.textContent = formatName(data.name);
@@ -244,4 +253,14 @@ document.getElementById("searchForm").addEventListener("submit", (event) => {
     event.preventDefault();
     fetchData();
 });
+function goToDexNumber(dexNumber) {
+    if (dexNumber < 1 || dexNumber > MAX_DEX_NUMBER) {
+        return;
+    }
+    searchInput.value = dexNumber;
+    loadPokemon(String(dexNumber));
+}
+
+prevButton.addEventListener("click", () => goToDexNumber(currentDexNumber - 1));
+nextButton.addEventListener("click", () => goToDexNumber(currentDexNumber + 1));
 document.getElementById("clearDataBtn").addEventListener("click", clearFields);

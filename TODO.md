@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Previous / Next buttons to step through Pokédex numbers
 - [ ] Random Pokémon button
 - [ ] Shiny sprite toggle
 - [ ] Pokédex flavor text / description (species endpoint)
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Show height and weight (2026-10-28) — metric height/weight tiles (API dm/hg converted to m/kg)
 - [x] Show base stats (HP, Attack, Defense, Sp. Atk, Sp. Def, Speed) as bars (2026-10-28) — six stat bars scaled to 255 (role=meter, red→green) plus base stat total
 - [x] Search by Pokédex number as well as name (document it in the placeholder) (2026-10-28) — accepts 25 / #025 / 'mr mime'; placeholder updated; refactored into loadPokemon/renderPokemon with stale-response guard and sprite fallbacks
+- [x] Previous / Next buttons to step through Pokédex numbers (2026-10-28) — ‹ › buttons in the card header, disabled at #1/#1025; forms navigate by species number
