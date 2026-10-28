@@ -14,9 +14,11 @@
     </head>
     <body>
         <div class="header">
-            <input type="text" id="pokemonLookupInpt" placeholder="Enter Pokémon name">
-            <button class="btn" id="getPokemonBtn">Get Pokémon</button>
-            <button class="btn" id="clearDataBtn">Clear</button>
+            <form id="searchForm" role="search">
+                <input type="text" id="pokemonLookupInpt" placeholder="Enter Pokémon name" aria-label="Pokémon name" autocomplete="off">
+                <button type="submit" class="btn" id="getPokemonBtn">Get Pokémon</button>
+                <button type="button" class="btn" id="clearDataBtn">Clear</button>
+            </form>
 
             <p class="hidden" id="errorMessage" role="alert"></p>
 

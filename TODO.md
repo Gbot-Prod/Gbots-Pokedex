@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Search on Enter key
 - [ ] Loading state/spinner while fetching
 - [ ] Show abilities (the `#pokemonAbility` element exists but is never filled)
 - [ ] Show height and weight
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Replace inline `onclick` handlers with `addEventListener` (2026-10-28) — buttons wired up with addEventListener in pokemon.js
 - [x] Move repeated button/font CSS into a shared `.btn` class (2026-10-28) — shared .btn rule; buttons only set their colour; removed duplicate .hidden rule
 - [x] Add a README describing the project and how to run it (2026-10-28) — README.md with layout, how to run and how to contribute
+- [x] Search on Enter key (2026-10-28) — search controls wrapped in a <form role=search>; Enter and the button both submit

@@ -101,6 +101,8 @@ function clearFields() {
     errorElement.textContent = "";
 }
 
-
-document.getElementById("getPokemonBtn").addEventListener("click", fetchData);
+document.getElementById("searchForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+    fetchData();
+});
 document.getElementById("clearDataBtn").addEventListener("click", clearFields);
