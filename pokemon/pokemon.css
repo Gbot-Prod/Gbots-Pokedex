@@ -2,8 +2,24 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 2rem;
+    margin: 0;
+    padding: 2rem 1rem;
     background-color: #88A8D0;
+}
+
+.page {
+    width: 100%;
+    max-width: 44rem;
+}
+
+#searchForm {
+    display: flex;
+    gap: 0.4rem;
+}
+
+#pokemonLookupInpt {
+    flex: 1;
+    min-width: 0;
 }
 
 #pokemonLookupInpt {
@@ -214,8 +230,11 @@ body {
 
 #pokemonSprite {
     padding: 1rem;
-    width:300px;
+    width: 300px;
     height: 300px;
+    max-width: 100%;
+    box-sizing: border-box;
+    object-fit: contain;
 }
 
 #pokemonTypeContainer {
@@ -553,6 +572,52 @@ body {
     background-color: #6885e3;
     font-size: 1rem;
     padding: 0.6rem 1rem;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 1rem 0.75rem;
+    }
+
+    #searchForm {
+        flex-wrap: wrap;
+    }
+
+    #pokemonLookupInpt {
+        flex: 1 1 100%;
+    }
+
+    #searchForm .btn {
+        flex: 1;
+        font-size: 1rem;
+        padding: 0.8rem 0.5rem;
+    }
+
+    #headerTitle {
+        font-size: 1.5rem;
+    }
+
+    #pokemonSprite {
+        width: 240px;
+        height: 240px;
+    }
+
+    #evolutionList {
+        flex-direction: column;
+    }
+
+    .evolutionArrow {
+        transform: rotate(90deg);
+    }
+
+    .tileGrid {
+        grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    }
+
+    .tileGrid img {
+        width: 72px;
+        height: 72px;
+    }
 }
 
 textarea:focus,

@@ -21,7 +21,6 @@ Rules for each run:
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
-- [ ] Responsive layout for phones
 - [ ] Card colors themed by the Pokémon's primary type
 - [ ] Dark mode
 - [ ] Smooth card animations and image fade-in
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Filter by generation (2026-10-28) — generation <select> (Gen 1 Kanto … Gen 9 Paldea) using static dex ranges; combines with the type filter
 - [x] Favorites list saved in `localStorage` (2026-10-28) — ☆/★ toggle next to the name; favorites grid above Browse persists in localStorage (shared .tileGrid styles)
 - [x] Recently viewed list (2026-10-28) — last 10 Pokémon (deduped, newest first) in a compact grid, stored in localStorage, with Clear history
+- [x] Responsive layout for phones (2026-10-28) — <main class=page> max 44rem; search form wraps under 600px; smaller sprite, vertical evolution flow, denser tile grid; no horizontal scroll at 375px
