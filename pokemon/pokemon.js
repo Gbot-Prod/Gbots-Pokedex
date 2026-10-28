@@ -43,7 +43,17 @@ function normalizeQuery(rawQuery) {
     if (/^\d+$/.test(query)) {
         return String(parseInt(query, 10));
     }
-    return query.replace(/\s+/g, "-");
+    // Turn display names into API slugs: "Farfetch'd" -> "farfetchd", "Mr. Mime" -> "mr-mime",
+    // "Nidoran♀" -> "nidoran-f", "Type: Null" -> "type-null", "Flabébé" -> "flabebe".
+    return query
+        .replace(/♀/g, "-f")
+        .replace(/♂/g, "-m")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[.'’:]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
 }
 
 function fetchData() {

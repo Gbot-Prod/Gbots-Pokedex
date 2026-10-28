@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Names with punctuation fail: "Farfetch'd", "Mr. Mime", "Nidoran♀", "Type: Null" must map to the API slugs (`farfetchd`, `mr-mime`, `nidoran-f`, `type-null`)
 - [ ] After a number/random/prev/next search the input shows the number (e.g. "95"); show the loaded Pokémon's name instead
 - [ ] Favorite ☆ is hard to see on yellow (Electric) cards and the compare "winner" green is low-contrast in dark mode
 
@@ -34,6 +33,7 @@ Rules for each run:
 - [ ] "Did you mean" should also match substrings/subsequences (e.g. "charz" → Charizard)
 
 ## 5. Design & UX
+- [ ] Show official display names from `species.names` ("Farfetch’d", "Mr. Mime", "Nidoran♀") instead of title-casing the slug ("Farfetchd", "Nidoran F")
 - [ ] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items
 - [ ] Metric/imperial toggle for height and weight
 
@@ -87,3 +87,4 @@ Rules for each run:
 - [x] Favicon and page title that updates with the current Pokémon (2026-10-28) — Poké Ball SVG favicon; title becomes 'Gengar #94 · Pokédex' and resets on Clear
 - [x] Type effectiveness chart (weaknesses/resistances) (2026-10-28) — 'Type matchups' section: weak to / resists / immune with type icons and 4×–0× multipliers, computed from each type's damage_relations
 - [x] Compare two Pokémon side by side (2026-10-28) — Compare section with two autocompleting inputs → table of stats/total/height/weight with the higher value highlighted; ⚖️ on the card pre-fills the current Pokémon
+- [x] Names with punctuation fail: "Farfetch'd", "Mr. Mime", "Nidoran♀", "Type: Null" must map to the API slugs (`farfetchd`, `mr-mime`, `nidoran-f`, `type-null`) (2026-10-28) — normalizeQuery maps ♀/♂, strips accents and . ' ’ : so official spellings resolve to API slugs
