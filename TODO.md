@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Shiny sprite toggle
 - [ ] Pokédex flavor text / description (species endpoint)
 - [ ] Evolution chain display
 
@@ -70,3 +69,4 @@ Rules for each run:
 - [x] Search by Pokédex number as well as name (document it in the placeholder) (2026-10-28) — accepts 25 / #025 / 'mr mime'; placeholder updated; refactored into loadPokemon/renderPokemon with stale-response guard and sprite fallbacks
 - [x] Previous / Next buttons to step through Pokédex numbers (2026-10-28) — ‹ › buttons in the card header, disabled at #1/#1025; forms navigate by species number
 - [x] Random Pokémon button (2026-10-28) — green Random button picks a dex number 1–1025
+- [x] Shiny sprite toggle (2026-10-28) — ✨ Shiny toggle (aria-pressed) over the sprite; choice persists while browsing; sprite fallback chain moved to pickSprite

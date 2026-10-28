@@ -20,7 +20,11 @@ const nextButton = document.getElementById("nextPokemonBtn");
 // Highest National Pokédex number in PokéAPI (Pecharunt). Higher ids are alternate forms.
 const MAX_DEX_NUMBER = 1025;
 
+const shinyButton = document.getElementById("shinyToggleBtn");
+
 let currentDexNumber = null;
+let currentSprites = null;
+let showShiny = false;
 let latestRequest = 0;
 
 // Accepts names ("Pikachu", "mr mime") and Pokédex numbers ("25", "#025").
@@ -99,12 +103,35 @@ function renderPokemon(data) {
     //fetch pokemon base stats
     renderStats(data.stats);
 
-    //fetch pokemon sprite (not every form has a HOME render)
-    const sprites = data.sprites;
-    imgElement.src = sprites.other.home.front_default || sprites.other["official-artwork"].front_default || sprites.front_default || "";
-    imgElement.style.display = imgElement.src ? "block" : "none";
+    //fetch pokemon sprite
+    currentSprites = data.sprites;
+    renderSprite();
 
     pokemonCard.classList.remove("hidden");
+}
+
+// Not every form has a HOME render, so fall back to official artwork, then the game sprite.
+function pickSprite(sprites, shiny) {
+    const key = shiny ? "front_shiny" : "front_default";
+    return sprites.other.home[key] || sprites.other["official-artwork"][key] || sprites[key] || "";
+}
+
+function renderSprite() {
+    if (!currentSprites) {
+        return;
+    }
+    const shinySrc = pickSprite(currentSprites, true);
+    shinyButton.hidden = !shinySrc;
+    const src = showShiny && shinySrc ? shinySrc : pickSprite(currentSprites, false);
+    if (src) {
+        imgElement.src = src;
+        imgElement.style.display = "block";
+    } else {
+        imgElement.removeAttribute("src");
+        imgElement.style.display = "none";
+    }
+    shinyButton.setAttribute("aria-pressed", String(showShiny));
+    shinyButton.classList.toggle("active", showShiny);
 }
 
 // "lightning-rod" -> "Lightning Rod"
@@ -263,6 +290,10 @@ function goToDexNumber(dexNumber) {
 
 document.getElementById("randomPokemonBtn").addEventListener("click", () => {
     goToDexNumber(1 + Math.floor(Math.random() * MAX_DEX_NUMBER));
+});
+shinyButton.addEventListener("click", () => {
+    showShiny = !showShiny;
+    renderSprite();
 });
 prevButton.addEventListener("click", () => goToDexNumber(currentDexNumber - 1));
 nextButton.addEventListener("click", () => goToDexNumber(currentDexNumber + 1));
