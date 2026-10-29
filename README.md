@@ -63,6 +63,9 @@ catch API changes the fixtures would hide.
 The fixtures are trimmed copies of real PokéAPI responses; `npm run fixtures`
 regenerates them from the live API (see `tests/build-fixtures.mjs`).
 
+`npm run lighthouse` runs Lighthouse with the budgets in `lighthouserc.json`
+(CI runs it on every push).
+
 Lint and formatting checks (ESLint + Prettier) run with `npm run lint`;
 `npm run format` rewrites files in the house style.
 

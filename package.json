@@ -9,11 +9,13 @@
         "lint": "eslint . && prettier --check .",
         "format": "prettier --write .",
         "fixtures": "NODE_USE_ENV_PROXY=1 node tests/build-fixtures.mjs",
-        "check:live": "LIVE_API=1 node --test tests/smoke.test.js"
+        "check:live": "LIVE_API=1 node --test tests/smoke.test.js",
+        "lighthouse": "lhci autorun"
     },
     "devDependencies": {
         "@axe-core/playwright": "^4.14.0",
         "@eslint/js": "^10.0.1",
+        "@lhci/cli": "^0.15.1",
         "eslint": "^10.1.0",
         "eslint-plugin-import-x": "^4.17.1",
         "globals": "^17.13.0",

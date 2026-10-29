@@ -17,3 +17,6 @@ jobs:
             - run: npx playwright install --with-deps chromium
             - run: npm run lint
             - run: npm test
+            # Lighthouse budgets (see lighthouserc.json): accessibility and best practices must
+            # stay high; performance and SEO only warn.
+            - run: npm run lighthouse

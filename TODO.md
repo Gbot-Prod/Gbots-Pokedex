@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Lighthouse CI in the GitHub workflow with performance/accessibility budgets
 
 ## 3. Core Pokédex features
 - [ ] Compare: radar (spider) chart of the six base stats in inline SVG, one colour per Pokémon
@@ -28,6 +27,7 @@ Rules for each run:
 - [ ] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen
 
 ## 6. Performance, accessibility & polish
+- [ ] Lighthouse performance is 0.8 (first paint 3.1 s): self-host or `preload` the Inter font with `font-display: swap`, and defer the browse grid until after the card renders
 - [ ] Tile type icons wait for 18 /type requests on every new session; store the id → types map in localStorage like the name list
 - [ ] Offline: Random and Previous/Next should pick from cached Pokémon instead of failing when offline
 - [ ] Offline tile check does one Cache API lookup per tile; read `cache.keys()` once into a Set instead
@@ -137,3 +137,4 @@ Rules for each run:
 - [x] Ability descriptions: show each ability's short effect (ability endpoint `effect_entries`) in a tooltip or expandable chip (2026-10-29) — ability chips are buttons (aria-expanded) that show the latest English game text below the chips, fetched on click; abilityDescription helper unit-tested; smoke test
 - [x] Combobox step 1: main search uses a custom ARIA combobox (combobox.js) — up to 8 matches with sprites, official names and dex numbers; ↑/↓/Enter/Escape and click; numbers match by id (2026-10-29) — matchEntries unit-tested, keyboard smoke test. Split from "replace the datalist"
 - [x] Combobox step 2: compare inputs use the custom combobox (auto-wrapped for positioning); the 1,300-option `<datalist>` and `loadNameSuggestions` are gone (2026-10-29)
+- [x] Lighthouse CI in the GitHub workflow with performance/accessibility budgets (2026-10-29) — lighthouserc.json budgets (a11y ≥0.95 and best practices ≥0.9 fail the build; performance/SEO warn) run via npm run lighthouse and in CI; local run: perf 0.8, a11y 1.0, BP 1.0, SEO 0.91
