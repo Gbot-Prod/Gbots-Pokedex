@@ -12,6 +12,17 @@ Rules for each run:
 - After each item, check it off (move it to "Done" with the date) and add any new ideas it revealed.
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
+## 0. Features & visuals (owner's priority)
+Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Holographic trading-card redesign of the main card: type-gradient foil frame, shimmering holo sheen, 3D tilt that follows the pointer (static when reduced motion is on)
+- [ ] Animated type-themed page background behind the card (embers for Fire, bubbles for Water, sparks for Electric, leaves for Grass, mist for Ghost…), subtle and CSS-only
+- [ ] "Who's that Pokémon?" quiz: silhouette of a random Pokémon, 4 choices (or type the name), reveal animation, score + streak saved locally
+- [ ] Team builder: 6 slots (add from the card or search), team type-coverage chart (weaknesses/resistances per attacking type), shareable `?team=` link
+- [ ] Interactive 18×18 type chart: hover a row/column to highlight, click a type to see its matchups, link from the card's type icons
+- [ ] Animated sprites: toggle to Showdown-style animated GIFs on the card and evolution chain (falls back to static art)
+- [ ] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading
+- [ ] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation
+
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
