@@ -7,6 +7,7 @@ import {
     STAT_LABELS,
     pickSprite,
     describeEvolution,
+    formatDexNumber,
     formatMultiplier,
     formLabel,
     formatName,
@@ -339,7 +340,7 @@ function renderPokemon(data, query) {
     }
 
     //fetch pokemon number
-    numberElement.textContent = "Pokemon no#" + data.id;
+    numberElement.textContent = formatDexNumber(data.id);
 
     //species info arrives separately; clear the previous Pokémon's text meanwhile
     genusElement.textContent = "";

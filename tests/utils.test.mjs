@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
     describeEvolution,
     editDistance,
+    formatDexNumber,
     formatMultiplier,
     formLabel,
     formatName,
@@ -135,4 +136,9 @@ test("learnset honours a preferred game when that game has a learnset", () => {
     assert.deepEqual(learnset(moves).games, ["x-y", "red-blue"]);
     assert.equal(learnset(moves, "red-blue").versionGroup, "red-blue");
     assert.equal(learnset(moves, "sun-moon").versionGroup, "x-y"); // not available, newest instead
+});
+
+test("formatDexNumber zero-pads to four digits", () => {
+    assert.equal(formatDexNumber(25), "#0025");
+    assert.equal(formatDexNumber(1025), "#1025");
 });

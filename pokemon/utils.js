@@ -210,3 +210,8 @@ export function suggestionScore(query, name) {
     const distance = editDistance(query, name);
     return distance <= Math.max(2, Math.floor(query.length / 3)) ? 2 + distance : Infinity;
 }
+
+// Pokédex numbers are shown zero-padded, as in the games: 25 -> "#0025".
+export function formatDexNumber(id) {
+    return "#" + String(id).padStart(4, "0");
+}
