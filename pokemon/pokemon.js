@@ -568,7 +568,34 @@ function applyTypeTheme(type) {
             pokemonCard.style.removeProperty(name);
         }
     });
+    // The animated page backdrop follows the same type (see "Type backdrop" in pokemon.css).
+    const root = document.documentElement;
+    if (colors) {
+        root.dataset.type = type;
+        root.style.setProperty("--theme-strong", colors[0]);
+        root.style.setProperty("--theme-light", colors[1]);
+    } else {
+        delete root.dataset.type;
+        root.style.removeProperty("--theme-strong");
+        root.style.removeProperty("--theme-light");
+    }
 }
+
+// Decorative particles for the backdrop; each gets a random position, size, speed and drift.
+function createBackdropParticles(count = 18) {
+    const backdrop = document.getElementById("typeBackdrop");
+    for (let index = 0; index < count; index++) {
+        const particle = document.createElement("span");
+        particle.className = "particle";
+        particle.style.setProperty("--x", (Math.random() * 100).toFixed(1) + "%");
+        particle.style.setProperty("--size", (6 + Math.random() * 10).toFixed(1) + "px");
+        particle.style.setProperty("--duration", (9 + Math.random() * 10).toFixed(1) + "s");
+        particle.style.setProperty("--delay", (-Math.random() * 18).toFixed(1) + "s");
+        particle.style.setProperty("--drift", ((Math.random() - 0.5) * 160).toFixed(0) + "px");
+        backdrop.append(particle);
+    }
+}
+createBackdropParticles();
 
 function setTypeIcon(iconElement, type) {
     const icon = TYPE_ICONS[type];

@@ -1513,3 +1513,123 @@ img.placeholderSprite {
         transform: none;
     }
 }
+
+/* --- Type backdrop ------------------------------------------------------------------
+   A fixed, decorative layer behind the page: a soft glow in the current Pokémon's type
+   colours plus drifting particles styled per type (pokemon.js sets data-type on <html>). */
+
+#typeBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            color-mix(in srgb, var(--theme-strong, transparent) 28%, transparent),
+            transparent 55%
+        ),
+        radial-gradient(
+            circle at 85% 85%,
+            color-mix(in srgb, var(--theme-light, transparent) 40%, transparent),
+            transparent 60%
+        );
+}
+
+#typeBackdrop .particle {
+    position: absolute;
+    bottom: -40px;
+    left: var(--x);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background-color: var(--theme-strong, #ffffff);
+    opacity: 0;
+    animation: particleRise var(--duration) linear var(--delay) infinite;
+}
+
+:root[data-type] #typeBackdrop .particle {
+    opacity: 0.35;
+}
+
+@keyframes particleRise {
+    to {
+        transform: translate(var(--drift), -115vh);
+    }
+}
+
+@keyframes particleFall {
+    from {
+        transform: translate(0, -10vh) rotate(0deg);
+    }
+    to {
+        transform: translate(var(--drift), 115vh) rotate(540deg);
+    }
+}
+
+@keyframes particleFlicker {
+    50% {
+        opacity: 0.1;
+    }
+}
+
+/* Fire: glowing embers */
+:root[data-type="fire"] #typeBackdrop .particle {
+    background: radial-gradient(circle, #ffe08a, #ff7a1a 55%, transparent 72%);
+    opacity: 0.8;
+}
+
+/* Water: bubbles */
+:root[data-type="water"] #typeBackdrop .particle {
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.7), transparent 40%);
+    border: 2px solid rgba(110, 180, 255, 0.7);
+    opacity: 0.7;
+}
+
+/* Electric: flickering sparks */
+:root[data-type="electric"] #typeBackdrop .particle {
+    width: 3px;
+    height: calc(var(--size) * 2);
+    border-radius: 2px;
+    background: #ffe14d;
+    box-shadow: 0 0 8px #ffe14d;
+    opacity: 0.8;
+    animation:
+        particleRise var(--duration) linear var(--delay) infinite,
+        particleFlicker 0.8s steps(2) infinite;
+}
+
+/* Grass and Bug: drifting leaves; Ice: falling snow */
+:root:is([data-type="grass"], [data-type="bug"], [data-type="ice"]) #typeBackdrop .particle {
+    top: -40px;
+    bottom: auto;
+    animation-name: particleFall;
+}
+
+:root:is([data-type="grass"], [data-type="bug"]) #typeBackdrop .particle {
+    border-radius: 0 100% 0 100%;
+    background: var(--theme-strong);
+    opacity: 0.5;
+}
+
+:root[data-type="ice"] #typeBackdrop .particle {
+    background: #ffffff;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+    opacity: 0.8;
+}
+
+/* Ghost, Dark, Poison, Psychic: slow drifting mist */
+:root:is([data-type="ghost"], [data-type="dark"], [data-type="poison"], [data-type="psychic"]) #typeBackdrop .particle {
+    width: calc(var(--size) * 8);
+    height: calc(var(--size) * 8);
+    filter: blur(18px);
+    opacity: 0.3;
+    animation-duration: calc(var(--duration) * 2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #typeBackdrop .particle {
+        display: none;
+    }
+}
