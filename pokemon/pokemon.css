@@ -1917,3 +1917,49 @@ img.placeholderSprite {
     outline: 3px solid #ffd447;
     outline-offset: -3px;
 }
+
+.quizOption {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.quizOption select {
+    padding: 0.4rem 0.6rem;
+    border: none;
+    border-radius: 0.4rem;
+    background-color: var(--input-bg);
+    color: var(--ink);
+    font-family: inherit;
+    font-weight: 600;
+}
+
+#quizStage {
+    position: relative;
+}
+
+.confetti {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.confetti span {
+    position: absolute;
+    top: -10px;
+    left: var(--x);
+    width: 8px;
+    height: 12px;
+    border-radius: 2px;
+    animation: confettiFall 1.8s ease-in var(--delay) forwards;
+}
+
+@keyframes confettiFall {
+    to {
+        transform: translate(var(--drift), 420px) rotate(var(--spin));
+        opacity: 0;
+    }
+}

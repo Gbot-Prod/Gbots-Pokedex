@@ -1,6 +1,6 @@
 // "Who's that Pokémon?": guess a Pokémon from its silhouette, with four choices.
 import { SPRITE_BASE, getAllPokemonEntries, getSpeciesSlugs } from "./api.js";
-import { MAX_DEX_NUMBER, entryDisplayName } from "./utils.js";
+import { GENERATIONS, MAX_DEX_NUMBER, entryDisplayName } from "./utils.js";
 
 const SCORE_KEY = "pokedex:quiz:v1";
 const ARTWORK_BASE = SPRITE_BASE + "other/official-artwork/";
@@ -13,6 +13,8 @@ const choicesElement = document.getElementById("quizChoices");
 const resultElement = document.getElementById("quizResult");
 const nextButton = document.getElementById("quizNextBtn");
 const scoreElement = document.getElementById("quizScore");
+const generationSelect = document.getElementById("quizGeneration");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let candidates = null; // National Dex entries with display names
 let score = { correct: 0, played: 0, streak: 0, best: 0 };
@@ -67,7 +69,12 @@ async function nextRound() {
         resultElement.textContent = "Couldn't load Pokémon for the quiz. Please try again.";
         return;
     }
-    const choices = pickRandom(entries, 4);
+    // Optionally limit the round to one generation (choices too, so it stays fair).
+    const generation = GENERATIONS.find((gen) => String(gen.number) === generationSelect.value);
+    const pool = generation
+        ? entries.filter((entry) => entry.id >= generation.first && entry.id <= generation.last)
+        : entries;
+    const choices = pickRandom(pool, 4);
     const answer = choices[Math.floor(Math.random() * choices.length)];
 
     stage.hidden = false;
@@ -96,6 +103,9 @@ function answerRound(choice, answer, chosenButton) {
     if (correct) {
         score.correct++;
         score.streak++;
+        if (score.streak > score.best && score.streak >= 3) {
+            celebrate(); // new best streak
+        }
         score.best = Math.max(score.best, score.streak);
     } else {
         score.streak = 0;
@@ -131,6 +141,28 @@ function answerRound(choice, answer, chosenButton) {
     nextButton.focus({ preventScroll: true });
 }
 
+// A short burst of confetti over the quiz art (skipped when reduced motion is preferred).
+function celebrate() {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const colors = ["#ffd447", "#ff6b6b", "#4dabf7", "#51cf66", "#cc5de8"];
+    const burst = document.createElement("div");
+    burst.className = "confetti";
+    burst.setAttribute("aria-hidden", "true");
+    for (let index = 0; index < 40; index++) {
+        const piece = document.createElement("span");
+        piece.style.setProperty("--x", (Math.random() * 100).toFixed(1) + "%");
+        piece.style.setProperty("--drift", ((Math.random() - 0.5) * 120).toFixed(0) + "px");
+        piece.style.setProperty("--delay", (Math.random() * 0.3).toFixed(2) + "s");
+        piece.style.setProperty("--spin", (Math.random() * 720 - 360).toFixed(0) + "deg");
+        piece.style.backgroundColor = colors[index % colors.length];
+        burst.append(piece);
+    }
+    stage.append(burst);
+    setTimeout(() => burst.remove(), 2200);
+}
+
 export function initQuiz(options) {
     showPokemon = options.showPokemon;
     loadScore();
@@ -140,5 +172,17 @@ export function initQuiz(options) {
         nextRound();
     });
     nextButton.addEventListener("click", nextRound);
+    for (const generation of GENERATIONS) {
+        const option = document.createElement("option");
+        option.value = generation.number;
+        option.textContent = "Gen " + generation.number + " (" + generation.region + ")";
+        generationSelect.append(option);
+    }
+    // Switching generation mid-game starts a fresh round from that generation.
+    generationSelect.addEventListener("change", () => {
+        if (!stage.hidden) {
+            nextRound();
+        }
+    });
     section.hidden = false;
 }

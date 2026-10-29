@@ -4,6 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 globalThis.document = { getElementById: () => ({}) };
+globalThis.window = { matchMedia: () => ({ matches: false }) };
 const { pickRandom } = await import("../pokemon/quiz.js");
 
 test("pickRandom returns n distinct items", () => {

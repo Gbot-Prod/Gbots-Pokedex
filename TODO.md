@@ -14,7 +14,7 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Quiz step 2: "type the name" mode (with the combobox), difficulty by generation, a timed 60-second run, and confetti on a new best streak
+- [ ] Quiz step 2b: "type the name" mode (with the combobox) and a timed 60-second run with a high score
 - [ ] Team builder step 2: shareable `?team=` link, offensive coverage (which types the team's own types hit super-effectively), drag to reorder, and "suggest a member" that patches the worst weakness
 - [ ] Type chart step 2: click a type to see its matchups summary, link the card's type icons to it, and keyboard navigation across cells (arrow keys)
 - [ ] Animated sprites: toggle to Showdown-style animated GIFs on the card and evolution chain (falls back to static art)
@@ -165,3 +165,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] "Who's that Pokémon?" step 1: Play → official artwork as a black silhouette on a glowing disc, 4 name choices, reveal animation, right/wrong marking, "View in Pokédex", score/streak/best saved locally (quiz.js) (2026-10-29) — smoke + unit tests
 - [x] Team builder step 1: ＋👥 button on the card, six saved slots (sprite, name, types, remove), and a defensive coverage table with weak/resist bars per attacking type, flagging types that hit half the team with no resist (team.js) (2026-10-29) — smoke + unit tests
 - [x] Interactive type chart step 1: "Show type chart" builds an 18×18 grid (attacker rows × defender columns) from the cached /type data, colour-coded 2×/½×/0×, hover highlights row + column with the cell outlined; scrolls inside its box on phones (typechart.js) (2026-10-29) — fixtures now include all 18 types; smoke + unit tests
+- [x] Quiz step 2a: generation picker (Gen 1 Kanto … Gen 9 Paldea; choices come from the same generation) and a confetti burst on a new best streak of 3+ (skipped under reduced motion); GENERATIONS moved to utils.js (2026-10-29)
