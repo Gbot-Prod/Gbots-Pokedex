@@ -15,12 +15,16 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
+- [ ] Unit tests for api.js (fetchPokemon species fallback, id/name aliasing, move-cache pruning, missing-sprite memory) with stubbed fetch/localStorage in Node
 
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
+- [ ] Combobox: highlight the matched part of each suggestion (`<mark>`), and let users remove an entry from the "Recently viewed" suggestions
 
 ## 5. Design & UX
+- [ ] Radar chart: lighter polygon colours in dark mode (the blue is dim on the dark table) and highlight a Pokémon's polygon when its legend entry or column is hovered/focused
+- [ ] Missing sprites show an empty space; use a Poké Ball placeholder (assets/favicon.svg) instead
 - [ ] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen
 
 ## 6. Performance, accessibility & polish
