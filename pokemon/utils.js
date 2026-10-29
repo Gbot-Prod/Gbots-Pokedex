@@ -118,36 +118,39 @@ export function formLabel(speciesName, pokemonName) {
     return formatName(suffix);
 }
 
-// Main-series games newest first, used to pick which learnset to show. Version group
-// ids aren't chronological (PokéAPI later added e.g. the Japanese Red/Green releases).
-const VERSION_GROUP_PREFERENCE = [
-    "scarlet-violet",
-    "sword-shield",
-    "brilliant-diamond-shining-pearl",
-    "ultra-sun-ultra-moon",
-    "sun-moon",
-    "lets-go-pikachu-lets-go-eevee",
-    "omega-ruby-alpha-sapphire",
-    "x-y",
-    "black-2-white-2",
-    "black-white",
-    "heartgold-soulsilver",
-    "platinum",
-    "diamond-pearl",
-    "emerald",
-    "firered-leafgreen",
-    "ruby-sapphire",
-    "crystal",
-    "gold-silver",
-    "yellow",
-    "red-blue",
+// Main-series games newest first, with display names. Used to pick which learnset to
+// show; version group ids aren't chronological (PokéAPI later added e.g. the Japanese
+// Red/Green releases).
+export const VERSION_GROUPS = [
+    ["scarlet-violet", "Scarlet & Violet"],
+    ["sword-shield", "Sword & Shield"],
+    ["brilliant-diamond-shining-pearl", "Brilliant Diamond & Shining Pearl"],
+    ["ultra-sun-ultra-moon", "Ultra Sun & Ultra Moon"],
+    ["sun-moon", "Sun & Moon"],
+    ["lets-go-pikachu-lets-go-eevee", "Let's Go Pikachu & Eevee"],
+    ["omega-ruby-alpha-sapphire", "Omega Ruby & Alpha Sapphire"],
+    ["x-y", "X & Y"],
+    ["black-2-white-2", "Black 2 & White 2"],
+    ["black-white", "Black & White"],
+    ["heartgold-soulsilver", "HeartGold & SoulSilver"],
+    ["platinum", "Platinum"],
+    ["diamond-pearl", "Diamond & Pearl"],
+    ["emerald", "Emerald"],
+    ["firered-leafgreen", "FireRed & LeafGreen"],
+    ["ruby-sapphire", "Ruby & Sapphire"],
+    ["crystal", "Crystal"],
+    ["gold-silver", "Gold & Silver"],
+    ["yellow", "Yellow"],
+    ["red-blue", "Red & Blue"],
 ];
+const VERSION_GROUP_PREFERENCE = VERSION_GROUPS.map(([name]) => name);
 
-// A Pokémon's moves in the most recent main-series game that has a level-up
-// learnset, grouped by how they're learned:
-// { versionGroup, methods: { "level-up": [{ name, url, level }], machine: [...], egg: [...], tutor: [...] } }
+// A Pokémon's moves in one main-series game, grouped by how they're learned:
+// { versionGroup, games, methods: { "level-up": [{ name, url, level }], machine: [...], egg: [...], tutor: [...] } }
+// `games` lists the main-series games (newest first) that have a level-up learnset.
+// Uses `preferredGame` when it's one of them, otherwise the newest.
 // Level-up moves are sorted by level, the rest by name.
-export function learnset(moves) {
+export function learnset(moves, preferredGame = null) {
     const entries = moves.flatMap(({ move, version_group_details: details }) =>
         details.map((detail) => ({
             name: move.name,
@@ -159,7 +162,8 @@ export function learnset(moves) {
     );
     const levelUpGroups = new Set(entries.filter((e) => e.method === "level-up").map((e) => e.versionGroup));
     const available = levelUpGroups.size ? levelUpGroups : new Set(entries.map((e) => e.versionGroup));
-    const versionGroup = VERSION_GROUP_PREFERENCE.find((group) => available.has(group)) ?? [...available].pop() ?? null;
+    const games = VERSION_GROUP_PREFERENCE.filter((group) => available.has(group));
+    const versionGroup = games.includes(preferredGame) ? preferredGame : (games[0] ?? [...available].pop() ?? null);
 
     const methods = { "level-up": [], machine: [], egg: [], tutor: [] };
     for (const entry of entries) {
@@ -171,7 +175,7 @@ export function learnset(moves) {
     for (const method of ["machine", "egg", "tutor"]) {
         methods[method].sort((a, b) => a.name.localeCompare(b.name));
     }
-    return { versionGroup, methods };
+    return { versionGroup, games, methods };
 }
 
 // Level-up moves from the most recent main-series game that lists any,

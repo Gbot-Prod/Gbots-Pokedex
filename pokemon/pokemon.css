@@ -699,6 +699,22 @@ body {
     text-align: center;
 }
 
+#movesGame {
+    display: block;
+    margin: 0.5rem auto 0;
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 0.4rem;
+    background-color: var(--input-bg);
+    color: var(--ink);
+    font-family: inherit;
+    font-weight: 600;
+}
+
+#movesGame[hidden] {
+    display: none;
+}
+
 #movesTabs {
     display: flex;
     flex-wrap: wrap;

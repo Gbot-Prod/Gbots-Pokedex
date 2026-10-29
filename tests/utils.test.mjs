@@ -122,3 +122,17 @@ test("learnset groups the chosen game's moves by learn method", () => {
     );
     assert.deepEqual(methods.tutor, []); // tutor entry belongs to another game
 });
+
+test("learnset honours a preferred game when that game has a learnset", () => {
+    const detail = (group) => ({
+        level_learned_at: 1,
+        move_learn_method: { name: "level-up" },
+        version_group: { name: group, url: "" },
+    });
+    const moves = [
+        { move: { name: "growl", url: "m/45/" }, version_group_details: [detail("red-blue"), detail("x-y")] },
+    ];
+    assert.deepEqual(learnset(moves).games, ["x-y", "red-blue"]);
+    assert.equal(learnset(moves, "red-blue").versionGroup, "red-blue");
+    assert.equal(learnset(moves, "sun-moon").versionGroup, "x-y"); // not available, newest instead
+});

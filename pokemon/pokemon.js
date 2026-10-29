@@ -12,6 +12,7 @@ import {
     formatName,
     idFromUrl,
     learnset,
+    VERSION_GROUPS,
     normalizeQuery,
     suggestionScore,
 } from "./utils.js";
@@ -42,6 +43,8 @@ const movesSummary = document.getElementById("movesSummary");
 const movesTable = document.getElementById("movesTable");
 const movesTableBody = movesTable.tBodies[0];
 const movesTabs = document.getElementById("movesTabs");
+const movesGameSelect = document.getElementById("movesGame");
+const GAME_NAMES = new Map(VERSION_GROUPS);
 let currentMoves = [];
 let movesDetailsLoaded = false;
 let currentCryUrl = null;
@@ -693,13 +696,29 @@ const MOVE_METHODS = [
 let currentLearnset = null;
 let currentMoveMethod = "level-up";
 
-function renderMoves(moves) {
-    currentLearnset = learnset(moves);
+let currentRawMoves = [];
+let preferredGame = null; // the game picked in the selector, kept while browsing
+
+function renderMoves(moves, { keepOpen = false } = {}) {
+    currentRawMoves = moves;
+    currentLearnset = learnset(moves, preferredGame);
+    movesGameSelect.replaceChildren(
+        ...currentLearnset.games.map((game) => {
+            const option = document.createElement("option");
+            option.value = game;
+            option.textContent = GAME_NAMES.get(game);
+            option.selected = game === currentLearnset.versionGroup;
+            return option;
+        }),
+    );
+    movesGameSelect.hidden = currentLearnset.games.length < 2;
     const counts = Object.fromEntries(
         MOVE_METHODS.map(({ method }) => [method, currentLearnset.methods[method].length]),
     );
     const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
-    movesSection.open = false;
+    if (!keepOpen) {
+        movesSection.open = false;
+    }
     movesSection.hidden = total === 0;
     movesSummary.textContent = "Moves (" + total + ")";
 
@@ -743,6 +762,12 @@ function renderMoveRows() {
         row.insertCell().textContent = "…";
     }
 }
+
+movesGameSelect.addEventListener("change", () => {
+    preferredGame = movesGameSelect.value;
+    renderMoves(currentRawMoves, { keepOpen: true });
+    loadMoveDetails();
+});
 
 // Type and power need one request per move, so they're only fetched once the list is opened.
 async function loadMoveDetails() {
