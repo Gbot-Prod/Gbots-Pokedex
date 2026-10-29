@@ -17,12 +17,18 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
+- [ ] Moves table: sortable columns (level/TM, name, power, accuracy) via header buttons with `aria-sort`
+- [ ] "Share" button on the card: `navigator.share` on phones, copy-link fallback with a "Link copied" status
 
 ## 4. Browsing & discovery
+- [ ] Clicking a type badge (card type icons or matchups) filters the browse grid by that type and scrolls to it
 
 ## 5. Design & UX
+- [ ] Radar legend: click to pin a highlight (aria-pressed buttons instead of focusable list items)
+- [ ] Main card: use the Poké Ball placeholder when a Pokémon has no artwork at all, instead of hiding the image
 
 ## 6. Performance, accessibility & polish
+- [ ] Combobox: Home/End and Page Up/Down in the suggestion list
 - [ ] Lighthouse performance is 0.8 (first paint 3.1 s): self-host or `preload` the Inter font with `font-display: swap`, and defer the browse grid until after the card renders
 - [ ] Tile type icons wait for 18 /type requests on every new session; store the id → types map in localStorage like the name list
 - [ ] Offline: Random and Previous/Next should pick from cached Pokémon instead of failing when offline
