@@ -13,12 +13,18 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
+- [ ] Sprite alt text and the screen-reader announcement still use the slug name ("Farfetchd sprite") because they're set before species data arrives; update them in `applyDisplayName`
 
 ## 2. Code quality
+- [ ] Make smoke tests fail fast: `page.setDefaultTimeout(5000)` and fail a test as soon as a `pageerror` fires (a missing export made the suite hang for minutes)
+- [ ] Catch broken imports between modules in lint (`eslint-plugin-import` `import/named`), since ESLint alone missed a removed export
 
 ## 3. Core Pokédex features
+- [ ] Moves table: show damage category (physical/special/status) and accuracy, and TM numbers from the machines endpoint
+- [ ] Compare: add a type-matchups row (weak/resist counts) and allow comparing three Pokémon
 
 ## 4. Browsing & discovery
+- [ ] Tiles (browse/favorites/recent) still show slug-based names for default forms ("Zygarde 50", "Aegislash Shield", "Farfetchd"); show official display names there too
 
 ## 5. Design & UX
 - [ ] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items
