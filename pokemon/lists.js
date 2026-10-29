@@ -1,6 +1,6 @@
 // Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
 import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries } from "./api.js";
-import { MAX_DEX_NUMBER, TYPE_ICONS, formatDexNumber, formatName, idFromUrl } from "./utils.js";
+import { MAX_DEX_NUMBER, TYPE_ICONS, formatDexNumber, formatName, idFromUrl, speciesDisplayName } from "./utils.js";
 
 // Set by initLists: loads a Pokémon onto the main card / returns the one shown there.
 let showPokemon = () => {};
@@ -13,6 +13,28 @@ export function initLists(options) {
     renderRecent();
     initBrowse();
     loadTileTypes();
+    loadSpeciesSlugs();
+}
+
+// National Dex number -> species slug. Default forms are listed under their form's name
+// ("zygarde-50", "aegislash-shield"), so tiles use the species name instead.
+let speciesSlugs = null;
+
+async function loadSpeciesSlugs() {
+    try {
+        const data = await fetchJson(API_BASE + "pokemon-species?limit=2000");
+        speciesSlugs = new Map(data.results.map((entry) => [idFromUrl(entry.url), entry.name]));
+        renderBrowsePage();
+        renderFavorites();
+        renderRecent();
+    } catch {
+        // tiles keep the title-cased Pokémon names
+    }
+}
+
+function tileName(entry) {
+    const slug = entry.id <= MAX_DEX_NUMBER ? speciesSlugs?.get(entry.id) : null;
+    return slug ? speciesDisplayName(slug) : formatName(entry.name);
 }
 
 // id -> type names in slot order, built from the 18 /type responses (cached by fetchJson).
@@ -181,7 +203,7 @@ function createBrowseTile(entry) {
     number.textContent = formatDexNumber(entry.id);
 
     const name = document.createElement("span");
-    name.textContent = formatName(entry.name);
+    name.textContent = tileName(entry);
 
     button.append(sprite, number, name);
 

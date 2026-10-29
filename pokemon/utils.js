@@ -233,3 +233,30 @@ export function damageMultipliers(typeDataList) {
     }
     return multipliers;
 }
+
+// Official English names that title-casing the API slug gets wrong.
+const SPECIES_NAME_EXCEPTIONS = {
+    "nidoran-f": "Nidoran♀",
+    "nidoran-m": "Nidoran♂",
+    farfetchd: "Farfetch’d",
+    sirfetchd: "Sirfetch’d",
+    "mr-mime": "Mr. Mime",
+    "mr-rime": "Mr. Rime",
+    "mime-jr": "Mime Jr.",
+    "ho-oh": "Ho-Oh",
+    "porygon-z": "Porygon-Z",
+    "type-null": "Type: Null",
+    "jangmo-o": "Jangmo-o",
+    "hakamo-o": "Hakamo-o",
+    "kommo-o": "Kommo-o",
+    flabebe: "Flabébé",
+    "wo-chien": "Wo-Chien",
+    "chien-pao": "Chien-Pao",
+    "ting-lu": "Ting-Lu",
+    "chi-yu": "Chi-Yu",
+};
+
+// Display name for a species slug without a request: "mr-mime" -> "Mr. Mime", "great-tusk" -> "Great Tusk".
+export function speciesDisplayName(slug) {
+    return SPECIES_NAME_EXCEPTIONS[slug] ?? formatName(slug);
+}

@@ -13,6 +13,7 @@ import {
     learnset,
     levelUpMoves,
     normalizeQuery,
+    speciesDisplayName,
     suggestionScore,
 } from "../pokemon/utils.js";
 
@@ -164,4 +165,10 @@ test("damageMultipliers combines both types' damage relations", () => {
     assert.equal(multipliers.electric, 1);
     assert.equal(multipliers.rock, 2);
     assert.equal(multipliers.normal, 1);
+});
+
+test("speciesDisplayName fixes punctuation the slug loses", () => {
+    assert.equal(speciesDisplayName("farfetchd"), "Farfetch’d");
+    assert.equal(speciesDisplayName("nidoran-f"), "Nidoran♀");
+    assert.equal(speciesDisplayName("great-tusk"), "Great Tusk");
 });
