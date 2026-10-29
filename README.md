@@ -26,6 +26,7 @@ tests/
   smoke.test.js  browser tests (Playwright) against mocked PokéAPI data
   utils.test.mjs unit tests for utils.js
   combobox.test.mjs  unit tests for the autocomplete matching
+  api.test.mjs   unit tests for api.js (fetch and storage stubbed)
   fixtures/      trimmed PokéAPI responses used by the tests
   build-fixtures.mjs  regenerates the fixtures from the live API
 TODO.md          living improvement backlog

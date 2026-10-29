@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Unit tests for api.js (fetchPokemon species fallback, id/name aliasing, move-cache pruning, missing-sprite memory) with stubbed fetch/localStorage in Node
 
 ## 3. Core Pokédex features
 
@@ -143,3 +142,4 @@ Rules for each run:
 - [x] Compare: radar (spider) chart of the six base stats in inline SVG, one colour per Pokémon (2026-10-29) — inline-SVG hexagon chart under the comparison table with one translucent polygon per Pokémon, grid rings, stat labels and a legend; scales to max(150, highest stat); role=img with a summary label; radarPoints unit-tested
 - [x] Combobox: show forms with their species number and label ("Charizard (Mega X) · #0006") instead of "#10034" (2026-10-29) — forms are matched to their species (longest slug prefix, entrySpecies) and shown as 'Charizard (Mega X) #0006' in suggestions and favorites/recent tiles; unit-tested
 - [x] Combobox: when the search box is focused and empty, offer recently viewed Pokémon (2026-10-29) — focusing/clicking the empty search box lists recently viewed Pokémon (listbox labelled 'Recently viewed'), with the same keyboard support; smoke test
+- [x] Unit tests for api.js (fetchPokemon species fallback, id/name aliasing, move-cache pruning, missing-sprite memory) with stubbed fetch/localStorage in Node (2026-10-29) — tests/api.test.mjs stubs fetch/localStorage/sessionStorage and covers the species fallback, no species retry for numbers, id/name reuse, move-summary caching and missing-sprite memory (5 tests)
