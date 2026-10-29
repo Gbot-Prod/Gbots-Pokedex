@@ -15,8 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Split `pokemon.js` into ES modules, in steps:
-  - [ ] Step 4: consider Vite (dev server + bundling) once there are several modules
 
 ## 3. Core Pokédex features
 - [ ] Shareable URLs: reflect the current Pokémon in `?pokemon=gengar` and support Back/Forward
@@ -93,3 +91,4 @@ Rules for each run:
 - [x] Split pokemon.js — step 2: PokéAPI access, response caching and the cached entry list moved to `api.js` (2026-10-28) — pokemon.js imports fetchJson/getAllPokemonEntries
 - [x] Split pokemon.js — step 3a: comparison moved to `compare.js` (`initCompare`), `pickSprite`/`STAT_LABELS` moved to utils.js (2026-10-28)
 - [x] Split pokemon.js — step 3b: browse grid, favorites and recently viewed moved to `lists.js` (`initLists`); TYPE_ICONS/MAX_DEX_NUMBER moved to utils.js (2026-10-29) — pokemon.js down from ~1,100 to ~630 lines
+- [x] Split pokemon.js — step 4: decided against Vite for now (2026-10-29) — 5 small native ES modules with no runtime dependencies load fine via `npm start`; revisit if we add npm runtime packages, TypeScript or a framework
