@@ -13,6 +13,7 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
+- [ ] Some newer forms have no sprite in PokéAPI's repo (e.g. id 10301), so tiles/suggestions log a 404; use `sprites.front_default` from the API (null when missing) or skip ids known to be missing
 
 ## 2. Code quality
 

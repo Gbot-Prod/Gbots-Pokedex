@@ -131,6 +131,8 @@ export function attachCombobox(input, { onSelect } = {}) {
                 sprite.width = 40;
                 sprite.height = 40;
                 sprite.loading = "lazy";
+                // Some newer forms have no sprite in PokéAPI's sprite repo yet.
+                sprite.addEventListener("error", () => (sprite.style.visibility = "hidden"), { once: true });
 
                 const name = document.createElement("span");
                 name.textContent = entry.label;
