@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Catch broken imports between modules in lint (`eslint-plugin-import` `import/named`), since ESLint alone missed a removed export
 
 ## 3. Core Pokédex features
 - [ ] Moves table: show damage category (physical/special/status) and accuracy, and TM numbers from the machines endpoint
@@ -108,3 +107,4 @@ Rules for each run:
 - [x] Show official display names from `species.names` ("Farfetch’d", "Mr. Mime", "Nidoran♀") instead of title-casing the slug ("Farfetchd", "Nidoran F") (2026-10-29) — after the species loads, the card/title/search box use species.names (Farfetch’d, Nidoran♀, Mr. Mime); forms read 'Charizard (Mega X)'
 - [x] Sprite alt text and the screen-reader announcement still use the slug name ("Farfetchd sprite") because they're set before species data arrives; update them in `applyDisplayName` (2026-10-29) — applyDisplayName refreshes the sprite alt ('Farfetch’d sprite') and the live-region text with the official name
 - [x] Make smoke tests fail fast: `page.setDefaultTimeout(5000)` and fail a test as soon as a `pageerror` fires (a missing export made the suite hang for minutes) (2026-10-29) — 5s default timeout (15s for check:live) and page errors logged as they happen; a broken import now fails all 13 smoke tests in ~1 min instead of hanging
+- [x] Catch broken imports between modules in lint (`eslint-plugin-import` `import/named`), since ESLint alone missed a removed export (2026-10-29) — eslint-plugin-import-x with import-x/named, no-unresolved and no-cycle on the site modules; verified it flags a removed export
