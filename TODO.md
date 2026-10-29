@@ -21,6 +21,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] "Pokémon of the day" hero at the top: deterministic pick from the date, shown as a big holo card with a "See it" button
 - [ ] Battle preview: pick two Pokémon, show who outspeeds, their best STAB move multiplier against each other and a simple "who has the edge" verdict
 - [ ] Optional sound effects (off by default): soft UI blips on navigation and quiz correct/wrong jingles via Web Audio
+- [ ] Daily quiz: the same 10 silhouettes for everyone each day (seeded by the date), with a shareable emoji result grid
+- [ ] Breeding & capture panel from species data: gender-ratio bar, catch-rate gauge, egg groups, hatch steps and growth rate
+- [ ] Card flip: click a corner button to flip the holo card (3D) to a back side with a Poké Ball design and a quick stats summary
+- [ ] "Evolve!" button on the evolution chain: white flash + morph animation into the next stage (instant under reduced motion)
+- [ ] Swipe left/right on phones to go to the previous/next Pokémon, with a slide transition
 - [ ] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading
 - [ ] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation
 
