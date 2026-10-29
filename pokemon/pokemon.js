@@ -35,6 +35,9 @@ const flavorTextElement = document.getElementById("pokemonFlavorText");
 
 const evolutionSection = document.getElementById("pokemonEvolution");
 const formsElement = document.getElementById("pokemonForms");
+const cryButton = document.getElementById("cryBtn");
+let currentCryUrl = null;
+let cryAudio = null;
 const evolutionListElement = document.getElementById("evolutionList");
 
 const DEFAULT_TITLE = document.title;
@@ -346,6 +349,10 @@ function renderPokemon(data, query) {
 
     //fetch pokemon base stats
     renderStats(data.stats);
+
+    // Cries are .ogg files; older entries only have a "legacy" recording.
+    currentCryUrl = data.cries?.latest || data.cries?.legacy || null;
+    cryButton.hidden = !currentCryUrl;
 
     //fetch pokemon sprite
     currentSprites = data.sprites;
@@ -669,8 +676,24 @@ document.getElementById("clearDataBtn").addEventListener("click", () => {
     setUrlPokemon(null);
 });
 
+// --- Cry ------------------------------------------------------------------------
+
+function playCry() {
+    if (!currentCryUrl) {
+        return;
+    }
+    cryAudio?.pause();
+    cryAudio = new Audio(currentCryUrl);
+    cryAudio.volume = 0.5;
+    cryButton.classList.add("playing");
+    cryAudio.addEventListener("ended", () => cryButton.classList.remove("playing"), { once: true });
+    cryAudio.play().catch(() => cryButton.classList.remove("playing")); // e.g. format unsupported
+}
+
+cryButton.addEventListener("click", playCry);
+
 // --- Keyboard shortcuts -------------------------------------------------------
-// ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny.
+// ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny, "c" plays the cry.
 
 function isTypingTarget(element) {
     return element.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(element.tagName);
@@ -692,6 +715,8 @@ document.addEventListener("keydown", (event) => {
         nextButton.click();
     } else if (event.key.toLowerCase() === "s" && cardVisible && !shinyButton.hidden) {
         shinyButton.click();
+    } else if (event.key.toLowerCase() === "c" && cardVisible && !cryButton.hidden) {
+        playCry();
     }
 });
 

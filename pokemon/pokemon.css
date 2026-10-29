@@ -363,6 +363,20 @@ body {
     gap: 0.5rem;
 }
 
+#cryBtn {
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+#cryBtn:hover,
+#cryBtn.playing {
+    transform: scale(1.2);
+}
+
 #compareCurrentBtn {
     border: none;
     background: none;

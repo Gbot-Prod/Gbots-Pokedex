@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Play the Pokémon's cry (`cries.latest`) with a small speaker button
 - [ ] Moves list (level-up moves with level, type and power) in a collapsible section
 
 ## 4. Browsing & discovery
@@ -93,3 +92,4 @@ Rules for each run:
 - [x] Shareable URLs: reflect the current Pokémon in `?pokemon=gengar` and support Back/Forward (2026-10-29) — current Pokémon kept in ?pokemon=<name> (pushState); deep links load on open, Back/Forward restore, Clear removes it; new smoke test
 - [x] Keyboard shortcuts: ←/→ for previous/next, `/` to focus search, `s` to toggle shiny (2026-10-29) — ←/→ prev/next, / focuses search, S toggles shiny; ignored while typing or with modifiers; hint line shown on devices with hover
 - [x] Alternate forms switcher (Mega, Alolan, Galarian…) from `species.varieties` (2026-10-29) — 'Forms:' buttons from species.varieties (Standard / Mega X / Alola / Gmax…), current form pressed; hidden for single-form species; formLabel helper + unit test
+- [x] Play the Pokémon's cry (`cries.latest`) with a small speaker button (2026-10-29) — 🔊 button next to the name plays cries.latest (falls back to legacy), C shortcut; hidden when there's no cry
