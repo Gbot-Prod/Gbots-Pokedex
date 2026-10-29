@@ -1063,6 +1063,27 @@ kbd {
     z-index: 10;
 }
 
+#installBtn {
+    position: fixed;
+    top: 0.75rem;
+    right: 3.75rem;
+    height: 2.5rem;
+    padding: 0 0.9rem;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-family: inter, arial, sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+#installBtn[hidden] {
+    display: none;
+}
+
 @media (max-width: 600px) {
     #compareForm span {
         display: none;
@@ -1073,7 +1094,8 @@ kbd {
     }
 
     body {
-        padding: 1rem 0.75rem;
+        /* leave room above the search box for the fixed theme/install buttons */
+        padding: 4rem 0.75rem 1rem;
     }
 
     #searchForm {

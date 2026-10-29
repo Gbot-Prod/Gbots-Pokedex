@@ -5,7 +5,7 @@
 // `npm run check:live` runs the same tests against the real PokéAPI (LIVE_API=1)
 // to catch API changes the fixtures would hide.
 
-/* global document -- used inside page.waitForFunction callbacks, which run in the browser */
+/* global document, window -- used inside page.evaluate/waitForFunction callbacks, which run in the browser */
 
 const { test, before, after, beforeEach, afterEach } = require("node:test");
 const assert = require("node:assert/strict");
@@ -329,4 +329,21 @@ test("the units toggle switches the card and the comparison table to imperial", 
     await page.reload();
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
     assert.equal(await page.textContent("#pokemonWeight"), "13.2 lbs"); // remembered
+});
+
+test("the install button appears when the browser offers installation", async () => {
+    assert.equal(await page.isVisible("#installBtn"), false);
+    // Simulate the browser's beforeinstallprompt event with a fake prompt.
+    await page.evaluate(() => {
+        const event = new Event("beforeinstallprompt", { cancelable: true });
+        event.prompt = () => {
+            window.installPrompted = true;
+        };
+        event.userChoice = Promise.resolve({ outcome: "accepted" });
+        window.dispatchEvent(event);
+    });
+    await page.waitForSelector("#installBtn:not([hidden])");
+    await page.click("#installBtn");
+    await page.waitForSelector("#installBtn[hidden]", { state: "attached" });
+    assert.equal(await page.evaluate(() => window.installPrompted), true);
 });

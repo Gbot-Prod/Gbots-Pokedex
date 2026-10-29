@@ -1029,6 +1029,34 @@ if (getUrlPokemon()) {
     loadFromUrl();
 }
 
+// --- Install as an app -----------------------------------------------------------
+// Browsers that support installing (Chrome, Edge, Android) fire beforeinstallprompt once the
+// manifest and service worker qualify; we keep the event and offer our own button.
+
+const installButton = document.getElementById("installBtn");
+let installPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault(); // show our button instead of the browser's mini-infobar
+    installPrompt = event;
+    installButton.hidden = false;
+});
+
+installButton.addEventListener("click", async () => {
+    if (!installPrompt) {
+        return;
+    }
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null; // a prompt can only be used once
+    installButton.hidden = true;
+});
+
+window.addEventListener("appinstalled", () => {
+    installPrompt = null;
+    installButton.hidden = true;
+});
+
 // Offline support: cache the app and the Pokémon you've viewed (see sw.js).
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {
