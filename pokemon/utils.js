@@ -354,3 +354,11 @@ export function pokemonDisplayName(pokemon) {
     const base = speciesDisplayName(species);
     return isDefault ? base : base + " (" + formLabel(species, pokemon.name) + ")";
 }
+
+// Drops cache entries ({ key: { savedAt, … } }) older than maxAgeMs, then keeps only the
+// newest maxEntries. Returns a new object.
+export function pruneCacheEntries(entries, now, maxAgeMs, maxEntries) {
+    const fresh = Object.entries(entries).filter(([, value]) => now - (value.savedAt ?? 0) <= maxAgeMs);
+    fresh.sort(([, a], [, b]) => b.savedAt - a.savedAt);
+    return Object.fromEntries(fresh.slice(0, maxEntries));
+}

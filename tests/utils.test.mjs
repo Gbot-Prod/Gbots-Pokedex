@@ -16,6 +16,7 @@ import {
     levelUpMoves,
     normalizeQuery,
     pokemonDisplayName,
+    pruneCacheEntries,
     speciesDisplayName,
     suggestionScore,
 } from "../pokemon/utils.js";
@@ -226,4 +227,10 @@ test("describeEvolution lists gender, stat and party conditions", () => {
         describeEvolution([{ party_species: { name: "remoraid" }, trigger: { name: "level-up" } }]),
         "Level Up (with Remoraid in party)",
     );
+});
+
+test("pruneCacheEntries drops expired entries and keeps the newest", () => {
+    const entries = { old: { savedAt: 0 }, a: { savedAt: 90 }, b: { savedAt: 95 }, c: { savedAt: 99 } };
+    assert.deepEqual(Object.keys(pruneCacheEntries(entries, 100, 50, 10)), ["c", "b", "a"]);
+    assert.deepEqual(Object.keys(pruneCacheEntries(entries, 100, 50, 2)), ["c", "b"]);
 });

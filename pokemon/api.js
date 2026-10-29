@@ -1,5 +1,5 @@
 // PokéAPI access with caching. Everything network-related lives here.
-import { idFromUrl } from "./utils.js";
+import { idFromUrl, pruneCacheEntries } from "./utils.js";
 
 export const API_BASE = "https://pokeapi.co/api/v2/";
 export const SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
@@ -84,14 +84,19 @@ async function fetchAllPokemonEntries() {
 
 // Move and TM details are kept in localStorage as small summaries, so a moves list
 // opened again (even after closing the tab) doesn't refetch 20–90 large /move responses.
-const MOVE_CACHE_KEY = "pokedex:moves:v1";
+// v2 entries carry a savedAt timestamp so old data expires (moves get rebalanced between games).
+const MOVE_CACHE_KEY = "pokedex:moves:v2";
+const MOVE_CACHE_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+const MOVE_CACHE_MAX_ENTRIES = 3000; // ~950 moves plus the TM records looked up so far
 let moveCache = null;
 let moveCacheSaveTimer = null;
 
 function getMoveCache() {
     if (!moveCache) {
         try {
-            moveCache = JSON.parse(localStorage.getItem(MOVE_CACHE_KEY)) ?? {};
+            localStorage.removeItem("pokedex:moves:v1"); // replaced by v2
+            const stored = JSON.parse(localStorage.getItem(MOVE_CACHE_KEY)) ?? {};
+            moveCache = pruneCacheEntries(stored, Date.now(), MOVE_CACHE_MAX_AGE_MS, MOVE_CACHE_MAX_ENTRIES);
         } catch {
             moveCache = {};
         }
@@ -104,7 +109,9 @@ function saveMoveCacheSoon() {
     clearTimeout(moveCacheSaveTimer);
     moveCacheSaveTimer = setTimeout(() => {
         try {
-            localStorage.setItem(MOVE_CACHE_KEY, JSON.stringify(moveCache));
+            // Prune only what's stored; the in-memory cache keeps everything for this visit.
+            const pruned = pruneCacheEntries(moveCache, Date.now(), MOVE_CACHE_MAX_AGE_MS, MOVE_CACHE_MAX_ENTRIES);
+            localStorage.setItem(MOVE_CACHE_KEY, JSON.stringify(pruned));
         } catch {
             // quota exceeded or storage unavailable; the in-memory cache still helps
         }
@@ -117,6 +124,7 @@ export async function getMoveSummary(url) {
     if (!cache[url]) {
         const move = await fetchJson(url);
         cache[url] = {
+            savedAt: Date.now(),
             type: move.type.name,
             power: move.power,
             accuracy: move.accuracy,
@@ -133,7 +141,7 @@ export async function getMachineItemName(url) {
     const cache = getMoveCache();
     if (!cache[url]) {
         const machine = await fetchJson(url);
-        cache[url] = { item: machine.item.name };
+        cache[url] = { savedAt: Date.now(), item: machine.item.name };
         saveMoveCacheSoon();
     }
     return cache[url].item;

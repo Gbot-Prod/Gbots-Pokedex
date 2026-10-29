@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Move summary cache in localStorage never expires: add a timestamp/version and cap its size
 - [ ] Cache by canonical id: "gengar" and "94" currently fetch the same Pokémon twice
 - [ ] Offline support: service worker caching the app shell and recently viewed Pokémon (PWA manifest)
 
@@ -116,3 +115,4 @@ Rules for each run:
 - [x] Compare table: follow the metric/imperial setting and use display names (Farfetch’d, "Charizard (Mega X)") in its header (2026-10-29) — header uses pokemonDisplayName (Farfetch’d, Charizard (Mega X), Zygarde); height/weight rows follow the units toggle and re-render when it changes; unit-tested
 - [x] Searching a species whose default form has a suffixed name fails: "zygarde", "aegislash", "deoxys", "giratina" 404 on /pokemon/{name}; fall back to the species' default variety (2026-10-29) — fetchPokemon() in api.js falls back to the species' default variety on a 404 (zygarde → zygarde-50, aegislash → aegislash-shield) and skips the doomed request when the cached name list says it doesn't exist; used by search and compare; smoke test + fixtures
 - [x] Evolution methods: show gender requirements (e.g. Combee → Vespiquen "female only") and other conditions PokéAPI provides (2026-10-29) — conditions in parentheses: gender (Combee 'Lv. 21 (female)'), Tyrogue's Atk/Def comparison, party species/type (Mantyke), rain (Goodra), upside-down console (Malamar), Beauty; unit-tested
+- [x] Move summary cache in localStorage never expires: add a timestamp/version and cap its size (2026-10-29) — cache moved to pokedex:moves:v2 with per-entry savedAt; entries older than 30 days dropped and storage capped at 3,000 entries (pruneCacheEntries, unit-tested); old v1 key removed
