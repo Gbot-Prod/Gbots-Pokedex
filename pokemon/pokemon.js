@@ -44,6 +44,8 @@ let currentMoves = [];
 let movesDetailsLoaded = false;
 let currentCryUrl = null;
 let cryAudio = null;
+// Cries are Ogg Vorbis files, which some browsers (e.g. Safari) can't play.
+const CAN_PLAY_CRIES = new Audio().canPlayType('audio/ogg; codecs="vorbis"') !== "";
 const evolutionListElement = document.getElementById("evolutionList");
 
 const DEFAULT_TITLE = document.title;
@@ -359,7 +361,7 @@ function renderPokemon(data, query) {
 
     // Cries are .ogg files; older entries only have a "legacy" recording.
     currentCryUrl = data.cries?.latest || data.cries?.legacy || null;
-    cryButton.hidden = !currentCryUrl;
+    cryButton.hidden = !currentCryUrl || !CAN_PLAY_CRIES;
 
     //fetch pokemon sprite
     currentSprites = data.sprites;

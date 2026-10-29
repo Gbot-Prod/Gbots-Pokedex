@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Cry button does nothing in Safari (no .ogg support): check `new Audio().canPlayType("audio/ogg")` and hide the button (or explain) when unsupported
 
 ## 2. Code quality
 - [ ] Extend the smoke tests to forms, moves, sorting, keyboard shortcuts and the cry button (add `moves`/`varieties`/`cries` to the fixtures)
@@ -101,3 +100,4 @@ Rules for each run:
 - [x] Browse sorting by number ↑/↓ and name A–Z/Z–A, combined with the type/generation filters (2026-10-29) — split from "type icons on tiles and sorting"
 - [x] Show type icons on browse tiles (build an id → types map from the 18 cached /type responses, loaded lazily) (2026-10-29) — id → types map built lazily from the 18 cached /type responses (slot order); browse, favorites and recent tiles show small type icons
 - [x] "Did you mean" should also match substrings/subsequences (e.g. "charz" → Charizard) (2026-10-29) — suggestionScore ranks prefix > substring > in-order letters (charz → Charizard) > typos; isSubsequence/suggestionScore unit-tested
+- [x] Cry button does nothing in Safari (no .ogg support): check `new Audio().canPlayType("audio/ogg")` and hide the button (or explain) when unsupported (2026-10-29) — button (and C shortcut) hidden when the browser can't play Ogg Vorbis; checked with canPlayType stubbed to ''
