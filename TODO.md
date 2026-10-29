@@ -19,7 +19,7 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Combobox: highlight the matched part of each suggestion (`<mark>`), and let users remove an entry from the "Recently viewed" suggestions
+- [ ] Combobox: let users remove an entry from the "Recently viewed" suggestions (e.g. Delete/Shift+Delete on the highlighted option, announced via a live region)
 
 ## 5. Design & UX
 - [ ] Radar chart: lighter polygon colours in dark mode (the blue is dim on the dark table) and highlight a Pokémon's polygon when its legend entry or column is hovered/focused
@@ -143,3 +143,4 @@ Rules for each run:
 - [x] Combobox: show forms with their species number and label ("Charizard (Mega X) · #0006") instead of "#10034" (2026-10-29) — forms are matched to their species (longest slug prefix, entrySpecies) and shown as 'Charizard (Mega X) #0006' in suggestions and favorites/recent tiles; unit-tested
 - [x] Combobox: when the search box is focused and empty, offer recently viewed Pokémon (2026-10-29) — focusing/clicking the empty search box lists recently viewed Pokémon (listbox labelled 'Recently viewed'), with the same keyboard support; smoke test
 - [x] Unit tests for api.js (fetchPokemon species fallback, id/name aliasing, move-cache pruning, missing-sprite memory) with stubbed fetch/localStorage in Node (2026-10-29) — tests/api.test.mjs stubs fetch/localStorage/sessionStorage and covers the species fallback, no species retry for numbers, id/name reuse, move-summary caching and missing-sprite memory (5 tests)
+- [x] Combobox: matched text is underlined in each suggestion (`<mark>`, "Charizard" for "char") (2026-10-29) — split from "highlight + remove recent"

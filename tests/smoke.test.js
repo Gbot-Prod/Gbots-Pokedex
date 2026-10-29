@@ -427,6 +427,7 @@ test("the search combobox suggests Pokémon and can be driven with the keyboard"
     await page.keyboard.type("pika");
     await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
     assert.match(await page.textContent("[role=listbox] [role=option]"), /Pikachu/);
+    assert.equal(await page.textContent("[role=listbox] [role=option] mark"), "Pika"); // matched part highlighted
 
     await page.keyboard.press("ArrowDown");
     assert.ok(await page.getAttribute("#pokemonLookupInpt", "aria-activedescendant"));

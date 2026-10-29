@@ -116,6 +116,14 @@ body {
     cursor: pointer;
 }
 
+.comboboxOption mark {
+    background: none;
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+}
+
 .comboboxOption small {
     margin-left: auto;
     font-weight: 500;

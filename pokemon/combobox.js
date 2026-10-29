@@ -36,6 +36,18 @@ export function matchEntries(entries, rawQuery, limit = MAX_OPTIONS) {
     return scored.slice(0, limit).map(({ entry }) => entry);
 }
 
+// Splits a label into text nodes with the first case-insensitive match of the query
+// wrapped in <mark>, e.g. ("Charizard", "char") -> [<mark>Char</mark>, "izard"].
+export function highlightMatch(label, query) {
+    const index = query ? label.toLowerCase().indexOf(query.toLowerCase()) : -1;
+    if (index === -1) {
+        return [label];
+    }
+    const mark = document.createElement("mark");
+    mark.textContent = label.slice(index, index + query.length);
+    return [label.slice(0, index), mark, label.slice(index + query.length)].filter((part) => part !== "");
+}
+
 let labelledEntriesPromise = null;
 
 // Every Pokémon with its display label, loaded once and shared by all comboboxes.
@@ -151,7 +163,7 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions } = {}) {
                 setSprite(sprite, entry.id);
 
                 const name = document.createElement("span");
-                name.textContent = entry.label;
+                name.append(...highlightMatch(entry.label, input.value.trim()));
                 const number = document.createElement("small");
                 number.textContent = formatDexNumber(entry.dexNumber);
 
