@@ -257,5 +257,5 @@ test("move tabs switch between level-up, TM, egg and tutor moves", async () => {
     assert.equal(await page.getAttribute('.movesTab[data-method="machine"]', "aria-selected"), "true");
     const machineRows = await page.locator("#movesTable tbody tr").count();
     assert.ok(machineRows > 0 && machineRows !== levelUpRows);
-    assert.equal(await page.isVisible("#movesTable th:first-child"), false); // no level column for TMs
+    assert.equal(await page.textContent("#movesTable th:first-child"), "TM"); // first column holds TM numbers
 });
