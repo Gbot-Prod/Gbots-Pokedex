@@ -35,6 +35,14 @@ const browseNextButton = document.getElementById("browseNextBtn");
 const browseStatusElement = document.getElementById("browseStatus");
 const typeFilterElement = document.getElementById("typeFilter");
 const generationFilterElement = document.getElementById("generationFilter");
+const sortOrderElement = document.getElementById("sortOrder");
+
+const SORTERS = {
+    number: (a, b) => a.id - b.id,
+    "number-desc": (a, b) => b.id - a.id,
+    name: (a, b) => a.name.localeCompare(b.name),
+    "name-desc": (a, b) => b.name.localeCompare(a.name),
+};
 
 // National Dex number ranges introduced by each generation.
 const GENERATIONS = [
@@ -114,7 +122,7 @@ async function applyBrowseFilters() {
         return;
     }
 
-    browseEntries = entries;
+    browseEntries = [...entries].sort(SORTERS[sortOrderElement.value] ?? SORTERS.number);
     browsePage = 0;
     browseStatusElement.textContent = entries.length ? "" : "No Pokémon match these filters.";
     renderBrowsePage();
@@ -161,6 +169,7 @@ function createBrowseTile(entry) {
 
 typeFilterElement.addEventListener("change", applyBrowseFilters);
 generationFilterElement.addEventListener("change", applyBrowseFilters);
+sortOrderElement.addEventListener("change", applyBrowseFilters);
 browsePrevButton.addEventListener("click", () => {
     browsePage--;
     renderBrowsePage();
