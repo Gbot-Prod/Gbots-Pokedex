@@ -552,3 +552,18 @@ test("the share button copies a link to the current Pokémon", async () => {
     await page.waitForFunction(() => document.getElementById("shareStatus").textContent === "Link copied");
     assert.match(await page.evaluate(() => window.copiedText), /\?pokemon=gengar$/);
 });
+
+test("the Who's that Pokémon? quiz reveals the answer and keeps score", async () => {
+    await page.click("#quizStartBtn");
+    await page.waitForSelector(".quizChoice");
+    assert.equal(await page.locator(".quizChoice").count(), 4);
+    assert.match(await page.getAttribute("#quizImage", "alt"), /Silhouette/);
+
+    await page.click(".quizChoice >> nth=0");
+    await page.waitForSelector("#quizStage.revealed");
+    assert.match(await page.textContent("#quizResult"), /Correct!|Not quite/);
+    assert.match(await page.textContent("#quizScore"), /Score \d\/1/);
+    assert.equal(await page.locator(".quizChoice.correct").count(), 1);
+    await page.click("#quizNextBtn");
+    await page.waitForSelector("#quizStage:not(.revealed)");
+});

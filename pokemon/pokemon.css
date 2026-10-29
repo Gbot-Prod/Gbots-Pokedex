@@ -1633,3 +1633,93 @@ img.placeholderSprite {
         display: none;
     }
 }
+
+/* --- Who's that Pokémon? ----------------------------------------------------------- */
+
+#quizStartBtn,
+#quizNextBtn {
+    background-color: #5871c1;
+}
+
+#quizScore {
+    margin: 0 0 0.6rem;
+    font-weight: 600;
+}
+
+#quizArt {
+    display: grid;
+    place-items: center;
+    width: min(260px, 100%);
+    aspect-ratio: 1;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff6c9 0%, #ffd34d 45%, #e3a21a 75%, transparent 76%);
+}
+
+#quizImage {
+    width: 80%;
+    height: auto;
+    /* black silhouette until revealed */
+    filter: brightness(0);
+    transition:
+        filter 0.6s ease-out,
+        transform 0.6s ease-out;
+}
+
+#quizStage.revealed #quizImage {
+    filter: none;
+    transform: scale(1.08);
+}
+
+#quizChoices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    max-width: 30rem;
+    margin: 0 auto;
+}
+
+.quizChoice {
+    padding: 0.7rem;
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    background-color: var(--tile-bg);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.quizChoice:hover:not(:disabled) {
+    background-color: var(--tile-hover);
+}
+
+.quizChoice:disabled {
+    cursor: default;
+}
+
+.quizChoice.correct {
+    border-color: var(--win);
+    background-color: var(--surface-solid);
+}
+
+.quizChoice.correct::before {
+    content: "✓ ";
+}
+
+.quizChoice.wrong {
+    border-color: #bb5555;
+    text-decoration: line-through;
+}
+
+#quizResult {
+    min-height: 1.5em;
+    margin: 0.8rem 0;
+    font-weight: 700;
+}
+
+#quizResult .linkBtn {
+    color: inherit;
+    font-size: 1rem;
+}

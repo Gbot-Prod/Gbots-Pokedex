@@ -170,6 +170,20 @@
                 <kbd>C</kbd> cry
             </p>
 
+            <section id="quizSection" class="tileSection" aria-labelledby="quizHeading" hidden>
+                <h2 id="quizHeading">Who's that Pokémon?</h2>
+                <p id="quizScore"></p>
+                <button type="button" class="btn" id="quizStartBtn">Play</button>
+                <div id="quizStage" hidden>
+                    <div id="quizArt">
+                        <img id="quizImage" alt="" width="240" height="240" />
+                    </div>
+                    <div id="quizChoices" role="group" aria-label="Choices"></div>
+                    <p id="quizResult" role="status"></p>
+                    <button type="button" class="btn" id="quizNextBtn" hidden>Next Pokémon</button>
+                </div>
+            </section>
+
             <section id="compareSection" class="tileSection" aria-labelledby="compareHeading">
                 <h2 id="compareHeading">Compare Pokémon</h2>
                 <form id="compareForm">

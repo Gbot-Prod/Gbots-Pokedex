@@ -10,6 +10,7 @@ import {
 } from "./api.js";
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
+import { initQuiz } from "./quiz.js";
 import {
     addToRecent,
     fadeInImage,
@@ -755,6 +756,7 @@ updateThemeButton();
 
 initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
+initQuiz({ showPokemon });
 
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
 function showPokemon(id) {

@@ -12,6 +12,7 @@ const SHELL_FILES = [
     "combobox.js",
     "compare.js",
     "lists.js",
+    "quiz.js",
     "utils.js",
     "manifest.webmanifest",
     "assets/BugIcon.png",

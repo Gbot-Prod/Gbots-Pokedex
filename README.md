@@ -17,6 +17,7 @@ pokemon/
   lists.js       browse grid with filters, favorites and recently viewed
   compare.js     side-by-side comparison table
   combobox.js    accessible search autocomplete (sprites, keyboard navigation)
+  quiz.js        "Who's that Pokémon?" silhouette quiz
   api.js         PokéAPI requests with in-memory/sessionStorage caching
   utils.js       pure helpers (name formatting, query normalisation, …)
   sw.js          service worker: offline app shell + cached PokéAPI data/sprites
