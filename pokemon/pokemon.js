@@ -1033,6 +1033,32 @@ function playCry() {
 
 cryButton.addEventListener("click", playCry);
 
+// --- Share ------------------------------------------------------------------------
+// Phones get the system share sheet; elsewhere the link (with ?pokemon=) is copied.
+
+const shareButton = document.getElementById("shareBtn");
+const shareStatus = document.getElementById("shareStatus");
+
+shareButton.addEventListener("click", async () => {
+    const url = window.location.href;
+    const title = document.title;
+    try {
+        if (navigator.share) {
+            await navigator.share({ title, url });
+            return;
+        }
+        await navigator.clipboard.writeText(url);
+        shareStatus.textContent = "Link copied";
+        shareButton.textContent = "✓";
+        setTimeout(() => {
+            shareButton.textContent = "🔗";
+            shareStatus.textContent = "";
+        }, 1500);
+    } catch {
+        // share sheet dismissed, or clipboard blocked: nothing to do
+    }
+});
+
 // --- Keyboard shortcuts -------------------------------------------------------
 // ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny, "c" plays the cry.
 

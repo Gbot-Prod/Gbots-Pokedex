@@ -432,6 +432,7 @@ body {
     gap: 0.5rem;
 }
 
+#shareBtn,
 #cryBtn {
     border: none;
     background: none;
@@ -441,6 +442,7 @@ body {
     transition: transform 0.15s;
 }
 
+#shareBtn:hover,
 #cryBtn:hover,
 #cryBtn.playing {
     transform: scale(1.2);

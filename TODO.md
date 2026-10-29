@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] "Share" button on the card: `navigator.share` on phones, copy-link fallback with a "Link copied" status
 
 ## 4. Browsing & discovery
 - [ ] Clicking a type badge (card type icons or matchups) filters the browse grid by that type and scrolls to it
@@ -150,3 +149,4 @@ Rules for each run:
 - [x] Missing sprites show an empty space; use a Poké Ball placeholder (assets/favicon.svg) instead (2026-10-29) — setSprite shows a faded, scaled Poké Ball (assets/favicon.svg) for known or newly found sprite gaps (e.g. Gyarados (Mega)); smoke test updated
 - [x] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen (2026-10-29) — picking a compare suggestion moves focus to the second box, then to the Compare button (third box is optional), closing the list; suggestion list capped at 14rem on phones; smoke test at 375px
 - [x] Moves table: sortable columns (level/TM, name, power, accuracy) via header buttons with `aria-sort` (2026-10-29) — every header is a sort button (▲/▼, aria-sort): level/TM numerically, name/type/category alphabetically, power/accuracy numerically with '—' last; resets when the tab or game changes; smoke test
+- [x] "Share" button on the card: `navigator.share` on phones, copy-link fallback with a "Link copied" status (2026-10-29) — 🔗 button uses the system share sheet where available, otherwise copies the ?pokemon= link and announces 'Link copied' (✓ briefly); smoke test with a stubbed clipboard

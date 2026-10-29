@@ -538,3 +538,17 @@ test("the moves table sorts by a column when its header is clicked", async () =>
         [...descending].sort((a, b) => b - a),
     );
 });
+
+test("the share button copies a link to the current Pokémon", async () => {
+    await search("gengar");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    // Headless Chromium has no share sheet; capture the clipboard write instead.
+    await page.evaluate(() => {
+        Object.defineProperty(navigator, "clipboard", {
+            value: { writeText: async (text) => (window.copiedText = text) },
+        });
+    });
+    await page.click("#shareBtn");
+    await page.waitForFunction(() => document.getElementById("shareStatus").textContent === "Link copied");
+    assert.match(await page.evaluate(() => window.copiedText), /\?pokemon=gengar$/);
+});
