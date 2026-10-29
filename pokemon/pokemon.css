@@ -10,7 +10,9 @@
     --surface-solid: #ffffff;
     --tile-bg: #9ebee8;
     --tile-hover: #b6d0f0;
-    --win: #1a7a42;
+    --win: #10522b;
+    /* text placed directly on the page background */
+    --page-ink: rgb(18, 40, 112);
 }
 
 :root[data-theme="dark"] {
@@ -24,6 +26,7 @@
     --tile-bg: #1f2940;
     --tile-hover: #2a3654;
     --win: #6be39a;
+    --page-ink: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,6 +41,7 @@
         --tile-bg: #1f2940;
         --tile-hover: #2a3654;
         --win: #6be39a;
+        --page-ink: #ffffff;
     }
 }
 
@@ -89,7 +93,7 @@ body {
 }
 
 #getPokemonBtn {
-    background-color: #6885e3;
+    background-color: #5871c1;
 }
 
 #randomPokemonBtn {
@@ -117,7 +121,7 @@ body {
     margin-top: 20px;
     font-family: inter, arial, sans-serif;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--page-ink);
 }
 
 #loadingIndicator.hidden {
@@ -414,7 +418,7 @@ body {
 }
 
 #compareBtn {
-    background-color: #6885e3;
+    background-color: #5871c1;
     font-size: 1rem;
     padding: 0.7rem 1.2rem;
 }
@@ -517,6 +521,12 @@ body {
     background-color: var(--type-strong);
     color: #ffffff;
     cursor: default;
+}
+
+#pokemonNumber {
+    margin: 1rem 0;
+    font-size: 1.17rem;
+    font-weight: 700;
 }
 
 #pokemonGenus {
@@ -881,14 +891,13 @@ body {
     margin: 1rem 0 0;
     font-family: inter, arial, sans-serif;
     font-size: 0.85rem;
-    color: #ffffff;
+    color: var(--page-ink);
     text-align: center;
-    opacity: 0.85;
 }
 
 kbd {
     padding: 0.05rem 0.4rem;
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid currentColor;
     border-radius: 4px;
     font-family: inherit;
     font-weight: 700;
@@ -903,7 +912,7 @@ kbd {
 .tileSection {
     margin: 2rem 0;
     font-family: inter, arial, sans-serif;
-    color: #ffffff;
+    color: var(--page-ink);
     text-align: center;
 }
 
@@ -946,7 +955,7 @@ kbd {
 .linkBtn {
     border: none;
     background: none;
-    color: #ffffff;
+    color: var(--page-ink);
     font-family: inherit;
     font-size: 0.9rem;
     text-decoration: underline;
@@ -1022,7 +1031,7 @@ kbd {
 
 #browsePrevBtn,
 #browseNextBtn {
-    background-color: #6885e3;
+    background-color: #5871c1;
     font-size: 1rem;
     padding: 0.6rem 1rem;
 }

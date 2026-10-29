@@ -495,24 +495,24 @@ function createStatRow(label, value, max) {
 // Card theme per type: strong (header), light (body) and deep (gradient) shades.
 // Strong shades are dark enough for white header text.
 const TYPE_COLORS = {
-    normal: ["#8a8a65", "#d4d4bd", "#8a8a65"],
-    fire: ["#d0611c", "#f5c19c", "#d0611c"],
+    normal: ["#757555", "#d4d4bd", "#8a8a65"],
+    fire: ["#bc5819", "#f5c19c", "#d0611c"],
     water: ["#4a6fd8", "#b3c6f2", "#3559c4"],
-    grass: ["#4f9a33", "#bfe3ac", "#3f8a25"],
-    electric: ["#b8920c", "#f8e49a", "#c9a20f"],
-    ice: ["#3f9e9b", "#c4ecea", "#3f9e9b"],
+    grass: ["#408129", "#bfe3ac", "#3f8a25"],
+    electric: ["#8d6f04", "#f8e49a", "#c9a20f"],
+    ice: ["#33817e", "#c4ecea", "#3f9e9b"],
     fighting: ["#a82a22", "#e7aaa5", "#a82a22"],
     poison: ["#8a3b8a", "#d9b0d9", "#7f357f"],
-    ground: ["#a8873a", "#ecd9a8", "#a8873a"],
+    ground: ["#8e7230", "#ecd9a8", "#a8873a"],
     flying: ["#7a68c8", "#d2c8f5", "#6a58b8"],
-    psychic: ["#d63a6c", "#f8bcd0", "#d63a6c"],
-    bug: ["#7b8c14", "#d9e39a", "#7b8c14"],
-    rock: ["#94812e", "#e0d4a0", "#94812e"],
+    psychic: ["#cf3868", "#f8bcd0", "#d63a6c"],
+    bug: ["#6b7a10", "#d9e39a", "#7b8c14"],
+    rock: ["#857528", "#e0d4a0", "#94812e"],
     ghost: ["#5a4785", "#c3b6dd", "#4d3c78"],
     dragon: ["#5a2fe0", "#c2aef8", "#4b22cc"],
     dark: ["#5c4838", "#c9bbae", "#4a3a2c"],
-    steel: ["#7a7a96", "#d8d8e6", "#6a6a86"],
-    fairy: ["#c05c8a", "#f3c8dc", "#c05c8a"],
+    steel: ["#72728c", "#d8d8e6", "#6a6a86"],
+    fairy: ["#b45681", "#f3c8dc", "#c05c8a"],
 };
 
 function applyTypeTheme(type) {

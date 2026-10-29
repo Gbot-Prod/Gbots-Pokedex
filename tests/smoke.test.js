@@ -7,12 +7,13 @@
 
 /* global document -- used inside page.waitForFunction callbacks, which run in the browser */
 
-const { test, before, after, beforeEach } = require("node:test");
+const { test, before, after, beforeEach, afterEach } = require("node:test");
 const assert = require("node:assert/strict");
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { AxeBuilder } = require("@axe-core/playwright");
 
 const LIVE_API = Boolean(process.env.LIVE_API);
 const SITE_ROOT = path.join(__dirname, "..", "pokemon");
@@ -35,6 +36,7 @@ const pokemonList = JSON.parse(fs.readFileSync(path.join(FIXTURES, "pokemon-list
 let server;
 let baseUrl;
 let browser;
+let context;
 let page;
 let pageErrors;
 
@@ -82,7 +84,8 @@ after(async () => {
 
 beforeEach(async () => {
     // Service workers would bypass page.route, so the mocked tests block them.
-    page = await browser.newPage({ serviceWorkers: LIVE_API ? "allow" : "block" });
+    context = await browser.newContext({ serviceWorkers: LIVE_API ? "allow" : "block" });
+    page = await context.newPage();
     pageErrors = [];
     // Fail fast: waits give up after a few seconds (longer against the real API), and any
     // uncaught page error (e.g. a broken module import) is reported in the next wait's failure.
@@ -110,6 +113,10 @@ beforeEach(async () => {
         route.fulfill({ status: 200, contentType: "image/png", body: BLANK_PNG }),
     );
     await page.goto(baseUrl);
+});
+
+afterEach(async () => {
+    await context?.close();
 });
 
 async function search(query) {
@@ -280,3 +287,24 @@ test("species whose default form has a suffixed name can be searched by species 
     assert.match(page.url(), /\?pokemon=zygarde-50$/);
     assert.deepEqual(pageErrors, []);
 });
+
+// Accessibility: no serious or critical axe-core violations in the main states, in both themes.
+for (const colorScheme of ["light", "dark"]) {
+    test("no serious accessibility violations (" + colorScheme + " mode)", async () => {
+        await page.emulateMedia({ colorScheme });
+        await search("pikachu");
+        await page.waitForSelector("#pokemonMoves:not([hidden])");
+        await page.click("#movesSummary");
+        await page.fill("#compareLeftInput", "pikachu");
+        await page.fill("#compareRightInput", "gengar");
+        await page.click("#compareBtn");
+        await page.waitForSelector("#compareResult:not([hidden])");
+        await page.waitForSelector("#browseGrid .browseTile");
+
+        const results = await new AxeBuilder({ page }).analyze();
+        const serious = results.violations
+            .filter((violation) => ["serious", "critical"].includes(violation.impact))
+            .map((violation) => violation.id + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));
+        assert.deepEqual(serious, []);
+    });
+}

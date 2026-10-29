@@ -12,6 +12,7 @@
         "check:live": "LIVE_API=1 node --test tests/smoke.test.js"
     },
     "devDependencies": {
+        "@axe-core/playwright": "^4.14.0",
         "@eslint/js": "^10.0.1",
         "eslint": "^10.1.0",
         "eslint-plugin-import-x": "^4.17.1",
