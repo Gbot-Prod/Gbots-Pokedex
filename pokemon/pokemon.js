@@ -9,6 +9,7 @@ import {
     describeEvolution,
     editDistance,
     formatMultiplier,
+    formLabel,
     formatName,
     idFromUrl,
     normalizeQuery,
@@ -33,6 +34,7 @@ const genusElement = document.getElementById("pokemonGenus");
 const flavorTextElement = document.getElementById("pokemonFlavorText");
 
 const evolutionSection = document.getElementById("pokemonEvolution");
+const formsElement = document.getElementById("pokemonForms");
 const evolutionListElement = document.getElementById("evolutionList");
 
 const DEFAULT_TITLE = document.title;
@@ -108,6 +110,7 @@ async function loadSpecies(url, requestId) {
             genusElement.textContent = "";
             flavorTextElement.textContent = "";
             evolutionSection.hidden = true;
+            formsElement.hidden = true;
         }
     }
 }
@@ -253,6 +256,8 @@ function createEvolutionButton(node) {
 }
 
 function renderSpecies(species) {
+    renderForms(species);
+
     const genus = species.genera.find((entry) => entry.language.name === "en");
     genusElement.textContent = genus ? genus.genus : "";
 
@@ -266,6 +271,37 @@ function renderSpecies(species) {
               .replace(/\s+/g, " ")
               .trim()
         : "";
+}
+
+// Buttons for the species' other forms (Mega, regional, Gigantamax…), if it has any.
+function renderForms(species) {
+    const varieties = species.varieties ?? [];
+    formsElement.replaceChildren();
+    formsElement.hidden = varieties.length < 2;
+    if (formsElement.hidden) {
+        return;
+    }
+
+    const label = document.createElement("span");
+    label.className = "formsLabel";
+    label.textContent = "Forms:";
+    formsElement.append(label);
+
+    for (const { pokemon } of varieties) {
+        const id = idFromUrl(pokemon.url);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "formBtn";
+        button.textContent = formLabel(species.name, pokemon.name);
+        const isCurrent = currentPokemon !== null && currentPokemon.id === id;
+        button.setAttribute("aria-pressed", String(isCurrent));
+        button.addEventListener("click", () => {
+            if (!isCurrent) {
+                showPokemon(id);
+            }
+        });
+        formsElement.append(button);
+    }
 }
 
 function renderPokemon(data, query) {
@@ -293,6 +329,7 @@ function renderPokemon(data, query) {
     genusElement.textContent = "";
     flavorTextElement.textContent = "";
     evolutionSection.hidden = true;
+    formsElement.hidden = true;
 
     //fetch pokemon type
     const pkmnType = data.types[0].type.name;

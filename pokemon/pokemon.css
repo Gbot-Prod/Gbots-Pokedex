@@ -475,6 +475,36 @@ body {
     transform: scale(1.2);
 }
 
+#pokemonForms {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 1rem 1rem;
+}
+
+.formsLabel {
+    font-weight: 700;
+}
+
+.formBtn {
+    padding: 0.3rem 0.8rem;
+    border: 2px solid var(--type-strong);
+    border-radius: 999px;
+    background-color: var(--surface);
+    color: inherit;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.formBtn[aria-pressed="true"] {
+    background-color: var(--type-strong);
+    color: #ffffff;
+    cursor: default;
+}
+
 #pokemonGenus {
     margin: -0.5rem 0 0.8rem;
     font-style: italic;

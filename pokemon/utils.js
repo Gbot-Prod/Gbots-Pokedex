@@ -108,3 +108,12 @@ export const TYPE_ICONS = {
     steel: "SteelIcon.png",
     fairy: "FairyIcon.png",
 };
+
+// Short label for a form within its species: ("charizard", "charizard-mega-x") -> "Mega X".
+export function formLabel(speciesName, pokemonName) {
+    if (pokemonName === speciesName) {
+        return "Standard";
+    }
+    const suffix = pokemonName.startsWith(speciesName + "-") ? pokemonName.slice(speciesName.length + 1) : pokemonName;
+    return formatName(suffix);
+}

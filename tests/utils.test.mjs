@@ -5,6 +5,7 @@ import {
     describeEvolution,
     editDistance,
     formatMultiplier,
+    formLabel,
     formatName,
     idFromUrl,
     normalizeQuery,
@@ -51,4 +52,10 @@ test("editDistance counts single-character edits", () => {
     assert.equal(editDistance("pikachoo", "pikachu"), 2);
     assert.equal(editDistance("gengr", "gengar"), 1);
     assert.equal(editDistance("same", "same"), 0);
+});
+
+test("formLabel names a form relative to its species", () => {
+    assert.equal(formLabel("charizard", "charizard"), "Standard");
+    assert.equal(formLabel("charizard", "charizard-mega-x"), "Mega X");
+    assert.equal(formLabel("raichu", "raichu-alola"), "Alola");
 });
