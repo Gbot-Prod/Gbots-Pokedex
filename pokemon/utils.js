@@ -370,3 +370,12 @@ export function entryDisplayName(entry, speciesSlugs) {
     const slug = entry.id <= MAX_DEX_NUMBER ? speciesSlugs?.get(entry.id) : null;
     return slug ? speciesDisplayName(slug) : formatName(entry.name);
 }
+
+// Plain-English description of an ability: the latest English in-game text, falling back to
+// the short effect. Game text has hard line breaks, which are collapsed.
+export function abilityDescription(ability) {
+    const english = (entries) => (entries ?? []).filter((entry) => entry.language.name === "en");
+    const flavor = english(ability.flavor_text_entries).pop()?.flavor_text;
+    const text = flavor ?? english(ability.effect_entries).pop()?.short_effect ?? "";
+    return text.replace(/\s+/g, " ").trim();
+}

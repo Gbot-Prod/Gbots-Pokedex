@@ -589,11 +589,33 @@ body {
     font-weight: 700;
 }
 
+#abilityDescription {
+    max-width: 26rem;
+    margin: -0.5rem 1rem 1rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 10px;
+    background-color: var(--surface);
+    line-height: 1.4;
+}
+
+#abilityDescription[hidden] {
+    display: none;
+}
+
 .abilityChip {
+    border: 2px solid transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
     background-color: var(--surface-solid);
     font-weight: 600;
+}
+
+.abilityChip[aria-expanded="true"] {
+    border-color: var(--type-strong);
 }
 
 .abilityChip.hiddenAbility {

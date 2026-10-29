@@ -409,3 +409,15 @@ test("comparisons are kept in the URL and restored from a shared link", async ()
     await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Raichu");
     assert.match(page.url(), /compare=/);
 });
+
+test("ability chips expand to show a description", async () => {
+    await search("pikachu");
+    await page.waitForSelector(".abilityChip");
+    await page.click(".abilityChip");
+    assert.equal(await page.getAttribute(".abilityChip", "aria-expanded"), "true");
+    await page.waitForSelector("#abilityDescription:not([hidden])");
+    // The fixtures have no ability data, so offline this shows the friendly fallback.
+    await page.waitForFunction(() => !document.getElementById("abilityDescription").textContent.includes("Loading"));
+    await page.click(".abilityChip");
+    await page.waitForSelector("#abilityDescription[hidden]", { state: "attached" });
+});

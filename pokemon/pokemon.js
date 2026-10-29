@@ -15,6 +15,7 @@ import {
     STAT_LABELS,
     TYPE_ICONS,
     VERSION_GROUPS,
+    abilityDescription,
     damageMultipliers,
     describeEvolution,
     entryDisplayName,
@@ -39,6 +40,7 @@ const type2IconElement = document.getElementById("pokemonType2");
 const heightElement = document.getElementById("pokemonHeight");
 const weightElement = document.getElementById("pokemonWeight");
 const abilityElement = document.getElementById("pokemonAbility");
+const abilityDescriptionElement = document.getElementById("abilityDescription");
 const statsListElement = document.getElementById("statsList");
 const pokemonCard = document.getElementById("pokemonCardContainer");
 const errorElement = document.getElementById("errorMessage");
@@ -425,6 +427,8 @@ function renderSprite() {
 
 function renderAbilities(abilities) {
     abilityElement.replaceChildren();
+    abilityDescriptionElement.hidden = true;
+    abilityDescriptionElement.textContent = "";
 
     const label = document.createElement("span");
     label.className = "abilityLabel";
@@ -432,10 +436,39 @@ function renderAbilities(abilities) {
     abilityElement.append(label);
 
     for (const { ability, is_hidden } of abilities) {
-        const chip = document.createElement("span");
+        const chip = document.createElement("button");
+        chip.type = "button";
         chip.className = "abilityChip" + (is_hidden ? " hiddenAbility" : "");
         chip.textContent = formatName(ability.name) + (is_hidden ? " (hidden)" : "");
+        chip.setAttribute("aria-expanded", "false");
+        chip.setAttribute("aria-controls", "abilityDescription");
+        chip.title = "What does " + formatName(ability.name) + " do?";
+        chip.addEventListener("click", () => toggleAbilityDescription(chip, ability));
         abilityElement.append(chip);
+    }
+}
+
+// Clicking an ability chip shows its description below the chips; clicking again hides it.
+async function toggleAbilityDescription(chip, ability) {
+    const wasOpen = chip.getAttribute("aria-expanded") === "true";
+    for (const other of abilityElement.querySelectorAll(".abilityChip")) {
+        other.setAttribute("aria-expanded", "false");
+    }
+    if (wasOpen) {
+        abilityDescriptionElement.hidden = true;
+        return;
+    }
+    chip.setAttribute("aria-expanded", "true");
+    abilityDescriptionElement.hidden = false;
+    abilityDescriptionElement.textContent = "Loading…";
+    try {
+        const details = await fetchJson(ability.url);
+        if (chip.getAttribute("aria-expanded") === "true") {
+            abilityDescriptionElement.textContent =
+                formatName(ability.name) + ": " + (abilityDescription(details) || "No description available.");
+        }
+    } catch {
+        abilityDescriptionElement.textContent = "Couldn't load the description.";
     }
 }
 

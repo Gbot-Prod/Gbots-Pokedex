@@ -2,6 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+    abilityDescription,
     damageMultipliers,
     describeEvolution,
     editDistance,
@@ -248,4 +249,17 @@ test("entryDisplayName prefers the species name for National Dex entries", () =>
         "Zygarde 10 Power Construct",
     );
     assert.equal(entryDisplayName({ id: 718, name: "zygarde-50" }, null), "Zygarde 50"); // list not loaded yet
+});
+
+test("abilityDescription prefers the latest English game text", () => {
+    const ability = {
+        flavor_text_entries: [
+            { language: { name: "en" }, flavor_text: "Old text." },
+            { language: { name: "en" }, flavor_text: "May paralyze\nattackers." },
+            { language: { name: "de" }, flavor_text: "Deutsch." },
+        ],
+        effect_entries: [{ language: { name: "en" }, short_effect: "30% paralysis on contact." }],
+    };
+    assert.equal(abilityDescription(ability), "May paralyze attackers.");
+    assert.equal(abilityDescription({ effect_entries: ability.effect_entries }), "30% paralysis on contact.");
 });

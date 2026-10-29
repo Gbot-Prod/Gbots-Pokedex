@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Ability descriptions: show each ability's short effect (ability endpoint `effect_entries`) in a tooltip or expandable chip
 
 ## 4. Browsing & discovery
 - [ ] Replace the 1,300-option `<datalist>` with a custom accessible combobox (sprites, keyboard navigation, official names)
@@ -130,3 +129,4 @@ Rules for each run:
 - [x] Service worker: bump `SHELL_CACHE` automatically (e.g. a build step or a version from package.json) — today an edit to the JS needs a manual version bump or users get the old shell once (2026-10-29) — solved without a build step: the shell is now network-first with cache: no-cache revalidation (fresh files whenever online, cached copy offline), so there's no version to bump and no mix of old/new modules; verified an edited CSS file is picked up on the next load
 - [x] Run the axe accessibility check at phone width (375px) too, and with the install/offline UI visible (2026-10-29) — axe now runs at 1280px and 375px in both themes with the install button and offline banner showing; it caught the Random/Clear buttons failing contrast at phone size (smaller text) — darkened to ≥4.6:1
 - [x] Shareable comparisons: reflect the compared Pokémon in the URL (`?compare=pikachu,gengar`) and restore them on load (2026-10-29) — compared Pokémon kept in ?compare=a,b[,c] (replaceState, alongside ?pokemon=) and restored on load; smoke test
+- [x] Ability descriptions: show each ability's short effect (ability endpoint `effect_entries`) in a tooltip or expandable chip (2026-10-29) — ability chips are buttons (aria-expanded) that show the latest English game text below the chips, fetched on click; abilityDescription helper unit-tested; smoke test
