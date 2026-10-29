@@ -12,6 +12,31 @@ export function initLists(options) {
     renderFavorites();
     renderRecent();
     initBrowse();
+    loadTileTypes();
+}
+
+// id -> type names in slot order, built from the 18 /type responses (cached by fetchJson).
+let typesById = null;
+
+async function loadTileTypes() {
+    try {
+        const types = await Promise.all(Object.keys(TYPE_ICONS).map((type) => fetchJson(API_BASE + "type/" + type)));
+        const map = new Map();
+        for (const type of types) {
+            for (const { pokemon, slot } of type.pokemon) {
+                const id = idFromUrl(pokemon.url);
+                const list = map.get(id) ?? [];
+                list[(slot ?? list.length + 1) - 1] = type.name;
+                map.set(id, list);
+            }
+        }
+        typesById = map;
+        renderBrowsePage();
+        renderFavorites();
+        renderRecent();
+    } catch {
+        // tiles simply stay without type icons
+    }
 }
 
 // Hides an image until it has loaded so it can fade in instead of popping.
@@ -159,6 +184,23 @@ function createBrowseTile(entry) {
     name.textContent = formatName(entry.name);
 
     button.append(sprite, number, name);
+
+    const types = typesById?.get(entry.id)?.filter(Boolean) ?? [];
+    if (types.length) {
+        const typeIcons = document.createElement("span");
+        typeIcons.className = "tileTypes";
+        for (const type of types) {
+            const icon = document.createElement("img");
+            icon.src = "assets/" + TYPE_ICONS[type];
+            icon.alt = formatName(type) + " type";
+            icon.title = formatName(type);
+            icon.width = 20;
+            icon.height = 20;
+            typeIcons.append(icon);
+        }
+        button.append(typeIcons);
+    }
+
     button.addEventListener("click", () => {
         showPokemon(entry.id);
         window.scrollTo({ top: 0, behavior: "smooth" });

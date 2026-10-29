@@ -913,6 +913,18 @@ kbd {
     background-color: var(--tile-hover);
 }
 
+.tileTypes {
+    display: flex;
+    gap: 0.2rem;
+    margin-top: 0.25rem;
+}
+
+/* keep the small icons from inheriting the tile sprite sizes */
+.tileGrid .tileTypes img {
+    width: 20px;
+    height: 20px;
+}
+
 .browseTile small {
     font-weight: 500;
     opacity: 0.8;

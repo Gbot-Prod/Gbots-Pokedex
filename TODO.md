@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Show type icons on browse tiles (build an id → types map from the 18 cached /type responses, loaded lazily)
 - [ ] "Did you mean" should also match substrings/subsequences (e.g. "charz" → Charizard)
 
 ## 5. Design & UX
@@ -94,3 +93,4 @@ Rules for each run:
 - [x] Play the Pokémon's cry (`cries.latest`) with a small speaker button (2026-10-29) — 🔊 button next to the name plays cries.latest (falls back to legacy), C shortcut; hidden when there's no cry
 - [x] Moves list (level-up moves with level, type and power) in a collapsible section (2026-10-29) — collapsible 'Level-up moves (N)' table from the newest main-series game (explicit game order, since version-group ids aren't chronological); type/power fetched only when opened; levelUpMoves helper + unit test
 - [x] Browse sorting by number ↑/↓ and name A–Z/Z–A, combined with the type/generation filters (2026-10-29) — split from "type icons on tiles and sorting"
+- [x] Show type icons on browse tiles (build an id → types map from the 18 cached /type responses, loaded lazily) (2026-10-29) — id → types map built lazily from the 18 cached /type responses (slot order); browse, favorites and recent tiles show small type icons
