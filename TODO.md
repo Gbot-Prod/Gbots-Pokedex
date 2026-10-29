@@ -15,14 +15,20 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
+- [ ] Run the axe accessibility check at phone width (375px) too, and with the install/offline UI visible
 
 ## 3. Core Pokédex features
+- [ ] Shareable comparisons: reflect the compared Pokémon in the URL (`?compare=pikachu,gengar`) and restore them on load
+- [ ] Ability descriptions: show each ability's short effect (ability endpoint `effect_entries`) in a tooltip or expandable chip
 
 ## 4. Browsing & discovery
+- [ ] Replace the 1,300-option `<datalist>` with a custom accessible combobox (sprites, keyboard navigation, official names)
 
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
+- [ ] Offline: Random and Previous/Next should pick from cached Pokémon instead of failing when offline
+- [ ] Offline tile check does one Cache API lookup per tile; read `cache.keys()` once into a Set instead
 - [ ] Service worker: cap the runtime cache (sprites and API responses grow without limit)
 
 ## Done
