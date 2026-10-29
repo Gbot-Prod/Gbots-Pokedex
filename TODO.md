@@ -15,15 +15,20 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
+- [ ] Lighthouse CI in the GitHub workflow with performance/accessibility budgets
 
 ## 3. Core Pokédex features
+- [ ] Compare: radar (spider) chart of the six base stats in inline SVG, one colour per Pokémon
 
 ## 4. Browsing & discovery
+- [ ] Combobox: show forms with their species number and label ("Charizard (Mega X) · #0006") instead of "#10034"
+- [ ] Combobox: when the search box is focused and empty, offer recently viewed Pokémon
 
 ## 5. Design & UX
 - [ ] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen
 
 ## 6. Performance, accessibility & polish
+- [ ] Tile type icons wait for 18 /type requests on every new session; store the id → types map in localStorage like the name list
 - [ ] Offline: Random and Previous/Next should pick from cached Pokémon instead of failing when offline
 - [ ] Offline tile check does one Cache API lookup per tile; read `cache.keys()` once into a Set instead
 - [ ] Service worker: cap the runtime cache (sprites and API responses grow without limit)
