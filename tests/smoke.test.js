@@ -489,3 +489,13 @@ test("Delete removes a Pokémon from the recently viewed suggestions", async () 
     assert.match(await page.textContent(".comboboxWrap [role=status]"), /Gengar removed/);
     assert.doesNotMatch(await page.innerText("#recentList"), /Gengar/); // the tiles update too
 });
+
+test("the comparison radar chart highlights a Pokémon from its legend entry", async () => {
+    await page.goto(baseUrl + "?compare=pikachu,gengar");
+    await page.waitForSelector("#compareRadar svg");
+    assert.equal(await page.locator("#compareRadar .radarSeries").count(), 2);
+    await page.focus(".radarLegend li >> nth=1");
+    assert.equal(await page.getAttribute("#compareRadar svg", "data-highlight"), "1");
+    await page.locator("#pokemonLookupInpt").focus();
+    assert.equal(await page.getAttribute("#compareRadar svg", "data-highlight"), null);
+});

@@ -21,7 +21,6 @@ Rules for each run:
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
-- [ ] Radar chart: lighter polygon colours in dark mode (the blue is dim on the dark table) and highlight a Pokémon's polygon when its legend entry or column is hovered/focused
 - [ ] Missing sprites show an empty space; use a Poké Ball placeholder (assets/favicon.svg) instead
 - [ ] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen
 
@@ -144,3 +143,4 @@ Rules for each run:
 - [x] Unit tests for api.js (fetchPokemon species fallback, id/name aliasing, move-cache pruning, missing-sprite memory) with stubbed fetch/localStorage in Node (2026-10-29) — tests/api.test.mjs stubs fetch/localStorage/sessionStorage and covers the species fallback, no species retry for numbers, id/name reuse, move-summary caching and missing-sprite memory (5 tests)
 - [x] Combobox: matched text is underlined in each suggestion (`<mark>`, "Charizard" for "char") (2026-10-29) — split from "highlight + remove recent"
 - [x] Combobox: let users remove an entry from the "Recently viewed" suggestions (e.g. Delete/Shift+Delete on the highlighted option, announced via a live region) (2026-10-29) — Delete on a highlighted recent suggestion removes it (removeFromRecent also updates the tiles), keeps a sensible highlight and announces 'X removed from recently viewed' in a status region; listbox label mentions the shortcut; smoke test
+- [x] Radar chart: lighter polygon colours in dark mode (the blue is dim on the dark table) and highlight a Pokémon's polygon when its legend entry or column is hovered/focused (2026-10-29) — series colours moved to CSS variables with lighter dark-mode shades; hovering/focusing a legend entry or hovering a table column highlights that Pokémon's polygon and dims the others; smoke test

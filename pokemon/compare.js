@@ -201,8 +201,7 @@ export function initCompare({ getCurrentPokemon, getUnits: unitsGetter }) {
 // --- Radar chart ------------------------------------------------------------------
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-// Distinct colours that stay readable on the light and dark table backgrounds.
-const RADAR_COLORS = ["#2f5fb3", "#c0392b", "#1d7a46"];
+// Series colours come from CSS (--radar-0…2), which has lighter shades for dark mode.
 const RADAR_SIZE = 280;
 const RADAR_RADIUS = 100;
 
@@ -261,10 +260,7 @@ function renderRadarChart(pokemonList) {
         svg.append(
             svgElement("polygon", {
                 points: radarPoints(pokemonValues, max, RADAR_RADIUS, center, center),
-                fill: RADAR_COLORS[index],
-                "fill-opacity": "0.2",
-                stroke: RADAR_COLORS[index],
-                "stroke-width": "2",
+                class: "radarSeries radarSeries-" + index,
             }),
         );
     });
@@ -273,12 +269,40 @@ function renderRadarChart(pokemonList) {
     legend.className = "radarLegend";
     pokemonList.forEach((pokemon, index) => {
         const item = document.createElement("li");
+        // Hovering or focusing a legend entry (or that Pokémon's table column) highlights its shape.
+        item.tabIndex = 0;
         const swatch = document.createElement("span");
-        swatch.className = "radarSwatch";
-        swatch.style.backgroundColor = RADAR_COLORS[index];
+        swatch.className = "radarSwatch radarSeries-" + index;
         item.append(swatch, pokemonDisplayName(pokemon));
+        for (const [on, off] of [
+            ["mouseenter", "mouseleave"],
+            ["focus", "blur"],
+        ]) {
+            item.addEventListener(on, () => highlightRadarSeries(index));
+            item.addEventListener(off, () => highlightRadarSeries(null));
+        }
         legend.append(item);
     });
 
     radarElement.replaceChildren(svg, legend);
+
+    // Table columns (header + cells) highlight the same shape on hover.
+    compareTable.onmouseover = (event) => {
+        const cell = event.target.closest("td, thead th");
+        const column = cell ? cell.cellIndex - 1 : -1;
+        highlightRadarSeries(column >= 0 ? column : null);
+    };
+    compareTable.onmouseleave = () => highlightRadarSeries(null);
+}
+
+function highlightRadarSeries(index) {
+    const svg = radarElement.querySelector("svg");
+    if (!svg) {
+        return;
+    }
+    if (index === null) {
+        delete svg.dataset.highlight;
+    } else {
+        svg.dataset.highlight = index;
+    }
 }
