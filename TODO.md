@@ -13,20 +13,27 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
+- [ ] Cry button does nothing in Safari (no .ogg support): check `new Audio().canPlayType("audio/ogg")` and hide the button (or explain) when unsupported
 
 ## 2. Code quality
+- [ ] Extend the smoke tests to forms, moves, sorting, keyboard shortcuts and the cry button (add `moves`/`varieties`/`cries` to the fixtures)
+- [ ] Opt-in live check: `npm run check:live` runs the smoke flow against the real PokéAPI (pikachu, gengar, farfetchd, 25) to catch API changes the fixtures hide
 
 ## 3. Core Pokédex features
+- [ ] Moves: add TM / egg / tutor tabs and a game selector (the level-up list currently always uses the newest game)
 
 ## 4. Browsing & discovery
+- [ ] "Did you mean" can list several forms of one species (Gengar, Gengar Mega, Gengar Gmax); prefer distinct species first
 
 ## 5. Design & UX
+- [ ] Format the card number as "#0025" to match the browse tiles (currently "Pokemon no#25")
 - [ ] Forms show their internal id ("Pokemon no#10034" for Mega Charizard X); show the species' dex number instead and label the form
 - [ ] Show official display names from `species.names` ("Farfetch’d", "Mr. Mime", "Nidoran♀") instead of title-casing the slug ("Farfetchd", "Nidoran F")
 - [ ] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items
 - [ ] Metric/imperial toggle for height and weight
 
 ## 6. Performance, accessibility & polish
+- [ ] Persist move details (type/power) in localStorage: opening a moves list fires 20–90 requests on every visit
 - [ ] Cache by canonical id: "gengar" and "94" currently fetch the same Pokémon twice
 - [ ] Offline support: service worker caching the app shell and recently viewed Pokémon (PWA manifest)
 
