@@ -79,7 +79,7 @@ function trimType(type) {
     };
 }
 
-for (const id of [24, 25, 26, 83, 94]) {
+for (const id of [24, 25, 26, 83, 94, 718]) {
     const pokemon = trimPokemon(await get("pokemon/" + id));
     await save("pokemon-" + id, pokemon);
 
@@ -104,6 +104,8 @@ for (const id of [24, 25, 26, 83, 94]) {
 for (const id of [25, 94]) {
     await save("pokemon-species-" + id, trimSpecies(await get("pokemon-species/" + id)));
 }
+// Zygarde's default form is "zygarde-50", so a search for "zygarde" goes through the species by name.
+await save("pokemon-species-zygarde", trimSpecies(await get("pokemon-species/zygarde")));
 for (const id of [10, 40]) {
     await save("evolution-chain-" + id, await get("evolution-chain/" + id));
 }

@@ -272,3 +272,10 @@ test("three Pokémon can be compared", async () => {
     assert.match(headers[3], /Gengar/);
     assert.deepEqual(pageErrors, []);
 });
+
+test("species whose default form has a suffixed name can be searched by species name", async () => {
+    await search("zygarde");
+    await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("0718"));
+    assert.match(page.url(), /\?pokemon=zygarde-50$/);
+    assert.deepEqual(pageErrors, []);
+});

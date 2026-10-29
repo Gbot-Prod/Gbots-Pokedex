@@ -1,4 +1,12 @@
-import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries, getMachineItemName, getMoveSummary } from "./api.js";
+import {
+    API_BASE,
+    SPRITE_BASE,
+    fetchJson,
+    fetchPokemon,
+    getAllPokemonEntries,
+    getMachineItemName,
+    getMoveSummary,
+} from "./api.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { addToRecent, fadeInImage, initLists, updateFavoriteButton } from "./lists.js";
 import {
@@ -86,7 +94,7 @@ async function loadPokemon(query, { fromHistory = false } = {}) {
         clearFields();
         setLoading(true);
 
-        const data = await fetchJson(API_BASE + "pokemon/" + encodeURIComponent(query));
+        const data = await fetchPokemon(query);
         if (requestId !== latestRequest) {
             return; // a newer search has started; drop this stale result
         }

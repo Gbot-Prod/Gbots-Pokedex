@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Searching a species whose default form has a suffixed name fails: "zygarde", "aegislash", "deoxys", "giratina" 404 on /pokemon/{name}; fall back to the species' default variety
 
 ## 2. Code quality
 
@@ -116,3 +115,4 @@ Rules for each run:
 - [x] CI: a GitHub Actions workflow running `npm run lint` and `npm test` on every push (a red commit slipped through locally this run) (2026-10-29) — .github/workflows/ci.yml runs npm ci, installs Chromium, then npm run lint and npm test on every push and PR
 - [x] TM tab: sort rows by TM number once the numbers load (currently alphabetical) (2026-10-29) — once TM numbers load the rows are re-ordered TM01, TM02… (then HM/TR, then moves without a machine)
 - [x] Compare table: follow the metric/imperial setting and use display names (Farfetch’d, "Charizard (Mega X)") in its header (2026-10-29) — header uses pokemonDisplayName (Farfetch’d, Charizard (Mega X), Zygarde); height/weight rows follow the units toggle and re-render when it changes; unit-tested
+- [x] Searching a species whose default form has a suffixed name fails: "zygarde", "aegislash", "deoxys", "giratina" 404 on /pokemon/{name}; fall back to the species' default variety (2026-10-29) — fetchPokemon() in api.js falls back to the species' default variety on a 404 (zygarde → zygarde-50, aegislash → aegislash-shield) and skips the doomed request when the cached name list says it doesn't exist; used by search and compare; smoke test + fixtures

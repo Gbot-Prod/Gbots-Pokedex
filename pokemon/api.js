@@ -138,3 +138,35 @@ export async function getMachineItemName(url) {
     }
     return cache[url].item;
 }
+
+// A Pokémon by name or number. Some species' default form has a suffixed name
+// ("zygarde" is listed as "zygarde-50", "aegislash" as "aegislash-shield"), so a name
+// that 404s is retried as a species and resolved to its default variety.
+export async function fetchPokemon(query) {
+    try {
+        // If the name list is already loaded and doesn't have this name, skip the request
+        // that would 404 (and log a console error) and go straight to the species.
+        if (allEntriesPromise && !/^\d+$/.test(query)) {
+            const entries = await allEntriesPromise.catch(() => null);
+            if (entries && !entries.some((entry) => entry.name === query)) {
+                throw Object.assign(new Error("Not in the Pokémon list"), { status: 404 });
+            }
+        }
+        return await fetchJson(API_BASE + "pokemon/" + encodeURIComponent(query));
+    } catch (error) {
+        if (error.status !== 404 || /^\d+$/.test(query)) {
+            throw error;
+        }
+        let species;
+        try {
+            species = await fetchJson(API_BASE + "pokemon-species/" + encodeURIComponent(query));
+        } catch {
+            throw error; // report the original "not found"
+        }
+        const variety = species.varieties.find((entry) => entry.is_default) ?? species.varieties[0];
+        if (!variety) {
+            throw error;
+        }
+        return fetchJson(variety.pokemon.url);
+    }
+}

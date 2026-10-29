@@ -1,5 +1,5 @@
 // Side-by-side comparison of two or three Pokémon.
-import { API_BASE, fetchJson } from "./api.js";
+import { API_BASE, fetchJson, fetchPokemon } from "./api.js";
 import {
     damageMultipliers,
     formatHeight,
@@ -32,9 +32,7 @@ async function comparePokemon() {
 
     const compareId = ++latestCompare;
     compareStatusElement.textContent = "Loading…";
-    const results = await Promise.allSettled(
-        queries.map((query) => fetchJson(API_BASE + "pokemon/" + encodeURIComponent(query))),
-    );
+    const results = await Promise.allSettled(queries.map((query) => fetchPokemon(query)));
     if (compareId !== latestCompare) {
         return;
     }
