@@ -793,12 +793,16 @@ function renderMoveRows() {
         tab.setAttribute("aria-selected", String(tab.dataset.method === currentMoveMethod));
     }
     const showLevel = currentMoveMethod === "level-up";
-    movesTable.classList.toggle("noLevel", !showLevel);
+    const showMachine = currentMoveMethod === "machine";
+    // The first column holds the level for level-up moves and the TM number for TMs.
+    movesTable.classList.toggle("noLevel", !showLevel && !showMachine);
+    movesTable.tHead.rows[0].cells[0].textContent = showMachine ? "TM" : "Lv.";
 
     movesTableBody.replaceChildren();
     for (const move of currentMoves) {
         const row = movesTableBody.insertRow();
-        row.insertCell().textContent = showLevel ? move.level || "Evo" : ""; // level 0 = learned on evolution
+        // level 0 = learned on evolution; TM numbers are filled in by loadMoveDetails
+        row.insertCell().textContent = showLevel ? move.level || "Evo" : showMachine ? "…" : "";
         row.insertCell().textContent = formatName(move.name);
         for (let column = 0; column < 4; column++) {
             row.insertCell().textContent = "…"; // type, category, power, accuracy
@@ -812,6 +816,23 @@ movesGameSelect.addEventListener("change", () => {
     loadMoveDetails();
 });
 
+// A TM's number comes from its machine record for the selected game (item "tm085" -> "TM085").
+async function loadTmNumber(moveDetails, versionGroup, cell, moves) {
+    const machine = moveDetails.machines?.find((entry) => entry.version_group.name === versionGroup);
+    if (!machine) {
+        cell.textContent = "—";
+        return;
+    }
+    try {
+        const details = await fetchJson(machine.machine.url);
+        if (moves === currentMoves) {
+            cell.textContent = details.item.name.toUpperCase();
+        }
+    } catch {
+        cell.textContent = "?";
+    }
+}
+
 // Type and power need one request per move, so they're only fetched once the list is opened.
 async function loadMoveDetails() {
     if (!movesSection.open || movesDetailsLoaded) {
@@ -819,10 +840,12 @@ async function loadMoveDetails() {
     }
     movesDetailsLoaded = true;
     const moves = currentMoves;
+    const method = currentMoveMethod;
+    const versionGroup = currentLearnset.versionGroup;
     const rows = [...movesTableBody.rows];
     await Promise.all(
         moves.map(async (move, index) => {
-            const [, , typeCell, categoryCell, powerCell, accuracyCell] = rows[index].cells;
+            const [firstCell, , typeCell, categoryCell, powerCell, accuracyCell] = rows[index].cells;
             try {
                 const details = await fetchJson(move.url);
                 if (moves !== currentMoves) {
@@ -841,6 +864,9 @@ async function loadMoveDetails() {
                 typeCell.append(" " + formatName(type));
                 powerCell.textContent = details.power ?? "—";
                 accuracyCell.textContent = details.accuracy ? details.accuracy + "%" : "—";
+                if (method === "machine") {
+                    loadTmNumber(details, versionGroup, firstCell, moves);
+                }
                 const category = details.damage_class?.name;
                 categoryCell.replaceChildren();
                 if (MOVE_CATEGORIES[category]) {
