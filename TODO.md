@@ -15,12 +15,16 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
+- [ ] Automated accessibility check: run axe-core against the page in the smoke tests (card, browse grid, compare table, dark mode)
+- [ ] Smoke tests for the units toggle (card + compare table) and for display names in the compare header
 
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
+- [ ] "Did you mean" buttons show slug names for default forms ("Zygarde 50", "Farfetchd"); use the species display names like the tiles do
 
 ## 5. Design & UX
+- [ ] "Install app" button using the `beforeinstallprompt` event, now that there's a manifest and service worker
 
 ## 6. Performance, accessibility & polish
 - [ ] Offline step 2: show an "You're offline — showing saved data" banner, mark which tiles are available offline, and add a smoke test for the offline flow
