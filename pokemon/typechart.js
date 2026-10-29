@@ -51,6 +51,17 @@ function highlight(table, row, column) {
     }
 }
 
+let renderPromise = null;
+
+function renderChartOnce() {
+    renderPromise ??= renderChart().finally(() => {
+        if (!chartElement.querySelector("table")) {
+            renderPromise = null; // failed; allow a retry
+        }
+    });
+    return renderPromise;
+}
+
 async function renderChart() {
     chartElement.textContent = "Loading type chart…";
     const types = Object.keys(TYPE_ICONS);
@@ -104,7 +115,52 @@ async function renderChart() {
         }
     });
     table.addEventListener("mouseleave", () => highlight(table, -1, -1));
+
+    // Keyboard: cells form a grid; arrow keys move between them and focus highlights too.
+    table.tBodies[0].rows[0].cells[1].tabIndex = 0;
+    table.addEventListener("focusin", (event) => {
+        const cell = event.target.closest("td");
+        if (cell) {
+            highlight(table, cell.parentElement.rowIndex, cell.cellIndex);
+        }
+    });
+    table.addEventListener("keydown", (event) => {
+        const cell = event.target.closest("td");
+        const moves = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] };
+        if (!cell || !moves[event.key]) {
+            return;
+        }
+        event.preventDefault();
+        const [rowStep, columnStep] = moves[event.key];
+        const rowIndex = Math.min(Math.max(cell.parentElement.rowIndex + rowStep, 1), types.length);
+        const columnIndex = Math.min(Math.max(cell.cellIndex + columnStep, 1), types.length);
+        const target = table.rows[rowIndex].cells[columnIndex];
+        cell.tabIndex = -1;
+        target.tabIndex = 0;
+        target.focus();
+    });
     chartElement.replaceChildren(table);
+}
+
+// Opens the chart with one type's row and column highlighted (its attacks and its weaknesses).
+export async function showTypeInChart(type) {
+    if (showButton.getAttribute("aria-expanded") !== "true") {
+        showButton.click();
+    }
+    await renderChartOnce();
+    const table = chartElement.querySelector("table");
+    const index = Object.keys(TYPE_ICONS).indexOf(type) + 1;
+    if (!table || index < 1) {
+        return;
+    }
+    highlight(table, index, index);
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    const cell = table.rows[index].cells[index];
+    for (const other of table.querySelectorAll("td[tabindex='0']")) {
+        other.tabIndex = -1;
+    }
+    cell.tabIndex = 0;
+    cell.focus({ preventScroll: true });
 }
 
 export function initTypeChart() {
@@ -115,7 +171,7 @@ export function initTypeChart() {
         showButton.textContent = expanded ? "Show type chart" : "Hide type chart";
         chartElement.hidden = expanded;
         if (!expanded && !chartElement.querySelector("table")) {
-            renderChart();
+            renderChartOnce();
         }
     });
 }

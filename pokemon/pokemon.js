@@ -11,7 +11,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initQuiz } from "./quiz.js";
-import { initTypeChart } from "./typechart.js";
+import { initTypeChart, showTypeInChart } from "./typechart.js";
 import { initTeam, onCardChange as updateTeamButton } from "./team.js";
 import {
     addToRecent,
@@ -608,7 +608,8 @@ function setTypeIcon(iconElement, type) {
     if (icon) {
         iconElement.src = "assets/" + icon;
         iconElement.alt = formatName(type) + " type";
-        iconElement.title = formatName(type);
+        iconElement.dataset.type = type;
+        iconElement.title = formatName(type) + " — show in the type chart";
         iconElement.style.display = "block";
     } else {
         iconElement.removeAttribute("src");
@@ -763,6 +764,20 @@ initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 initQuiz({ showPokemon });
 initTypeChart();
+
+// The card's type icons open the type chart at that type.
+for (const icon of [type1IconElement, type2IconElement]) {
+    icon.setAttribute("role", "button");
+    icon.tabIndex = 0;
+    const open = () => icon.dataset.type && showTypeInChart(icon.dataset.type);
+    icon.addEventListener("click", open);
+    icon.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            open();
+        }
+    });
+}
 initTeam({
     showPokemon,
     getCurrentPokemon: () =>

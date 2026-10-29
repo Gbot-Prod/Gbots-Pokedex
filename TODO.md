@@ -16,7 +16,6 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Quiz step 2b: "type the name" mode (with the combobox) and a timed 60-second run with a high score
 - [ ] Team builder step 2b: offensive coverage (which types the team's own types hit super-effectively), drag to reorder, and "suggest a member" that patches the worst weakness
-- [ ] Type chart step 2: click a type to see its matchups summary, link the card's type icons to it, and keyboard navigation across cells (arrow keys)
 - [ ] Animated sprites: toggle to Showdown-style animated GIFs on the card and evolution chain (falls back to static art)
 - [ ] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading
 - [ ] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation
@@ -167,3 +166,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Interactive type chart step 1: "Show type chart" builds an 18×18 grid (attacker rows × defender columns) from the cached /type data, colour-coded 2×/½×/0×, hover highlights row + column with the cell outlined; scrolls inside its box on phones (typechart.js) (2026-10-29) — fixtures now include all 18 types; smoke + unit tests
 - [x] Quiz step 2a: generation picker (Gen 1 Kanto … Gen 9 Paldea; choices come from the same generation) and a confetti burst on a new best streak of 3+ (skipped under reduced motion); GENERATIONS moved to utils.js (2026-10-29)
 - [x] Team builder step 2a: "Share team" copies a `?team=6,94,…` link (share sheet on phones); opening one shows "Someone shared a team: … [Load this team] [Keep mine]" instead of overwriting yours (2026-10-29) — smoke + unit tests
+- [x] Type chart step 2: the card's type icons are buttons that open the chart focused on that type's row/column; arrow keys move between cells (roving focus) with the same highlight as hover (2026-10-29) — smoke test

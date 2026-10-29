@@ -1109,6 +1109,7 @@ th[aria-sort="descending"] .sortBtn::after {
 }
 
 .typeIcon {
+    cursor: pointer;
     padding: 5px;
 }
 

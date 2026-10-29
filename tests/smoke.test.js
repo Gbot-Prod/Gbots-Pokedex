@@ -604,3 +604,14 @@ test("a shared ?team= link offers to load that team", async () => {
     assert.doesNotMatch(page.url(), /team=/); // the offer is consumed
     assert.equal(await page.isVisible("#teamShareBtn"), true);
 });
+
+test("a card type icon opens the type chart at that type, and arrow keys move around it", async () => {
+    await search("gengar");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    await page.click("#pokemonType1"); // Ghost
+    await page.waitForFunction(() => document.activeElement?.title?.startsWith("Ghost → Ghost"));
+    await page.keyboard.press("ArrowRight");
+    assert.match(await page.evaluate(() => document.activeElement.title), /^Ghost → Dark/);
+    await page.keyboard.press("ArrowDown");
+    assert.match(await page.evaluate(() => document.activeElement.title), /^Dark → Dark/);
+});
