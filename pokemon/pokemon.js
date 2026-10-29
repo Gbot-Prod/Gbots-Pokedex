@@ -1128,6 +1128,32 @@ if (getUrlPokemon()) {
     loadFromUrl();
 }
 
+// --- Holo art tilt ---------------------------------------------------------------
+// The artwork window tilts toward the pointer and its holo sheen slides with it.
+
+const artWindow = document.getElementById("pokemonSpriteContainer");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const MAX_TILT_DEGREES = 10;
+
+artWindow.addEventListener("pointermove", (event) => {
+    if (reducedMotion.matches || event.pointerType === "touch") {
+        return;
+    }
+    const rect = artWindow.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width; // 0..1
+    const y = (event.clientY - rect.top) / rect.height;
+    artWindow.style.setProperty("--tilt-y", ((x - 0.5) * 2 * MAX_TILT_DEGREES).toFixed(2) + "deg");
+    artWindow.style.setProperty("--tilt-x", ((0.5 - y) * 2 * MAX_TILT_DEGREES).toFixed(2) + "deg");
+    artWindow.style.setProperty("--sheen-x", (x * 100).toFixed(1) + "%");
+    artWindow.style.setProperty("--sheen-y", (y * 100).toFixed(1) + "%");
+});
+
+artWindow.addEventListener("pointerleave", () => {
+    for (const property of ["--tilt-x", "--tilt-y", "--sheen-x", "--sheen-y"]) {
+        artWindow.style.removeProperty(property);
+    }
+});
+
 // --- Offline banner ---------------------------------------------------------------
 
 const offlineBanner = document.getElementById("offlineBanner");

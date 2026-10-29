@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Holographic trading-card redesign of the main card: type-gradient foil frame, shimmering holo sheen, 3D tilt that follows the pointer (static when reduced motion is on)
 - [ ] Animated type-themed page background behind the card (embers for Fire, bubbles for Water, sparks for Electric, leaves for Grass, mist for Ghost…), subtle and CSS-only
 - [ ] "Who's that Pokémon?" quiz: silhouette of a random Pokémon, 4 choices (or type the name), reveal animation, score + streak saved locally
 - [ ] Team builder: 6 slots (add from the card or search), team type-coverage chart (weaknesses/resistances per attacking type), shareable `?team=` link
@@ -33,6 +32,7 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Clicking a type badge (card type icons or matchups) filters the browse grid by that type and scrolls to it
 
 ## 5. Design & UX
+- [ ] Forms list can be huge (Pikachu has 16 cap forms, filling a phone screen); show the first ~5 with a "+11 more" toggle
 - [ ] Radar legend: click to pin a highlight (aria-pressed buttons instead of focusable list items)
 - [ ] Main card: use the Poké Ball placeholder when a Pokémon has no artwork at all, instead of hiding the image
 
@@ -161,3 +161,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen (2026-10-29) — picking a compare suggestion moves focus to the second box, then to the Compare button (third box is optional), closing the list; suggestion list capped at 14rem on phones; smoke test at 375px
 - [x] Moves table: sortable columns (level/TM, name, power, accuracy) via header buttons with `aria-sort` (2026-10-29) — every header is a sort button (▲/▼, aria-sort): level/TM numerically, name/type/category alphabetically, power/accuracy numerically with '—' last; resets when the tab or game changes; smoke test
 - [x] "Share" button on the card: `navigator.share` on phones, copy-link fallback with a "Link copied" status (2026-10-29) — 🔗 button uses the system share sheet where available, otherwise copies the ?pokemon= link and announces 'Link copied' (✓ briefly); smoke test with a stubbed clipboard
+- [x] Holographic trading-card redesign of the main card: type-gradient foil frame, shimmering holo sheen, 3D tilt that follows the pointer (static when reduced motion is on) (2026-10-29) — card wrapped in a slowly shifting foil frame in its type colours with a deep shadow; the artwork window tilts toward the pointer (up to 10°) with a colour-dodge rainbow sheen that follows it; static under reduced motion / touch. Also: name row wraps on phones
