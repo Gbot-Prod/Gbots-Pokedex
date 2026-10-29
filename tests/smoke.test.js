@@ -83,7 +83,13 @@ after(async () => {
 beforeEach(async () => {
     page = await browser.newPage();
     pageErrors = [];
-    page.on("pageerror", (error) => pageErrors.push(error.message));
+    // Fail fast: waits give up after a few seconds (longer against the real API), and any
+    // uncaught page error (e.g. a broken module import) is reported in the next wait's failure.
+    page.setDefaultTimeout(LIVE_API ? 15000 : 5000);
+    page.on("pageerror", (error) => {
+        pageErrors.push(error.message);
+        console.error("page error:", error.message);
+    });
 
     if (LIVE_API) {
         await page.goto(baseUrl);

@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Make smoke tests fail fast: `page.setDefaultTimeout(5000)` and fail a test as soon as a `pageerror` fires (a missing export made the suite hang for minutes)
 - [ ] Catch broken imports between modules in lint (`eslint-plugin-import` `import/named`), since ESLint alone missed a removed export
 
 ## 3. Core Pokédex features
@@ -108,3 +107,4 @@ Rules for each run:
 - [x] Forms show their internal id ("Pokemon no#10034" for Mega Charizard X); show the species' dex number instead and label the form (2026-10-29) — card, title and screen-reader announcement use the species' dex number; forms add a label ('#0006 · Mega X form')
 - [x] Show official display names from `species.names` ("Farfetch’d", "Mr. Mime", "Nidoran♀") instead of title-casing the slug ("Farfetchd", "Nidoran F") (2026-10-29) — after the species loads, the card/title/search box use species.names (Farfetch’d, Nidoran♀, Mr. Mime); forms read 'Charizard (Mega X)'
 - [x] Sprite alt text and the screen-reader announcement still use the slug name ("Farfetchd sprite") because they're set before species data arrives; update them in `applyDisplayName` (2026-10-29) — applyDisplayName refreshes the sprite alt ('Farfetch’d sprite') and the live-region text with the official name
+- [x] Make smoke tests fail fast: `page.setDefaultTimeout(5000)` and fail a test as soon as a `pageerror` fires (a missing export made the suite hang for minutes) (2026-10-29) — 5s default timeout (15s for check:live) and page errors logged as they happen; a broken import now fails all 13 smoke tests in ~1 min instead of hanging
