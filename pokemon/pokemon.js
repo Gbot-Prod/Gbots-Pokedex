@@ -9,6 +9,8 @@ import {
     damageMultipliers,
     describeEvolution,
     formatDexNumber,
+    formatHeight,
+    formatWeight,
     formatMultiplier,
     formLabel,
     formatName,
@@ -370,8 +372,8 @@ function renderPokemon(data, query) {
     applyTypeTheme(pkmnType);
 
     //fetch pokemon height (decimetres) and weight (hectograms)
-    heightElement.textContent = (data.height / 10).toFixed(1) + " m";
-    weightElement.textContent = (data.weight / 10).toFixed(1) + " kg";
+    currentMeasurements = { height: data.height, weight: data.weight };
+    renderMeasurements();
 
     //fetch pokemon abilities
     renderAbilities(data.abilities);
@@ -876,6 +878,37 @@ async function loadMoveDetails() {
 }
 
 movesSection.addEventListener("toggle", loadMoveDetails);
+
+// --- Units ----------------------------------------------------------------------
+
+const UNITS_KEY = "pokedex:units";
+const unitsButton = document.getElementById("unitsToggleBtn");
+let currentMeasurements = null;
+let units = "metric";
+try {
+    units = localStorage.getItem(UNITS_KEY) === "imperial" ? "imperial" : "metric";
+} catch {
+    // storage unavailable; default to metric
+}
+
+function renderMeasurements() {
+    if (currentMeasurements) {
+        heightElement.textContent = formatHeight(currentMeasurements.height, units);
+        weightElement.textContent = formatWeight(currentMeasurements.weight, units);
+    }
+    unitsButton.textContent = units === "metric" ? "Show lbs / ft" : "Show kg / m";
+}
+
+unitsButton.addEventListener("click", () => {
+    units = units === "metric" ? "imperial" : "metric";
+    try {
+        localStorage.setItem(UNITS_KEY, units);
+    } catch {
+        // the choice just won't persist
+    }
+    renderMeasurements();
+});
+renderMeasurements();
 
 // --- Cry ------------------------------------------------------------------------
 

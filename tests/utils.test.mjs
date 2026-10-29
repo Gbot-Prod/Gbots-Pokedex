@@ -6,6 +6,8 @@ import {
     describeEvolution,
     editDistance,
     formatDexNumber,
+    formatHeight,
+    formatWeight,
     formatMultiplier,
     formLabel,
     formatName,
@@ -193,4 +195,12 @@ test("describeEvolution covers time of day, held items and trades, using the new
         describeEvolution([{ min_happiness: 160, known_move_type: { name: "fairy" }, trigger: { name: "level-up" } }]),
         "Friendship, knowing a Fairy move",
     );
+});
+
+test("formatHeight/formatWeight convert PokéAPI units", () => {
+    assert.equal(formatHeight(4), "0.4 m");
+    assert.equal(formatHeight(4, "imperial"), "1′04″");
+    assert.equal(formatHeight(17, "imperial"), "5′07″");
+    assert.equal(formatWeight(60), "6.0 kg");
+    assert.equal(formatWeight(60, "imperial"), "13.2 lbs");
 });

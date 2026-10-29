@@ -295,3 +295,19 @@ const SPECIES_NAME_EXCEPTIONS = {
 export function speciesDisplayName(slug) {
     return SPECIES_NAME_EXCEPTIONS[slug] ?? formatName(slug);
 }
+
+// PokéAPI gives height in decimetres and weight in hectograms.
+export function formatHeight(decimetres, units = "metric") {
+    if (units === "imperial") {
+        const totalInches = Math.round(decimetres * 3.93701);
+        return Math.floor(totalInches / 12) + "′" + String(totalInches % 12).padStart(2, "0") + "″";
+    }
+    return (decimetres / 10).toFixed(1) + " m";
+}
+
+export function formatWeight(hectograms, units = "metric") {
+    if (units === "imperial") {
+        return (hectograms * 0.220462).toFixed(1) + " lbs";
+    }
+    return (hectograms / 10).toFixed(1) + " kg";
+}

@@ -560,6 +560,12 @@ body {
     font-weight: 700;
 }
 
+#unitsToggleBtn {
+    margin-top: 0.3rem;
+    color: inherit;
+    font-size: 0.8rem;
+}
+
 #pokemonAbility {
     display: flex;
     flex-wrap: wrap;
