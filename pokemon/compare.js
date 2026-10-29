@@ -1,6 +1,15 @@
 // Side-by-side comparison of two or three Pokémon.
 import { API_BASE, fetchJson } from "./api.js";
-import { STAT_LABELS, damageMultipliers, formatName, normalizeQuery, pickSprite } from "./utils.js";
+import {
+    damageMultipliers,
+    formatHeight,
+    formatName,
+    formatWeight,
+    normalizeQuery,
+    pickSprite,
+    pokemonDisplayName,
+    STAT_LABELS,
+} from "./utils.js";
 
 const compareForm = document.getElementById("compareForm");
 const compareLeftInput = document.getElementById("compareLeftInput");
@@ -64,7 +73,19 @@ async function loadMatchupCounts(pokemonList) {
     }
 }
 
+// Set by initCompare: returns "metric" or "imperial".
+let getUnits = () => "metric";
+let lastComparison = null;
+
+// Re-draws the current comparison, e.g. after the units setting changes.
+export function refreshComparison() {
+    if (lastComparison) {
+        renderComparison(...lastComparison);
+    }
+}
+
 function renderComparison(pokemonList, matchups) {
+    lastComparison = [pokemonList, matchups];
     const head = compareTable.tHead;
     const body = compareTable.tBodies[0];
     head.replaceChildren();
@@ -77,11 +98,11 @@ function renderComparison(pokemonList, matchups) {
         cell.scope = "col";
         const sprite = document.createElement("img");
         sprite.src = pickSprite(pokemon.sprites, false);
-        sprite.alt = formatName(pokemon.name) + " sprite";
+        sprite.alt = pokemonDisplayName(pokemon) + " sprite";
         sprite.width = 96;
         sprite.height = 96;
         const name = document.createElement("span");
-        name.textContent = formatName(pokemon.name);
+        name.textContent = pokemonDisplayName(pokemon);
         const types = document.createElement("small");
         types.textContent = pokemon.types.map((entry) => formatName(entry.type.name)).join(" / ");
         cell.append(sprite, name, types);
@@ -97,8 +118,10 @@ function renderComparison(pokemonList, matchups) {
         pokemonList.map((pokemon) => statValue(pokemon, statName)),
     ]);
     rows.push(["Total", pokemonList.map(total)]);
-    rows.push(["Height (m)", pokemonList.map((pokemon) => pokemon.height / 10)]);
-    rows.push(["Weight (kg)", pokemonList.map((pokemon) => pokemon.weight / 10)]);
+    // Raw API values decide the winner; the cells show them in the chosen units.
+    const units = getUnits();
+    rows.push(["Height", pokemonList.map((pokemon) => pokemon.height), false, (value) => formatHeight(value, units)]);
+    rows.push(["Weight", pokemonList.map((pokemon) => pokemon.weight), false, (value) => formatWeight(value, units)]);
     if (matchups) {
         // Fewer weaknesses is better, so that row highlights the lowest number.
         rows.push(["Weak to (types)", matchups.map((counts) => counts.weak), true]);
@@ -106,7 +129,7 @@ function renderComparison(pokemonList, matchups) {
         rows.push(["Immune to (types)", matchups.map((counts) => counts.immune)]);
     }
 
-    for (const [label, values, lowerIsBetter = false] of rows) {
+    for (const [label, values, lowerIsBetter = false, format = String] of rows) {
         const row = body.insertRow();
         const header = document.createElement("th");
         header.scope = "row";
@@ -117,7 +140,7 @@ function renderComparison(pokemonList, matchups) {
         const allTied = values.every((value) => value === best);
         for (const value of values) {
             const cell = row.insertCell();
-            cell.textContent = value;
+            cell.textContent = format(value);
             if (value === best && !allTied) {
                 cell.className = "compareWinner";
             }
@@ -129,7 +152,8 @@ function renderComparison(pokemonList, matchups) {
 
 // getCurrentPokemon returns the { id, name } on the main card (or null);
 // loadNameSuggestions fills the shared autocomplete list.
-export function initCompare({ getCurrentPokemon, loadNameSuggestions }) {
+export function initCompare({ getCurrentPokemon, loadNameSuggestions, getUnits: unitsGetter }) {
+    getUnits = unitsGetter ?? getUnits;
     compareForm.addEventListener("submit", (event) => {
         event.preventDefault();
         comparePokemon();

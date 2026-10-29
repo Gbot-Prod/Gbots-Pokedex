@@ -15,6 +15,7 @@ import {
     learnset,
     levelUpMoves,
     normalizeQuery,
+    pokemonDisplayName,
     speciesDisplayName,
     suggestionScore,
 } from "../pokemon/utils.js";
@@ -203,4 +204,14 @@ test("formatHeight/formatWeight convert PokéAPI units", () => {
     assert.equal(formatHeight(17, "imperial"), "5′07″");
     assert.equal(formatWeight(60), "6.0 kg");
     assert.equal(formatWeight(60, "imperial"), "13.2 lbs");
+});
+
+test("pokemonDisplayName uses the species name and labels alternate forms", () => {
+    const species = (name, id) => ({ name, url: "https://pokeapi.co/api/v2/pokemon-species/" + id + "/" });
+    assert.equal(pokemonDisplayName({ id: 83, name: "farfetchd", species: species("farfetchd", 83) }), "Farfetch’d");
+    assert.equal(pokemonDisplayName({ id: 718, name: "zygarde-50", species: species("zygarde", 718) }), "Zygarde");
+    assert.equal(
+        pokemonDisplayName({ id: 10034, name: "charizard-mega-x", species: species("charizard", 6) }),
+        "Charizard (Mega X)",
+    );
 });

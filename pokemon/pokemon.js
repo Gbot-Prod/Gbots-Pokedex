@@ -1,5 +1,5 @@
 import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries, getMachineItemName, getMoveSummary } from "./api.js";
-import { initCompare } from "./compare.js";
+import { initCompare, refreshComparison } from "./compare.js";
 import { addToRecent, fadeInImage, initLists, updateFavoriteButton } from "./lists.js";
 import {
     MAX_DEX_NUMBER,
@@ -684,7 +684,7 @@ themeToggleButton.addEventListener("click", () => {
 prefersDark.addEventListener("change", updateThemeButton);
 updateThemeButton();
 
-initCompare({ getCurrentPokemon: () => currentPokemon, loadNameSuggestions });
+initCompare({ getCurrentPokemon: () => currentPokemon, loadNameSuggestions, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
@@ -921,6 +921,7 @@ unitsButton.addEventListener("click", () => {
         // the choice just won't persist
     }
     renderMeasurements();
+    refreshComparison();
 });
 renderMeasurements();
 

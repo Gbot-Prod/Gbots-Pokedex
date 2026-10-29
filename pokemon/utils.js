@@ -311,3 +311,14 @@ export function formatWeight(hectograms, units = "metric") {
     }
     return (hectograms / 10).toFixed(1) + " kg";
 }
+
+// Display name for a /pokemon response: "Farfetch’d", "Charizard (Mega X)", "Zygarde" (not "Zygarde 50").
+export function pokemonDisplayName(pokemon) {
+    const species = pokemon.species?.name;
+    if (!species) {
+        return formatName(pokemon.name);
+    }
+    const isDefault = idFromUrl(pokemon.species.url) === pokemon.id;
+    const base = speciesDisplayName(species);
+    return isDefault ? base : base + " (" + formLabel(species, pokemon.name) + ")";
+}

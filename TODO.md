@@ -13,6 +13,7 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
+- [ ] Searching a species whose default form has a suffixed name fails: "zygarde", "aegislash", "deoxys", "giratina" 404 on /pokemon/{name}; fall back to the species' default variety
 
 ## 2. Code quality
 
@@ -21,7 +22,6 @@ Rules for each run:
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
-- [ ] Compare table: follow the metric/imperial setting and use display names (Farfetch’d, "Charizard (Mega X)") in its header
 - [ ] Evolution methods: show gender requirements (e.g. Combee → Vespiquen "female only") and other conditions PokéAPI provides
 
 ## 6. Performance, accessibility & polish
@@ -115,3 +115,4 @@ Rules for each run:
 - [x] Persist move details (type/power) in localStorage: opening a moves list fires 20–90 requests on every visit (2026-10-29) — getMoveSummary/getMachineItemName in api.js keep small summaries in localStorage (batched writes); Pikachu's TM tab in a new tab went from 106 requests to 0 (~39 KB stored)
 - [x] CI: a GitHub Actions workflow running `npm run lint` and `npm test` on every push (a red commit slipped through locally this run) (2026-10-29) — .github/workflows/ci.yml runs npm ci, installs Chromium, then npm run lint and npm test on every push and PR
 - [x] TM tab: sort rows by TM number once the numbers load (currently alphabetical) (2026-10-29) — once TM numbers load the rows are re-ordered TM01, TM02… (then HM/TR, then moves without a machine)
+- [x] Compare table: follow the metric/imperial setting and use display names (Farfetch’d, "Charizard (Mega X)") in its header (2026-10-29) — header uses pokemonDisplayName (Farfetch’d, Charizard (Mega X), Zygarde); height/weight rows follow the units toggle and re-render when it changes; unit-tested
