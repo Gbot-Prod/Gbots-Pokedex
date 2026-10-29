@@ -59,7 +59,8 @@ function getLabelledEntries() {
 }
 
 // onSelect(entry) runs after the input is filled with the chosen Pokémon's name.
-export function attachCombobox(input, { onSelect } = {}) {
+// getEmptySuggestions() returns [{ id }] to offer while the input is empty (e.g. recently viewed).
+export function attachCombobox(input, { onSelect, getEmptySuggestions } = {}) {
     const listId = "combobox-list-" + ++comboboxCount;
     const list = document.createElement("ul");
     list.id = listId;
@@ -123,7 +124,17 @@ export function attachCombobox(input, { onSelect } = {}) {
         if (queryId !== latestQuery) {
             return;
         }
-        options = matchEntries(entries, input.value);
+        if (input.value.trim()) {
+            options = matchEntries(entries, input.value);
+            list.setAttribute("aria-label", "Suggestions");
+        } else {
+            const byId = new Map(entries.map((entry) => [entry.id, entry]));
+            options = (getEmptySuggestions?.() ?? [])
+                .map((suggestion) => byId.get(suggestion.id))
+                .filter(Boolean)
+                .slice(0, MAX_OPTIONS);
+            list.setAttribute("aria-label", "Recently viewed");
+        }
         list.replaceChildren(
             ...options.map((entry, index) => {
                 const item = document.createElement("li");
@@ -163,10 +174,18 @@ export function attachCombobox(input, { onSelect } = {}) {
     }
 
     input.addEventListener("input", update);
+    // An empty box offers the empty-state suggestions as soon as it's focused or clicked.
+    const showEmptySuggestions = () => {
+        if (!input.value.trim() && getEmptySuggestions && list.hidden) {
+            update();
+        }
+    };
+    input.addEventListener("focus", showEmptySuggestions);
+    input.addEventListener("click", showEmptySuggestions);
     input.addEventListener("blur", close);
     input.addEventListener("keydown", (event) => {
         if (list.hidden) {
-            if (event.key === "ArrowDown" && input.value) {
+            if (event.key === "ArrowDown" && (input.value || getEmptySuggestions)) {
                 update();
                 event.preventDefault();
             }

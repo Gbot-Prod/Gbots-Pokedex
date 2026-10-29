@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Combobox: when the search box is focused and empty, offer recently viewed Pokémon
 
 ## 5. Design & UX
 - [ ] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen
@@ -139,3 +138,4 @@ Rules for each run:
 - [x] Some newer forms have no sprite in PokéAPI's repo (e.g. id 10301), so tiles/suggestions log a 404; use `sprites.front_default` from the API (null when missing) or skip ids known to be missing (2026-10-29) — setSprite/spriteUrl in api.js skip the 12 form sprites known to be missing and remember any other failure in localStorage, so a 404 happens at most once per browser; used by combobox, tiles and evolution; verified no 404s typing pikachu/eevee/zyg/ogerpon…; smoke test
 - [x] Compare: radar (spider) chart of the six base stats in inline SVG, one colour per Pokémon (2026-10-29) — inline-SVG hexagon chart under the comparison table with one translucent polygon per Pokémon, grid rings, stat labels and a legend; scales to max(150, highest stat); role=img with a summary label; radarPoints unit-tested
 - [x] Combobox: show forms with their species number and label ("Charizard (Mega X) · #0006") instead of "#10034" (2026-10-29) — forms are matched to their species (longest slug prefix, entrySpecies) and shown as 'Charizard (Mega X) #0006' in suggestions and favorites/recent tiles; unit-tested
+- [x] Combobox: when the search box is focused and empty, offer recently viewed Pokémon (2026-10-29) — focusing/clicking the empty search box lists recently viewed Pokémon (listbox labelled 'Recently viewed'), with the same keyboard support; smoke test

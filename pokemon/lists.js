@@ -322,6 +322,10 @@ const recentListElement = document.getElementById("recentList");
 
 let recentPokemon = loadStoredList(RECENT_KEY);
 
+export function getRecentPokemon() {
+    return recentPokemon;
+}
+
 export function addToRecent(pokemon) {
     recentPokemon = [pokemon, ...recentPokemon.filter((entry) => entry.id !== pokemon.id)].slice(0, MAX_RECENT);
     saveStoredList(RECENT_KEY, recentPokemon);

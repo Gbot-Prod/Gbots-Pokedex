@@ -457,3 +457,14 @@ test("a sprite that fails to load is remembered and not requested again", async 
         "hidden",
     );
 });
+
+test("an empty, focused search box offers recently viewed Pokémon", async () => {
+    await search("gengar");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
+    await page.fill("#pokemonLookupInpt", "");
+    await page.locator("#pokemonNumber").click(); // move focus away
+    await page.click("#pokemonLookupInpt");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    assert.equal(await page.getAttribute("[role=listbox]:not([hidden])", "aria-label"), "Recently viewed");
+    assert.match(await page.textContent("[role=listbox]:not([hidden]) [role=option]"), /Gengar/);
+});
