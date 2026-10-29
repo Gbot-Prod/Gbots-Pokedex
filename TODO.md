@@ -17,7 +17,7 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Compare: add a type-matchups row (weak/resist counts) and allow comparing three Pokémon
+- [ ] Compare: allow comparing three Pokémon
 
 ## 4. Browsing & discovery
 - [ ] Tiles (browse/favorites/recent) still show slug-based names for default forms ("Zygarde 50", "Aegislash Shield", "Farfetchd"); show official display names there too
@@ -109,3 +109,4 @@ Rules for each run:
 - [x] Catch broken imports between modules in lint (`eslint-plugin-import` `import/named`), since ESLint alone missed a removed export (2026-10-29) — eslint-plugin-import-x with import-x/named, no-unresolved and no-cycle on the site modules; verified it flags a removed export
 - [x] Moves table: Physical/Special/Status category badge and accuracy columns (2026-10-29) — from the move request already made; fixtures + smoke test updated. Split from "category, accuracy and TM numbers"
 - [x] Moves table: show TM numbers on the TM tab (move → `machines` for the selected game → item name like "tm085") (2026-10-29) — TM tab's first column shows the TM number from the move's machine record for the selected game (e.g. TM08 Body Slam in Red & Blue)
+- [x] Compare: "Weak to / Resists / Immune to (types)" rows, fewer weaknesses highlighted as better (2026-10-29) — matchup math moved to a shared, unit-tested `damageMultipliers()` in utils.js. Split from "matchups row and three Pokémon"

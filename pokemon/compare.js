@@ -1,6 +1,6 @@
 // Side-by-side comparison of two Pokémon.
 import { API_BASE, fetchJson } from "./api.js";
-import { STAT_LABELS, formatName, normalizeQuery, pickSprite } from "./utils.js";
+import { STAT_LABELS, damageMultipliers, formatName, normalizeQuery, pickSprite } from "./utils.js";
 
 const compareForm = document.getElementById("compareForm");
 const compareLeftInput = document.getElementById("compareLeftInput");
@@ -35,10 +35,32 @@ async function comparePokemon() {
     }
 
     compareStatusElement.textContent = "";
-    renderComparison(results.map((result) => result.value));
+    const pokemon = results.map((result) => result.value);
+    renderComparison(pokemon, await loadMatchupCounts(pokemon));
 }
 
-function renderComparison([left, right]) {
+// { weak, resist, immune } counts per Pokémon, or null if the type data can't be loaded.
+async function loadMatchupCounts(pokemonList) {
+    try {
+        return await Promise.all(
+            pokemonList.map(async (pokemon) => {
+                const typeData = await Promise.all(
+                    pokemon.types.map((entry) => fetchJson(API_BASE + "type/" + entry.type.name)),
+                );
+                const values = Object.values(damageMultipliers(typeData));
+                return {
+                    weak: values.filter((value) => value > 1).length,
+                    resist: values.filter((value) => value > 0 && value < 1).length,
+                    immune: values.filter((value) => value === 0).length,
+                };
+            }),
+        );
+    } catch {
+        return null;
+    }
+}
+
+function renderComparison([left, right], matchups) {
     const head = compareTable.tHead;
     const body = compareTable.tBodies[0];
     head.replaceChildren();
@@ -73,8 +95,14 @@ function renderComparison([left, right]) {
     rows.push(["Total", total(left), total(right)]);
     rows.push(["Height (m)", left.height / 10, right.height / 10]);
     rows.push(["Weight (kg)", left.weight / 10, right.weight / 10]);
+    if (matchups) {
+        // Fewer weaknesses is better, so that row highlights the lower number.
+        rows.push(["Weak to (types)", matchups[0].weak, matchups[1].weak, true]);
+        rows.push(["Resists (types)", matchups[0].resist, matchups[1].resist]);
+        rows.push(["Immune to (types)", matchups[0].immune, matchups[1].immune]);
+    }
 
-    for (const [label, leftValue, rightValue] of rows) {
+    for (const [label, leftValue, rightValue, lowerIsBetter = false] of rows) {
         const row = body.insertRow();
         const header = document.createElement("th");
         header.scope = "row";
@@ -86,7 +114,7 @@ function renderComparison([left, right]) {
         ]) {
             const cell = row.insertCell();
             cell.textContent = value;
-            if (value > other) {
+            if (lowerIsBetter ? value < other : value > other) {
                 cell.className = "compareWinner";
             }
         }

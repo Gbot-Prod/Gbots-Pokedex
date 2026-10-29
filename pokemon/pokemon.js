@@ -6,6 +6,7 @@ import {
     TYPE_ICONS,
     STAT_LABELS,
     pickSprite,
+    damageMultipliers,
     describeEvolution,
     formatDexNumber,
     formatMultiplier,
@@ -153,18 +154,7 @@ async function loadMatchups(types, requestId) {
             return;
         }
 
-        const multipliers = Object.fromEntries(Object.keys(TYPE_ICONS).map((type) => [type, 1]));
-        for (const { damage_relations: relations } of typeData) {
-            for (const { name } of relations.double_damage_from) {
-                multipliers[name] *= 2;
-            }
-            for (const { name } of relations.half_damage_from) {
-                multipliers[name] *= 0.5;
-            }
-            for (const { name } of relations.no_damage_from) {
-                multipliers[name] = 0;
-            }
-        }
+        const multipliers = damageMultipliers(typeData);
         renderMatchups(multipliers);
     } catch {
         // matchups are optional; leave the section hidden

@@ -2,6 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+    damageMultipliers,
     describeEvolution,
     editDistance,
     formatDexNumber,
@@ -141,4 +142,26 @@ test("learnset honours a preferred game when that game has a learnset", () => {
 test("formatDexNumber zero-pads to four digits", () => {
     assert.equal(formatDexNumber(25), "#0025");
     assert.equal(formatDexNumber(1025), "#1025");
+});
+
+test("damageMultipliers combines both types' damage relations", () => {
+    const electric = {
+        damage_relations: {
+            double_damage_from: [{ name: "ground" }],
+            half_damage_from: [{ name: "flying" }, { name: "steel" }, { name: "electric" }],
+            no_damage_from: [],
+        },
+    };
+    const flying = {
+        damage_relations: {
+            double_damage_from: [{ name: "rock" }, { name: "electric" }, { name: "ice" }],
+            half_damage_from: [{ name: "grass" }],
+            no_damage_from: [{ name: "ground" }],
+        },
+    };
+    const multipliers = damageMultipliers([electric, flying]);
+    assert.equal(multipliers.ground, 0);
+    assert.equal(multipliers.electric, 1);
+    assert.equal(multipliers.rock, 2);
+    assert.equal(multipliers.normal, 1);
 });

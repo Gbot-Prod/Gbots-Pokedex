@@ -215,3 +215,21 @@ export function suggestionScore(query, name) {
 export function formatDexNumber(id) {
     return "#" + String(id).padStart(4, "0");
 }
+
+// Damage multiplier each attacking type deals to a Pokémon with the given types, from the
+// types' damage_relations (e.g. Ground vs. Electric/Flying = 0, Rock vs. Fire/Flying = 4).
+export function damageMultipliers(typeDataList) {
+    const multipliers = Object.fromEntries(Object.keys(TYPE_ICONS).map((type) => [type, 1]));
+    for (const { damage_relations: relations } of typeDataList) {
+        for (const { name } of relations.double_damage_from) {
+            multipliers[name] *= 2;
+        }
+        for (const { name } of relations.half_damage_from) {
+            multipliers[name] *= 0.5;
+        }
+        for (const { name } of relations.no_damage_from) {
+            multipliers[name] = 0;
+        }
+    }
+    return multipliers;
+}
