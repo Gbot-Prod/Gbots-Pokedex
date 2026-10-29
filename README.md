@@ -16,6 +16,7 @@ pokemon/
   pokemon.js     main card: search, rendering, navigation, theme (ES module entry)
   lists.js       browse grid with filters, favorites and recently viewed
   compare.js     side-by-side comparison table
+  combobox.js    accessible search autocomplete (sprites, keyboard navigation)
   api.js         PokéAPI requests with in-memory/sessionStorage caching
   utils.js       pure helpers (name formatting, query normalisation, …)
   sw.js          service worker: offline app shell + cached PokéAPI data/sprites
@@ -24,6 +25,7 @@ pokemon/
 tests/
   smoke.test.js  browser tests (Playwright) against mocked PokéAPI data
   utils.test.mjs unit tests for utils.js
+  combobox.test.mjs  unit tests for the autocomplete matching
   fixtures/      trimmed PokéAPI responses used by the tests
   build-fixtures.mjs  regenerates the fixtures from the live API
 TODO.md          living improvement backlog

@@ -8,6 +8,7 @@ import {
     getMoveSummary,
     getSpeciesSlugs,
 } from "./api.js";
+import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { addToRecent, fadeInImage, initLists, updateFavoriteButton } from "./lists.js";
 import {
@@ -700,7 +701,8 @@ async function loadNameSuggestions() {
     }
 }
 
-searchInput.addEventListener("focus", loadNameSuggestions);
+// The main search gets the custom combobox; picking a suggestion searches straight away.
+attachCombobox(searchInput, { onSelect: (entry) => loadPokemon(entry.name) });
 
 document.getElementById("searchForm").addEventListener("submit", (event) => {
     event.preventDefault();

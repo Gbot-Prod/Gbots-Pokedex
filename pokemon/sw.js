@@ -9,6 +9,7 @@ const SHELL_FILES = [
     "pokemon.css",
     "pokemon.js",
     "api.js",
+    "combobox.js",
     "compare.js",
     "lists.js",
     "utils.js",

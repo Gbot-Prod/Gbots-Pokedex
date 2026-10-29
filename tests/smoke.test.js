@@ -421,3 +421,17 @@ test("ability chips expand to show a description", async () => {
     await page.click(".abilityChip");
     await page.waitForSelector("#abilityDescription[hidden]", { state: "attached" });
 });
+
+test("the search combobox suggests Pokémon and can be driven with the keyboard", async () => {
+    await page.click("#pokemonLookupInpt");
+    await page.keyboard.type("pika");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    assert.match(await page.textContent("[role=listbox] [role=option]"), /Pikachu/);
+
+    await page.keyboard.press("ArrowDown");
+    assert.ok(await page.getAttribute("#pokemonLookupInpt", "aria-activedescendant"));
+    await page.keyboard.press("Enter");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
+    assert.equal(await page.getAttribute("#pokemonLookupInpt", "aria-expanded"), "false");
+    assert.deepEqual(pageErrors, []);
+});

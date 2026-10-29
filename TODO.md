@@ -19,7 +19,7 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Replace the 1,300-option `<datalist>` with a custom accessible combobox (sprites, keyboard navigation, official names)
+- [ ] Combobox step 2: use the custom combobox for the compare inputs too, then drop the `<datalist>` and `loadNameSuggestions`
 
 ## 5. Design & UX
 
@@ -130,3 +130,4 @@ Rules for each run:
 - [x] Run the axe accessibility check at phone width (375px) too, and with the install/offline UI visible (2026-10-29) — axe now runs at 1280px and 375px in both themes with the install button and offline banner showing; it caught the Random/Clear buttons failing contrast at phone size (smaller text) — darkened to ≥4.6:1
 - [x] Shareable comparisons: reflect the compared Pokémon in the URL (`?compare=pikachu,gengar`) and restore them on load (2026-10-29) — compared Pokémon kept in ?compare=a,b[,c] (replaceState, alongside ?pokemon=) and restored on load; smoke test
 - [x] Ability descriptions: show each ability's short effect (ability endpoint `effect_entries`) in a tooltip or expandable chip (2026-10-29) — ability chips are buttons (aria-expanded) that show the latest English game text below the chips, fetched on click; abilityDescription helper unit-tested; smoke test
+- [x] Combobox step 1: main search uses a custom ARIA combobox (combobox.js) — up to 8 matches with sprites, official names and dex numbers; ↑/↓/Enter/Escape and click; numbers match by id (2026-10-29) — matchEntries unit-tested, keyboard smoke test. Split from "replace the datalist"
