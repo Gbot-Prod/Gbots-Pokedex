@@ -1,1 +1,1 @@
-{"id":209,"name":"spark","power":65,"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}
+{"id":209,"name":"spark","power":65,"accuracy":100,"damage_class":{"name":"physical"},"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}

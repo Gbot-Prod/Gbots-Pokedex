@@ -1,1 +1,1 @@
-{"id":87,"name":"thunder","power":110,"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}
+{"id":87,"name":"thunder","power":110,"accuracy":70,"damage_class":{"name":"special"},"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}

@@ -1,1 +1,1 @@
-{"id":86,"name":"thunder-wave","power":null,"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}
+{"id":86,"name":"thunder-wave","power":null,"accuracy":90,"damage_class":{"name":"status"},"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}

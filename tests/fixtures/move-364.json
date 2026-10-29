@@ -1,1 +1,1 @@
-{"id":364,"name":"feint","power":30,"type":{"name":"normal","url":"https://pokeapi.co/api/v2/type/1/"}}
+{"id":364,"name":"feint","power":30,"accuracy":100,"damage_class":{"name":"physical"},"type":{"name":"normal","url":"https://pokeapi.co/api/v2/type/1/"}}

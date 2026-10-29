@@ -94,6 +94,8 @@ for (const id of [24, 25, 26, 83, 94]) {
                 id: details.id,
                 name: details.name,
                 power: details.power,
+                accuracy: details.accuracy,
+                damage_class: { name: details.damage_class.name },
                 type: details.type,
             });
         }

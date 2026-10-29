@@ -723,6 +723,12 @@ document.getElementById("clearDataBtn").addEventListener("click", () => {
 
 // --- Moves ----------------------------------------------------------------------
 
+const MOVE_CATEGORIES = {
+    physical: { short: "Phys", label: "Physical" },
+    special: { short: "Spec", label: "Special" },
+    status: { short: "Stat", label: "Status" },
+};
+
 const MOVE_METHODS = [
     { method: "level-up", label: "Level-up" },
     { method: "machine", label: "TM" },
@@ -794,8 +800,9 @@ function renderMoveRows() {
         const row = movesTableBody.insertRow();
         row.insertCell().textContent = showLevel ? move.level || "Evo" : ""; // level 0 = learned on evolution
         row.insertCell().textContent = formatName(move.name);
-        row.insertCell().textContent = "…";
-        row.insertCell().textContent = "…";
+        for (let column = 0; column < 4; column++) {
+            row.insertCell().textContent = "…"; // type, category, power, accuracy
+        }
     }
 }
 
@@ -815,7 +822,7 @@ async function loadMoveDetails() {
     const rows = [...movesTableBody.rows];
     await Promise.all(
         moves.map(async (move, index) => {
-            const [, , typeCell, powerCell] = rows[index].cells;
+            const [, , typeCell, categoryCell, powerCell, accuracyCell] = rows[index].cells;
             try {
                 const details = await fetchJson(move.url);
                 if (moves !== currentMoves) {
@@ -833,9 +840,20 @@ async function loadMoveDetails() {
                 }
                 typeCell.append(" " + formatName(type));
                 powerCell.textContent = details.power ?? "—";
+                accuracyCell.textContent = details.accuracy ? details.accuracy + "%" : "—";
+                const category = details.damage_class?.name;
+                categoryCell.replaceChildren();
+                if (MOVE_CATEGORIES[category]) {
+                    const badge = document.createElement("span");
+                    badge.className = "moveCategory " + category;
+                    badge.textContent = MOVE_CATEGORIES[category].short;
+                    badge.title = MOVE_CATEGORIES[category].label;
+                    categoryCell.append(badge);
+                }
             } catch {
-                typeCell.textContent = "?";
-                powerCell.textContent = "?";
+                for (const cell of [typeCell, categoryCell, powerCell, accuracyCell]) {
+                    cell.textContent = "?";
+                }
             }
         }),
     );

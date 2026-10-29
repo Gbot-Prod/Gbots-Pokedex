@@ -17,7 +17,7 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Moves table: show damage category (physical/special/status) and accuracy, and TM numbers from the machines endpoint
+- [ ] Moves table: show TM numbers on the TM tab (move → `machines` for the selected game → item name like "tm085")
 - [ ] Compare: add a type-matchups row (weak/resist counts) and allow comparing three Pokémon
 
 ## 4. Browsing & discovery
@@ -108,3 +108,4 @@ Rules for each run:
 - [x] Sprite alt text and the screen-reader announcement still use the slug name ("Farfetchd sprite") because they're set before species data arrives; update them in `applyDisplayName` (2026-10-29) — applyDisplayName refreshes the sprite alt ('Farfetch’d sprite') and the live-region text with the official name
 - [x] Make smoke tests fail fast: `page.setDefaultTimeout(5000)` and fail a test as soon as a `pageerror` fires (a missing export made the suite hang for minutes) (2026-10-29) — 5s default timeout (15s for check:live) and page errors logged as they happen; a broken import now fails all 13 smoke tests in ~1 min instead of hanging
 - [x] Catch broken imports between modules in lint (`eslint-plugin-import` `import/named`), since ESLint alone missed a removed export (2026-10-29) — eslint-plugin-import-x with import-x/named, no-unresolved and no-cycle on the site modules; verified it flags a removed export
+- [x] Moves table: Physical/Special/Status category badge and accuracy columns (2026-10-29) — from the move request already made; fixtures + smoke test updated. Split from "category, accuracy and TM numbers"

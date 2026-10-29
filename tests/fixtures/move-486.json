@@ -1,1 +1,1 @@
-{"id":486,"name":"electro-ball","power":null,"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}
+{"id":486,"name":"electro-ball","power":null,"accuracy":100,"damage_class":{"name":"special"},"type":{"name":"electric","url":"https://pokeapi.co/api/v2/type/13/"}}

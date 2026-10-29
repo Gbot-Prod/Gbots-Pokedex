@@ -208,7 +208,7 @@ test("the level-up moves list loads type and power when opened", async () => {
         trs.map((tr) => tr.innerText.replace(/\s+/g, " ").trim()),
     );
     assert.ok(
-        rows.some((row) => /Thunder Shock Electric 40$/.test(row)),
+        rows.some((row) => /Thunder Shock Electric Spec 40 100%$/.test(row)),
         rows.join(" | "),
     );
     assert.deepEqual(pageErrors, []);

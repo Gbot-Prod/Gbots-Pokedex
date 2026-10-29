@@ -1,1 +1,1 @@
-{"id":231,"name":"iron-tail","power":100,"type":{"name":"steel","url":"https://pokeapi.co/api/v2/type/9/"}}
+{"id":231,"name":"iron-tail","power":100,"accuracy":75,"damage_class":{"name":"physical"},"type":{"name":"steel","url":"https://pokeapi.co/api/v2/type/9/"}}

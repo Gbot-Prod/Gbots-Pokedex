@@ -1,1 +1,1 @@
-{"id":204,"name":"charm","power":null,"type":{"name":"fairy","url":"https://pokeapi.co/api/v2/type/18/"}}
+{"id":204,"name":"charm","power":null,"accuracy":100,"damage_class":{"name":"status"},"type":{"name":"fairy","url":"https://pokeapi.co/api/v2/type/18/"}}
