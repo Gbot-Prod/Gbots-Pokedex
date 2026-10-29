@@ -21,7 +21,6 @@ Rules for each run:
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
-- [ ] Forms show their internal id ("Pokemon no#10034" for Mega Charizard X); show the species' dex number instead and label the form
 - [ ] Show official display names from `species.names` ("Farfetch’d", "Mr. Mime", "Nidoran♀") instead of title-casing the slug ("Farfetchd", "Nidoran F")
 - [ ] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items
 - [ ] Metric/imperial toggle for height and weight
@@ -102,3 +101,4 @@ Rules for each run:
 - [x] Moves: game selector (the moves list always uses the newest game that has a level-up learnset) (2026-10-29) — game <select> listing every main-series game with a level-up learnset (named, newest first); choice persists while browsing and falls back to the newest game
 - [x] "Did you mean" can list several forms of one species (Gengar, Gengar Mega, Gengar Gmax); prefer distinct species first (2026-10-29) — forms rank below species with the same score and are skipped when their species is already suggested ('gengr' → just Gengar)
 - [x] Format the card number as "#0025" to match the browse tiles (currently "Pokemon no#25") (2026-10-29) — card shows '#0025' via a shared formatDexNumber helper (also used by tiles), unit-tested
+- [x] Forms show their internal id ("Pokemon no#10034" for Mega Charizard X); show the species' dex number instead and label the form (2026-10-29) — card, title and screen-reader announcement use the species' dex number; forms add a label ('#0006 · Mega X form')

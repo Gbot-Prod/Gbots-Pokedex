@@ -328,7 +328,7 @@ function renderPokemon(data, query) {
     updateFavoriteButton();
     addToRecent(currentPokemon);
     announceResult(data);
-    document.title = formatName(data.name) + " #" + data.id + " · Pokédex";
+    document.title = formatName(data.name) + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
     prevButton.disabled = currentDexNumber <= 1;
     nextButton.disabled = currentDexNumber >= MAX_DEX_NUMBER;
 
@@ -340,7 +340,10 @@ function renderPokemon(data, query) {
     }
 
     //fetch pokemon number
-    numberElement.textContent = formatDexNumber(data.id);
+    // Alternate forms have internal ids (e.g. 10034); show the species' number and name the form.
+    const isForm = data.id !== currentDexNumber;
+    numberElement.textContent =
+        formatDexNumber(currentDexNumber) + (isForm ? " · " + formLabel(data.species.name, data.name) + " form" : "");
 
     //species info arrives separately; clear the previous Pokémon's text meanwhile
     genusElement.textContent = "";
@@ -519,7 +522,7 @@ function setTypeIcon(iconElement, type) {
 function announceResult(data) {
     const types = data.types.map((entry) => formatName(entry.type.name)).join(" and ");
     document.getElementById("resultAnnouncer").textContent =
-        "Showing " + formatName(data.name) + ", number " + data.id + ", " + types + " type.";
+        "Showing " + formatName(data.name) + ", number " + currentDexNumber + ", " + types + " type.";
 }
 
 function fetchPKMNType(pkmnType, pkmnType2) {
