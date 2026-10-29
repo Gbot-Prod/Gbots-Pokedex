@@ -14,10 +14,15 @@ const resultElement = document.getElementById("quizResult");
 const nextButton = document.getElementById("quizNextBtn");
 const scoreElement = document.getElementById("quizScore");
 const generationSelect = document.getElementById("quizGeneration");
+const timedButton = document.getElementById("quizTimedBtn");
+const timerElement = document.getElementById("quizTimer");
+const TIMED_SECONDS = 60;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let candidates = null; // National Dex entries with display names
-let score = { correct: 0, played: 0, streak: 0, best: 0 };
+let score = { correct: 0, played: 0, streak: 0, best: 0, bestTimed: 0 };
+// The 60-second challenge: { endsAt, correct, interval } while running, otherwise null.
+let timedRun = null;
 let showPokemon = () => {};
 
 function loadScore() {
@@ -38,7 +43,16 @@ function saveScore() {
 
 function renderScore() {
     scoreElement.textContent =
-        "Score " + score.correct + "/" + score.played + " · Streak " + score.streak + " · Best " + score.best;
+        "Score " +
+        score.correct +
+        "/" +
+        score.played +
+        " · Streak " +
+        score.streak +
+        " · Best " +
+        score.best +
+        " · Best 60s run " +
+        score.bestTimed;
 }
 
 // n distinct random items from a list.
@@ -90,6 +104,7 @@ async function nextRound() {
             button.type = "button";
             button.className = "quizChoice";
             button.textContent = choice.label;
+            button.dataset.key = choices.indexOf(choice) + 1; // number keys 1–4 pick it
             button.addEventListener("click", () => answerRound(choice, answer, button));
             return button;
         }),
@@ -97,8 +112,81 @@ async function nextRound() {
     choicesElement.querySelector("button").focus({ preventScroll: true });
 }
 
+function revealAnswer(answer, chosenButton, correct) {
+    stage.classList.add("revealed");
+    image.alt = answer.label + " artwork";
+    for (const button of choicesElement.querySelectorAll("button")) {
+        button.disabled = true;
+        if (button.textContent === answer.label) {
+            button.classList.add("correct");
+        }
+    }
+    if (!correct) {
+        chosenButton.classList.add("wrong");
+    }
+}
+
+// --- 60-second challenge -------------------------------------------------------------
+
+function startTimedRun() {
+    stopTimedRun(false);
+    startButton.hidden = true;
+    timedButton.disabled = true;
+    timedRun = { endsAt: Date.now() + TIMED_SECONDS * 1000, correct: 0, interval: null };
+    const tick = () => {
+        const left = Math.max(0, Math.ceil((timedRun.endsAt - Date.now()) / 1000));
+        timerElement.textContent = "⏱ " + left + "s · " + timedRun.correct + " correct";
+        timerElement.classList.toggle("urgent", left <= 10);
+        if (left === 0) {
+            stopTimedRun(true);
+        }
+    };
+    timedRun.interval = setInterval(tick, 250);
+    timerElement.hidden = false;
+    tick();
+    nextRound();
+}
+
+function stopTimedRun(showResult) {
+    if (!timedRun) {
+        return;
+    }
+    clearInterval(timedRun.interval);
+    const { correct } = timedRun;
+    timedRun = null;
+    timedButton.disabled = false;
+    timerElement.hidden = true;
+    if (!showResult) {
+        return;
+    }
+    const newBest = correct > score.bestTimed;
+    score.bestTimed = Math.max(score.bestTimed, correct);
+    saveScore();
+    renderScore();
+    for (const button of choicesElement.querySelectorAll("button")) {
+        button.disabled = true;
+    }
+    resultElement.textContent =
+        "Time's up! You named " + correct + " Pokémon in 60 seconds" + (newBest ? " — a new best!" : ".");
+    if (newBest && correct > 0) {
+        celebrate();
+    }
+    nextButton.hidden = false;
+    nextButton.focus({ preventScroll: true });
+}
+
 function answerRound(choice, answer, chosenButton) {
     const correct = choice.id === answer.id;
+    if (timedRun) {
+        // Challenge rounds keep their own count and move straight on.
+        if (correct) {
+            timedRun.correct++;
+        }
+        revealAnswer(answer, chosenButton, correct);
+        resultElement.textContent = (correct ? "✓ " : "✗ ") + answer.label + " · " + timedRun.correct + " correct";
+        setTimeout(() => timedRun && nextRound(), 700);
+        return;
+    }
     score.played++;
     if (correct) {
         score.correct++;
@@ -113,17 +201,7 @@ function answerRound(choice, answer, chosenButton) {
     saveScore();
     renderScore();
 
-    stage.classList.add("revealed");
-    image.alt = answer.label + " artwork";
-    for (const button of choicesElement.querySelectorAll("button")) {
-        button.disabled = true;
-        if (button.textContent === answer.label) {
-            button.classList.add("correct");
-        }
-    }
-    if (!correct) {
-        chosenButton.classList.add("wrong");
-    }
+    revealAnswer(answer, chosenButton, correct);
 
     resultElement.replaceChildren(
         (correct ? "Correct! It's " : "Not quite — it's ") + answer.label + ". ",
@@ -172,6 +250,15 @@ export function initQuiz(options) {
         nextRound();
     });
     nextButton.addEventListener("click", nextRound);
+    timedButton.addEventListener("click", startTimedRun);
+    // Number keys 1–4 answer while a round is open.
+    stage.addEventListener("keydown", (event) => {
+        const button = choicesElement.querySelector('[data-key="' + event.key + '"]:not(:disabled)');
+        if (button) {
+            event.preventDefault();
+            button.click();
+        }
+    });
     for (const generation of GENERATIONS) {
         const option = document.createElement("option");
         option.value = generation.number;

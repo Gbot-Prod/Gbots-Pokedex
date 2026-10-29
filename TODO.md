@@ -14,7 +14,7 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Quiz step 2b: "type the name" mode (with the combobox) and a timed 60-second run with a high score
+- [ ] Quiz step 2c: "type the name" mode using the search combobox (accept official spellings via normalizeQuery)
 - [ ] Team builder step 2b: offensive coverage (which types the team's own types hit super-effectively), drag to reorder, and "suggest a member" that patches the worst weakness
 - [ ] Animated sprites step 2: animated sprites in the evolution chain and team slots when the toggle is on; add showdown sprites to the fixtures so the toggle is tested offline
 - [ ] Theme picker: Classic, Retro Game Boy (4-shade green palette + pixel font) and Neon night, saved per visitor
@@ -173,3 +173,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Type chart step 2: the card's type icons are buttons that open the chart focused on that type's row/column; arrow keys move between cells (roving focus) with the same highlight as hover (2026-10-29) — smoke test
 - [x] Animated sprites step 1: "▶ Animated" toggle in the art window swaps to the Showdown GIF (shiny too), scaled up pixel-crisp, remembered in localStorage, hidden when there's no animation (2026-10-29)
 - [x] Stat bars animate in from zero with count-up numbers when a Pokémon loads (instant under reduced motion) (2026-10-29) — bars grow from 0 and numbers count up with an ease-out over 0.6 s whenever a Pokémon loads; final values immediately under reduced motion
+- [x] Quiz step 2b: ⏱ 60-second challenge (running "⏱ 42s · 3 correct" timer, auto-advance, urgent pulse in the last 10 s, final result + best 60-second run saved, confetti on a new best) and number keys 1–4 to answer (2026-10-29) — smoke test with a fake clock

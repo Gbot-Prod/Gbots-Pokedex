@@ -623,3 +623,19 @@ test("the animated-sprite toggle only shows when an animation exists", async () 
     // The trimmed fixtures have no Showdown animations, so the toggle stays hidden.
     assert.equal(await page.isVisible("#animatedToggleBtn"), false);
 });
+
+test("the 60-second quiz challenge counts down, accepts number keys and ends with a result", async () => {
+    await page.clock.install();
+    await page.reload();
+    await page.click("#quizTimedBtn");
+    await page.waitForSelector(".quizChoice:not(:disabled)");
+    assert.match(await page.textContent("#quizTimer"), /^⏱ \d+s · 0 correct$/);
+
+    await page.keyboard.press("1"); // answers with the first (focused-area) choice
+    assert.equal(await page.locator(".quizChoice:disabled").count(), 4);
+
+    await page.clock.runFor(61_000);
+    await page.waitForFunction(() => document.getElementById("quizResult").textContent.startsWith("Time's up!"));
+    assert.equal(await page.isVisible("#quizTimer"), false);
+    assert.match(await page.textContent("#quizScore"), /Best 60s run \d/);
+});

@@ -27,6 +27,7 @@
     --tile-hover: #2a3654;
     --win: #6be39a;
     --page-ink: #ffffff;
+    --danger-ink: #ff8a80;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -42,6 +43,7 @@
         --tile-hover: #2a3654;
         --win: #6be39a;
         --page-ink: #ffffff;
+        --danger-ink: #ff8a80;
     }
 }
 
@@ -1639,6 +1641,7 @@ img.placeholderSprite {
 /* --- Who's that Pokémon? ----------------------------------------------------------- */
 
 #quizStartBtn,
+#quizTimedBtn,
 #quizNextBtn {
     background-color: #5871c1;
 }
@@ -2025,4 +2028,32 @@ img.placeholderSprite {
 #pokemonSprite.animatedSprite {
     padding: 22%;
     image-rendering: pixelated;
+}
+
+#quizTimedBtn {
+    margin-left: 0.4rem;
+}
+
+#quizTimer {
+    margin: 0.6rem 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+#quizTimer.urgent {
+    color: var(--danger-ink, #b3261e);
+    animation: timerPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes timerPulse {
+    to {
+        transform: scale(1.12);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #quizTimer.urgent {
+        animation: none;
+    }
 }
