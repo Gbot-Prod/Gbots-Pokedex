@@ -308,3 +308,25 @@ for (const colorScheme of ["light", "dark"]) {
         assert.deepEqual(serious, []);
     });
 }
+
+test("the units toggle switches the card and the comparison table to imperial", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    assert.equal(await page.textContent("#pokemonHeight"), "0.4 m");
+
+    await page.fill("#compareLeftInput", "farfetchd");
+    await page.fill("#compareRightInput", "pikachu");
+    await page.click("#compareBtn");
+    await page.waitForSelector("#compareResult:not([hidden])");
+    // The header uses official names, not the API slug ("Farfetchd").
+    assert.match(await page.textContent("#compareTable thead"), /Farfetch’d/);
+
+    await page.click("#unitsToggleBtn");
+    assert.equal(await page.textContent("#pokemonHeight"), "1′04″");
+    assert.equal(await page.textContent("#pokemonWeight"), "13.2 lbs");
+    assert.match(await page.innerText("#compareTable"), /Weight\s+33\.1 lbs\s+13\.2 lbs/);
+
+    await page.reload();
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    assert.equal(await page.textContent("#pokemonWeight"), "13.2 lbs"); // remembered
+});

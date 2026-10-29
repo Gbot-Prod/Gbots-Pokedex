@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Smoke tests for the units toggle (card + compare table) and for display names in the compare header
 
 ## 3. Core Pokédex features
 
@@ -123,3 +122,4 @@ Rules for each run:
 - [x] Cache by canonical id: "gengar" and "94" currently fetch the same Pokémon twice (2026-10-29) — fetchPokemon remembers each loaded Pokémon under /pokemon/<id>, /pokemon/<name> (with and without trailing slash): gengar → 94 → #094 → next → prev made 2 requests instead of 5
 - [x] Offline step 1: web manifest + service worker (2026-10-29) — app shell stale-while-revalidate, PokéAPI/sprites network-first with cached fallback; viewed Pokémon reload offline with sprites; mocked tests block service workers. Split from "Offline support"
 - [x] Automated accessibility check: run axe-core against the page in the smoke tests (card, browse grid, compare table, dark mode) (2026-10-29) — axe-core smoke tests (card, moves, compare, browse; light + dark) fail on serious/critical issues. Fixed what they found: page text now dark ink in light mode, blue buttons and 11 type theme shades darkened to ≥4.5:1, compare 'winner' green darkened, Pokédex number no longer a skipped-level heading
+- [x] Smoke tests for the units toggle (card + compare table) and for display names in the compare header (2026-10-29) — smoke test covers card + compare table switching to imperial, the choice surviving a reload, and 'Farfetch’d' in the compare header
