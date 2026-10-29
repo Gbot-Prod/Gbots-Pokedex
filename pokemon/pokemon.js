@@ -56,7 +56,9 @@ function fetchData() {
     loadPokemon(query);
 }
 
-async function loadPokemon(query) {
+// fromHistory: the query came from the URL (page load or Back/Forward), so the
+// URL is only normalised in place instead of adding a new history entry.
+async function loadPokemon(query, { fromHistory = false } = {}) {
     const requestId = ++latestRequest;
     try {
         clearFields();
@@ -67,6 +69,7 @@ async function loadPokemon(query) {
             return; // a newer search has started; drop this stale result
         }
         renderPokemon(data, query);
+        setUrlPokemon(data.name, fromHistory);
         loadSpecies(data.species.url, requestId);
         loadMatchups(
             data.types.map((entry) => entry.type.name),
@@ -624,4 +627,48 @@ shinyButton.addEventListener("click", () => {
 });
 prevButton.addEventListener("click", () => goToDexNumber(currentDexNumber - 1));
 nextButton.addEventListener("click", () => goToDexNumber(currentDexNumber + 1));
-document.getElementById("clearDataBtn").addEventListener("click", clearFields);
+document.getElementById("clearDataBtn").addEventListener("click", () => {
+    clearFields();
+    setUrlPokemon(null);
+});
+
+// --- Shareable URLs -----------------------------------------------------------
+// The current Pokémon lives in ?pokemon=<name> so links can be shared and Back/Forward work.
+
+function getUrlPokemon() {
+    return new URLSearchParams(window.location.search).get("pokemon");
+}
+
+function setUrlPokemon(name, replace = false) {
+    const url = new URL(window.location.href);
+    if (name) {
+        url.searchParams.set("pokemon", name);
+    } else {
+        url.searchParams.delete("pokemon");
+    }
+    if (url.href === window.location.href) {
+        return;
+    }
+    if (replace) {
+        history.replaceState({ pokemon: name }, "", url);
+    } else {
+        history.pushState({ pokemon: name }, "", url);
+    }
+}
+
+function loadFromUrl() {
+    const name = getUrlPokemon();
+    const query = name ? normalizeQuery(name) : "";
+    if (query) {
+        loadPokemon(query, { fromHistory: true });
+    } else {
+        latestRequest++; // ignore any request still in flight
+        setLoading(false);
+        clearFields();
+    }
+}
+
+window.addEventListener("popstate", loadFromUrl);
+if (getUrlPokemon()) {
+    loadFromUrl();
+}

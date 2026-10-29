@@ -158,3 +158,17 @@ test("favorites persist across reloads", async () => {
     await page.waitForSelector("#favoritesSection:not([hidden])");
     assert.match(await page.innerText("#favoritesList"), /Pikachu/);
 });
+
+test("?pokemon= links open that Pokémon and Back returns to the previous one", async () => {
+    await page.goto(baseUrl + "?pokemon=25");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
+    assert.match(page.url(), /\?pokemon=pikachu$/);
+
+    await search("gengar");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
+    assert.match(page.url(), /\?pokemon=gengar$/);
+
+    await page.goBack();
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
+    assert.deepEqual(pageErrors, []);
+});
