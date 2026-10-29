@@ -11,6 +11,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initQuiz } from "./quiz.js";
+import { initTypeChart } from "./typechart.js";
 import { initTeam, onCardChange as updateTeamButton } from "./team.js";
 import {
     addToRecent,
@@ -761,6 +762,7 @@ updateThemeButton();
 initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 initQuiz({ showPokemon });
+initTypeChart();
 initTeam({
     showPokemon,
     getCurrentPokemon: () =>

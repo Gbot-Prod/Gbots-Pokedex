@@ -1853,3 +1853,67 @@ img.placeholderSprite {
 .coverageTable tr.danger {
     background-color: rgba(192, 57, 43, 0.18);
 }
+
+/* --- Type chart ------------------------------------------------------------------------ */
+
+#typeChartBtn {
+    background-color: #5871c1;
+}
+
+#typeChart {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.typeChartTable {
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: var(--tile-bg);
+    color: var(--ink);
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.typeChartTable caption {
+    padding: 0.4rem;
+    color: var(--page-ink);
+    font-weight: 700;
+}
+
+.typeChartTable th,
+.typeChartTable td {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--surface);
+    text-align: center;
+}
+
+.typeChartTable th:first-child {
+    padding: 0 0.3rem;
+}
+
+.typeChartTable td.x2 {
+    background-color: #2e8b57;
+    color: #ffffff;
+}
+
+.typeChartTable td.x05 {
+    background-color: #b8443a;
+    color: #ffffff;
+}
+
+.typeChartTable td.x0 {
+    background-color: #2b2b36;
+    color: #ffffff;
+}
+
+.typeChartTable .rowHighlight,
+.typeChartTable .columnHighlight {
+    box-shadow: inset 0 0 0 999px rgba(255, 255, 255, 0.28);
+}
+
+.typeChartTable td.rowHighlight.columnHighlight {
+    outline: 3px solid #ffd447;
+    outline-offset: -3px;
+}

@@ -109,7 +109,10 @@ await save("pokemon-species-zygarde", trimSpecies(await get("pokemon-species/zyg
 for (const id of [10, 40]) {
     await save("evolution-chain-" + id, await get("evolution-chain/" + id));
 }
-for (const type of ["electric", "ghost", "poison"]) {
+// All 18 types, so the type chart and team coverage work offline.
+const ALL_TYPES =
+    "normal fire water grass electric ice fighting poison ground flying psychic bug rock ghost dragon dark steel fairy";
+for (const type of ALL_TYPES.split(" ")) {
     await save("type-" + type, trimType(await get("type/" + type)));
 }
 const list = await get("pokemon?limit=2000");

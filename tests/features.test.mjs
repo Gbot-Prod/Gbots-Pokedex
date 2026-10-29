@@ -27,3 +27,22 @@ test("teamCoverage counts weak and resisting members per attacking type", async 
     assert.deepEqual([byType.fire.weak, byType.fire.resist], [1, 1]);
     assert.equal(coverage.length, 18);
 });
+
+test("typeChartMatrix reads each type's attacking relations", async () => {
+    const { typeChartMatrix } = await import("../pokemon/typechart.js");
+    const relations = (double, half, none) => ({
+        double_damage_to: double.map((name) => ({ name })),
+        half_damage_to: half.map((name) => ({ name })),
+        no_damage_to: none.map((name) => ({ name })),
+    });
+    const matrix = typeChartMatrix([
+        { name: "electric", damage_relations: relations(["water"], ["electric"], ["ground"]) },
+        { name: "water", damage_relations: relations([], ["water"], []) },
+        { name: "ground", damage_relations: relations(["electric"], [], []) },
+    ]);
+    assert.equal(matrix.electric.water, 2);
+    assert.equal(matrix.electric.ground, 0);
+    assert.equal(matrix.electric.electric, 0.5);
+    assert.equal(matrix.water.ground, 1);
+    assert.equal(matrix.ground.electric, 2);
+});

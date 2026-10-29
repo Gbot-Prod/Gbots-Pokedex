@@ -14,6 +14,7 @@ const SHELL_FILES = [
     "lists.js",
     "quiz.js",
     "team.js",
+    "typechart.js",
     "utils.js",
     "manifest.webmanifest",
     "assets/BugIcon.png",

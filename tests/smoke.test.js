@@ -584,3 +584,13 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     await page.click(".teamRemove");
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 1);
 });
+
+test("the type chart opens on demand and highlights the hovered row and column", async () => {
+    assert.equal(await page.isVisible("#typeChart"), false);
+    await page.click("#typeChartBtn");
+    assert.equal(await page.getAttribute("#typeChartBtn", "aria-expanded"), "true");
+    await page.waitForSelector(".typeChartTable");
+    assert.equal(await page.locator(".typeChartTable tbody tr").count(), 18);
+    await page.hover(".typeChartTable tbody tr:nth-child(5) td:nth-child(3)");
+    assert.ok((await page.locator(".typeChartTable .rowHighlight").count()) > 0);
+});
