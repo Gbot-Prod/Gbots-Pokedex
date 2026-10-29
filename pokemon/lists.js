@@ -179,6 +179,7 @@ function renderBrowsePage() {
     const pageEntries = browseEntries.slice(browsePage * BROWSE_PAGE_SIZE, (browsePage + 1) * BROWSE_PAGE_SIZE);
 
     browseGridElement.replaceChildren(...pageEntries.map(createBrowseTile));
+    markOfflineAvailability();
     browsePageLabel.textContent = "Page " + (browsePage + 1) + " of " + pageCount;
     browsePrevButton.disabled = browsePage === 0;
     browseNextButton.disabled = browsePage >= pageCount - 1;
@@ -189,6 +190,8 @@ function createBrowseTile(entry) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "browseTile";
+    button.dataset.id = entry.id;
+    button.dataset.name = entry.name;
 
     const sprite = document.createElement("img");
     fadeInImage(sprite, SPRITE_BASE + entry.id + ".png");
@@ -297,6 +300,7 @@ export function updateFavoriteButton() {
 function renderFavorites() {
     favoritesSection.hidden = favorites.length === 0;
     favoritesListElement.replaceChildren(...favorites.map(createBrowseTile));
+    markOfflineAvailability();
 }
 
 favoriteButton.addEventListener("click", toggleFavorite);
@@ -319,6 +323,7 @@ export function addToRecent(pokemon) {
 function renderRecent() {
     recentSection.hidden = recentPokemon.length === 0;
     recentListElement.replaceChildren(...recentPokemon.map(createBrowseTile));
+    markOfflineAvailability();
 }
 
 document.getElementById("clearRecentBtn").addEventListener("click", () => {
@@ -326,3 +331,44 @@ document.getElementById("clearRecentBtn").addEventListener("click", () => {
     saveStoredList(RECENT_KEY, recentPokemon);
     renderRecent();
 });
+
+// --- Offline availability ---------------------------------------------------------
+// While offline, tiles for Pokémon the service worker hasn't cached are dimmed, since
+// opening them would fail. (The runtime cache name matches sw.js.)
+
+const RUNTIME_CACHE = "pokedex-runtime-v1";
+
+async function isCachedOffline(id, name) {
+    const cache = await caches.open(RUNTIME_CACHE);
+    for (const key of [id, name]) {
+        for (const url of [API_BASE + "pokemon/" + key, API_BASE + "pokemon/" + key + "/"]) {
+            if (await cache.match(url)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+async function markOfflineAvailability() {
+    const tiles = document.querySelectorAll(".browseTile");
+    if (navigator.onLine || !("caches" in window)) {
+        for (const tile of tiles) {
+            tile.classList.remove("unavailableOffline");
+            tile.removeAttribute("aria-disabled");
+        }
+        return;
+    }
+    for (const tile of tiles) {
+        const available = await isCachedOffline(tile.dataset.id, tile.dataset.name);
+        tile.classList.toggle("unavailableOffline", !available);
+        if (available) {
+            tile.removeAttribute("aria-disabled");
+        } else {
+            tile.setAttribute("aria-disabled", "true");
+        }
+    }
+}
+
+window.addEventListener("online", markOfflineAvailability);
+window.addEventListener("offline", markOfflineAvailability);

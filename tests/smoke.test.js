@@ -356,3 +356,24 @@ test("an offline banner shows while the browser is offline", async () => {
     await context.setOffline(false);
     await page.waitForSelector("#offlineBanner[hidden]", { state: "attached" });
 });
+
+// Needs the service worker, which the mocked tests block, so this runs in `npm run check:live`.
+test(
+    "viewed Pokémon still load after going offline",
+    { skip: !LIVE_API && "needs the real API (check:live)" },
+    async () => {
+        await page.evaluate(() => navigator.serviceWorker.ready);
+        await page.reload(); // now controlled by the service worker
+        await search("pikachu");
+        await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
+
+        await context.setOffline(true);
+        await page.reload();
+        await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
+        await page.waitForSelector("#offlineBanner:not([hidden])");
+        // Pikachu (viewed) stays enabled in the recent list; an unvisited browse tile is dimmed.
+        await page.waitForSelector("#browseGrid .browseTile.unavailableOffline");
+        assert.equal(await page.locator("#recentList .browseTile.unavailableOffline").count(), 0);
+        await context.setOffline(false);
+    },
+);

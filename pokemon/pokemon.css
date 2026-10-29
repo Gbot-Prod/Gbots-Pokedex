@@ -1015,6 +1015,11 @@ kbd {
     height: 20px;
 }
 
+.browseTile.unavailableOffline {
+    opacity: 0.45;
+    filter: grayscale(1);
+}
+
 .browseTile small {
     font-weight: 500;
     opacity: 0.8;

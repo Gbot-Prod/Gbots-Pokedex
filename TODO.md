@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Offline step 2b: mark which tiles/recent Pokémon are available offline (check the service worker's runtime cache) and add an end-to-end offline reload test with the service worker enabled
 - [ ] Service worker: bump `SHELL_CACHE` automatically (e.g. a build step or a version from package.json) — today an edit to the JS needs a manual version bump or users get the old shell once
 - [ ] Service worker: cap the runtime cache (sprites and API responses grow without limit)
 
@@ -124,3 +123,4 @@ Rules for each run:
 - [x] "Did you mean" buttons show slug names for default forms ("Zygarde 50", "Farfetchd"); use the species display names like the tiles do (2026-10-29) — suggestions and autocomplete use entryDisplayName (Farfetch’d, Nidoran♀, Zygarde); species list fetch shared via getSpeciesSlugs in api.js; forms of an already-suggested species are skipped by species name ('zygard' → just Zygarde)
 - [x] "Install app" button using the `beforeinstallprompt` event, now that there's a manifest and service worker (2026-10-29) — button next to the theme toggle appears on beforeinstallprompt, opens the browser's install prompt and hides once used or installed; smoke test with a simulated event. Also fixed the fixed buttons covering the search box on phones (extra top padding)
 - [x] Offline step 2a: "You're offline" banner driven by online/offline events, with a smoke test (2026-10-29) — split from offline step 2
+- [x] Offline step 2b: mark which tiles/recent Pokémon are available offline (check the service worker's runtime cache) and add an end-to-end offline reload test with the service worker enabled (2026-10-29) — while offline, tiles whose Pokémon isn't in the service worker's cache are dimmed (aria-disabled); end-to-end offline reload test runs in check:live (skipped in the mocked suite, which blocks service workers)
