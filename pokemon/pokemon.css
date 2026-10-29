@@ -984,6 +984,26 @@ body {
     text-align: right;
 }
 
+.sortBtn {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+th[aria-sort="ascending"] .sortBtn::after {
+    content: " ▲";
+    font-size: 0.7em;
+}
+
+th[aria-sort="descending"] .sortBtn::after {
+    content: " ▼";
+    font-size: 0.7em;
+}
+
 #movesTable abbr {
     text-decoration: none;
 }

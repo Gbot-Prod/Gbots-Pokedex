@@ -513,3 +513,28 @@ test("picking a compare suggestion moves on, so the list never blocks the Compar
     await page.click("#compareBtn");
     await page.waitForSelector("#compareResult:not([hidden])");
 });
+
+test("the moves table sorts by a column when its header is clicked", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonMoves:not([hidden])");
+    await page.click("#movesSummary");
+    await page.waitForFunction(() => !document.querySelector("#movesTable tbody").textContent.includes("…"));
+
+    const powers = () =>
+        page.$$eval("#movesTable tbody tr", (rows) => rows.map((row) => parseInt(row.cells[4].textContent, 10) || -1));
+    await page.click("#movesTable th:nth-child(5) button"); // Pwr
+    assert.equal(await page.getAttribute("#movesTable th:nth-child(5)", "aria-sort"), "ascending");
+    const ascending = await powers();
+    assert.deepEqual(
+        ascending,
+        [...ascending].sort((a, b) => a - b),
+    );
+
+    await page.click("#movesTable th:nth-child(5) button");
+    assert.equal(await page.getAttribute("#movesTable th:nth-child(5)", "aria-sort"), "descending");
+    const descending = await powers();
+    assert.deepEqual(
+        descending,
+        [...descending].sort((a, b) => b - a),
+    );
+});

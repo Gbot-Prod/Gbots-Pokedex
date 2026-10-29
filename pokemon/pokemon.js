@@ -830,7 +830,8 @@ function renderMoveRows() {
     const showMachine = currentMoveMethod === "machine";
     // The first column holds the level for level-up moves and the TM number for TMs.
     movesTable.classList.toggle("noLevel", !showLevel && !showMachine);
-    movesTable.tHead.rows[0].cells[0].textContent = showMachine ? "TM" : "Lv.";
+    movesTable.tHead.rows[0].cells[0].querySelector("button").textContent = showMachine ? "TM" : "Lv.";
+    resetMoveSort();
 
     movesTableBody.replaceChildren();
     for (const move of currentMoves) {
@@ -852,6 +853,55 @@ movesGameSelect.addEventListener("change", () => {
 
 // TM rows start alphabetical; once the numbers are in, order them TM01, TM02, … then HMs/TRs,
 // with moves that have no machine in this game last.
+// --- Sortable moves table ---------------------------------------------------------
+// Each header becomes a button; clicking sorts by that column, clicking again reverses.
+
+function moveSortKey(row, column) {
+    const text = row.cells[column].textContent.trim();
+    if (column === 0) {
+        const machine = /^(TM|HM|TR)(\d+)$/.exec(text);
+        if (machine) {
+            return ["TM", "HM", "TR"].indexOf(machine[1]) * 1000 + Number(machine[2]);
+        }
+        return text === "Evo" ? 0 : Number(text) || Infinity;
+    }
+    if (column >= 4) {
+        const number = parseInt(text, 10); // "90", "100%"; "—" (none) sorts as -1
+        return Number.isNaN(number) ? -1 : number;
+    }
+    return text.toLowerCase();
+}
+
+function sortMovesBy(column) {
+    const header = movesTable.tHead.rows[0].cells[column];
+    const direction = header.getAttribute("aria-sort") === "ascending" ? "descending" : "ascending";
+    resetMoveSort();
+    header.setAttribute("aria-sort", direction);
+    const sign = direction === "ascending" ? 1 : -1;
+    const rows = [...movesTableBody.rows].sort((a, b) => {
+        const keyA = moveSortKey(a, column);
+        const keyB = moveSortKey(b, column);
+        const order = typeof keyA === "string" ? keyA.localeCompare(keyB) : keyA - keyB;
+        return sign * order;
+    });
+    movesTableBody.append(...rows);
+}
+
+function resetMoveSort() {
+    for (const header of movesTable.tHead.rows[0].cells) {
+        header.removeAttribute("aria-sort");
+    }
+}
+
+[...movesTable.tHead.rows[0].cells].forEach((header, column) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "sortBtn";
+    button.append(...header.childNodes);
+    header.append(button);
+    button.addEventListener("click", () => sortMovesBy(column));
+});
+
 function sortRowsByTmNumber() {
     const key = (row) => {
         const match = /^(TM|HM|TR)(\d+)$/.exec(row.cells[0].textContent);
