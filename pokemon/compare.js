@@ -17,6 +17,7 @@ const compareForm = document.getElementById("compareForm");
 const compareLeftInput = document.getElementById("compareLeftInput");
 const compareRightInput = document.getElementById("compareRightInput");
 const compareThirdInput = document.getElementById("compareThirdInput");
+const compareButton = document.getElementById("compareBtn");
 const compareStatusElement = document.getElementById("compareStatus");
 const compareResultElement = document.getElementById("compareResult");
 const compareTable = document.getElementById("compareTable");
@@ -179,9 +180,17 @@ export function initCompare({ getCurrentPokemon, getUnits: unitsGetter }) {
         event.preventDefault();
         comparePokemon();
     });
-    for (const input of [compareLeftInput, compareRightInput, compareThirdInput]) {
-        attachCombobox(input);
-    }
+    // After a pick, move on to the next empty box (or the Compare button), which also closes
+    // the suggestion list so it never sits over the button on small screens.
+    const inputs = [compareLeftInput, compareRightInput, compareThirdInput];
+    inputs.forEach((input, index) => {
+        attachCombobox(input, {
+            onSelect: () => {
+                const next = inputs.slice(index + 1).find((other) => !other.value.trim());
+                (next && index < 1 ? next : compareButton).focus();
+            },
+        });
+    });
 
     document.getElementById("compareCurrentBtn").addEventListener("click", () => {
         const currentPokemon = getCurrentPokemon();

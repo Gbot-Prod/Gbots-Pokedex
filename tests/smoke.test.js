@@ -494,3 +494,22 @@ test("the comparison radar chart highlights a Pokémon from its legend entry", a
     await page.locator("#pokemonLookupInpt").focus();
     assert.equal(await page.getAttribute("#compareRadar svg", "data-highlight"), null);
 });
+
+test("picking a compare suggestion moves on, so the list never blocks the Compare button", async () => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.click("#compareLeftInput");
+    await page.keyboard.type("pika");
+    await page.waitForSelector("#compareLeftInput[aria-expanded=true]");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    assert.equal(await page.evaluate(() => document.activeElement.id), "compareRightInput");
+
+    await page.keyboard.type("geng");
+    await page.waitForSelector("#compareRightInput[aria-expanded=true]");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    // The optional third box is skipped; focus lands on the button with the list closed.
+    assert.equal(await page.evaluate(() => document.activeElement.id), "compareBtn");
+    await page.click("#compareBtn");
+    await page.waitForSelector("#compareResult:not([hidden])");
+});

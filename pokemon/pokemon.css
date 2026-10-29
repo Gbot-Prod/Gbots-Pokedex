@@ -1319,6 +1319,11 @@ img.placeholderSprite {
         flex-basis: 100%;
     }
 
+    /* keep the suggestion list short so it covers less of the form */
+    .comboboxList {
+        max-height: 14rem;
+    }
+
     body {
         /* leave room above the search box for the fixed theme/install buttons */
         padding: 4rem 0.75rem 1rem;
