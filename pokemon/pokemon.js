@@ -11,6 +11,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initQuiz } from "./quiz.js";
+import { initTeam, onCardChange as updateTeamButton } from "./team.js";
 import {
     addToRecent,
     fadeInImage,
@@ -87,6 +88,7 @@ const shinyButton = document.getElementById("shinyToggleBtn");
 
 let currentDexNumber = null;
 let currentPokemon = null; // { id, name } of the Pokémon on the card
+let currentTypes = [];
 let currentSprites = null;
 let showShiny = false;
 let latestRequest = 0;
@@ -360,7 +362,9 @@ function renderPokemon(data, query) {
     // Alternate forms (e.g. id 10034) navigate relative to their species' dex number.
     currentDexNumber = idFromUrl(data.species.url) || data.id;
     currentPokemon = { id: data.id, name: data.name };
+    currentTypes = data.types.map((entry) => entry.type.name);
     updateFavoriteButton();
+    updateTeamButton();
     addToRecent(currentPokemon);
     announceResult(data);
     document.title = formatName(data.name) + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
@@ -757,6 +761,11 @@ updateThemeButton();
 initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 initQuiz({ showPokemon });
+initTeam({
+    showPokemon,
+    getCurrentPokemon: () =>
+        currentPokemon && { ...currentPokemon, label: nameElement.textContent.trim(), types: currentTypes },
+});
 
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
 function showPokemon(id) {

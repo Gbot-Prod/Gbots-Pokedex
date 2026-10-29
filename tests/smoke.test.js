@@ -567,3 +567,20 @@ test("the Who's that Pokémon? quiz reveals the answer and keeps score", async (
     await page.click("#quizNextBtn");
     await page.waitForSelector("#quizStage:not(.revealed)");
 });
+
+test("the team builder adds Pokémon from the card and charts type coverage", async () => {
+    for (const name of ["pikachu", "gengar"]) {
+        await search(name);
+        await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+        await page.click("#teamAddBtn");
+    }
+    assert.equal(await page.getAttribute("#teamAddBtn", "aria-pressed"), "true");
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
+    await page.waitForSelector(".coverageTable");
+    // Ground hits both Pikachu (2×) and Gengar (2×).
+    const groundWeak = await page.$eval(".coverageTable tbody tr:nth-child(9) td.weak", (cell) => cell.textContent);
+    assert.equal(groundWeak, "2");
+
+    await page.click(".teamRemove");
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 1);
+});

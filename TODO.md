@@ -15,7 +15,7 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Quiz step 2: "type the name" mode (with the combobox), difficulty by generation, a timed 60-second run, and confetti on a new best streak
-- [ ] Team builder: 6 slots (add from the card or search), team type-coverage chart (weaknesses/resistances per attacking type), shareable `?team=` link
+- [ ] Team builder step 2: shareable `?team=` link, offensive coverage (which types the team's own types hit super-effectively), drag to reorder, and "suggest a member" that patches the worst weakness
 - [ ] Interactive 18×18 type chart: hover a row/column to highlight, click a type to see its matchups, link from the card's type icons
 - [ ] Animated sprites: toggle to Showdown-style animated GIFs on the card and evolution chain (falls back to static art)
 - [ ] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading
@@ -163,3 +163,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Holographic trading-card redesign of the main card: type-gradient foil frame, shimmering holo sheen, 3D tilt that follows the pointer (static when reduced motion is on) (2026-10-29) — card wrapped in a slowly shifting foil frame in its type colours with a deep shadow; the artwork window tilts toward the pointer (up to 10°) with a colour-dodge rainbow sheen that follows it; static under reduced motion / touch. Also: name row wraps on phones
 - [x] Animated type-themed page background behind the card (embers for Fire, bubbles for Water, sparks for Electric, leaves for Grass, mist for Ghost…), subtle and CSS-only (2026-10-29) — fixed decorative backdrop with a glow in the current type's colours and 18 particles styled per type: embers (Fire), bubbles (Water), flickering sparks (Electric), falling leaves (Grass/Bug), snow (Ice), drifting mist (Ghost/Dark/Poison/Psychic), dots otherwise; particles hidden under reduced motion
 - [x] "Who's that Pokémon?" step 1: Play → official artwork as a black silhouette on a glowing disc, 4 name choices, reveal animation, right/wrong marking, "View in Pokédex", score/streak/best saved locally (quiz.js) (2026-10-29) — smoke + unit tests
+- [x] Team builder step 1: ＋👥 button on the card, six saved slots (sprite, name, types, remove), and a defensive coverage table with weak/resist bars per attacking type, flagging types that hit half the team with no resist (team.js) (2026-10-29) — smoke + unit tests

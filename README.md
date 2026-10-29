@@ -18,6 +18,7 @@ pokemon/
   compare.js     side-by-side comparison table
   combobox.js    accessible search autocomplete (sprites, keyboard navigation)
   quiz.js        "Who's that Pokémon?" silhouette quiz
+  team.js        team builder (6 slots) with a type-coverage chart
   api.js         PokéAPI requests with in-memory/sessionStorage caching
   utils.js       pure helpers (name formatting, query normalisation, …)
   sw.js          service worker: offline app shell + cached PokéAPI data/sprites
@@ -28,6 +29,7 @@ tests/
   utils.test.mjs unit tests for utils.js
   combobox.test.mjs  unit tests for the autocomplete matching
   api.test.mjs   unit tests for api.js (fetch and storage stubbed)
+  features.test.mjs  unit tests for the quiz and team helpers
   fixtures/      trimmed PokéAPI responses used by the tests
   build-fixtures.mjs  regenerates the fixtures from the live API
 TODO.md          living improvement backlog

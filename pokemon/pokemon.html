@@ -94,6 +94,15 @@
                         >
                             ☆
                         </button>
+                        <button
+                            type="button"
+                            id="teamAddBtn"
+                            aria-pressed="false"
+                            aria-label="Team"
+                            title="Add to team"
+                        >
+                            ＋👥
+                        </button>
                     </div>
                     <p id="pokemonNumber"></p>
                     <p id="pokemonGenus"></p>
@@ -169,6 +178,14 @@
                 Tip: <kbd>/</kbd> search · <kbd>←</kbd> <kbd>→</kbd> previous/next · <kbd>S</kbd> shiny ·
                 <kbd>C</kbd> cry
             </p>
+
+            <section id="teamSection" class="tileSection" aria-labelledby="teamHeading" hidden>
+                <h2 id="teamHeading">Your team</h2>
+                <p class="sectionHint">Add Pokémon with the ＋👥 button on the card.</p>
+                <span id="teamStatus" class="visuallyHidden" role="status"></span>
+                <ol id="teamSlots"></ol>
+                <div id="teamCoverage"></div>
+            </section>
 
             <section id="quizSection" class="tileSection" aria-labelledby="quizHeading" hidden>
                 <h2 id="quizHeading">Who's that Pokémon?</h2>

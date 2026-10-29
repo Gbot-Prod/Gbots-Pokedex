@@ -1,0 +1,200 @@
+// Team builder: up to six Pokémon, saved locally, with a type-coverage chart showing how
+// many team members are weak to / resist each attacking type.
+import { API_BASE, fetchJson, setSprite } from "./api.js";
+import { TYPE_ICONS, damageMultipliers, formatName } from "./utils.js";
+
+const TEAM_KEY = "pokedex:team:v1";
+export const TEAM_SIZE = 6;
+
+const section = document.getElementById("teamSection");
+const slotsElement = document.getElementById("teamSlots");
+const coverageElement = document.getElementById("teamCoverage");
+const teamButton = document.getElementById("teamAddBtn");
+const statusElement = document.getElementById("teamStatus");
+
+let team = []; // [{ id, name, label, types: ["fire", "flying"] }]
+let getCurrentPokemon = () => null;
+let showPokemon = () => {};
+
+function loadTeam() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(TEAM_KEY));
+        team = Array.isArray(stored) ? stored.slice(0, TEAM_SIZE) : [];
+    } catch {
+        team = [];
+    }
+}
+
+function saveTeam() {
+    try {
+        localStorage.setItem(TEAM_KEY, JSON.stringify(team));
+    } catch {
+        // the team just won't persist
+    }
+}
+
+// For each attacking type: how many members take extra damage, and how many resist or are immune.
+export function teamCoverage(memberMultipliers) {
+    return Object.keys(TYPE_ICONS).map((type) => ({
+        type,
+        weak: memberMultipliers.filter((multipliers) => multipliers[type] > 1).length,
+        resist: memberMultipliers.filter((multipliers) => multipliers[type] < 1).length,
+    }));
+}
+
+function updateTeamButton() {
+    const current = getCurrentPokemon();
+    const inTeam = current && team.some((member) => member.id === current.id);
+    teamButton.setAttribute("aria-pressed", String(Boolean(inTeam)));
+    teamButton.title = inTeam ? "Remove from team" : team.length >= TEAM_SIZE ? "Team is full" : "Add to team";
+    teamButton.classList.toggle("active", Boolean(inTeam));
+}
+
+function toggleCurrent() {
+    const current = getCurrentPokemon();
+    if (!current) {
+        return;
+    }
+    if (team.some((member) => member.id === current.id)) {
+        team = team.filter((member) => member.id !== current.id);
+        statusElement.textContent = current.label + " removed from your team";
+    } else if (team.length >= TEAM_SIZE) {
+        statusElement.textContent = "Your team already has six Pokémon";
+        return;
+    } else {
+        team = [...team, current];
+        statusElement.textContent = current.label + " added to your team (" + team.length + "/6)";
+    }
+    saveTeam();
+    renderTeam();
+}
+
+function renderSlots() {
+    const slots = [];
+    for (let index = 0; index < TEAM_SIZE; index++) {
+        const member = team[index];
+        const slot = document.createElement("li");
+        slot.className = "teamSlot" + (member ? "" : " empty");
+        if (member) {
+            const open = document.createElement("button");
+            open.type = "button";
+            open.className = "teamMember";
+            open.title = "View " + member.label;
+            const sprite = document.createElement("img");
+            sprite.alt = "";
+            sprite.width = 72;
+            sprite.height = 72;
+            setSprite(sprite, member.id);
+            const name = document.createElement("span");
+            name.textContent = member.label;
+            const types = document.createElement("small");
+            types.textContent = member.types.map(formatName).join(" / ");
+            open.append(sprite, name, types);
+            open.addEventListener("click", () => {
+                showPokemon(member.id);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "teamRemove";
+            remove.setAttribute("aria-label", "Remove " + member.label + " from team");
+            remove.textContent = "×";
+            remove.addEventListener("click", () => {
+                team = team.filter((other) => other.id !== member.id);
+                statusElement.textContent = member.label + " removed from your team";
+                saveTeam();
+                renderTeam();
+            });
+            slot.append(open, remove);
+        } else {
+            slot.textContent = "Empty slot";
+        }
+        slots.push(slot);
+    }
+    slotsElement.replaceChildren(...slots);
+}
+
+let coverageRequest = 0;
+
+async function renderCoverage() {
+    const requestId = ++coverageRequest;
+    if (!team.length) {
+        coverageElement.replaceChildren();
+        return;
+    }
+    let memberMultipliers;
+    try {
+        memberMultipliers = await Promise.all(
+            team.map(async (member) =>
+                damageMultipliers(await Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
+            ),
+        );
+    } catch {
+        coverageElement.textContent = "Couldn't load type data for the coverage chart.";
+        return;
+    }
+    if (requestId !== coverageRequest) {
+        return;
+    }
+
+    const table = document.createElement("table");
+    table.className = "coverageTable";
+    const caption = document.createElement("caption");
+    caption.textContent = "Team defence: members weak to / resisting each attacking type";
+    const head = table.createTHead().insertRow();
+    for (const label of ["Attacking type", "Weak", "Resist"]) {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.textContent = label;
+        head.append(th);
+    }
+    const body = table.createTBody();
+    for (const { type, weak, resist } of teamCoverage(memberMultipliers)) {
+        const row = body.insertRow();
+        // Flag types that hit half or more of the team and that nobody resists.
+        row.classList.toggle("danger", weak * 2 >= team.length && resist === 0);
+        const typeCell = document.createElement("th");
+        typeCell.scope = "row";
+        const icon = document.createElement("img");
+        icon.src = "assets/" + TYPE_ICONS[type];
+        icon.alt = "";
+        icon.width = 22;
+        icon.height = 22;
+        typeCell.append(icon, " " + formatName(type));
+        row.append(typeCell);
+        for (const [count, kind] of [
+            [weak, "weak"],
+            [resist, "resist"],
+        ]) {
+            const cell = row.insertCell();
+            cell.className = kind;
+            const bar = document.createElement("span");
+            bar.className = "coverageBar";
+            bar.style.width = (count / TEAM_SIZE) * 100 + "%";
+            cell.append(bar, String(count));
+        }
+    }
+    table.append(caption);
+    coverageElement.replaceChildren(table);
+}
+
+function renderTeam() {
+    section.hidden = false;
+    renderSlots();
+    renderCoverage();
+    updateTeamButton();
+}
+
+// Call when the card shows a new Pokémon so the "Add to team" button reflects it.
+export function onCardChange() {
+    updateTeamButton();
+}
+
+export function initTeam(options) {
+    getCurrentPokemon = options.getCurrentPokemon;
+    showPokemon = options.showPokemon;
+    loadTeam();
+    teamButton.addEventListener("click", toggleCurrent);
+    renderTeam();
+}
