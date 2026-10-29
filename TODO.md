@@ -21,7 +21,6 @@ Rules for each run:
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
-- [ ] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items
 - [ ] Metric/imperial toggle for height and weight
 
 ## 6. Performance, accessibility & polish
@@ -110,3 +109,4 @@ Rules for each run:
 - [x] Compare: "Weak to / Resists / Immune to (types)" rows, fewer weaknesses highlighted as better (2026-10-29) — matchup math moved to a shared, unit-tested `damageMultipliers()` in utils.js. Split from "matchups row and three Pokémon"
 - [x] Compare: allow comparing three Pokémon (2026-10-29) — optional third input; table, best-value highlighting (skipped on full ties) and matchup rows work for 2 or 3; inputs stack on phones; smoke test
 - [x] Tiles (browse/favorites/recent) still show slug-based names for default forms ("Zygarde 50", "Aegislash Shield", "Farfetchd"); show official display names there too (2026-10-29) — tiles use the species name from one cached /pokemon-species list (Aegislash, Zygarde) plus an exceptions map for punctuation (Farfetch’d, Nidoran♀, Mr. Mime, Type: Null); speciesDisplayName unit-tested
+- [x] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items (2026-10-29) — describeEvolution uses the newest game's detail and adds time of day, held/trade items, trade partners, known moves/move types and locations (Espeon 'Friendship (day)', Scizor 'Trade holding Metal Coat', Leafeon 'Leaf Stone'); unit-tested

@@ -172,3 +172,25 @@ test("speciesDisplayName fixes punctuation the slug loses", () => {
     assert.equal(speciesDisplayName("nidoran-f"), "Nidoran♀");
     assert.equal(speciesDisplayName("great-tusk"), "Great Tusk");
 });
+
+test("describeEvolution covers time of day, held items and trades, using the newest detail", () => {
+    assert.equal(
+        describeEvolution([{ min_happiness: 160, time_of_day: "night", trigger: { name: "level-up" } }]),
+        "Friendship (night)",
+    );
+    assert.equal(
+        describeEvolution([{ held_item: { name: "metal-coat" }, trigger: { name: "trade" } }]),
+        "Trade holding Metal Coat",
+    );
+    assert.equal(
+        describeEvolution([
+            { location: { name: "eterna-forest" }, trigger: { name: "level-up" } },
+            { item: { name: "leaf-stone" }, trigger: { name: "use-item" } },
+        ]),
+        "Leaf Stone",
+    );
+    assert.equal(
+        describeEvolution([{ min_happiness: 160, known_move_type: { name: "fairy" }, trigger: { name: "level-up" } }]),
+        "Friendship, knowing a Fairy move",
+    );
+});

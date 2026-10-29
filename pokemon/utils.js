@@ -27,22 +27,57 @@ export function idFromUrl(url) {
     return Number(url.split("/").filter(Boolean).pop());
 }
 
-// Summarises how a Pokémon evolves, e.g. "Lv. 16", "Thunder Stone", "Trade".
+// Summarises how a Pokémon evolves, e.g. "Lv. 16", "Thunder Stone", "Friendship (day)",
+// "Trade holding Metal Coat". PokéAPI lists one detail per game, oldest first, and methods
+// changed over time (Leafeon: mossy rock, later a Leaf Stone), so the newest game's is used.
 export function describeEvolution(details) {
-    const detail = details[0];
+    // Prefer the detail from the newest main-series game; otherwise the last one listed.
+    const rank = (detail) => {
+        const index = VERSION_GROUP_PREFERENCE.indexOf(detail.version_group?.name);
+        return index === -1 ? Infinity : index;
+    };
+    const detail = details.reduce(
+        (best, candidate) => (rank(candidate) <= rank(best) ? candidate : best),
+        details[details.length - 1],
+    );
     if (!detail) {
         return "";
     }
-    if (detail.min_level) {
-        return "Lv. " + detail.min_level;
+    const trigger = detail.trigger?.name;
+    let text;
+    if (trigger === "trade") {
+        text = "Trade";
+        if (detail.trade_species) {
+            text += " for " + formatName(detail.trade_species.name);
+        }
+    } else if (detail.min_level) {
+        text = "Lv. " + detail.min_level;
+    } else if (detail.item) {
+        text = formatName(detail.item.name);
+    } else if (detail.min_happiness) {
+        text = "Friendship";
+    } else if (detail.min_affection) {
+        text = "Affection";
+    } else if (detail.known_move) {
+        text = "Knowing " + formatName(detail.known_move.name);
+    } else if (detail.known_move_type) {
+        text = "Knowing a " + formatName(detail.known_move_type.name) + " move";
+    } else if (detail.location) {
+        text = "At " + formatName(detail.location.name);
+    } else {
+        text = formatName(trigger ?? "unknown");
     }
-    if (detail.item) {
-        return formatName(detail.item.name);
+    if (detail.held_item) {
+        text += " holding " + formatName(detail.held_item.name);
     }
-    if (detail.min_happiness) {
-        return "Friendship";
+    // e.g. Sylveon: friendship while knowing a Fairy move
+    if (detail.known_move_type && !text.startsWith("Knowing")) {
+        text += ", knowing a " + formatName(detail.known_move_type.name) + " move";
     }
-    return formatName(detail.trigger.name);
+    if (detail.time_of_day) {
+        text += " (" + detail.time_of_day + ")";
+    }
+    return text;
 }
 
 // "lightning-rod" -> "Lightning Rod"
