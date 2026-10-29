@@ -13,6 +13,7 @@
     --win: #10522b;
     /* text placed directly on the page background */
     --page-ink: rgb(18, 40, 112);
+    --danger-ink: #8a1c13;
 }
 
 :root[data-theme="dark"] {
@@ -1834,7 +1835,7 @@ img.placeholderSprite {
 
 .coverageTable td {
     position: relative;
-    width: 35%;
+    width: 24%;
     font-weight: 700;
 }
 
@@ -1852,6 +1853,15 @@ img.placeholderSprite {
 
 .coverageTable td.resist .coverageBar {
     background-color: #1d7a46;
+}
+
+.coverageTable td.hits .coverageBar {
+    background-color: #2f5fb3;
+}
+
+/* nobody on the team hits this type super-effectively */
+.coverageTable tr.noHits td.hits {
+    color: var(--danger-ink, #b3261e);
 }
 
 .coverageTable tr.danger {

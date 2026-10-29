@@ -54,3 +54,18 @@ test("parseTeamParam keeps up to six valid ids", async () => {
     assert.deepEqual(parseTeamParam("1,2,3,4,5,6,7,8"), [1, 2, 3, 4, 5, 6]);
     assert.deepEqual(parseTeamParam(null), []);
 });
+
+test("offensive coverage counts members whose own types hit a type super-effectively", async () => {
+    const { superEffectiveTargets, teamCoverage } = await import("../pokemon/team.js");
+    const fire = { damage_relations: { double_damage_to: [{ name: "grass" }, { name: "ice" }] } };
+    const flying = { damage_relations: { double_damage_to: [{ name: "grass" }, { name: "fighting" }] } };
+    const charizardHits = superEffectiveTargets([fire, flying]);
+    assert.deepEqual([...charizardHits].sort(), ["fighting", "grass", "ice"]);
+
+    const coverage = Object.fromEntries(
+        teamCoverage([{}, {}], [charizardHits, new Set(["grass"])]).map((row) => [row.type, row]),
+    );
+    assert.equal(coverage.grass.hits, 2);
+    assert.equal(coverage.ice.hits, 1);
+    assert.equal(coverage.normal.hits, 0);
+});

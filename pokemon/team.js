@@ -35,12 +35,19 @@ function saveTeam() {
     }
 }
 
-// For each attacking type: how many members take extra damage, and how many resist or are immune.
-export function teamCoverage(memberMultipliers) {
+// Types a member's own (STAB) types hit super-effectively, from their /type responses.
+export function superEffectiveTargets(typeDataList) {
+    return new Set(typeDataList.flatMap((type) => type.damage_relations.double_damage_to.map(({ name }) => name)));
+}
+
+// For each type: how many members take extra damage from it, how many resist or are immune,
+// and (if memberHits is given) how many members hit it super-effectively with their own types.
+export function teamCoverage(memberMultipliers, memberHits = []) {
     return Object.keys(TYPE_ICONS).map((type) => ({
         type,
         weak: memberMultipliers.filter((multipliers) => multipliers[type] > 1).length,
         resist: memberMultipliers.filter((multipliers) => multipliers[type] < 1).length,
+        hits: memberHits.filter((targets) => targets.has(type)).length,
     }));
 }
 
@@ -126,12 +133,13 @@ async function renderCoverage() {
         return;
     }
     let memberMultipliers;
+    let memberHits;
     try {
-        memberMultipliers = await Promise.all(
-            team.map(async (member) =>
-                damageMultipliers(await Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
-            ),
+        const memberTypeData = await Promise.all(
+            team.map((member) => Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
         );
+        memberMultipliers = memberTypeData.map(damageMultipliers);
+        memberHits = memberTypeData.map(superEffectiveTargets);
     } catch {
         coverageElement.textContent = "Couldn't load type data for the coverage chart.";
         return;
@@ -143,16 +151,17 @@ async function renderCoverage() {
     const table = document.createElement("table");
     table.className = "coverageTable";
     const caption = document.createElement("caption");
-    caption.textContent = "Team defence: members weak to / resisting each attacking type";
+    caption.textContent =
+        "Defence: members weak to / resisting each type · Offence: members whose own types hit it super-effectively";
     const head = table.createTHead().insertRow();
-    for (const label of ["Attacking type", "Weak", "Resist"]) {
+    for (const label of ["Type", "Weak", "Resist", "Your hits"]) {
         const th = document.createElement("th");
         th.scope = "col";
         th.textContent = label;
         head.append(th);
     }
     const body = table.createTBody();
-    for (const { type, weak, resist } of teamCoverage(memberMultipliers)) {
+    for (const { type, weak, resist, hits } of teamCoverage(memberMultipliers, memberHits)) {
         const row = body.insertRow();
         // Flag types that hit half or more of the team and that nobody resists.
         row.classList.toggle("danger", weak * 2 >= team.length && resist === 0);
@@ -165,9 +174,11 @@ async function renderCoverage() {
         icon.height = 22;
         typeCell.append(icon, " " + formatName(type));
         row.append(typeCell);
+        row.classList.toggle("noHits", hits === 0);
         for (const [count, kind] of [
             [weak, "weak"],
             [resist, "resist"],
+            [hits, "hits"],
         ]) {
             const cell = row.insertCell();
             cell.className = kind;
