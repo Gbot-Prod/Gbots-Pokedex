@@ -18,6 +18,8 @@ pokemon/
   compare.js     side-by-side comparison table
   api.js         PokéAPI requests with in-memory/sessionStorage caching
   utils.js       pure helpers (name formatting, query normalisation, …)
+  sw.js          service worker: offline app shell + cached PokéAPI data/sprites
+  manifest.webmanifest  install-as-app metadata
   assets/        type icons (one PNG per type, e.g. FireIcon.png)
 tests/
   smoke.test.js  browser tests (Playwright) against mocked PokéAPI data

@@ -1,0 +1,11 @@
+{
+    "name": "Gbot's Pokédex",
+    "short_name": "Pokédex",
+    "description": "Search, browse and compare Pokémon using PokéAPI.",
+    "start_url": "pokemon.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#88A8D0",
+    "theme_color": "#6884E3",
+    "icons": [{ "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

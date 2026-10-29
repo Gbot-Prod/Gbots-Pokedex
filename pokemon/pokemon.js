@@ -1017,3 +1017,10 @@ window.addEventListener("popstate", loadFromUrl);
 if (getUrlPokemon()) {
     loadFromUrl();
 }
+
+// Offline support: cache the app and the Pokémon you've viewed (see sw.js).
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(() => {
+        // e.g. unsupported context; the site still works online
+    });
+}

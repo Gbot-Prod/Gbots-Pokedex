@@ -20,6 +20,14 @@ module.exports = [
         },
     },
     {
+        files: ["pokemon/sw.js"],
+        languageOptions: {
+            ecmaVersion: 2022,
+            sourceType: "script",
+            globals: globals.serviceworker,
+        },
+    },
+    {
         files: ["tests/**/*.mjs"],
         languageOptions: {
             ecmaVersion: 2022,

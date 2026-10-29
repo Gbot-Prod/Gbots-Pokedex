@@ -23,7 +23,9 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Offline support: service worker caching the app shell and recently viewed Pokémon (PWA manifest)
+- [ ] Offline step 2: show an "You're offline — showing saved data" banner, mark which tiles are available offline, and add a smoke test for the offline flow
+- [ ] Service worker: bump `SHELL_CACHE` automatically (e.g. a build step or a version from package.json) — today an edit to the JS needs a manual version bump or users get the old shell once
+- [ ] Service worker: cap the runtime cache (sprites and API responses grow without limit)
 
 ## Done
 <!-- Move completed items here with the date and commit, e.g.
@@ -116,3 +118,4 @@ Rules for each run:
 - [x] Evolution methods: show gender requirements (e.g. Combee → Vespiquen "female only") and other conditions PokéAPI provides (2026-10-29) — conditions in parentheses: gender (Combee 'Lv. 21 (female)'), Tyrogue's Atk/Def comparison, party species/type (Mantyke), rain (Goodra), upside-down console (Malamar), Beauty; unit-tested
 - [x] Move summary cache in localStorage never expires: add a timestamp/version and cap its size (2026-10-29) — cache moved to pokedex:moves:v2 with per-entry savedAt; entries older than 30 days dropped and storage capped at 3,000 entries (pruneCacheEntries, unit-tested); old v1 key removed
 - [x] Cache by canonical id: "gengar" and "94" currently fetch the same Pokémon twice (2026-10-29) — fetchPokemon remembers each loaded Pokémon under /pokemon/<id>, /pokemon/<name> (with and without trailing slash): gengar → 94 → #094 → next → prev made 2 requests instead of 5
+- [x] Offline step 1: web manifest + service worker (2026-10-29) — app shell stale-while-revalidate, PokéAPI/sprites network-first with cached fallback; viewed Pokémon reload offline with sprites; mocked tests block service workers. Split from "Offline support"

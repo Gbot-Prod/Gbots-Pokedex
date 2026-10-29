@@ -81,7 +81,8 @@ after(async () => {
 });
 
 beforeEach(async () => {
-    page = await browser.newPage();
+    // Service workers would bypass page.route, so the mocked tests block them.
+    page = await browser.newPage({ serviceWorkers: LIVE_API ? "allow" : "block" });
     pageErrors = [];
     // Fail fast: waits give up after a few seconds (longer against the real API), and any
     // uncaught page error (e.g. a broken module import) is reported in the next wait's failure.
