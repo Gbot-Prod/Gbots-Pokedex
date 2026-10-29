@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Sprite alt text and the screen-reader announcement still use the slug name ("Farfetchd sprite") because they're set before species data arrives; update them in `applyDisplayName`
 
 ## 2. Code quality
 - [ ] Make smoke tests fail fast: `page.setDefaultTimeout(5000)` and fail a test as soon as a `pageerror` fires (a missing export made the suite hang for minutes)
@@ -108,3 +107,4 @@ Rules for each run:
 - [x] Format the card number as "#0025" to match the browse tiles (currently "Pokemon no#25") (2026-10-29) — card shows '#0025' via a shared formatDexNumber helper (also used by tiles), unit-tested
 - [x] Forms show their internal id ("Pokemon no#10034" for Mega Charizard X); show the species' dex number instead and label the form (2026-10-29) — card, title and screen-reader announcement use the species' dex number; forms add a label ('#0006 · Mega X form')
 - [x] Show official display names from `species.names` ("Farfetch’d", "Mr. Mime", "Nidoran♀") instead of title-casing the slug ("Farfetchd", "Nidoran F") (2026-10-29) — after the species loads, the card/title/search box use species.names (Farfetch’d, Nidoran♀, Mr. Mime); forms read 'Charizard (Mega X)'
+- [x] Sprite alt text and the screen-reader announcement still use the slug name ("Farfetchd sprite") because they're set before species data arrives; update them in `applyDisplayName` (2026-10-29) — applyDisplayName refreshes the sprite alt ('Farfetch’d sprite') and the live-region text with the official name

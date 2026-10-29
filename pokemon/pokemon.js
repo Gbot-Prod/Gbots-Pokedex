@@ -303,6 +303,9 @@ function applyDisplayName(species) {
     const displayName = isForm ? english + " (" + formLabel(species.name, currentPokemon.name) + ")" : english;
 
     nameElement.textContent = displayName;
+    renderSprite(); // refreshes the sprite's alt text with the new name
+    const announcer = document.getElementById("resultAnnouncer");
+    announcer.textContent = announcer.textContent.replace(previous, displayName);
     document.title = displayName + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
     if (searchInput.value === previous) {
         searchInput.value = displayName;
