@@ -1998,3 +1998,31 @@ img.placeholderSprite {
 #sharedTeam .linkBtn {
     color: inherit;
 }
+
+/* --- Animated sprites ---------------------------------------------------------------- */
+
+#animatedToggleBtn {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 2;
+    padding: 0.3rem 0.7rem;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#animatedToggleBtn.active {
+    background-color: #ffffff;
+    color: rgb(18, 40, 112);
+}
+
+/* Showdown GIFs are small pixel art: scale them up crisply */
+#pokemonSprite.animatedSprite {
+    padding: 22%;
+    image-rendering: pixelated;
+}

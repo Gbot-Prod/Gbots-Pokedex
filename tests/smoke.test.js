@@ -615,3 +615,10 @@ test("a card type icon opens the type chart at that type, and arrow keys move ar
     await page.keyboard.press("ArrowDown");
     assert.match(await page.evaluate(() => document.activeElement.title), /^Dark → Dark/);
 });
+
+test("the animated-sprite toggle only shows when an animation exists", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    // The trimmed fixtures have no Showdown animations, so the toggle stays hidden.
+    assert.equal(await page.isVisible("#animatedToggleBtn"), false);
+});

@@ -92,6 +92,14 @@ let currentPokemon = null; // { id, name } of the Pokémon on the card
 let currentTypes = [];
 let currentSprites = null;
 let showShiny = false;
+const animatedButton = document.getElementById("animatedToggleBtn");
+const ANIMATED_KEY = "pokedex:animated-sprites";
+let showAnimated = false;
+try {
+    showAnimated = localStorage.getItem(ANIMATED_KEY) === "true";
+} catch {
+    // default to static artwork
+}
 let latestRequest = 0;
 
 function fetchData() {
@@ -419,17 +427,29 @@ function renderPokemon(data, query) {
     pokemonCard.classList.remove("hidden");
 }
 
+// Animated Showdown sprites (small GIFs) exist for most Pokémon; null when there isn't one.
+function animatedSprite(sprites, shiny) {
+    return sprites.other?.showdown?.[shiny ? "front_shiny" : "front_default"] ?? null;
+}
+
 function renderSprite() {
     if (!currentSprites) {
         return;
     }
     const shinySrc = pickSprite(currentSprites, true);
     shinyButton.hidden = !shinySrc;
-    const src = showShiny && shinySrc ? shinySrc : pickSprite(currentSprites, false);
+    const wantShiny = showShiny && Boolean(shinySrc);
+    const animatedSrc = animatedSprite(currentSprites, wantShiny);
+    animatedButton.hidden = !animatedSrc;
+    const useAnimated = showAnimated && Boolean(animatedSrc);
+    const src = useAnimated ? animatedSrc : wantShiny ? shinySrc : pickSprite(currentSprites, false);
     if (src) {
         fadeInImage(imgElement, src);
-        const showingShiny = showShiny && src === shinySrc;
-        imgElement.alt = (showingShiny ? "Shiny " : "") + nameElement.textContent.trim() + " sprite";
+        imgElement.classList.toggle("animatedSprite", useAnimated);
+        imgElement.alt =
+            (wantShiny ? "Shiny " : "") +
+            nameElement.textContent.trim() +
+            (useAnimated ? " animated sprite" : " sprite");
         imgElement.style.display = "block";
     } else {
         imgElement.removeAttribute("src");
@@ -437,6 +457,8 @@ function renderSprite() {
     }
     shinyButton.setAttribute("aria-pressed", String(showShiny));
     shinyButton.classList.toggle("active", showShiny);
+    animatedButton.setAttribute("aria-pressed", String(showAnimated));
+    animatedButton.classList.toggle("active", showAnimated);
 }
 
 function renderAbilities(abilities) {
@@ -801,6 +823,15 @@ document.getElementById("randomPokemonBtn").addEventListener("click", () => {
 });
 shinyButton.addEventListener("click", () => {
     showShiny = !showShiny;
+    renderSprite();
+});
+animatedButton.addEventListener("click", () => {
+    showAnimated = !showAnimated;
+    try {
+        localStorage.setItem(ANIMATED_KEY, String(showAnimated));
+    } catch {
+        // preference just won't persist
+    }
     renderSprite();
 });
 prevButton.addEventListener("click", () => goToDexNumber(currentDexNumber - 1));
