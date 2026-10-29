@@ -450,13 +450,8 @@ test("a sprite that fails to load is remembered and not requested again", async 
     await page.reload();
     await page.waitForSelector("#browseGrid .browseTile");
     assert.equal(requests, 1); // skipped on the next visit
-    assert.equal(
-        await page
-            .locator("#browseGrid .browseTile img")
-            .first()
-            .evaluate((img) => img.style.visibility),
-        "hidden",
-    );
+    // A Poké Ball placeholder is shown instead.
+    assert.match(await page.locator("#browseGrid .browseTile img").first().getAttribute("src"), /favicon\.svg$/);
 });
 
 test("an empty, focused search box offers recently viewed Pokémon", async () => {

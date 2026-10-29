@@ -1214,6 +1214,13 @@ kbd {
     height: 20px;
 }
 
+/* Poké Ball shown where PokéAPI has no sprite for a form */
+img.placeholderSprite {
+    object-fit: contain;
+    transform: scale(0.55);
+    opacity: 0.45;
+}
+
 .browseTile.unavailableOffline {
     opacity: 0.45;
     filter: grayscale(1);

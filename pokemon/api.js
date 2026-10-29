@@ -248,18 +248,26 @@ export function noteMissingSprite(id) {
     }
 }
 
-// Points an <img> at a Pokémon's sprite, hiding it (and remembering the gap) if there isn't one.
+const PLACEHOLDER_SPRITE = "assets/favicon.svg";
+
+function showPlaceholder(image) {
+    image.src = PLACEHOLDER_SPRITE;
+    image.classList.add("placeholderSprite");
+}
+
+// Points an <img> at a Pokémon's sprite. If there isn't one (known gap, or it fails to
+// load), a faded Poké Ball is shown instead and the gap is remembered.
 export function setSprite(image, id, load = (img, src) => (img.src = src)) {
     const src = spriteUrl(id);
     if (!src) {
-        image.style.visibility = "hidden";
+        showPlaceholder(image);
         return;
     }
     image.addEventListener(
         "error",
         () => {
-            image.style.visibility = "hidden";
             noteMissingSprite(id);
+            showPlaceholder(image);
         },
         { once: true },
     );
