@@ -8,6 +8,7 @@ import {
     formLabel,
     formatName,
     idFromUrl,
+    learnset,
     levelUpMoves,
     normalizeQuery,
     suggestionScore,
@@ -90,4 +91,34 @@ test("suggestionScore ranks prefixes, substrings, in-order letters, then typos",
     assert.equal(suggestionScore("charz", "charizard"), 2);
     assert.equal(suggestionScore("pikachoo", "pikachu"), 4);
     assert.equal(suggestionScore("charz", "bulbasaur"), Infinity);
+});
+
+test("learnset groups the chosen game's moves by learn method", () => {
+    const detail = (level, method, group = "scarlet-violet") => ({
+        level_learned_at: level,
+        move_learn_method: { name: method },
+        version_group: { name: group, url: "" },
+    });
+    const { versionGroup, methods } = learnset([
+        { move: { name: "thunder", url: "m/87/" }, version_group_details: [detail(0, "machine")] },
+        { move: { name: "volt-tackle", url: "m/344/" }, version_group_details: [detail(0, "egg")] },
+        {
+            move: { name: "growl", url: "m/45/" },
+            version_group_details: [detail(1, "level-up"), detail(0, "tutor", "x-y")],
+        },
+    ]);
+    assert.equal(versionGroup, "scarlet-violet");
+    assert.deepEqual(
+        methods.machine.map((move) => move.name),
+        ["thunder"],
+    );
+    assert.deepEqual(
+        methods.egg.map((move) => move.name),
+        ["volt-tackle"],
+    );
+    assert.deepEqual(
+        methods["level-up"].map((move) => move.name),
+        ["growl"],
+    );
+    assert.deepEqual(methods.tutor, []); // tutor entry belongs to another game
 });

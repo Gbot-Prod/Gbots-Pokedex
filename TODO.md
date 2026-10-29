@@ -17,7 +17,7 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Moves: add TM / egg / tutor tabs and a game selector (the level-up list currently always uses the newest game)
+- [ ] Moves: game selector (the moves list always uses the newest game that has a level-up learnset)
 
 ## 4. Browsing & discovery
 - [ ] "Did you mean" can list several forms of one species (Gengar, Gengar Mega, Gengar Gmax); prefer distinct species first
@@ -101,3 +101,4 @@ Rules for each run:
 - [x] Cry button does nothing in Safari (no .ogg support): check `new Audio().canPlayType("audio/ogg")` and hide the button (or explain) when unsupported (2026-10-29) — button (and C shortcut) hidden when the browser can't play Ogg Vorbis; checked with canPlayType stubbed to ''
 - [x] Extend the smoke tests to forms, moves, sorting, keyboard shortcuts and the cry button (add `moves`/`varieties`/`cries` to the fixtures) (2026-10-29) — fixtures now regenerated from the live API by tests/build-fixtures.mjs (npm run fixtures) and include moves, varieties, cries; 5 new tests (forms, moves, sorting, keyboard, cry) — 20 tests pass
 - [x] Opt-in live check: `npm run check:live` runs the smoke flow against the real PokéAPI (pikachu, gengar, farfetchd, 25) to catch API changes the fixtures hide (2026-10-29) — npm run check:live runs the smoke suite with LIVE_API=1 (no mocks) — 12/12 pass against the real API; added a Farfetch'd test + fixture
+- [x] Moves: Level-up / TM / Egg / Tutor tabs for the newest game (2026-10-29) — `learnset()` groups by learn method; level column hidden for non-level-up tabs; fixtures keep all SV moves; unit + smoke tests. Split from "tabs and a game selector"

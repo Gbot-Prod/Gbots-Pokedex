@@ -143,28 +143,41 @@ const VERSION_GROUP_PREFERENCE = [
     "red-blue",
 ];
 
+// A Pokémon's moves in the most recent main-series game that has a level-up
+// learnset, grouped by how they're learned:
+// { versionGroup, methods: { "level-up": [{ name, url, level }], machine: [...], egg: [...], tutor: [...] } }
+// Level-up moves are sorted by level, the rest by name.
+export function learnset(moves) {
+    const entries = moves.flatMap(({ move, version_group_details: details }) =>
+        details.map((detail) => ({
+            name: move.name,
+            url: move.url,
+            level: detail.level_learned_at,
+            method: detail.move_learn_method.name,
+            versionGroup: detail.version_group.name,
+        })),
+    );
+    const levelUpGroups = new Set(entries.filter((e) => e.method === "level-up").map((e) => e.versionGroup));
+    const available = levelUpGroups.size ? levelUpGroups : new Set(entries.map((e) => e.versionGroup));
+    const versionGroup = VERSION_GROUP_PREFERENCE.find((group) => available.has(group)) ?? [...available].pop() ?? null;
+
+    const methods = { "level-up": [], machine: [], egg: [], tutor: [] };
+    for (const entry of entries) {
+        if (entry.versionGroup === versionGroup && methods[entry.method]) {
+            methods[entry.method].push({ name: entry.name, url: entry.url, level: entry.level });
+        }
+    }
+    methods["level-up"].sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
+    for (const method of ["machine", "egg", "tutor"]) {
+        methods[method].sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return { versionGroup, methods };
+}
+
 // Level-up moves from the most recent main-series game that lists any,
 // sorted by level: [{ name, url, level }].
 export function levelUpMoves(moves) {
-    const levelUps = moves.flatMap(({ move, version_group_details: details }) =>
-        details
-            .filter((detail) => detail.move_learn_method.name === "level-up")
-            .map((detail) => ({
-                name: move.name,
-                url: move.url,
-                level: detail.level_learned_at,
-                versionGroup: detail.version_group.name,
-            })),
-    );
-    if (!levelUps.length) {
-        return [];
-    }
-    const available = new Set(levelUps.map((entry) => entry.versionGroup));
-    const chosen = VERSION_GROUP_PREFERENCE.find((group) => available.has(group)) ?? [...available].pop();
-    return levelUps
-        .filter((entry) => entry.versionGroup === chosen)
-        .map(({ name, url, level }) => ({ name, url, level }))
-        .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
+    return learnset(moves).methods["level-up"];
 }
 
 // True if every character of `needle` appears in `haystack` in order ("charz" in "charizard").

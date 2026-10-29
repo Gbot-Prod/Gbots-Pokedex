@@ -193,7 +193,8 @@ test("species with several forms get a forms switcher", async () => {
 test("the level-up moves list loads type and power when opened", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonMoves:not([hidden])");
-    assert.match(await page.textContent("#movesSummary"), /Level-up moves \(\d+\)/);
+    assert.match(await page.textContent("#movesSummary"), /Moves \(\d+\)/);
+    assert.equal(await page.getAttribute(".movesTab[aria-selected=true]", "data-method"), "level-up");
 
     await page.click("#movesSummary");
     await page.waitForFunction(() => !document.querySelector("#movesTable tbody").textContent.includes("…"));
@@ -238,4 +239,17 @@ test("official spellings with punctuation resolve", async () => {
     await search("Farfetch'd");
     await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("83"));
     assert.deepEqual(pageErrors, []);
+});
+
+test("move tabs switch between level-up, TM, egg and tutor moves", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonMoves:not([hidden])");
+    await page.click("#movesSummary");
+    const levelUpRows = await page.locator("#movesTable tbody tr").count();
+
+    await page.click('.movesTab[data-method="machine"]');
+    assert.equal(await page.getAttribute('.movesTab[data-method="machine"]', "aria-selected"), "true");
+    const machineRows = await page.locator("#movesTable tbody tr").count();
+    assert.ok(machineRows > 0 && machineRows !== levelUpRows);
+    assert.equal(await page.isVisible("#movesTable th:first-child"), false); // no level column for TMs
 });

@@ -699,6 +699,35 @@ body {
     text-align: center;
 }
 
+#movesTabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+}
+
+.movesTab {
+    padding: 0.25rem 0.7rem;
+    border: 2px solid var(--type-strong);
+    border-radius: 999px;
+    background-color: var(--surface);
+    color: inherit;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.movesTab[aria-selected="true"] {
+    background-color: var(--type-strong);
+    color: #ffffff;
+}
+
+#movesTable.noLevel th:first-child,
+#movesTable.noLevel td:first-child {
+    display: none;
+}
+
 #movesTable {
     width: 100%;
     margin-top: 0.5rem;

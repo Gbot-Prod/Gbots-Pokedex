@@ -11,7 +11,7 @@ import {
     formLabel,
     formatName,
     idFromUrl,
-    levelUpMoves,
+    learnset,
     normalizeQuery,
     suggestionScore,
 } from "./utils.js";
@@ -39,7 +39,9 @@ const formsElement = document.getElementById("pokemonForms");
 const cryButton = document.getElementById("cryBtn");
 const movesSection = document.getElementById("pokemonMoves");
 const movesSummary = document.getElementById("movesSummary");
-const movesTableBody = document.querySelector("#movesTable tbody");
+const movesTable = document.getElementById("movesTable");
+const movesTableBody = movesTable.tBodies[0];
+const movesTabs = document.getElementById("movesTabs");
 let currentMoves = [];
 let movesDetailsLoaded = false;
 let currentCryUrl = null;
@@ -682,16 +684,60 @@ document.getElementById("clearDataBtn").addEventListener("click", () => {
 
 // --- Moves ----------------------------------------------------------------------
 
+const MOVE_METHODS = [
+    { method: "level-up", label: "Level-up" },
+    { method: "machine", label: "TM" },
+    { method: "egg", label: "Egg" },
+    { method: "tutor", label: "Tutor" },
+];
+let currentLearnset = null;
+let currentMoveMethod = "level-up";
+
 function renderMoves(moves) {
-    currentMoves = levelUpMoves(moves);
-    movesDetailsLoaded = false;
+    currentLearnset = learnset(moves);
+    const counts = Object.fromEntries(
+        MOVE_METHODS.map(({ method }) => [method, currentLearnset.methods[method].length]),
+    );
+    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
     movesSection.open = false;
-    movesSection.hidden = currentMoves.length === 0;
-    movesSummary.textContent = "Level-up moves (" + currentMoves.length + ")";
+    movesSection.hidden = total === 0;
+    movesSummary.textContent = "Moves (" + total + ")";
+
+    if (!counts[currentMoveMethod]) {
+        currentMoveMethod = MOVE_METHODS.find(({ method }) => counts[method])?.method ?? "level-up";
+    }
+    movesTabs.replaceChildren(
+        ...MOVE_METHODS.filter(({ method }) => counts[method]).map(({ method, label }) => {
+            const tab = document.createElement("button");
+            tab.type = "button";
+            tab.className = "movesTab";
+            tab.setAttribute("role", "tab");
+            tab.dataset.method = method;
+            tab.textContent = label + " (" + counts[method] + ")";
+            tab.addEventListener("click", () => {
+                currentMoveMethod = method;
+                renderMoveRows();
+                loadMoveDetails();
+            });
+            return tab;
+        }),
+    );
+    renderMoveRows();
+}
+
+function renderMoveRows() {
+    currentMoves = currentLearnset.methods[currentMoveMethod];
+    movesDetailsLoaded = false;
+    for (const tab of movesTabs.children) {
+        tab.setAttribute("aria-selected", String(tab.dataset.method === currentMoveMethod));
+    }
+    const showLevel = currentMoveMethod === "level-up";
+    movesTable.classList.toggle("noLevel", !showLevel);
+
     movesTableBody.replaceChildren();
     for (const move of currentMoves) {
         const row = movesTableBody.insertRow();
-        row.insertCell().textContent = move.level || "Evo"; // level 0 = learned on evolution
+        row.insertCell().textContent = showLevel ? move.level || "Evo" : ""; // level 0 = learned on evolution
         row.insertCell().textContent = formatName(move.name);
         row.insertCell().textContent = "…";
         row.insertCell().textContent = "…";

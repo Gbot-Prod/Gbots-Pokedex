@@ -10,7 +10,7 @@ import path from "node:path";
 
 const API = "https://pokeapi.co/api/v2/";
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures");
-// Only this game's level-up moves are kept (the page shows the newest game's learnset).
+// Only this game's moves are kept (the page shows the newest game's learnset).
 const MOVES_VERSION_GROUP = "scarlet-violet";
 
 async function get(resource) {
@@ -48,11 +48,7 @@ function trimPokemon(pokemon) {
         moves: pokemon.moves
             .map(({ move, version_group_details: details }) => ({
                 move,
-                version_group_details: details.filter(
-                    (detail) =>
-                        detail.move_learn_method.name === "level-up" &&
-                        detail.version_group.name === MOVES_VERSION_GROUP,
-                ),
+                version_group_details: details.filter((detail) => detail.version_group.name === MOVES_VERSION_GROUP),
             }))
             .filter((entry) => entry.version_group_details.length),
     };
@@ -87,9 +83,12 @@ for (const id of [24, 25, 26, 83, 94]) {
     const pokemon = trimPokemon(await get("pokemon/" + id));
     await save("pokemon-" + id, pokemon);
 
-    // Pikachu's moves get fixtures too, so the moves list can be tested.
+    // Pikachu's level-up moves get fixtures too, so the moves list can be tested.
     if (id === 25) {
-        for (const { move } of pokemon.moves) {
+        const levelUp = pokemon.moves.filter(({ version_group_details: details }) =>
+            details.some((detail) => detail.move_learn_method.name === "level-up"),
+        );
+        for (const { move } of levelUp) {
             const details = await get("move/" + idFromUrl(move.url));
             await save("move-" + details.id, {
                 id: details.id,
