@@ -362,3 +362,11 @@ export function pruneCacheEntries(entries, now, maxAgeMs, maxEntries) {
     fresh.sort(([, a], [, b]) => b.savedAt - a.savedAt);
     return Object.fromEntries(fresh.slice(0, maxEntries));
 }
+
+// Display name for a { name, id } list entry: National Dex entries use their species'
+// name (speciesSlugs: Map id -> species slug), so "zygarde-50" shows as "Zygarde" and
+// "farfetchd" as "Farfetch’d"; alternate forms keep their own name ("Charizard Mega X").
+export function entryDisplayName(entry, speciesSlugs) {
+    const slug = entry.id <= MAX_DEX_NUMBER ? speciesSlugs?.get(entry.id) : null;
+    return slug ? speciesDisplayName(slug) : formatName(entry.name);
+}

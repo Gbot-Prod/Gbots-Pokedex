@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] "Did you mean" buttons show slug names for default forms ("Zygarde 50", "Farfetchd"); use the species display names like the tiles do
 
 ## 5. Design & UX
 - [ ] "Install app" button using the `beforeinstallprompt` event, now that there's a manifest and service worker
@@ -123,3 +122,4 @@ Rules for each run:
 - [x] Offline step 1: web manifest + service worker (2026-10-29) — app shell stale-while-revalidate, PokéAPI/sprites network-first with cached fallback; viewed Pokémon reload offline with sprites; mocked tests block service workers. Split from "Offline support"
 - [x] Automated accessibility check: run axe-core against the page in the smoke tests (card, browse grid, compare table, dark mode) (2026-10-29) — axe-core smoke tests (card, moves, compare, browse; light + dark) fail on serious/critical issues. Fixed what they found: page text now dark ink in light mode, blue buttons and 11 type theme shades darkened to ≥4.5:1, compare 'winner' green darkened, Pokédex number no longer a skipped-level heading
 - [x] Smoke tests for the units toggle (card + compare table) and for display names in the compare header (2026-10-29) — smoke test covers card + compare table switching to imperial, the choice surviving a reload, and 'Farfetch’d' in the compare header
+- [x] "Did you mean" buttons show slug names for default forms ("Zygarde 50", "Farfetchd"); use the species display names like the tiles do (2026-10-29) — suggestions and autocomplete use entryDisplayName (Farfetch’d, Nidoran♀, Zygarde); species list fetch shared via getSpeciesSlugs in api.js; forms of an already-suggested species are skipped by species name ('zygard' → just Zygarde)

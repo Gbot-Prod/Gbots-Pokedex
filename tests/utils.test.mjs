@@ -5,6 +5,7 @@ import {
     damageMultipliers,
     describeEvolution,
     editDistance,
+    entryDisplayName,
     formatDexNumber,
     formatHeight,
     formatWeight,
@@ -233,4 +234,18 @@ test("pruneCacheEntries drops expired entries and keeps the newest", () => {
     const entries = { old: { savedAt: 0 }, a: { savedAt: 90 }, b: { savedAt: 95 }, c: { savedAt: 99 } };
     assert.deepEqual(Object.keys(pruneCacheEntries(entries, 100, 50, 10)), ["c", "b", "a"]);
     assert.deepEqual(Object.keys(pruneCacheEntries(entries, 100, 50, 2)), ["c", "b"]);
+});
+
+test("entryDisplayName prefers the species name for National Dex entries", () => {
+    const slugs = new Map([
+        [83, "farfetchd"],
+        [718, "zygarde"],
+    ]);
+    assert.equal(entryDisplayName({ id: 83, name: "farfetchd" }, slugs), "Farfetch’d");
+    assert.equal(entryDisplayName({ id: 718, name: "zygarde-50" }, slugs), "Zygarde");
+    assert.equal(
+        entryDisplayName({ id: 10118, name: "zygarde-10-power-construct" }, slugs),
+        "Zygarde 10 Power Construct",
+    );
+    assert.equal(entryDisplayName({ id: 718, name: "zygarde-50" }, null), "Zygarde 50"); // list not loaded yet
 });

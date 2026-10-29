@@ -1,6 +1,6 @@
 // Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
-import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries } from "./api.js";
-import { MAX_DEX_NUMBER, TYPE_ICONS, formatDexNumber, formatName, idFromUrl, speciesDisplayName } from "./utils.js";
+import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries, getSpeciesSlugs } from "./api.js";
+import { MAX_DEX_NUMBER, TYPE_ICONS, entryDisplayName, formatDexNumber, formatName, idFromUrl } from "./utils.js";
 
 // Set by initLists: loads a Pokémon onto the main card / returns the one shown there.
 let showPokemon = () => {};
@@ -22,8 +22,7 @@ let speciesSlugs = null;
 
 async function loadSpeciesSlugs() {
     try {
-        const data = await fetchJson(API_BASE + "pokemon-species?limit=2000");
-        speciesSlugs = new Map(data.results.map((entry) => [idFromUrl(entry.url), entry.name]));
+        speciesSlugs = await getSpeciesSlugs();
         renderBrowsePage();
         renderFavorites();
         renderRecent();
@@ -33,8 +32,7 @@ async function loadSpeciesSlugs() {
 }
 
 function tileName(entry) {
-    const slug = entry.id <= MAX_DEX_NUMBER ? speciesSlugs?.get(entry.id) : null;
-    return slug ? speciesDisplayName(slug) : formatName(entry.name);
+    return entryDisplayName(entry, speciesSlugs);
 }
 
 // id -> type names in slot order, built from the 18 /type responses (cached by fetchJson).

@@ -195,3 +195,18 @@ async function fetchPokemonUncached(query) {
         return fetchJson(variety.pokemon.url);
     }
 }
+
+let speciesSlugsPromise = null;
+
+// National Dex number -> species slug, from one (cached) /pokemon-species list request.
+export function getSpeciesSlugs() {
+    if (!speciesSlugsPromise) {
+        speciesSlugsPromise = fetchJson(API_BASE + "pokemon-species?limit=2000")
+            .then((data) => new Map(data.results.map((entry) => [idFromUrl(entry.url), entry.name])))
+            .catch((error) => {
+                speciesSlugsPromise = null; // allow a retry later
+                throw error;
+            });
+    }
+    return speciesSlugsPromise;
+}

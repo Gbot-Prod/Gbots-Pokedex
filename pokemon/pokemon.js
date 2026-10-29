@@ -6,26 +6,28 @@ import {
     getAllPokemonEntries,
     getMachineItemName,
     getMoveSummary,
+    getSpeciesSlugs,
 } from "./api.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { addToRecent, fadeInImage, initLists, updateFavoriteButton } from "./lists.js";
 import {
     MAX_DEX_NUMBER,
-    TYPE_ICONS,
     STAT_LABELS,
-    pickSprite,
+    TYPE_ICONS,
+    VERSION_GROUPS,
     damageMultipliers,
     describeEvolution,
+    entryDisplayName,
     formatDexNumber,
     formatHeight,
-    formatWeight,
     formatMultiplier,
-    formLabel,
     formatName,
+    formatWeight,
+    formLabel,
     idFromUrl,
     learnset,
-    VERSION_GROUPS,
     normalizeQuery,
+    pickSprite,
     suggestionScore,
 } from "./utils.js";
 
@@ -587,6 +589,10 @@ async function addNameSuggestions(query, requestId) {
     if (requestId !== latestRequest) {
         return;
     }
+    const speciesSlugs = await getSpeciesSlugs().catch(() => null); // for official names
+    if (requestId !== latestRequest) {
+        return;
+    }
 
     const suggestions = entries
         .map((entry) => ({ entry, score: suggestionScore(query, entry.name) }))
@@ -598,9 +604,13 @@ async function addNameSuggestions(query, requestId) {
                 (a.entry.id > MAX_DEX_NUMBER) - (b.entry.id > MAX_DEX_NUMBER) ||
                 a.entry.id - b.entry.id,
         )
-        // Skip forms of a species that's already suggested ("gengar-mega" after "gengar").
+        // Skip forms of a species that's already suggested ("gengar-mega" after "gengar",
+        // "zygarde-10-power-construct" after "zygarde-50", whose species is "zygarde").
         .filter((candidate, index, all) =>
-            all.slice(0, index).every(({ entry }) => !candidate.entry.name.startsWith(entry.name + "-")),
+            all.slice(0, index).every(({ entry }) => {
+                const base = (entry.id <= MAX_DEX_NUMBER && speciesSlugs?.get(entry.id)) || entry.name;
+                return !candidate.entry.name.startsWith(base + "-");
+            }),
         )
         .slice(0, 3);
 
@@ -615,9 +625,9 @@ async function addNameSuggestions(query, requestId) {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "suggestionBtn";
-        button.textContent = formatName(entry.name);
+        button.textContent = entryDisplayName(entry, speciesSlugs);
         button.addEventListener("click", () => {
-            searchInput.value = formatName(entry.name);
+            searchInput.value = entryDisplayName(entry, speciesSlugs);
             loadPokemon(entry.name);
         });
         line.append(button, index < suggestions.length - 1 ? " " : "?");
@@ -645,9 +655,10 @@ async function loadNameSuggestions() {
     nameListLoaded = true;
     try {
         const entries = await getAllPokemonEntries();
+        const speciesSlugs = await getSpeciesSlugs().catch(() => null);
         const options = entries.map((entry) => {
             const option = document.createElement("option");
-            option.value = formatName(entry.name);
+            option.value = entryDisplayName(entry, speciesSlugs);
             return option;
         });
         nameListElement.replaceChildren(...options);
