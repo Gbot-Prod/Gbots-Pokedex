@@ -150,7 +150,24 @@ export async function getMachineItemName(url) {
 // A Pokémon by name or number. Some species' default form has a suffixed name
 // ("zygarde" is listed as "zygarde-50", "aegislash" as "aegislash-shield"), so a name
 // that 404s is retried as a species and resolved to its default variety.
+// The same Pokémon is reachable as /pokemon/gengar, /pokemon/94 and /pokemon/94/ (from
+// other responses' links), so a loaded one is remembered under all of them.
+function rememberPokemon(pokemon) {
+    for (const key of [pokemon.id, pokemon.name]) {
+        for (const url of [API_BASE + "pokemon/" + key, API_BASE + "pokemon/" + key + "/"]) {
+            if (!responseCache.has(url)) {
+                responseCache.set(url, Promise.resolve(pokemon));
+            }
+        }
+    }
+    return pokemon;
+}
+
 export async function fetchPokemon(query) {
+    return rememberPokemon(await fetchPokemonUncached(query));
+}
+
+async function fetchPokemonUncached(query) {
     try {
         // If the name list is already loaded and doesn't have this name, skip the request
         // that would 404 (and log a console error) and go straight to the species.
