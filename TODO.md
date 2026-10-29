@@ -6,7 +6,7 @@ many items as it can in one session**, and keeps the backlog growing with new
 ideas it discovers.
 
 Rules for each run:
-- Keep going: finish an item, verify, commit, push, then immediately start the next one. Stop only after ~45 minutes of work (so runs don't overlap) or when the list is empty.
+- Keep going: finish an item, verify, commit, push, then immediately start the next one. Stop only after ~20 minutes of work (runs are hourly, so they must not overlap) or when the list is empty.
 - Each item gets its own commit and push, so progress is saved even if the session ends early.
 - Don't break existing features; load the site in a headless browser after every item to check.
 - After each item, check it off (move it to "Done" with the date) and add any new ideas it revealed.
