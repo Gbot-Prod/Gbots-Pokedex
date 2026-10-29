@@ -53,6 +53,9 @@ npx playwright install chromium   # first time only
 npm test
 ```
 
+`npm run check:live` runs the same smoke tests against the real PokéAPI, to
+catch API changes the fixtures would hide.
+
 The fixtures are trimmed copies of real PokéAPI responses; `npm run fixtures`
 regenerates them from the live API (see `tests/build-fixtures.mjs`).
 

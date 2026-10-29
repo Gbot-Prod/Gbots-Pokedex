@@ -2,6 +2,8 @@
 // PokéAPI is replaced by the trimmed fixtures in tests/fixtures and sprite
 // images are stubbed, so the suite runs offline and gives stable results.
 // Run with: npm test
+// `npm run check:live` runs the same tests against the real PokéAPI (LIVE_API=1)
+// to catch API changes the fixtures would hide.
 
 /* global document -- used inside page.waitForFunction callbacks, which run in the browser */
 
@@ -12,6 +14,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
 
+const LIVE_API = Boolean(process.env.LIVE_API);
 const SITE_ROOT = path.join(__dirname, "..", "pokemon");
 const FIXTURES = path.join(__dirname, "fixtures");
 const CONTENT_TYPES = {
@@ -81,6 +84,11 @@ beforeEach(async () => {
     page = await browser.newPage();
     pageErrors = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
+
+    if (LIVE_API) {
+        await page.goto(baseUrl);
+        return; // talk to the real PokéAPI and sprite hosts
+    }
 
     await page.route("https://pokeapi.co/**", (route) => {
         const fixture = fixtureFor(route.request().url());
@@ -224,4 +232,10 @@ test("the cry button requests the Pokémon's cry", async () => {
     const cryRequest = page.waitForRequest((request) => request.url().endsWith("/latest/25.ogg"));
     await page.click("#cryBtn");
     await cryRequest;
+});
+
+test("official spellings with punctuation resolve", async () => {
+    await search("Farfetch'd");
+    await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("83"));
+    assert.deepEqual(pageErrors, []);
 });

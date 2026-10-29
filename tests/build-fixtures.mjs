@@ -83,7 +83,7 @@ function trimType(type) {
     };
 }
 
-for (const id of [24, 25, 26, 94]) {
+for (const id of [24, 25, 26, 83, 94]) {
     const pokemon = trimPokemon(await get("pokemon/" + id));
     await save("pokemon-" + id, pokemon);
 
