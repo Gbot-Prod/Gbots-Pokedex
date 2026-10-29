@@ -10,6 +10,7 @@ import {
     idFromUrl,
     levelUpMoves,
     normalizeQuery,
+    suggestionScore,
 } from "../pokemon/utils.js";
 
 test("normalizeQuery turns display names and numbers into API keys", () => {
@@ -81,4 +82,12 @@ test("levelUpMoves uses the newest main-series game, not the highest version gro
         { name: "thunder-shock", url: "m/84/", level: 1 },
     ]);
     assert.deepEqual(levelUpMoves([]), []);
+});
+
+test("suggestionScore ranks prefixes, substrings, in-order letters, then typos", () => {
+    assert.equal(suggestionScore("pika", "pikachu"), 0);
+    assert.equal(suggestionScore("chu", "pikachu"), 1);
+    assert.equal(suggestionScore("charz", "charizard"), 2);
+    assert.equal(suggestionScore("pikachoo", "pikachu"), 4);
+    assert.equal(suggestionScore("charz", "bulbasaur"), Infinity);
 });

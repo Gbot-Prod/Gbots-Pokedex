@@ -166,3 +166,30 @@ export function levelUpMoves(moves) {
         .map(({ name, url, level }) => ({ name, url, level }))
         .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
 }
+
+// True if every character of `needle` appears in `haystack` in order ("charz" in "charizard").
+export function isSubsequence(needle, haystack) {
+    let position = 0;
+    for (const char of haystack) {
+        if (char === needle[position]) {
+            position++;
+        }
+    }
+    return position === needle.length;
+}
+
+// How well a Pokémon name matches a failed search; lower is better, Infinity means no match.
+// Prefixes ("pika") beat substrings ("chu") beat in-order letters ("charz"), then typos ("pikachoo").
+export function suggestionScore(query, name) {
+    if (name.startsWith(query)) {
+        return 0;
+    }
+    if (query.length >= 3 && name.includes(query)) {
+        return 1;
+    }
+    if (query.length >= 4 && isSubsequence(query, name)) {
+        return 2;
+    }
+    const distance = editDistance(query, name);
+    return distance <= Math.max(2, Math.floor(query.length / 3)) ? 2 + distance : Infinity;
+}

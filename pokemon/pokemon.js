@@ -7,13 +7,13 @@ import {
     STAT_LABELS,
     pickSprite,
     describeEvolution,
-    editDistance,
     formatMultiplier,
     formLabel,
     formatName,
     idFromUrl,
     levelUpMoves,
     normalizeQuery,
+    suggestionScore,
 } from "./utils.js";
 
 const imgElement = document.getElementById("pokemonSprite");
@@ -555,14 +555,9 @@ async function addNameSuggestions(query, requestId) {
         return;
     }
 
-    const maxDistance = Math.max(2, Math.floor(query.length / 3));
     const suggestions = entries
-        .map((entry) => ({
-            entry,
-            // Names that start with the query (e.g. "pika") rank first.
-            score: entry.name.startsWith(query) ? 0 : editDistance(query, entry.name),
-        }))
-        .filter((candidate) => candidate.score <= maxDistance)
+        .map((entry) => ({ entry, score: suggestionScore(query, entry.name) }))
+        .filter((candidate) => candidate.score !== Infinity)
         .sort((a, b) => a.score - b.score || a.entry.id - b.entry.id)
         .slice(0, 3);
 
