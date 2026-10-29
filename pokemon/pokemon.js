@@ -10,7 +10,14 @@ import {
 } from "./api.js";
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
-import { addToRecent, fadeInImage, getRecentPokemon, initLists, updateFavoriteButton } from "./lists.js";
+import {
+    addToRecent,
+    fadeInImage,
+    getRecentPokemon,
+    initLists,
+    removeFromRecent,
+    updateFavoriteButton,
+} from "./lists.js";
 import {
     MAX_DEX_NUMBER,
     STAT_LABELS,
@@ -679,7 +686,11 @@ function clearFields() {
 // --- Autocomplete -------------------------------------------------------
 
 // The main search gets the custom combobox; picking a suggestion searches straight away.
-attachCombobox(searchInput, { onSelect: (entry) => loadPokemon(entry.name), getEmptySuggestions: getRecentPokemon });
+attachCombobox(searchInput, {
+    onSelect: (entry) => loadPokemon(entry.name),
+    getEmptySuggestions: getRecentPokemon,
+    onRemoveSuggestion: removeFromRecent,
+});
 
 document.getElementById("searchForm").addEventListener("submit", (event) => {
     event.preventDefault();

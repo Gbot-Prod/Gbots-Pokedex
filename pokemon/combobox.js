@@ -71,8 +71,9 @@ function getLabelledEntries() {
 }
 
 // onSelect(entry) runs after the input is filled with the chosen Pokémon's name.
-// getEmptySuggestions() returns [{ id }] to offer while the input is empty (e.g. recently viewed).
-export function attachCombobox(input, { onSelect, getEmptySuggestions } = {}) {
+// getEmptySuggestions() returns [{ id }] to offer while the input is empty (e.g. recently viewed);
+// onRemoveSuggestion(id), if given, lets Delete remove the highlighted one of those.
+export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveSuggestion } = {}) {
     const listId = "combobox-list-" + ++comboboxCount;
     const list = document.createElement("ul");
     list.id = listId;
@@ -88,6 +89,11 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions } = {}) {
         wrap.append(input);
     }
     input.after(list);
+    // Announces removals for screen reader users (the list itself just changes).
+    const status = document.createElement("span");
+    status.className = "visuallyHidden";
+    status.setAttribute("role", "status");
+    list.after(status);
 
     input.setAttribute("role", "combobox");
     input.setAttribute("aria-autocomplete", "list");
@@ -145,7 +151,10 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions } = {}) {
                 .map((suggestion) => byId.get(suggestion.id))
                 .filter(Boolean)
                 .slice(0, MAX_OPTIONS);
-            list.setAttribute("aria-label", "Recently viewed");
+            list.setAttribute(
+                "aria-label",
+                onRemoveSuggestion ? "Recently viewed (press Delete to remove one)" : "Recently viewed",
+            );
         }
         list.replaceChildren(
             ...options.map((entry, index) => {
@@ -212,6 +221,17 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions } = {}) {
         } else if (event.key === "Enter" && activeIndex >= 0) {
             event.preventDefault(); // don't also submit the typed text
             choose(options[activeIndex]);
+        } else if (event.key === "Delete" && activeIndex >= 0 && !input.value.trim() && onRemoveSuggestion) {
+            event.preventDefault();
+            const removed = options[activeIndex];
+            onRemoveSuggestion(removed.id);
+            status.textContent = removed.label + " removed from recently viewed";
+            const nextIndex = Math.min(activeIndex, options.length - 2);
+            update().then(() => {
+                if (options.length && nextIndex >= 0) {
+                    setActive(nextIndex);
+                }
+            });
         } else if (event.key === "Escape") {
             event.preventDefault();
             close();

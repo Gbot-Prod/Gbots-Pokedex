@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Combobox: let users remove an entry from the "Recently viewed" suggestions (e.g. Delete/Shift+Delete on the highlighted option, announced via a live region)
 
 ## 5. Design & UX
 - [ ] Radar chart: lighter polygon colours in dark mode (the blue is dim on the dark table) and highlight a Pokémon's polygon when its legend entry or column is hovered/focused
@@ -144,3 +143,4 @@ Rules for each run:
 - [x] Combobox: when the search box is focused and empty, offer recently viewed Pokémon (2026-10-29) — focusing/clicking the empty search box lists recently viewed Pokémon (listbox labelled 'Recently viewed'), with the same keyboard support; smoke test
 - [x] Unit tests for api.js (fetchPokemon species fallback, id/name aliasing, move-cache pruning, missing-sprite memory) with stubbed fetch/localStorage in Node (2026-10-29) — tests/api.test.mjs stubs fetch/localStorage/sessionStorage and covers the species fallback, no species retry for numbers, id/name reuse, move-summary caching and missing-sprite memory (5 tests)
 - [x] Combobox: matched text is underlined in each suggestion (`<mark>`, "Charizard" for "char") (2026-10-29) — split from "highlight + remove recent"
+- [x] Combobox: let users remove an entry from the "Recently viewed" suggestions (e.g. Delete/Shift+Delete on the highlighted option, announced via a live region) (2026-10-29) — Delete on a highlighted recent suggestion removes it (removeFromRecent also updates the tiles), keeps a sensible highlight and announces 'X removed from recently viewed' in a status region; listbox label mentions the shortcut; smoke test

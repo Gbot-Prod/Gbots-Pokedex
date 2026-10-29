@@ -326,6 +326,12 @@ export function getRecentPokemon() {
     return recentPokemon;
 }
 
+export function removeFromRecent(id) {
+    recentPokemon = recentPokemon.filter((entry) => entry.id !== id);
+    saveStoredList(RECENT_KEY, recentPokemon);
+    renderRecent();
+}
+
 export function addToRecent(pokemon) {
     recentPokemon = [pokemon, ...recentPokemon.filter((entry) => entry.id !== pokemon.id)].slice(0, MAX_RECENT);
     saveStoredList(RECENT_KEY, recentPokemon);

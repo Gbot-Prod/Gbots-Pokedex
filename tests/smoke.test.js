@@ -466,6 +466,26 @@ test("an empty, focused search box offers recently viewed Pokémon", async () =>
     await page.locator("#pokemonNumber").click(); // move focus away
     await page.click("#pokemonLookupInpt");
     await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
-    assert.equal(await page.getAttribute("[role=listbox]:not([hidden])", "aria-label"), "Recently viewed");
+    assert.match(await page.getAttribute("[role=listbox]:not([hidden])", "aria-label"), /^Recently viewed/);
     assert.match(await page.textContent("[role=listbox]:not([hidden]) [role=option]"), /Gengar/);
+});
+
+test("Delete removes a Pokémon from the recently viewed suggestions", async () => {
+    for (const name of ["pikachu", "gengar"]) {
+        await search(name);
+        await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    }
+    await page.fill("#pokemonLookupInpt", "");
+    await page.locator("#pokemonNumber").click();
+    await page.click("#pokemonLookupInpt");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    await page.keyboard.press("ArrowDown"); // Gengar (most recent)
+    await page.keyboard.press("Delete");
+
+    await page.waitForFunction(
+        () => document.querySelectorAll("[role=listbox]:not([hidden]) [role=option]").length === 1,
+    );
+    assert.match(await page.textContent("[role=listbox]:not([hidden]) [role=option]"), /Pikachu/);
+    assert.match(await page.textContent(".comboboxWrap [role=status]"), /Gengar removed/);
+    assert.doesNotMatch(await page.innerText("#recentList"), /Gengar/); // the tiles update too
 });
