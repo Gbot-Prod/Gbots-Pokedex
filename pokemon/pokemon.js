@@ -1029,6 +1029,18 @@ if (getUrlPokemon()) {
     loadFromUrl();
 }
 
+// --- Offline banner ---------------------------------------------------------------
+
+const offlineBanner = document.getElementById("offlineBanner");
+
+function updateOfflineBanner() {
+    offlineBanner.hidden = navigator.onLine;
+}
+
+window.addEventListener("online", updateOfflineBanner);
+window.addEventListener("offline", updateOfflineBanner);
+updateOfflineBanner();
+
 // --- Install as an app -----------------------------------------------------------
 // Browsers that support installing (Chrome, Edge, Android) fire beforeinstallprompt once the
 // manifest and service worker qualify; we keep the event and offer our own button.

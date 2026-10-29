@@ -347,3 +347,12 @@ test("the install button appears when the browser offers installation", async ()
     await page.waitForSelector("#installBtn[hidden]", { state: "attached" });
     assert.equal(await page.evaluate(() => window.installPrompted), true);
 });
+
+test("an offline banner shows while the browser is offline", async () => {
+    assert.equal(await page.isVisible("#offlineBanner"), false);
+    await context.setOffline(true);
+    await page.waitForSelector("#offlineBanner:not([hidden])");
+    assert.match(await page.textContent("#offlineBanner"), /offline/);
+    await context.setOffline(false);
+    await page.waitForSelector("#offlineBanner[hidden]", { state: "attached" });
+});
