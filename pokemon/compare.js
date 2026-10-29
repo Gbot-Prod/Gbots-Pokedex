@@ -2,6 +2,7 @@
 import { attachCombobox } from "./combobox.js";
 import { API_BASE, fetchJson, fetchPokemon } from "./api.js";
 import {
+    STAT_LABELS,
     damageMultipliers,
     formatHeight,
     formatName,
@@ -9,7 +10,7 @@ import {
     normalizeQuery,
     pickSprite,
     pokemonDisplayName,
-    STAT_LABELS,
+    radarPoints,
 } from "./utils.js";
 
 const compareForm = document.getElementById("compareForm");
@@ -19,6 +20,7 @@ const compareThirdInput = document.getElementById("compareThirdInput");
 const compareStatusElement = document.getElementById("compareStatus");
 const compareResultElement = document.getElementById("compareResult");
 const compareTable = document.getElementById("compareTable");
+const radarElement = document.getElementById("compareRadar");
 let latestCompare = 0;
 
 async function comparePokemon() {
@@ -166,6 +168,7 @@ function renderComparison(pokemonList, matchups) {
         }
     }
 
+    renderRadarChart(pokemonList);
     compareResultElement.hidden = false;
 }
 
@@ -193,4 +196,89 @@ export function initCompare({ getCurrentPokemon, getUnits: unitsGetter }) {
     });
 
     compareFromUrl();
+}
+
+// --- Radar chart ------------------------------------------------------------------
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+// Distinct colours that stay readable on the light and dark table backgrounds.
+const RADAR_COLORS = ["#2f5fb3", "#c0392b", "#1d7a46"];
+const RADAR_SIZE = 280;
+const RADAR_RADIUS = 100;
+
+function svgElement(name, attributes) {
+    const element = document.createElementNS(SVG_NS, name);
+    for (const [key, value] of Object.entries(attributes)) {
+        element.setAttribute(key, value);
+    }
+    return element;
+}
+
+// Six-axis chart of the base stats, one translucent polygon per Pokémon. The table above
+// has the exact numbers, so the chart is labelled as an image summary.
+function renderRadarChart(pokemonList) {
+    const statNames = Object.keys(STAT_LABELS);
+    const statValue = (pokemon, statName) =>
+        pokemon.stats.find((entry) => entry.stat.name === statName)?.base_stat ?? 0;
+    const values = pokemonList.map((pokemon) => statNames.map((statName) => statValue(pokemon, statName)));
+    // Scale to the highest stat shown (at least 150) so typical Pokémon don't look tiny.
+    const max = Math.max(150, ...values.flat());
+    const center = RADAR_SIZE / 2;
+
+    const svg = svgElement("svg", {
+        viewBox: "0 0 " + RADAR_SIZE + " " + RADAR_SIZE,
+        width: RADAR_SIZE,
+        height: RADAR_SIZE,
+        role: "img",
+        "aria-label": "Base stats radar chart comparing " + pokemonList.map(pokemonDisplayName).join(", "),
+    });
+    for (const fraction of [0.25, 0.5, 0.75, 1]) {
+        svg.append(
+            svgElement("polygon", {
+                points: radarPoints(
+                    statNames.map(() => max * fraction),
+                    max,
+                    RADAR_RADIUS,
+                    center,
+                    center,
+                ),
+                class: "radarGrid",
+            }),
+        );
+    }
+    statNames.forEach((statName, index) => {
+        const angle = -Math.PI / 2 + (index * 2 * Math.PI) / statNames.length;
+        const label = svgElement("text", {
+            x: (center + (RADAR_RADIUS + 22) * Math.cos(angle)).toFixed(1),
+            y: (center + (RADAR_RADIUS + 22) * Math.sin(angle) + 4).toFixed(1),
+            "text-anchor": "middle",
+            class: "radarLabel",
+        });
+        label.textContent = STAT_LABELS[statName];
+        svg.append(label);
+    });
+    values.forEach((pokemonValues, index) => {
+        svg.append(
+            svgElement("polygon", {
+                points: radarPoints(pokemonValues, max, RADAR_RADIUS, center, center),
+                fill: RADAR_COLORS[index],
+                "fill-opacity": "0.2",
+                stroke: RADAR_COLORS[index],
+                "stroke-width": "2",
+            }),
+        );
+    });
+
+    const legend = document.createElement("ul");
+    legend.className = "radarLegend";
+    pokemonList.forEach((pokemon, index) => {
+        const item = document.createElement("li");
+        const swatch = document.createElement("span");
+        swatch.className = "radarSwatch";
+        swatch.style.backgroundColor = RADAR_COLORS[index];
+        item.append(swatch, pokemonDisplayName(pokemon));
+        legend.append(item);
+    });
+
+    radarElement.replaceChildren(svg, legend);
 }

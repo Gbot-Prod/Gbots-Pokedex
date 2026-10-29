@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Compare: radar (spider) chart of the six base stats in inline SVG, one colour per Pokémon
 
 ## 4. Browsing & discovery
 - [ ] Combobox: show forms with their species number and label ("Charizard (Mega X) · #0006") instead of "#10034"
@@ -139,3 +138,4 @@ Rules for each run:
 - [x] Combobox step 2: compare inputs use the custom combobox (auto-wrapped for positioning); the 1,300-option `<datalist>` and `loadNameSuggestions` are gone (2026-10-29)
 - [x] Lighthouse CI in the GitHub workflow with performance/accessibility budgets (2026-10-29) — lighthouserc.json budgets (a11y ≥0.95 and best practices ≥0.9 fail the build; performance/SEO warn) run via npm run lighthouse and in CI; local run: perf 0.8, a11y 1.0, BP 1.0, SEO 0.91
 - [x] Some newer forms have no sprite in PokéAPI's repo (e.g. id 10301), so tiles/suggestions log a 404; use `sprites.front_default` from the API (null when missing) or skip ids known to be missing (2026-10-29) — setSprite/spriteUrl in api.js skip the 12 form sprites known to be missing and remember any other failure in localStorage, so a 404 happens at most once per browser; used by combobox, tiles and evolution; verified no 404s typing pikachu/eevee/zyg/ogerpon…; smoke test
+- [x] Compare: radar (spider) chart of the six base stats in inline SVG, one colour per Pokémon (2026-10-29) — inline-SVG hexagon chart under the comparison table with one translucent polygon per Pokémon, grid rings, stat labels and a legend; scales to max(150, highest stat); role=img with a summary label; radarPoints unit-tested

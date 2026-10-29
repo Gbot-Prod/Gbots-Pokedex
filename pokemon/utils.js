@@ -379,3 +379,19 @@ export function abilityDescription(ability) {
     const text = flavor ?? english(ability.effect_entries).pop()?.short_effect ?? "";
     return text.replace(/\s+/g, " ").trim();
 }
+
+// Corner points of a radar-chart polygon: one axis per value, starting at the top and
+// going clockwise, each scaled by value / max of the radius. Returns "x,y x,y …" for <polygon>.
+export function radarPoints(values, max, radius, centerX, centerY) {
+    return values
+        .map((value, index) => {
+            const angle = -Math.PI / 2 + (index * 2 * Math.PI) / values.length;
+            const distance = (Math.min(value, max) / max) * radius;
+            return (
+                (centerX + distance * Math.cos(angle)).toFixed(1) +
+                "," +
+                (centerY + distance * Math.sin(angle)).toFixed(1)
+            );
+        })
+        .join(" ");
+}

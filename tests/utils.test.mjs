@@ -19,6 +19,7 @@ import {
     normalizeQuery,
     pokemonDisplayName,
     pruneCacheEntries,
+    radarPoints,
     speciesDisplayName,
     suggestionScore,
 } from "../pokemon/utils.js";
@@ -262,4 +263,10 @@ test("abilityDescription prefers the latest English game text", () => {
     };
     assert.equal(abilityDescription(ability), "May paralyze attackers.");
     assert.equal(abilityDescription({ effect_entries: ability.effect_entries }), "30% paralysis on contact.");
+});
+
+test("radarPoints puts the first axis at the top and scales by value", () => {
+    // Two axes on a radius-100 chart centred at (100,100): top and bottom.
+    assert.equal(radarPoints([100, 50], 100, 100, 100, 100), "100.0,0.0 100.0,150.0");
+    assert.equal(radarPoints([300], 150, 100, 0, 0), "0.0,-100.0"); // capped at max
 });
