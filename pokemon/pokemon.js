@@ -565,7 +565,17 @@ async function addNameSuggestions(query, requestId) {
     const suggestions = entries
         .map((entry) => ({ entry, score: suggestionScore(query, entry.name) }))
         .filter((candidate) => candidate.score !== Infinity)
-        .sort((a, b) => a.score - b.score || a.entry.id - b.entry.id)
+        // Alternate forms (ids above the National Dex) rank just below species with the same score.
+        .sort(
+            (a, b) =>
+                a.score - b.score ||
+                (a.entry.id > MAX_DEX_NUMBER) - (b.entry.id > MAX_DEX_NUMBER) ||
+                a.entry.id - b.entry.id,
+        )
+        // Skip forms of a species that's already suggested ("gengar-mega" after "gengar").
+        .filter((candidate, index, all) =>
+            all.slice(0, index).every(({ entry }) => !candidate.entry.name.startsWith(entry.name + "-")),
+        )
         .slice(0, 3);
 
     if (!suggestions.length) {

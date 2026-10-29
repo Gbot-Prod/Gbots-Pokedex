@@ -19,7 +19,6 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] "Did you mean" can list several forms of one species (Gengar, Gengar Mega, Gengar Gmax); prefer distinct species first
 
 ## 5. Design & UX
 - [ ] Format the card number as "#0025" to match the browse tiles (currently "Pokemon no#25")
@@ -102,3 +101,4 @@ Rules for each run:
 - [x] Opt-in live check: `npm run check:live` runs the smoke flow against the real PokéAPI (pikachu, gengar, farfetchd, 25) to catch API changes the fixtures hide (2026-10-29) — npm run check:live runs the smoke suite with LIVE_API=1 (no mocks) — 12/12 pass against the real API; added a Farfetch'd test + fixture
 - [x] Moves: Level-up / TM / Egg / Tutor tabs for the newest game (2026-10-29) — `learnset()` groups by learn method; level column hidden for non-level-up tabs; fixtures keep all SV moves; unit + smoke tests. Split from "tabs and a game selector"
 - [x] Moves: game selector (the moves list always uses the newest game that has a level-up learnset) (2026-10-29) — game <select> listing every main-series game with a level-up learnset (named, newest first); choice persists while browsing and falls back to the newest game
+- [x] "Did you mean" can list several forms of one species (Gengar, Gengar Mega, Gengar Gmax); prefer distinct species first (2026-10-29) — forms rank below species with the same score and are skipped when their species is already suggested ('gengr' → just Gengar)
