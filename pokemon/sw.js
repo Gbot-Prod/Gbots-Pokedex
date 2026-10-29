@@ -1,8 +1,8 @@
 // Service worker: makes the Pokédex work offline for Pokémon you've already viewed.
-// - App shell (HTML, CSS, JS, icons): served from cache, refreshed in the background.
-// - PokéAPI data and sprites: network first, falling back to the last cached copy.
+// - App shell (HTML, CSS, JS, icons) and PokéAPI data/sprites: network first, falling back
+//   to the last cached copy when offline. The shell is also pre-cached on install.
 
-const SHELL_CACHE = "pokedex-shell-v1";
+const SHELL_CACHE = "pokedex-shell-v2";
 const RUNTIME_CACHE = "pokedex-runtime-v1";
 const SHELL_FILES = [
     "pokemon.html",
@@ -52,31 +52,19 @@ self.addEventListener("activate", (event) => {
     );
 });
 
-// Serve the cached copy straight away and update the cache for next time.
-async function staleWhileRevalidate(request) {
-    const cache = await caches.open(SHELL_CACHE);
-    const cached = await cache.match(request, { ignoreSearch: true });
-    const network = fetch(request)
-        .then((response) => {
-            if (response.ok) {
-                cache.put(request, response.clone());
-            }
-            return response;
-        })
-        .catch(() => cached);
-    return cached ?? network;
-}
-
-async function networkFirst(request) {
-    const cache = await caches.open(RUNTIME_CACHE);
+// Always try the network so online visitors get the latest files and data (no cache
+// version to bump on every edit, and never a mix of old and new modules); fall back to
+// the last cached copy when offline.
+async function networkFirst(request, cacheName, matchOptions, fetchOptions) {
+    const cache = await caches.open(cacheName);
     try {
-        const response = await fetch(request);
+        const response = await fetch(request, fetchOptions);
         if (response.ok) {
             cache.put(request, response.clone());
         }
         return response;
     } catch (error) {
-        const cached = await cache.match(request);
+        const cached = await cache.match(request, matchOptions);
         if (cached) {
             return cached;
         }
@@ -91,8 +79,11 @@ self.addEventListener("fetch", (event) => {
     }
     const url = new URL(request.url);
     if (url.origin === self.location.origin) {
-        event.respondWith(staleWhileRevalidate(request));
+        // ignoreSearch: pokemon.html?pokemon=gengar is served from the cached pokemon.html
+        // cache: "no-cache" revalidates with the server, so the browser's HTTP cache can't
+        // hand back a stale copy of an edited file.
+        event.respondWith(networkFirst(request, SHELL_CACHE, { ignoreSearch: true }, { cache: "no-cache" }));
     } else if (RUNTIME_HOSTS.includes(url.hostname)) {
-        event.respondWith(networkFirst(request));
+        event.respondWith(networkFirst(request, RUNTIME_CACHE));
     }
 });
