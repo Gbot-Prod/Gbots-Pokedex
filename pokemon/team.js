@@ -1,6 +1,6 @@
 // Team builder: up to six Pokémon, saved locally, with a type-coverage chart showing how
 // many team members are weak to / resist each attacking type.
-import { API_BASE, fetchJson, fetchPokemon, setSprite } from "./api.js";
+import { ANIMATED_CHANGE_EVENT, API_BASE, fetchJson, fetchPokemon, setSmallSprite } from "./api.js";
 import { TYPE_ICONS, damageMultipliers, formatName, pokemonDisplayName } from "./utils.js";
 
 const TEAM_KEY = "pokedex:team:v1";
@@ -93,7 +93,7 @@ function renderSlots() {
             sprite.alt = "";
             sprite.width = 72;
             sprite.height = 72;
-            setSprite(sprite, member.id);
+            setSmallSprite(sprite, member.id);
             const name = document.createElement("span");
             name.textContent = member.label;
             const types = document.createElement("small");
@@ -288,6 +288,7 @@ export function initTeam(options) {
     loadTeam();
     teamButton.addEventListener("click", toggleCurrent);
     shareTeamButton.addEventListener("click", shareTeam);
+    window.addEventListener(ANIMATED_CHANGE_EVENT, renderSlots);
     renderTeam();
     offerSharedTeam();
 }

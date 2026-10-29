@@ -1,4 +1,6 @@
 import {
+    ANIMATED_CHANGE_EVENT,
+    ANIMATED_KEY,
     API_BASE,
     fetchJson,
     fetchPokemon,
@@ -6,7 +8,7 @@ import {
     getMachineItemName,
     getMoveSummary,
     getSpeciesSlugs,
-    setSprite,
+    setSmallSprite,
 } from "./api.js";
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
@@ -93,7 +95,6 @@ let currentTypes = [];
 let currentSprites = null;
 let showShiny = false;
 const animatedButton = document.getElementById("animatedToggleBtn");
-const ANIMATED_KEY = "pokedex:animated-sprites";
 let showAnimated = false;
 try {
     showAnimated = localStorage.getItem(ANIMATED_KEY) === "true";
@@ -274,7 +275,7 @@ function createEvolutionButton(node) {
     }
 
     const sprite = document.createElement("img");
-    setSprite(sprite, dexNumber, fadeInImage);
+    setSmallSprite(sprite, dexNumber, fadeInImage);
     sprite.alt = "";
     sprite.width = 72;
     sprite.height = 72;
@@ -867,6 +868,11 @@ animatedButton.addEventListener("click", () => {
         // preference just won't persist
     }
     renderSprite();
+    // Small sprites (evolution chain, team) follow the same setting.
+    for (const image of document.querySelectorAll(".evolutionMember img[data-sprite-id]")) {
+        setSmallSprite(image, image.dataset.spriteId, fadeInImage);
+    }
+    window.dispatchEvent(new Event(ANIMATED_CHANGE_EVENT));
 });
 prevButton.addEventListener("click", () => goToDexNumber(currentDexNumber - 1));
 nextButton.addEventListener("click", () => goToDexNumber(currentDexNumber + 1));

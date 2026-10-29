@@ -273,3 +273,36 @@ export function setSprite(image, id, load = (img, src) => (img.src = src)) {
     );
     load(image, src);
 }
+
+// --- Animated sprites ------------------------------------------------------------------
+// The "▶ Animated" toggle also animates small sprites (evolution chain, team slots).
+// Showdown GIFs exist for nearly every Pokémon; a missing one falls back to the static sprite.
+export const ANIMATED_KEY = "pokedex:animated-sprites";
+export const ANIMATED_CHANGE_EVENT = "pokedex:animated-change";
+
+export function animatedSpritesEnabled() {
+    try {
+        return localStorage.getItem(ANIMATED_KEY) === "true";
+    } catch {
+        return false;
+    }
+}
+
+export function setSmallSprite(image, id, load = (img, src) => (img.src = src)) {
+    image.dataset.spriteId = id;
+    if (!animatedSpritesEnabled()) {
+        image.classList.remove("animatedSmall");
+        setSprite(image, id, load);
+        return;
+    }
+    image.classList.add("animatedSmall");
+    image.addEventListener(
+        "error",
+        () => {
+            image.classList.remove("animatedSmall");
+            setSprite(image, id, load);
+        },
+        { once: true },
+    );
+    load(image, SPRITE_BASE + "other/showdown/" + id + ".gif");
+}

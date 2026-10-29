@@ -2067,3 +2067,11 @@ img.placeholderSprite {
         animation: none;
     }
 }
+
+/* small animated sprites: keep pixel art crisp and a little inset */
+img.animatedSmall {
+    padding: 10%;
+    box-sizing: border-box;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
