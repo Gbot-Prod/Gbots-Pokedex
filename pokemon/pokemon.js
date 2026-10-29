@@ -274,6 +274,7 @@ function createEvolutionButton(node) {
 
 function renderSpecies(species) {
     renderForms(species);
+    applyDisplayName(species);
 
     const genus = species.genera.find((entry) => entry.language.name === "en");
     genusElement.textContent = genus ? genus.genus : "";
@@ -288,6 +289,24 @@ function renderSpecies(species) {
               .replace(/\s+/g, " ")
               .trim()
         : "";
+}
+
+// Swap the title-cased slug ("Farfetchd", "Nidoran F") for the official English name
+// ("Farfetch’d", "Nidoran♀"); forms keep their label ("Charizard (Mega X)").
+function applyDisplayName(species) {
+    const english = species.names?.find((entry) => entry.language.name === "en")?.name;
+    if (!english || !currentPokemon) {
+        return;
+    }
+    const previous = formatName(currentPokemon.name);
+    const isForm = currentPokemon.id !== currentDexNumber;
+    const displayName = isForm ? english + " (" + formLabel(species.name, currentPokemon.name) + ")" : english;
+
+    nameElement.textContent = displayName;
+    document.title = displayName + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
+    if (searchInput.value === previous) {
+        searchInput.value = displayName;
+    }
 }
 
 // Buttons for the species' other forms (Mega, regional, Gigantamax…), if it has any.
