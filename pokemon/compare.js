@@ -1,21 +1,25 @@
-// Side-by-side comparison of two Pokémon.
+// Side-by-side comparison of two or three Pokémon.
 import { API_BASE, fetchJson } from "./api.js";
 import { STAT_LABELS, damageMultipliers, formatName, normalizeQuery, pickSprite } from "./utils.js";
 
 const compareForm = document.getElementById("compareForm");
 const compareLeftInput = document.getElementById("compareLeftInput");
 const compareRightInput = document.getElementById("compareRightInput");
+const compareThirdInput = document.getElementById("compareThirdInput");
 const compareStatusElement = document.getElementById("compareStatus");
 const compareResultElement = document.getElementById("compareResult");
 const compareTable = document.getElementById("compareTable");
 let latestCompare = 0;
 
 async function comparePokemon() {
-    const queries = [normalizeQuery(compareLeftInput.value), normalizeQuery(compareRightInput.value)];
-    if (queries.some((query) => !query)) {
-        compareStatusElement.textContent = "Enter two Pokémon to compare.";
+    const [left, right, third] = [compareLeftInput, compareRightInput, compareThirdInput].map((input) =>
+        normalizeQuery(input.value),
+    );
+    if (!left || !right) {
+        compareStatusElement.textContent = "Enter at least two Pokémon to compare.";
         return;
     }
+    const queries = third ? [left, right, third] : [left, right];
 
     const compareId = ++latestCompare;
     compareStatusElement.textContent = "Loading…";
@@ -60,7 +64,7 @@ async function loadMatchupCounts(pokemonList) {
     }
 }
 
-function renderComparison([left, right], matchups) {
+function renderComparison(pokemonList, matchups) {
     const head = compareTable.tHead;
     const body = compareTable.tBodies[0];
     head.replaceChildren();
@@ -68,7 +72,7 @@ function renderComparison([left, right], matchups) {
 
     const headRow = head.insertRow();
     headRow.append(document.createElement("th"));
-    for (const pokemon of [left, right]) {
+    for (const pokemon of pokemonList) {
         const cell = document.createElement("th");
         cell.scope = "col";
         const sprite = document.createElement("img");
@@ -86,35 +90,35 @@ function renderComparison([left, right], matchups) {
 
     const statValue = (pokemon, statName) =>
         pokemon.stats.find((entry) => entry.stat.name === statName)?.base_stat ?? 0;
+    const total = (pokemon) => pokemon.stats.reduce((sum, entry) => sum + entry.base_stat, 0);
+    // [label, value for each Pokémon, lowerIsBetter]
     const rows = Object.keys(STAT_LABELS).map((statName) => [
         STAT_LABELS[statName],
-        statValue(left, statName),
-        statValue(right, statName),
+        pokemonList.map((pokemon) => statValue(pokemon, statName)),
     ]);
-    const total = (pokemon) => pokemon.stats.reduce((sum, entry) => sum + entry.base_stat, 0);
-    rows.push(["Total", total(left), total(right)]);
-    rows.push(["Height (m)", left.height / 10, right.height / 10]);
-    rows.push(["Weight (kg)", left.weight / 10, right.weight / 10]);
+    rows.push(["Total", pokemonList.map(total)]);
+    rows.push(["Height (m)", pokemonList.map((pokemon) => pokemon.height / 10)]);
+    rows.push(["Weight (kg)", pokemonList.map((pokemon) => pokemon.weight / 10)]);
     if (matchups) {
-        // Fewer weaknesses is better, so that row highlights the lower number.
-        rows.push(["Weak to (types)", matchups[0].weak, matchups[1].weak, true]);
-        rows.push(["Resists (types)", matchups[0].resist, matchups[1].resist]);
-        rows.push(["Immune to (types)", matchups[0].immune, matchups[1].immune]);
+        // Fewer weaknesses is better, so that row highlights the lowest number.
+        rows.push(["Weak to (types)", matchups.map((counts) => counts.weak), true]);
+        rows.push(["Resists (types)", matchups.map((counts) => counts.resist)]);
+        rows.push(["Immune to (types)", matchups.map((counts) => counts.immune)]);
     }
 
-    for (const [label, leftValue, rightValue, lowerIsBetter = false] of rows) {
+    for (const [label, values, lowerIsBetter = false] of rows) {
         const row = body.insertRow();
         const header = document.createElement("th");
         header.scope = "row";
         header.textContent = label;
         row.append(header);
-        for (const [value, other] of [
-            [leftValue, rightValue],
-            [rightValue, leftValue],
-        ]) {
+        // Highlight the best value, unless every Pokémon ties.
+        const best = lowerIsBetter ? Math.min(...values) : Math.max(...values);
+        const allTied = values.every((value) => value === best);
+        for (const value of values) {
             const cell = row.insertCell();
             cell.textContent = value;
-            if (lowerIsBetter ? value < other : value > other) {
+            if (value === best && !allTied) {
                 cell.className = "compareWinner";
             }
         }
@@ -132,6 +136,7 @@ export function initCompare({ getCurrentPokemon, loadNameSuggestions }) {
     });
     compareLeftInput.addEventListener("focus", loadNameSuggestions);
     compareRightInput.addEventListener("focus", loadNameSuggestions);
+    compareThirdInput.addEventListener("focus", loadNameSuggestions);
 
     document.getElementById("compareCurrentBtn").addEventListener("click", () => {
         const currentPokemon = getCurrentPokemon();
@@ -140,6 +145,7 @@ export function initCompare({ getCurrentPokemon, loadNameSuggestions }) {
         }
         compareLeftInput.value = formatName(currentPokemon.name);
         compareRightInput.value = "";
+        compareThirdInput.value = "";
         document.getElementById("compareSection").scrollIntoView({ behavior: "smooth" });
         compareRightInput.focus({ preventScroll: true });
     });

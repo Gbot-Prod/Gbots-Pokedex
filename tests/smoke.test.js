@@ -259,3 +259,16 @@ test("move tabs switch between level-up, TM, egg and tutor moves", async () => {
     assert.ok(machineRows > 0 && machineRows !== levelUpRows);
     assert.equal(await page.textContent("#movesTable th:first-child"), "TM"); // first column holds TM numbers
 });
+
+test("three Pokémon can be compared", async () => {
+    await page.fill("#compareLeftInput", "pikachu");
+    await page.fill("#compareRightInput", "raichu");
+    await page.fill("#compareThirdInput", "gengar");
+    await page.click("#compareBtn");
+    await page.waitForSelector("#compareResult:not([hidden])");
+
+    const headers = await page.$$eval("#compareTable thead th", (cells) => cells.map((cell) => cell.innerText));
+    assert.equal(headers.length, 4); // empty corner + three Pokémon
+    assert.match(headers[3], /Gengar/);
+    assert.deepEqual(pageErrors, []);
+});

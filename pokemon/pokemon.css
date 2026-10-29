@@ -1049,6 +1049,14 @@ kbd {
 }
 
 @media (max-width: 600px) {
+    #compareForm span {
+        display: none;
+    }
+
+    .compareInput {
+        flex-basis: 100%;
+    }
+
     body {
         padding: 1rem 0.75rem;
     }
