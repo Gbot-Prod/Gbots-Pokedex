@@ -117,3 +117,52 @@ export function formLabel(speciesName, pokemonName) {
     const suffix = pokemonName.startsWith(speciesName + "-") ? pokemonName.slice(speciesName.length + 1) : pokemonName;
     return formatName(suffix);
 }
+
+// Main-series games newest first, used to pick which learnset to show. Version group
+// ids aren't chronological (PokéAPI later added e.g. the Japanese Red/Green releases).
+const VERSION_GROUP_PREFERENCE = [
+    "scarlet-violet",
+    "sword-shield",
+    "brilliant-diamond-shining-pearl",
+    "ultra-sun-ultra-moon",
+    "sun-moon",
+    "lets-go-pikachu-lets-go-eevee",
+    "omega-ruby-alpha-sapphire",
+    "x-y",
+    "black-2-white-2",
+    "black-white",
+    "heartgold-soulsilver",
+    "platinum",
+    "diamond-pearl",
+    "emerald",
+    "firered-leafgreen",
+    "ruby-sapphire",
+    "crystal",
+    "gold-silver",
+    "yellow",
+    "red-blue",
+];
+
+// Level-up moves from the most recent main-series game that lists any,
+// sorted by level: [{ name, url, level }].
+export function levelUpMoves(moves) {
+    const levelUps = moves.flatMap(({ move, version_group_details: details }) =>
+        details
+            .filter((detail) => detail.move_learn_method.name === "level-up")
+            .map((detail) => ({
+                name: move.name,
+                url: move.url,
+                level: detail.level_learned_at,
+                versionGroup: detail.version_group.name,
+            })),
+    );
+    if (!levelUps.length) {
+        return [];
+    }
+    const available = new Set(levelUps.map((entry) => entry.versionGroup));
+    const chosen = VERSION_GROUP_PREFERENCE.find((group) => available.has(group)) ?? [...available].pop();
+    return levelUps
+        .filter((entry) => entry.versionGroup === chosen)
+        .map(({ name, url, level }) => ({ name, url, level }))
+        .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
+}

@@ -684,6 +684,47 @@ body {
     font-weight: 700;
 }
 
+#pokemonMoves {
+    width: 100%;
+    max-width: 28rem;
+    margin: 0 1rem 1rem;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+#movesSummary {
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+}
+
+#movesTable {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-collapse: collapse;
+}
+
+#movesTable th,
+#movesTable td {
+    padding: 0.25rem 0.5rem;
+}
+
+#movesTable tbody tr:nth-child(odd) {
+    background-color: var(--surface);
+}
+
+#movesTable td:first-child,
+#movesTable td:last-child,
+#movesTable th:first-child,
+#movesTable th:last-child {
+    text-align: right;
+}
+
+#movesTable img {
+    vertical-align: middle;
+}
+
 #pokemonEvolution {
     width: 100%;
     padding: 0 1rem 1rem;

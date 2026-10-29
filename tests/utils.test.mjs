@@ -8,6 +8,7 @@ import {
     formLabel,
     formatName,
     idFromUrl,
+    levelUpMoves,
     normalizeQuery,
 } from "../pokemon/utils.js";
 
@@ -58,4 +59,26 @@ test("formLabel names a form relative to its species", () => {
     assert.equal(formLabel("charizard", "charizard"), "Standard");
     assert.equal(formLabel("charizard", "charizard-mega-x"), "Mega X");
     assert.equal(formLabel("raichu", "raichu-alola"), "Alola");
+});
+
+test("levelUpMoves uses the newest main-series game, not the highest version group id", () => {
+    const detail = (level, group, method = "level-up") => ({
+        level_learned_at: level,
+        move_learn_method: { name: method },
+        version_group: { name: group, url: "https://pokeapi.co/api/v2/version-group/1/" },
+    });
+    const moves = [
+        {
+            move: { name: "thunder-shock", url: "m/84/" },
+            version_group_details: [detail(1, "scarlet-violet"), detail(1, "red-green-japan")],
+        },
+        { move: { name: "growl", url: "m/45/" }, version_group_details: [detail(5, "red-green-japan")] },
+        { move: { name: "nuzzle", url: "m/609/" }, version_group_details: [detail(0, "scarlet-violet")] },
+        { move: { name: "thunder", url: "m/87/" }, version_group_details: [detail(0, "scarlet-violet", "machine")] },
+    ];
+    assert.deepEqual(levelUpMoves(moves), [
+        { name: "nuzzle", url: "m/609/", level: 0 },
+        { name: "thunder-shock", url: "m/84/", level: 1 },
+    ]);
+    assert.deepEqual(levelUpMoves([]), []);
 });

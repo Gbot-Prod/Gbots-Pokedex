@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Moves list (level-up moves with level, type and power) in a collapsible section
 
 ## 4. Browsing & discovery
 - [ ] Show type icons on browse tiles and allow sorting by number / name
@@ -93,3 +92,4 @@ Rules for each run:
 - [x] Keyboard shortcuts: ←/→ for previous/next, `/` to focus search, `s` to toggle shiny (2026-10-29) — ←/→ prev/next, / focuses search, S toggles shiny; ignored while typing or with modifiers; hint line shown on devices with hover
 - [x] Alternate forms switcher (Mega, Alolan, Galarian…) from `species.varieties` (2026-10-29) — 'Forms:' buttons from species.varieties (Standard / Mega X / Alola / Gmax…), current form pressed; hidden for single-form species; formLabel helper + unit test
 - [x] Play the Pokémon's cry (`cries.latest`) with a small speaker button (2026-10-29) — 🔊 button next to the name plays cries.latest (falls back to legacy), C shortcut; hidden when there's no cry
+- [x] Moves list (level-up moves with level, type and power) in a collapsible section (2026-10-29) — collapsible 'Level-up moves (N)' table from the newest main-series game (explicit game order, since version-group ids aren't chronological); type/power fetched only when opened; levelUpMoves helper + unit test

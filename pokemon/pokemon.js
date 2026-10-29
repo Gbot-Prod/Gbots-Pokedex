@@ -12,6 +12,7 @@ import {
     formLabel,
     formatName,
     idFromUrl,
+    levelUpMoves,
     normalizeQuery,
 } from "./utils.js";
 
@@ -36,6 +37,11 @@ const flavorTextElement = document.getElementById("pokemonFlavorText");
 const evolutionSection = document.getElementById("pokemonEvolution");
 const formsElement = document.getElementById("pokemonForms");
 const cryButton = document.getElementById("cryBtn");
+const movesSection = document.getElementById("pokemonMoves");
+const movesSummary = document.getElementById("movesSummary");
+const movesTableBody = document.querySelector("#movesTable tbody");
+let currentMoves = [];
+let movesDetailsLoaded = false;
 let currentCryUrl = null;
 let cryAudio = null;
 const evolutionListElement = document.getElementById("evolutionList");
@@ -349,6 +355,7 @@ function renderPokemon(data, query) {
 
     //fetch pokemon base stats
     renderStats(data.stats);
+    renderMoves(data.moves ?? []);
 
     // Cries are .ogg files; older entries only have a "legacy" recording.
     currentCryUrl = data.cries?.latest || data.cries?.legacy || null;
@@ -675,6 +682,62 @@ document.getElementById("clearDataBtn").addEventListener("click", () => {
     clearFields();
     setUrlPokemon(null);
 });
+
+// --- Moves ----------------------------------------------------------------------
+
+function renderMoves(moves) {
+    currentMoves = levelUpMoves(moves);
+    movesDetailsLoaded = false;
+    movesSection.open = false;
+    movesSection.hidden = currentMoves.length === 0;
+    movesSummary.textContent = "Level-up moves (" + currentMoves.length + ")";
+    movesTableBody.replaceChildren();
+    for (const move of currentMoves) {
+        const row = movesTableBody.insertRow();
+        row.insertCell().textContent = move.level || "Evo"; // level 0 = learned on evolution
+        row.insertCell().textContent = formatName(move.name);
+        row.insertCell().textContent = "…";
+        row.insertCell().textContent = "…";
+    }
+}
+
+// Type and power need one request per move, so they're only fetched once the list is opened.
+async function loadMoveDetails() {
+    if (!movesSection.open || movesDetailsLoaded) {
+        return;
+    }
+    movesDetailsLoaded = true;
+    const moves = currentMoves;
+    const rows = [...movesTableBody.rows];
+    await Promise.all(
+        moves.map(async (move, index) => {
+            const [, , typeCell, powerCell] = rows[index].cells;
+            try {
+                const details = await fetchJson(move.url);
+                if (moves !== currentMoves) {
+                    return; // a different Pokémon is showing now
+                }
+                const type = details.type.name;
+                typeCell.replaceChildren();
+                if (TYPE_ICONS[type]) {
+                    const icon = document.createElement("img");
+                    icon.src = "assets/" + TYPE_ICONS[type];
+                    icon.alt = "";
+                    icon.width = 20;
+                    icon.height = 20;
+                    typeCell.append(icon);
+                }
+                typeCell.append(" " + formatName(type));
+                powerCell.textContent = details.power ?? "—";
+            } catch {
+                typeCell.textContent = "?";
+                powerCell.textContent = "?";
+            }
+        }),
+    );
+}
+
+movesSection.addEventListener("toggle", loadMoveDetails);
 
 // --- Cry ------------------------------------------------------------------------
 
