@@ -435,3 +435,25 @@ test("the search combobox suggests Pokémon and can be driven with the keyboard"
     assert.equal(await page.getAttribute("#pokemonLookupInpt", "aria-expanded"), "false");
     assert.deepEqual(pageErrors, []);
 });
+
+test("a sprite that fails to load is remembered and not requested again", async () => {
+    let requests = 0;
+    await page.route("**/sprites/pokemon/1.png", (route) => {
+        requests++;
+        route.fulfill({ status: 404, body: "" });
+    });
+    await page.reload();
+    await page.waitForFunction(() => (localStorage.getItem("pokedex:missing-sprites:v1") ?? "").includes("1"));
+    assert.equal(requests, 1);
+
+    await page.reload();
+    await page.waitForSelector("#browseGrid .browseTile");
+    assert.equal(requests, 1); // skipped on the next visit
+    assert.equal(
+        await page
+            .locator("#browseGrid .browseTile img")
+            .first()
+            .evaluate((img) => img.style.visibility),
+        "hidden",
+    );
+});

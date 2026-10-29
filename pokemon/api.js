@@ -210,3 +210,58 @@ export function getSpeciesSlugs() {
     }
     return speciesSlugsPromise;
 }
+
+// --- Sprites ----------------------------------------------------------------------
+// A few alternate forms have no image in PokéAPI's sprite repo, and requesting one logs a
+// 404. Known gaps are skipped up front, and any other sprite that fails to load is
+// remembered (localStorage) so it's only requested once per browser.
+const MISSING_SPRITES_KEY = "pokedex:missing-sprites:v1";
+const KNOWN_MISSING_SPRITES = [10010, 10041, 10107, 10264, 10265, 10266, 10267, 10268, 10269, 10270, 10271, 10301];
+let missingSprites = null;
+
+function getMissingSprites() {
+    if (!missingSprites) {
+        missingSprites = new Set(KNOWN_MISSING_SPRITES);
+        try {
+            for (const id of JSON.parse(localStorage.getItem(MISSING_SPRITES_KEY)) ?? []) {
+                missingSprites.add(id);
+            }
+        } catch {
+            // storage unavailable; the built-in list still applies
+        }
+    }
+    return missingSprites;
+}
+
+// URL of a Pokémon's small sprite, or null if it's known not to exist.
+export function spriteUrl(id) {
+    return getMissingSprites().has(Number(id)) ? null : SPRITE_BASE + id + ".png";
+}
+
+export function noteMissingSprite(id) {
+    const missing = getMissingSprites();
+    missing.add(Number(id));
+    try {
+        localStorage.setItem(MISSING_SPRITES_KEY, JSON.stringify([...missing]));
+    } catch {
+        // fine: it just gets requested again next visit
+    }
+}
+
+// Points an <img> at a Pokémon's sprite, hiding it (and remembering the gap) if there isn't one.
+export function setSprite(image, id, load = (img, src) => (img.src = src)) {
+    const src = spriteUrl(id);
+    if (!src) {
+        image.style.visibility = "hidden";
+        return;
+    }
+    image.addEventListener(
+        "error",
+        () => {
+            image.style.visibility = "hidden";
+            noteMissingSprite(id);
+        },
+        { once: true },
+    );
+    load(image, src);
+}

@@ -13,7 +13,6 @@ Rules for each run:
 - Bigger changes (new framework, build tooling, tests) are welcome when they make sense; split them into steps.
 
 ## 1. Bug fixes (do these first)
-- [ ] Some newer forms have no sprite in PokéAPI's repo (e.g. id 10301), so tiles/suggestions log a 404; use `sprites.front_default` from the API (null when missing) or skip ids known to be missing
 
 ## 2. Code quality
 
@@ -139,3 +138,4 @@ Rules for each run:
 - [x] Combobox step 1: main search uses a custom ARIA combobox (combobox.js) — up to 8 matches with sprites, official names and dex numbers; ↑/↓/Enter/Escape and click; numbers match by id (2026-10-29) — matchEntries unit-tested, keyboard smoke test. Split from "replace the datalist"
 - [x] Combobox step 2: compare inputs use the custom combobox (auto-wrapped for positioning); the 1,300-option `<datalist>` and `loadNameSuggestions` are gone (2026-10-29)
 - [x] Lighthouse CI in the GitHub workflow with performance/accessibility budgets (2026-10-29) — lighthouserc.json budgets (a11y ≥0.95 and best practices ≥0.9 fail the build; performance/SEO warn) run via npm run lighthouse and in CI; local run: perf 0.8, a11y 1.0, BP 1.0, SEO 0.91
+- [x] Some newer forms have no sprite in PokéAPI's repo (e.g. id 10301), so tiles/suggestions log a 404; use `sprites.front_default` from the API (null when missing) or skip ids known to be missing (2026-10-29) — setSprite/spriteUrl in api.js skip the 12 form sprites known to be missing and remember any other failure in localStorage, so a 404 happens at most once per browser; used by combobox, tiles and evolution; verified no 404s typing pikachu/eevee/zyg/ogerpon…; smoke test

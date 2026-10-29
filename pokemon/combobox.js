@@ -1,7 +1,7 @@
 // Accessible autocomplete for Pokémon name inputs (ARIA 1.2 combobox pattern):
 // typing shows up to 8 matches with sprites and official names; ↑/↓ move through them,
 // Enter picks the highlighted one, Escape closes the list.
-import { SPRITE_BASE, getAllPokemonEntries, getSpeciesSlugs } from "./api.js";
+import { getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
 import { entryDisplayName, formatDexNumber, normalizeQuery } from "./utils.js";
 
 const MAX_OPTIONS = 8;
@@ -126,13 +126,11 @@ export function attachCombobox(input, { onSelect } = {}) {
                 item.setAttribute("aria-selected", "false");
 
                 const sprite = document.createElement("img");
-                sprite.src = SPRITE_BASE + entry.id + ".png";
                 sprite.alt = "";
                 sprite.width = 40;
                 sprite.height = 40;
                 sprite.loading = "lazy";
-                // Some newer forms have no sprite in PokéAPI's sprite repo yet.
-                sprite.addEventListener("error", () => (sprite.style.visibility = "hidden"), { once: true });
+                setSprite(sprite, entry.id);
 
                 const name = document.createElement("span");
                 name.textContent = entry.label;

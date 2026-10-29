@@ -1,12 +1,12 @@
 import {
     API_BASE,
-    SPRITE_BASE,
     fetchJson,
     fetchPokemon,
     getAllPokemonEntries,
     getMachineItemName,
     getMoveSummary,
     getSpeciesSlugs,
+    setSprite,
 } from "./api.js";
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
@@ -255,7 +255,7 @@ function createEvolutionButton(node) {
     }
 
     const sprite = document.createElement("img");
-    fadeInImage(sprite, SPRITE_BASE + dexNumber + ".png");
+    setSprite(sprite, dexNumber, fadeInImage);
     sprite.alt = "";
     sprite.width = 72;
     sprite.height = 72;
