@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] CI: a GitHub Actions workflow running `npm run lint` and `npm test` on every push (a red commit slipped through locally this run)
 
 ## 3. Core Pokédex features
 - [ ] TM tab: sort rows by TM number once the numbers load (currently alphabetical)
@@ -115,3 +114,4 @@ Rules for each run:
 - [x] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items (2026-10-29) — describeEvolution uses the newest game's detail and adds time of day, held/trade items, trade partners, known moves/move types and locations (Espeon 'Friendship (day)', Scizor 'Trade holding Metal Coat', Leafeon 'Leaf Stone'); unit-tested
 - [x] Metric/imperial toggle for height and weight (2026-10-29) — 'Show lbs / ft' toggle under height/weight (1′04″, 13.2 lbs), remembered in localStorage; formatHeight/formatWeight unit-tested
 - [x] Persist move details (type/power) in localStorage: opening a moves list fires 20–90 requests on every visit (2026-10-29) — getMoveSummary/getMachineItemName in api.js keep small summaries in localStorage (batched writes); Pikachu's TM tab in a new tab went from 106 requests to 0 (~39 KB stored)
+- [x] CI: a GitHub Actions workflow running `npm run lint` and `npm test` on every push (a red commit slipped through locally this run) (2026-10-29) — .github/workflows/ci.yml runs npm ci, installs Chromium, then npm run lint and npm test on every push and PR
