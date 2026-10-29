@@ -84,3 +84,27 @@ export function pickSprite(sprites, shiny) {
     const key = shiny ? "front_shiny" : "front_default";
     return sprites.other.home[key] || sprites.other["official-artwork"][key] || sprites[key] || "";
 }
+
+// Highest National Pokédex number in PokéAPI (Pecharunt). Higher ids are alternate forms.
+export const MAX_DEX_NUMBER = 1025;
+
+export const TYPE_ICONS = {
+    normal: "NormalIcon.png",
+    fire: "FireIcon.png",
+    water: "WaterIcon.png",
+    grass: "GrassIcon.png",
+    electric: "ElectricIcon.png",
+    ice: "IceIcon.png",
+    fighting: "FightingIcon.png",
+    poison: "PoisonIcon.png",
+    ground: "GroundIcon.png",
+    flying: "FlyingIcon.png",
+    psychic: "PsychicIcon.png",
+    bug: "BugIcon.png",
+    rock: "RockIcon.png",
+    ghost: "GhostIcon.png",
+    dark: "DarkIcon.png",
+    dragon: "DragonIcon.png",
+    steel: "SteelIcon.png",
+    fairy: "FairyIcon.png",
+};

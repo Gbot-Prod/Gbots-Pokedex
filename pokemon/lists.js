@@ -1,0 +1,257 @@
+// Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
+import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries } from "./api.js";
+import { MAX_DEX_NUMBER, TYPE_ICONS, formatName, idFromUrl } from "./utils.js";
+
+// Set by initLists: loads a Pokémon onto the main card / returns the one shown there.
+let showPokemon = () => {};
+let getCurrentPokemon = () => null;
+
+export function initLists(options) {
+    showPokemon = options.showPokemon;
+    getCurrentPokemon = options.getCurrentPokemon;
+    renderFavorites();
+    renderRecent();
+    initBrowse();
+}
+
+// Hides an image until it has loaded so it can fade in instead of popping.
+export function fadeInImage(image, src) {
+    if (image.getAttribute("src") === src) {
+        return;
+    }
+    image.classList.add("pending");
+    image.addEventListener("load", () => image.classList.remove("pending"), { once: true });
+    image.addEventListener("error", () => image.classList.remove("pending"), { once: true });
+    image.src = src;
+}
+
+// --- Browse grid ----------------------------------------------------------
+
+const BROWSE_PAGE_SIZE = 24;
+const browseGridElement = document.getElementById("browseGrid");
+const browsePageLabel = document.getElementById("browsePageLabel");
+const browsePrevButton = document.getElementById("browsePrevBtn");
+const browseNextButton = document.getElementById("browseNextBtn");
+const browseStatusElement = document.getElementById("browseStatus");
+const typeFilterElement = document.getElementById("typeFilter");
+const generationFilterElement = document.getElementById("generationFilter");
+
+// National Dex number ranges introduced by each generation.
+const GENERATIONS = [
+    { number: 1, region: "Kanto", first: 1, last: 151 },
+    { number: 2, region: "Johto", first: 152, last: 251 },
+    { number: 3, region: "Hoenn", first: 252, last: 386 },
+    { number: 4, region: "Sinnoh", first: 387, last: 493 },
+    { number: 5, region: "Unova", first: 494, last: 649 },
+    { number: 6, region: "Kalos", first: 650, last: 721 },
+    { number: 7, region: "Alola", first: 722, last: 809 },
+    { number: 8, region: "Galar", first: 810, last: 905 },
+    { number: 9, region: "Paldea", first: 906, last: 1025 },
+];
+let nationalDexEntries = [];
+let browseEntries = [];
+let browsePage = 0;
+const typeMembersCache = new Map();
+
+async function initBrowse() {
+    for (const type of Object.keys(TYPE_ICONS)) {
+        const option = document.createElement("option");
+        option.value = type;
+        option.textContent = formatName(type);
+        typeFilterElement.append(option);
+    }
+
+    for (const generation of GENERATIONS) {
+        const option = document.createElement("option");
+        option.value = generation.number;
+        option.textContent = "Gen " + generation.number + " (" + generation.region + ")";
+        generationFilterElement.append(option);
+    }
+
+    browseStatusElement.textContent = "Loading Pokémon…";
+    try {
+        const entries = await getAllPokemonEntries();
+        // Only the National Dex here; alternate forms are reachable through search.
+        nationalDexEntries = entries.filter((entry) => entry.id <= MAX_DEX_NUMBER);
+        await applyBrowseFilters();
+    } catch {
+        browseStatusElement.textContent = "Couldn't load the Pokémon list.";
+    }
+}
+
+// Ids of every Pokémon with the given type, fetched once per type.
+async function getTypeMemberIds(type) {
+    if (!typeMembersCache.has(type)) {
+        const data = await fetchJson(API_BASE + "type/" + type);
+        typeMembersCache.set(type, new Set(data.pokemon.map((entry) => idFromUrl(entry.pokemon.url))));
+    }
+    return typeMembersCache.get(type);
+}
+
+async function applyBrowseFilters() {
+    const type = typeFilterElement.value;
+    const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
+    let entries = nationalDexEntries;
+
+    if (generation) {
+        entries = entries.filter((entry) => entry.id >= generation.first && entry.id <= generation.last);
+    }
+
+    try {
+        if (type) {
+            browseStatusElement.textContent = "Loading " + formatName(type) + " Pokémon…";
+            const members = await getTypeMemberIds(type);
+            if (
+                type !== typeFilterElement.value ||
+                generationFilterElement.value !== (generation ? String(generation.number) : "")
+            ) {
+                return; // the filter changed while we were waiting
+            }
+            entries = entries.filter((entry) => members.has(entry.id));
+        }
+    } catch {
+        browseStatusElement.textContent = "Couldn't load that filter. Please try again.";
+        return;
+    }
+
+    browseEntries = entries;
+    browsePage = 0;
+    browseStatusElement.textContent = entries.length ? "" : "No Pokémon match these filters.";
+    renderBrowsePage();
+}
+
+function renderBrowsePage() {
+    const pageCount = Math.max(1, Math.ceil(browseEntries.length / BROWSE_PAGE_SIZE));
+    browsePage = Math.min(Math.max(browsePage, 0), pageCount - 1);
+    const pageEntries = browseEntries.slice(browsePage * BROWSE_PAGE_SIZE, (browsePage + 1) * BROWSE_PAGE_SIZE);
+
+    browseGridElement.replaceChildren(...pageEntries.map(createBrowseTile));
+    browsePageLabel.textContent = "Page " + (browsePage + 1) + " of " + pageCount;
+    browsePrevButton.disabled = browsePage === 0;
+    browseNextButton.disabled = browsePage >= pageCount - 1;
+}
+
+function createBrowseTile(entry) {
+    const item = document.createElement("li");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "browseTile";
+
+    const sprite = document.createElement("img");
+    fadeInImage(sprite, SPRITE_BASE + entry.id + ".png");
+    sprite.alt = "";
+    sprite.width = 96;
+    sprite.height = 96;
+    sprite.loading = "lazy";
+
+    const number = document.createElement("small");
+    number.textContent = "#" + String(entry.id).padStart(4, "0");
+
+    const name = document.createElement("span");
+    name.textContent = formatName(entry.name);
+
+    button.append(sprite, number, name);
+    button.addEventListener("click", () => {
+        showPokemon(entry.id);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    item.append(button);
+    return item;
+}
+
+typeFilterElement.addEventListener("change", applyBrowseFilters);
+generationFilterElement.addEventListener("change", applyBrowseFilters);
+browsePrevButton.addEventListener("click", () => {
+    browsePage--;
+    renderBrowsePage();
+});
+browseNextButton.addEventListener("click", () => {
+    browsePage++;
+    renderBrowsePage();
+});
+
+// --- Favorites ------------------------------------------------------------
+
+const FAVORITES_KEY = "pokedex:favorites:v1";
+const favoriteButton = document.getElementById("favoriteBtn");
+const favoritesSection = document.getElementById("favoritesSection");
+const favoritesListElement = document.getElementById("favoritesList");
+
+function loadStoredList(key) {
+    try {
+        const list = JSON.parse(localStorage.getItem(key));
+        return Array.isArray(list) ? list : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveStoredList(key, list) {
+    try {
+        localStorage.setItem(key, JSON.stringify(list));
+    } catch {
+        // storage full or unavailable; the list still works until the page closes
+    }
+}
+
+let favorites = loadStoredList(FAVORITES_KEY);
+
+function isFavorite(id) {
+    return favorites.some((entry) => entry.id === id);
+}
+
+function toggleFavorite() {
+    const currentPokemon = getCurrentPokemon();
+    if (!currentPokemon) {
+        return;
+    }
+    if (isFavorite(currentPokemon.id)) {
+        favorites = favorites.filter((entry) => entry.id !== currentPokemon.id);
+    } else {
+        favorites = [...favorites, currentPokemon].sort((a, b) => a.id - b.id);
+    }
+    saveStoredList(FAVORITES_KEY, favorites);
+    updateFavoriteButton();
+    renderFavorites();
+}
+
+export function updateFavoriteButton() {
+    const currentPokemon = getCurrentPokemon();
+    const active = currentPokemon !== null && isFavorite(currentPokemon.id);
+    favoriteButton.textContent = active ? "★" : "☆";
+    favoriteButton.setAttribute("aria-pressed", String(active));
+    favoriteButton.title = active ? "Remove from favorites" : "Add to favorites";
+}
+
+function renderFavorites() {
+    favoritesSection.hidden = favorites.length === 0;
+    favoritesListElement.replaceChildren(...favorites.map(createBrowseTile));
+}
+
+favoriteButton.addEventListener("click", toggleFavorite);
+
+// --- Recently viewed --------------------------------------------------------
+
+const RECENT_KEY = "pokedex:recent:v1";
+const MAX_RECENT = 10;
+const recentSection = document.getElementById("recentSection");
+const recentListElement = document.getElementById("recentList");
+
+let recentPokemon = loadStoredList(RECENT_KEY);
+
+export function addToRecent(pokemon) {
+    recentPokemon = [pokemon, ...recentPokemon.filter((entry) => entry.id !== pokemon.id)].slice(0, MAX_RECENT);
+    saveStoredList(RECENT_KEY, recentPokemon);
+    renderRecent();
+}
+
+function renderRecent() {
+    recentSection.hidden = recentPokemon.length === 0;
+    recentListElement.replaceChildren(...recentPokemon.map(createBrowseTile));
+}
+
+document.getElementById("clearRecentBtn").addEventListener("click", () => {
+    recentPokemon = [];
+    saveStoredList(RECENT_KEY, recentPokemon);
+    renderRecent();
+});

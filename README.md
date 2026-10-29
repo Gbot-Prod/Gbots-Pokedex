@@ -13,7 +13,8 @@ mode.
 pokemon/
   pokemon.html   page markup
   pokemon.css    styles
-  pokemon.js     page logic (ES module): fetching, rendering, browse, favorites…
+  pokemon.js     main card: search, rendering, navigation, theme (ES module entry)
+  lists.js       browse grid with filters, favorites and recently viewed
   compare.js     side-by-side comparison table
   api.js         PokéAPI requests with in-memory/sessionStorage caching
   utils.js       pure helpers (name formatting, query normalisation, …)
