@@ -2,7 +2,7 @@
 // typing shows up to 8 matches with sprites and official names; ↑/↓ move through them,
 // Enter picks the highlighted one, Escape closes the list.
 import { getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
-import { entryDisplayName, formatDexNumber, normalizeQuery } from "./utils.js";
+import { entryDisplayName, entrySpecies, formatDexNumber, normalizeQuery } from "./utils.js";
 
 const MAX_OPTIONS = 8;
 let comboboxCount = 0;
@@ -42,7 +42,14 @@ let labelledEntriesPromise = null;
 function getLabelledEntries() {
     if (!labelledEntriesPromise) {
         labelledEntriesPromise = Promise.all([getAllPokemonEntries(), getSpeciesSlugs().catch(() => null)])
-            .then(([entries, slugs]) => entries.map((entry) => ({ ...entry, label: entryDisplayName(entry, slugs) })))
+            .then(([entries, slugs]) =>
+                entries.map((entry) => ({
+                    ...entry,
+                    label: entryDisplayName(entry, slugs),
+                    // forms show their species' number, not their internal id (10034)
+                    dexNumber: entrySpecies(entry, slugs)?.id ?? entry.id,
+                })),
+            )
             .catch((error) => {
                 labelledEntriesPromise = null; // allow a retry
                 throw error;
@@ -135,7 +142,7 @@ export function attachCombobox(input, { onSelect } = {}) {
                 const name = document.createElement("span");
                 name.textContent = entry.label;
                 const number = document.createElement("small");
-                number.textContent = formatDexNumber(entry.id);
+                number.textContent = formatDexNumber(entry.dexNumber);
 
                 item.append(sprite, name, number);
                 // mousedown (not click) so the input doesn't lose focus and close the list first

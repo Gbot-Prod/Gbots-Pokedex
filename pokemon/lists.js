@@ -1,6 +1,14 @@
 // Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
 import { API_BASE, fetchJson, getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
-import { MAX_DEX_NUMBER, TYPE_ICONS, entryDisplayName, formatDexNumber, formatName, idFromUrl } from "./utils.js";
+import {
+    MAX_DEX_NUMBER,
+    TYPE_ICONS,
+    entryDisplayName,
+    entrySpecies,
+    formatDexNumber,
+    formatName,
+    idFromUrl,
+} from "./utils.js";
 
 // Set by initLists: loads a Pokémon onto the main card / returns the one shown there.
 let showPokemon = () => {};
@@ -201,7 +209,7 @@ function createBrowseTile(entry) {
     sprite.loading = "lazy";
 
     const number = document.createElement("small");
-    number.textContent = formatDexNumber(entry.id);
+    number.textContent = formatDexNumber(entrySpecies(entry, speciesSlugs)?.id ?? entry.id);
 
     const name = document.createElement("span");
     name.textContent = tileName(entry);

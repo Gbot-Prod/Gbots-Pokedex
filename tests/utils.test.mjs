@@ -7,6 +7,7 @@ import {
     describeEvolution,
     editDistance,
     entryDisplayName,
+    entrySpecies,
     formatDexNumber,
     formatHeight,
     formatWeight,
@@ -247,7 +248,7 @@ test("entryDisplayName prefers the species name for National Dex entries", () =>
     assert.equal(entryDisplayName({ id: 718, name: "zygarde-50" }, slugs), "Zygarde");
     assert.equal(
         entryDisplayName({ id: 10118, name: "zygarde-10-power-construct" }, slugs),
-        "Zygarde 10 Power Construct",
+        "Zygarde (10 Power Construct)",
     );
     assert.equal(entryDisplayName({ id: 718, name: "zygarde-50" }, null), "Zygarde 50"); // list not loaded yet
 });
@@ -269,4 +270,16 @@ test("radarPoints puts the first axis at the top and scales by value", () => {
     // Two axes on a radius-100 chart centred at (100,100): top and bottom.
     assert.equal(radarPoints([100, 50], 100, 100, 100, 100), "100.0,0.0 100.0,150.0");
     assert.equal(radarPoints([300], 150, 100, 0, 0), "0.0,-100.0"); // capped at max
+});
+
+test("entrySpecies finds a form's species by the longest matching slug", () => {
+    const slugs = new Map([
+        [6, "charizard"],
+        [122, "mr-mime"],
+        [25, "pikachu"],
+    ]);
+    assert.deepEqual(entrySpecies({ id: 10034, name: "charizard-mega-x" }, slugs), { id: 6, slug: "charizard" });
+    assert.deepEqual(entrySpecies({ id: 10168, name: "mr-mime-galar" }, slugs), { id: 122, slug: "mr-mime" });
+    assert.equal(entrySpecies({ id: 10999, name: "unknown-form" }, slugs), null);
+    assert.equal(entryDisplayName({ id: 10034, name: "charizard-mega-x" }, slugs), "Charizard (Mega X)");
 });

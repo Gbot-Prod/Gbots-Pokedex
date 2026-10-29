@@ -363,12 +363,42 @@ export function pruneCacheEntries(entries, now, maxAgeMs, maxEntries) {
     return Object.fromEntries(fresh.slice(0, maxEntries));
 }
 
-// Display name for a { name, id } list entry: National Dex entries use their species'
-// name (speciesSlugs: Map id -> species slug), so "zygarde-50" shows as "Zygarde" and
-// "farfetchd" as "Farfetch’d"; alternate forms keep their own name ("Charizard Mega X").
+// Species (dex number and slug) an entry belongs to. Forms like "charizard-mega-x" aren't
+// linked to their species in the list, so the longest species slug that prefixes the name wins.
+// speciesSlugs: Map dex number -> species slug.
+const speciesBySlugCache = new WeakMap();
+export function entrySpecies(entry, speciesSlugs) {
+    if (!speciesSlugs) {
+        return null;
+    }
+    if (entry.id <= MAX_DEX_NUMBER) {
+        const slug = speciesSlugs.get(entry.id);
+        return slug ? { id: entry.id, slug } : null;
+    }
+    if (!speciesBySlugCache.has(speciesSlugs)) {
+        speciesBySlugCache.set(speciesSlugs, new Map([...speciesSlugs].map(([id, slug]) => [slug, id])));
+    }
+    const bySlug = speciesBySlugCache.get(speciesSlugs);
+    const parts = entry.name.split("-");
+    for (let length = parts.length - 1; length > 0; length--) {
+        const slug = parts.slice(0, length).join("-");
+        if (bySlug.has(slug)) {
+            return { id: bySlug.get(slug), slug };
+        }
+    }
+    return null;
+}
+
+// Display name for a { name, id } list entry: National Dex entries use their species' name
+// ("zygarde-50" -> "Zygarde", "farfetchd" -> "Farfetch’d"); forms add their label
+// ("charizard-mega-x" -> "Charizard (Mega X)").
 export function entryDisplayName(entry, speciesSlugs) {
-    const slug = entry.id <= MAX_DEX_NUMBER ? speciesSlugs?.get(entry.id) : null;
-    return slug ? speciesDisplayName(slug) : formatName(entry.name);
+    const species = entrySpecies(entry, speciesSlugs);
+    if (!species) {
+        return formatName(entry.name);
+    }
+    const base = speciesDisplayName(species.slug);
+    return entry.id <= MAX_DEX_NUMBER ? base : base + " (" + formLabel(species.slug, entry.name) + ")";
 }
 
 // Plain-English description of an ability: the latest English in-game text, falling back to
