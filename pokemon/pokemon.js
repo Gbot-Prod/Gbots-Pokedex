@@ -525,6 +525,40 @@ function renderStats(stats) {
     const totalRow = createStatRow("Total", total);
     totalRow.classList.add("statTotal");
     statsListElement.append(totalRow);
+    animateStats();
+}
+
+// Bars grow from zero and the numbers count up (skipped when reduced motion is preferred).
+function animateStats() {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const fills = [...statsListElement.querySelectorAll(".statFill")];
+    const targets = fills.map((fill) => fill.style.width);
+    for (const fill of fills) {
+        fill.style.width = "0%";
+    }
+    requestAnimationFrame(() =>
+        requestAnimationFrame(() => fills.forEach((fill, index) => (fill.style.width = targets[index]))),
+    );
+
+    const numbers = [...statsListElement.querySelectorAll(".statValue")].map((element) => [
+        element,
+        Number(element.textContent),
+    ]);
+    const start = performance.now();
+    const DURATION = 600;
+    const step = (now) => {
+        const progress = Math.min(1, (now - start) / DURATION);
+        const eased = 1 - (1 - progress) ** 3;
+        for (const [element, value] of numbers) {
+            element.textContent = Math.round(value * eased);
+        }
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        }
+    };
+    requestAnimationFrame(step);
 }
 
 function createStatRow(label, value, max) {

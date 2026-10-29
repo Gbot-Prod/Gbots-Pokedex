@@ -19,7 +19,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Animated sprites step 2: animated sprites in the evolution chain and team slots when the toggle is on; add showdown sprites to the fixtures so the toggle is tested offline
 - [ ] Theme picker: Classic, Retro Game Boy (4-shade green palette + pixel font) and Neon night, saved per visitor
 - [ ] "Pokémon of the day" hero at the top: deterministic pick from the date, shown as a big holo card with a "See it" button
-- [ ] Stat bars animate in from zero with count-up numbers when a Pokémon loads (instant under reduced motion)
 - [ ] Battle preview: pick two Pokémon, show who outspeeds, their best STAB move multiplier against each other and a simple "who has the edge" verdict
 - [ ] Optional sound effects (off by default): soft UI blips on navigation and quiz correct/wrong jingles via Web Audio
 - [ ] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading
@@ -173,3 +172,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team builder step 2a: "Share team" copies a `?team=6,94,…` link (share sheet on phones); opening one shows "Someone shared a team: … [Load this team] [Keep mine]" instead of overwriting yours (2026-10-29) — smoke + unit tests
 - [x] Type chart step 2: the card's type icons are buttons that open the chart focused on that type's row/column; arrow keys move between cells (roving focus) with the same highlight as hover (2026-10-29) — smoke test
 - [x] Animated sprites step 1: "▶ Animated" toggle in the art window swaps to the Showdown GIF (shiny too), scaled up pixel-crisp, remembered in localStorage, hidden when there's no animation (2026-10-29)
+- [x] Stat bars animate in from zero with count-up numbers when a Pokémon loads (instant under reduced motion) (2026-10-29) — bars grow from 0 and numbers count up with an ease-out over 0.6 s whenever a Pokémon loads; final values immediately under reduced motion

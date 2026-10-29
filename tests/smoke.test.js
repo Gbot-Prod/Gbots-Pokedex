@@ -132,7 +132,8 @@ test("searching by name shows the card", async () => {
     assert.match(await page.textContent("#pokemonNumber"), /25/);
     assert.equal(await page.getAttribute("#pokemonType1", "alt"), "Electric type");
     assert.equal(await page.isVisible("#pokemonType2"), false);
-    assert.match(await page.innerText("#statsList"), /Total\s+320/);
+    // Stats count up when they appear, so wait for the final total.
+    await page.waitForFunction(() => /Total\s+320/.test(document.getElementById("statsList").innerText));
     await page.waitForSelector("#pokemonFlavorText:not(:empty)");
     await page.waitForSelector("#pokemonMatchups:not([hidden])");
     assert.match(await page.innerText("#matchupsList"), /Weak to/);
