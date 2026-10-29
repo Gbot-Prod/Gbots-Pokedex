@@ -19,9 +19,9 @@ Rules for each run:
 ## 3. Core Pokédex features
 
 ## 4. Browsing & discovery
-- [ ] Combobox step 2: use the custom combobox for the compare inputs too, then drop the `<datalist>` and `loadNameSuggestions`
 
 ## 5. Design & UX
+- [ ] On phones the open suggestion list covers the Compare button; close it after a pick and/or open it upwards near the bottom of the screen
 
 ## 6. Performance, accessibility & polish
 - [ ] Offline: Random and Previous/Next should pick from cached Pokémon instead of failing when offline
@@ -131,3 +131,4 @@ Rules for each run:
 - [x] Shareable comparisons: reflect the compared Pokémon in the URL (`?compare=pikachu,gengar`) and restore them on load (2026-10-29) — compared Pokémon kept in ?compare=a,b[,c] (replaceState, alongside ?pokemon=) and restored on load; smoke test
 - [x] Ability descriptions: show each ability's short effect (ability endpoint `effect_entries`) in a tooltip or expandable chip (2026-10-29) — ability chips are buttons (aria-expanded) that show the latest English game text below the chips, fetched on click; abilityDescription helper unit-tested; smoke test
 - [x] Combobox step 1: main search uses a custom ARIA combobox (combobox.js) — up to 8 matches with sprites, official names and dex numbers; ↑/↓/Enter/Escape and click; numbers match by id (2026-10-29) — matchEntries unit-tested, keyboard smoke test. Split from "replace the datalist"
+- [x] Combobox step 2: compare inputs use the custom combobox (auto-wrapped for positioning); the 1,300-option `<datalist>` and `loadNameSuggestions` are gone (2026-10-29)

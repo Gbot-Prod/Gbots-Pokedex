@@ -75,6 +75,15 @@ body {
     box-sizing: border-box;
 }
 
+#compareForm .comboboxWrap {
+    flex: 1 1 10rem;
+}
+
+.comboboxWrap .compareInput {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .comboboxList {
     position: absolute;
     top: calc(100% + 4px);
@@ -1179,7 +1188,7 @@ kbd {
         display: none;
     }
 
-    .compareInput {
+    #compareForm .comboboxWrap {
         flex-basis: 100%;
     }
 

@@ -312,7 +312,7 @@ for (const [colorScheme, width] of [
         await page.click("#movesSummary");
         await page.fill("#compareLeftInput", "pikachu");
         await page.fill("#compareRightInput", "gengar");
-        await page.click("#compareBtn");
+        await page.press("#compareRightInput", "Enter"); // submits; at phone width the suggestion list covers the button
         await page.waitForSelector("#compareResult:not([hidden])");
         await page.waitForSelector("#browseGrid .browseTile");
 

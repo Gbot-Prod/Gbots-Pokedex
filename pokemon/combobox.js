@@ -60,6 +60,13 @@ export function attachCombobox(input, { onSelect } = {}) {
     list.setAttribute("role", "listbox");
     list.setAttribute("aria-label", "Suggestions");
     list.hidden = true;
+    // The list is positioned under the input, so both live in a relative wrapper.
+    if (!input.parentElement.classList.contains("comboboxWrap")) {
+        const wrap = document.createElement("div");
+        wrap.className = "comboboxWrap";
+        input.replaceWith(wrap);
+        wrap.append(input);
+    }
     input.after(list);
 
     input.setAttribute("role", "combobox");

@@ -1,4 +1,5 @@
 // Side-by-side comparison of two or three Pokémon.
+import { attachCombobox } from "./combobox.js";
 import { API_BASE, fetchJson, fetchPokemon } from "./api.js";
 import {
     damageMultipliers,
@@ -169,16 +170,15 @@ function renderComparison(pokemonList, matchups) {
 }
 
 // getCurrentPokemon returns the { id, name } on the main card (or null);
-// loadNameSuggestions fills the shared autocomplete list.
-export function initCompare({ getCurrentPokemon, loadNameSuggestions, getUnits: unitsGetter }) {
+export function initCompare({ getCurrentPokemon, getUnits: unitsGetter }) {
     getUnits = unitsGetter ?? getUnits;
     compareForm.addEventListener("submit", (event) => {
         event.preventDefault();
         comparePokemon();
     });
-    compareLeftInput.addEventListener("focus", loadNameSuggestions);
-    compareRightInput.addEventListener("focus", loadNameSuggestions);
-    compareThirdInput.addEventListener("focus", loadNameSuggestions);
+    for (const input of [compareLeftInput, compareRightInput, compareThirdInput]) {
+        attachCombobox(input);
+    }
 
     document.getElementById("compareCurrentBtn").addEventListener("click", () => {
         const currentPokemon = getCurrentPokemon();

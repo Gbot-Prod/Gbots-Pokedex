@@ -678,29 +678,6 @@ function clearFields() {
 
 // --- Autocomplete -------------------------------------------------------
 
-const nameListElement = document.getElementById("pokemonNameList");
-let nameListLoaded = false;
-
-// The full list is only fetched once the user starts interacting with the search box.
-async function loadNameSuggestions() {
-    if (nameListLoaded) {
-        return;
-    }
-    nameListLoaded = true;
-    try {
-        const entries = await getAllPokemonEntries();
-        const speciesSlugs = await getSpeciesSlugs().catch(() => null);
-        const options = entries.map((entry) => {
-            const option = document.createElement("option");
-            option.value = entryDisplayName(entry, speciesSlugs);
-            return option;
-        });
-        nameListElement.replaceChildren(...options);
-    } catch {
-        nameListLoaded = false; // allow a retry on the next focus
-    }
-}
-
 // The main search gets the custom combobox; picking a suggestion searches straight away.
 attachCombobox(searchInput, { onSelect: (entry) => loadPokemon(entry.name) });
 
@@ -738,7 +715,7 @@ themeToggleButton.addEventListener("click", () => {
 prefersDark.addEventListener("change", updateThemeButton);
 updateThemeButton();
 
-initCompare({ getCurrentPokemon: () => currentPokemon, loadNameSuggestions, getUnits: () => units });
+initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 
 // Loads any Pokémon by id, including alternate forms above the National Dex range.
