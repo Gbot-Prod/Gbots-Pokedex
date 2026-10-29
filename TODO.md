@@ -15,14 +15,19 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
+- [ ] CI: a GitHub Actions workflow running `npm run lint` and `npm test` on every push (a red commit slipped through locally this run)
 
 ## 3. Core Pokédex features
+- [ ] TM tab: sort rows by TM number once the numbers load (currently alphabetical)
 
 ## 4. Browsing & discovery
 
 ## 5. Design & UX
+- [ ] Compare table: follow the metric/imperial setting and use display names (Farfetch’d, "Charizard (Mega X)") in its header
+- [ ] Evolution methods: show gender requirements (e.g. Combee → Vespiquen "female only") and other conditions PokéAPI provides
 
 ## 6. Performance, accessibility & polish
+- [ ] Move summary cache in localStorage never expires: add a timestamp/version and cap its size
 - [ ] Cache by canonical id: "gengar" and "94" currently fetch the same Pokémon twice
 - [ ] Offline support: service worker caching the app shell and recently viewed Pokémon (PWA manifest)
 
