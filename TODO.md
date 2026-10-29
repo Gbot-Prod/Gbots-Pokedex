@@ -23,7 +23,6 @@ Rules for each run:
 ## 5. Design & UX
 
 ## 6. Performance, accessibility & polish
-- [ ] Persist move details (type/power) in localStorage: opening a moves list fires 20–90 requests on every visit
 - [ ] Cache by canonical id: "gengar" and "94" currently fetch the same Pokémon twice
 - [ ] Offline support: service worker caching the app shell and recently viewed Pokémon (PWA manifest)
 
@@ -110,3 +109,4 @@ Rules for each run:
 - [x] Tiles (browse/favorites/recent) still show slug-based names for default forms ("Zygarde 50", "Aegislash Shield", "Farfetchd"); show official display names there too (2026-10-29) — tiles use the species name from one cached /pokemon-species list (Aegislash, Zygarde) plus an exceptions map for punctuation (Farfetch’d, Nidoran♀, Mr. Mime, Type: Null); speciesDisplayName unit-tested
 - [x] Evolution methods: include time of day (Espeon day / Umbreon night), held items and trade items (2026-10-29) — describeEvolution uses the newest game's detail and adds time of day, held/trade items, trade partners, known moves/move types and locations (Espeon 'Friendship (day)', Scizor 'Trade holding Metal Coat', Leafeon 'Leaf Stone'); unit-tested
 - [x] Metric/imperial toggle for height and weight (2026-10-29) — 'Show lbs / ft' toggle under height/weight (1′04″, 13.2 lbs), remembered in localStorage; formatHeight/formatWeight unit-tested
+- [x] Persist move details (type/power) in localStorage: opening a moves list fires 20–90 requests on every visit (2026-10-29) — getMoveSummary/getMachineItemName in api.js keep small summaries in localStorage (batched writes); Pikachu's TM tab in a new tab went from 106 requests to 0 (~39 KB stored)

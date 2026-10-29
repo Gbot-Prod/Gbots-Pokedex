@@ -1,4 +1,4 @@
-import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries } from "./api.js";
+import { API_BASE, SPRITE_BASE, fetchJson, getAllPokemonEntries, getMachineItemName, getMoveSummary } from "./api.js";
 import { initCompare } from "./compare.js";
 import { addToRecent, fadeInImage, initLists, updateFavoriteButton } from "./lists.js";
 import {
@@ -809,16 +809,16 @@ movesGameSelect.addEventListener("change", () => {
 });
 
 // A TM's number comes from its machine record for the selected game (item "tm085" -> "TM085").
-async function loadTmNumber(moveDetails, versionGroup, cell, moves) {
-    const machine = moveDetails.machines?.find((entry) => entry.version_group.name === versionGroup);
+async function loadTmNumber(summary, versionGroup, cell, moves) {
+    const machine = summary.machines.find(([group]) => group === versionGroup);
     if (!machine) {
         cell.textContent = "—";
         return;
     }
     try {
-        const details = await fetchJson(machine.machine.url);
+        const itemName = await getMachineItemName(machine[1]);
         if (moves === currentMoves) {
-            cell.textContent = details.item.name.toUpperCase();
+            cell.textContent = itemName.toUpperCase();
         }
     } catch {
         cell.textContent = "?";
@@ -839,11 +839,11 @@ async function loadMoveDetails() {
         moves.map(async (move, index) => {
             const [firstCell, , typeCell, categoryCell, powerCell, accuracyCell] = rows[index].cells;
             try {
-                const details = await fetchJson(move.url);
+                const details = await getMoveSummary(move.url);
                 if (moves !== currentMoves) {
                     return; // a different Pokémon is showing now
                 }
-                const type = details.type.name;
+                const type = details.type;
                 typeCell.replaceChildren();
                 if (TYPE_ICONS[type]) {
                     const icon = document.createElement("img");
@@ -859,7 +859,7 @@ async function loadMoveDetails() {
                 if (method === "machine") {
                     loadTmNumber(details, versionGroup, firstCell, moves);
                 }
-                const category = details.damage_class?.name;
+                const category = details.category;
                 categoryCell.replaceChildren();
                 if (MOVE_CATEGORIES[category]) {
                     const badge = document.createElement("span");

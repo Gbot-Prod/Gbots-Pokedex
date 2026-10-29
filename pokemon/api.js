@@ -81,3 +81,60 @@ async function fetchAllPokemonEntries() {
     }
     return entries;
 }
+
+// Move and TM details are kept in localStorage as small summaries, so a moves list
+// opened again (even after closing the tab) doesn't refetch 20–90 large /move responses.
+const MOVE_CACHE_KEY = "pokedex:moves:v1";
+let moveCache = null;
+let moveCacheSaveTimer = null;
+
+function getMoveCache() {
+    if (!moveCache) {
+        try {
+            moveCache = JSON.parse(localStorage.getItem(MOVE_CACHE_KEY)) ?? {};
+        } catch {
+            moveCache = {};
+        }
+    }
+    return moveCache;
+}
+
+// Writes are batched: a moves list fills dozens of entries at once.
+function saveMoveCacheSoon() {
+    clearTimeout(moveCacheSaveTimer);
+    moveCacheSaveTimer = setTimeout(() => {
+        try {
+            localStorage.setItem(MOVE_CACHE_KEY, JSON.stringify(moveCache));
+        } catch {
+            // quota exceeded or storage unavailable; the in-memory cache still helps
+        }
+    }, 500);
+}
+
+// { type, power, accuracy, category, machines: [[versionGroup, machineUrl], …] }
+export async function getMoveSummary(url) {
+    const cache = getMoveCache();
+    if (!cache[url]) {
+        const move = await fetchJson(url);
+        cache[url] = {
+            type: move.type.name,
+            power: move.power,
+            accuracy: move.accuracy,
+            category: move.damage_class?.name ?? null,
+            machines: (move.machines ?? []).map((entry) => [entry.version_group.name, entry.machine.url]),
+        };
+        saveMoveCacheSoon();
+    }
+    return cache[url];
+}
+
+// TM/HM/TR item name for a machine record, e.g. "tm085".
+export async function getMachineItemName(url) {
+    const cache = getMoveCache();
+    if (!cache[url]) {
+        const machine = await fetchJson(url);
+        cache[url] = { item: machine.item.name };
+        saveMoveCacheSoon();
+    }
+    return cache[url].item;
+}
