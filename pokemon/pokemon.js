@@ -632,6 +632,32 @@ document.getElementById("clearDataBtn").addEventListener("click", () => {
     setUrlPokemon(null);
 });
 
+// --- Keyboard shortcuts -------------------------------------------------------
+// ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny.
+
+function isTypingTarget(element) {
+    return element.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(element.tagName);
+}
+
+document.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isTypingTarget(event.target)) {
+        return;
+    }
+    const cardVisible = !pokemonCard.classList.contains("hidden");
+
+    if (event.key === "/") {
+        event.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+    } else if (event.key === "ArrowLeft" && cardVisible && !prevButton.disabled) {
+        prevButton.click();
+    } else if (event.key === "ArrowRight" && cardVisible && !nextButton.disabled) {
+        nextButton.click();
+    } else if (event.key.toLowerCase() === "s" && cardVisible && !shinyButton.hidden) {
+        shinyButton.click();
+    }
+});
+
 // --- Shareable URLs -----------------------------------------------------------
 // The current Pokémon lives in ?pokemon=<name> so links can be shared and Back/Forward work.
 

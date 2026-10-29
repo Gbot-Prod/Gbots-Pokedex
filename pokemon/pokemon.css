@@ -711,6 +711,29 @@ body {
     padding: 5px;
 }
 
+#shortcutHint {
+    margin: 1rem 0 0;
+    font-family: inter, arial, sans-serif;
+    font-size: 0.85rem;
+    color: #ffffff;
+    text-align: center;
+    opacity: 0.85;
+}
+
+kbd {
+    padding: 0.05rem 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: 700;
+}
+
+@media (hover: none) {
+    #shortcutHint {
+        display: none;
+    }
+}
+
 .tileSection {
     margin: 2rem 0;
     font-family: inter, arial, sans-serif;

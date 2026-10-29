@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] Keyboard shortcuts: ←/→ for previous/next, `/` to focus search, `s` to toggle shiny
 - [ ] Alternate forms switcher (Mega, Alolan, Galarian…) from `species.varieties`
 - [ ] Play the Pokémon's cry (`cries.latest`) with a small speaker button
 - [ ] Moves list (level-up moves with level, type and power) in a collapsible section
@@ -92,3 +91,4 @@ Rules for each run:
 - [x] Split pokemon.js — step 3b: browse grid, favorites and recently viewed moved to `lists.js` (`initLists`); TYPE_ICONS/MAX_DEX_NUMBER moved to utils.js (2026-10-29) — pokemon.js down from ~1,100 to ~630 lines
 - [x] Split pokemon.js — step 4: decided against Vite for now (2026-10-29) — 5 small native ES modules with no runtime dependencies load fine via `npm start`; revisit if we add npm runtime packages, TypeScript or a framework
 - [x] Shareable URLs: reflect the current Pokémon in `?pokemon=gengar` and support Back/Forward (2026-10-29) — current Pokémon kept in ?pokemon=<name> (pushState); deep links load on open, Back/Forward restore, Clear removes it; new smoke test
+- [x] Keyboard shortcuts: ←/→ for previous/next, `/` to focus search, `s` to toggle shiny (2026-10-29) — ←/→ prev/next, / focuses search, S toggles shiny; ignored while typing or with modifiers; hint line shown on devices with hover
