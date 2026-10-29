@@ -289,9 +289,24 @@ test("species whose default form has a suffixed name can be searched by species 
 });
 
 // Accessibility: no serious or critical axe-core violations in the main states, in both themes.
-for (const colorScheme of ["light", "dark"]) {
-    test("no serious accessibility violations (" + colorScheme + " mode)", async () => {
+// Run in light and dark mode, at desktop and phone width, with the install/offline UI showing.
+for (const [colorScheme, width] of [
+    ["light", 1280],
+    ["dark", 1280],
+    ["light", 375],
+    ["dark", 375],
+]) {
+    test("no serious accessibility violations (" + colorScheme + " mode, " + width + "px)", async () => {
         await page.emulateMedia({ colorScheme });
+        await page.setViewportSize({ width, height: 900 });
+        // Show the install button and offline banner too.
+        await page.evaluate(() => {
+            const event = new Event("beforeinstallprompt", { cancelable: true });
+            event.prompt = () => {};
+            event.userChoice = Promise.resolve({ outcome: "dismissed" });
+            window.dispatchEvent(event);
+            document.getElementById("offlineBanner").hidden = false;
+        });
         await search("pikachu");
         await page.waitForSelector("#pokemonMoves:not([hidden])");
         await page.click("#movesSummary");

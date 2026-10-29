@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Run the axe accessibility check at phone width (375px) too, and with the install/offline UI visible
 
 ## 3. Core Pokédex features
 - [ ] Shareable comparisons: reflect the compared Pokémon in the URL (`?compare=pikachu,gengar`) and restore them on load
@@ -130,3 +129,4 @@ Rules for each run:
 - [x] Offline step 2a: "You're offline" banner driven by online/offline events, with a smoke test (2026-10-29) — split from offline step 2
 - [x] Offline step 2b: mark which tiles/recent Pokémon are available offline (check the service worker's runtime cache) and add an end-to-end offline reload test with the service worker enabled (2026-10-29) — while offline, tiles whose Pokémon isn't in the service worker's cache are dimmed (aria-disabled); end-to-end offline reload test runs in check:live (skipped in the mocked suite, which blocks service workers)
 - [x] Service worker: bump `SHELL_CACHE` automatically (e.g. a build step or a version from package.json) — today an edit to the JS needs a manual version bump or users get the old shell once (2026-10-29) — solved without a build step: the shell is now network-first with cache: no-cache revalidation (fresh files whenever online, cached copy offline), so there's no version to bump and no mix of old/new modules; verified an edited CSS file is picked up on the next load
+- [x] Run the axe accessibility check at phone width (375px) too, and with the install/offline UI visible (2026-10-29) — axe now runs at 1280px and 375px in both themes with the install button and offline banner showing; it caught the Random/Clear buttons failing contrast at phone size (smaller text) — darkened to ≥4.6:1
