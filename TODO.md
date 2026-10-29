@@ -17,7 +17,6 @@ Rules for each run:
 ## 2. Code quality
 
 ## 3. Core Pokédex features
-- [ ] TM tab: sort rows by TM number once the numbers load (currently alphabetical)
 
 ## 4. Browsing & discovery
 
@@ -115,3 +114,4 @@ Rules for each run:
 - [x] Metric/imperial toggle for height and weight (2026-10-29) — 'Show lbs / ft' toggle under height/weight (1′04″, 13.2 lbs), remembered in localStorage; formatHeight/formatWeight unit-tested
 - [x] Persist move details (type/power) in localStorage: opening a moves list fires 20–90 requests on every visit (2026-10-29) — getMoveSummary/getMachineItemName in api.js keep small summaries in localStorage (batched writes); Pikachu's TM tab in a new tab went from 106 requests to 0 (~39 KB stored)
 - [x] CI: a GitHub Actions workflow running `npm run lint` and `npm test` on every push (a red commit slipped through locally this run) (2026-10-29) — .github/workflows/ci.yml runs npm ci, installs Chromium, then npm run lint and npm test on every push and PR
+- [x] TM tab: sort rows by TM number once the numbers load (currently alphabetical) (2026-10-29) — once TM numbers load the rows are re-ordered TM01, TM02… (then HM/TR, then moves without a machine)

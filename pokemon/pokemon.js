@@ -808,6 +808,17 @@ movesGameSelect.addEventListener("change", () => {
     loadMoveDetails();
 });
 
+// TM rows start alphabetical; once the numbers are in, order them TM01, TM02, … then HMs/TRs,
+// with moves that have no machine in this game last.
+function sortRowsByTmNumber() {
+    const key = (row) => {
+        const match = /^(TM|HM|TR)(\d+)$/.exec(row.cells[0].textContent);
+        return match ? ["TM", "HM", "TR"].indexOf(match[1]) * 1000 + Number(match[2]) : Infinity;
+    };
+    const rows = [...movesTableBody.rows].sort((a, b) => key(a) - key(b));
+    movesTableBody.append(...rows);
+}
+
 // A TM's number comes from its machine record for the selected game (item "tm085" -> "TM085").
 async function loadTmNumber(summary, versionGroup, cell, moves) {
     const machine = summary.machines.find(([group]) => group === versionGroup);
@@ -857,7 +868,7 @@ async function loadMoveDetails() {
                 powerCell.textContent = details.power ?? "—";
                 accuracyCell.textContent = details.accuracy ? details.accuracy + "%" : "—";
                 if (method === "machine") {
-                    loadTmNumber(details, versionGroup, firstCell, moves);
+                    await loadTmNumber(details, versionGroup, firstCell, moves);
                 }
                 const category = details.category;
                 categoryCell.replaceChildren();
@@ -875,6 +886,9 @@ async function loadMoveDetails() {
             }
         }),
     );
+    if (method === "machine" && moves === currentMoves) {
+        sortRowsByTmNumber();
+    }
 }
 
 movesSection.addEventListener("toggle", loadMoveDetails);
