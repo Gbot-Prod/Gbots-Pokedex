@@ -172,3 +172,56 @@ test("?pokemon= links open that Pokémon and Back returns to the previous one", 
     await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
     assert.deepEqual(pageErrors, []);
 });
+
+test("species with several forms get a forms switcher", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonForms:not([hidden])");
+
+    const pressed = await page.textContent(".formBtn[aria-pressed=true]");
+    assert.equal(pressed.trim(), "Standard");
+    assert.ok((await page.locator(".formBtn").count()) > 1);
+});
+
+test("the level-up moves list loads type and power when opened", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonMoves:not([hidden])");
+    assert.match(await page.textContent("#movesSummary"), /Level-up moves \(\d+\)/);
+
+    await page.click("#movesSummary");
+    await page.waitForFunction(() => !document.querySelector("#movesTable tbody").textContent.includes("…"));
+    const rows = await page.$$eval("#movesTable tbody tr", (trs) =>
+        trs.map((tr) => tr.innerText.replace(/\s+/g, " ").trim()),
+    );
+    assert.ok(
+        rows.some((row) => /Thunder Shock Electric 40$/.test(row)),
+        rows.join(" | "),
+    );
+    assert.deepEqual(pageErrors, []);
+});
+
+test("the browse grid can be sorted by name", async () => {
+    await page.waitForSelector("#browseGrid .browseTile");
+    await page.selectOption("#sortOrder", "name");
+    const first = await page.textContent("#browseGrid .browseTile span");
+    assert.equal(first.trim(), "Abomasnow");
+});
+
+test("arrow keys step through the Pokédex when not typing", async () => {
+    await search("25");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
+    await page.locator("#pokemonNumber").click();
+
+    await page.keyboard.press("ArrowRight");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Raichu");
+
+    await page.keyboard.press("s");
+    assert.equal(await page.getAttribute("#shinyToggleBtn", "aria-pressed"), "true");
+});
+
+test("the cry button requests the Pokémon's cry", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#cryBtn:not([hidden])");
+    const cryRequest = page.waitForRequest((request) => request.url().endsWith("/latest/25.ogg"));
+    await page.click("#cryBtn");
+    await cryRequest;
+});

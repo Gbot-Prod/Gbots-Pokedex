@@ -23,6 +23,7 @@ tests/
   smoke.test.js  browser tests (Playwright) against mocked PokéAPI data
   utils.test.mjs unit tests for utils.js
   fixtures/      trimmed PokéAPI responses used by the tests
+  build-fixtures.mjs  regenerates the fixtures from the live API
 TODO.md          living improvement backlog
 ```
 
@@ -51,6 +52,9 @@ npm install                       # installs Playwright, ESLint and Prettier
 npx playwright install chromium   # first time only
 npm test
 ```
+
+The fixtures are trimmed copies of real PokéAPI responses; `npm run fixtures`
+regenerates them from the live API (see `tests/build-fixtures.mjs`).
 
 Lint and formatting checks (ESLint + Prettier) run with `npm run lint`;
 `npm run format` rewrites files in the house style.

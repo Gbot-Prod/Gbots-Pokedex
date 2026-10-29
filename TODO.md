@@ -15,7 +15,6 @@ Rules for each run:
 ## 1. Bug fixes (do these first)
 
 ## 2. Code quality
-- [ ] Extend the smoke tests to forms, moves, sorting, keyboard shortcuts and the cry button (add `moves`/`varieties`/`cries` to the fixtures)
 - [ ] Opt-in live check: `npm run check:live` runs the smoke flow against the real PokéAPI (pikachu, gengar, farfetchd, 25) to catch API changes the fixtures hide
 
 ## 3. Core Pokédex features
@@ -101,3 +100,4 @@ Rules for each run:
 - [x] Show type icons on browse tiles (build an id → types map from the 18 cached /type responses, loaded lazily) (2026-10-29) — id → types map built lazily from the 18 cached /type responses (slot order); browse, favorites and recent tiles show small type icons
 - [x] "Did you mean" should also match substrings/subsequences (e.g. "charz" → Charizard) (2026-10-29) — suggestionScore ranks prefix > substring > in-order letters (charz → Charizard) > typos; isSubsequence/suggestionScore unit-tested
 - [x] Cry button does nothing in Safari (no .ogg support): check `new Audio().canPlayType("audio/ogg")` and hide the button (or explain) when unsupported (2026-10-29) — button (and C shortcut) hidden when the browser can't play Ogg Vorbis; checked with canPlayType stubbed to ''
+- [x] Extend the smoke tests to forms, moves, sorting, keyboard shortcuts and the cry button (add `moves`/`varieties`/`cries` to the fixtures) (2026-10-29) — fixtures now regenerated from the live API by tests/build-fixtures.mjs (npm run fixtures) and include moves, varieties, cries; 5 new tests (forms, moves, sorting, keyboard, cry) — 20 tests pass
