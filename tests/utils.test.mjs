@@ -215,3 +215,15 @@ test("pokemonDisplayName uses the species name and labels alternate forms", () =
         "Charizard (Mega X)",
     );
 });
+
+test("describeEvolution lists gender, stat and party conditions", () => {
+    assert.equal(describeEvolution([{ min_level: 21, gender: 1, trigger: { name: "level-up" } }]), "Lv. 21 (female)");
+    assert.equal(
+        describeEvolution([{ min_level: 20, relative_physical_stats: 1, trigger: { name: "level-up" } }]),
+        "Lv. 20 (Atk > Def)",
+    );
+    assert.equal(
+        describeEvolution([{ party_species: { name: "remoraid" }, trigger: { name: "level-up" } }]),
+        "Level Up (with Remoraid in party)",
+    );
+});

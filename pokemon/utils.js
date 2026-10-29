@@ -74,8 +74,40 @@ export function describeEvolution(details) {
     if (detail.known_move_type && !text.startsWith("Knowing")) {
         text += ", knowing a " + formatName(detail.known_move_type.name) + " move";
     }
+    // Extra conditions, e.g. Tyrogue's stat comparison, Mantyke's party member, Inkay's upside-down console.
+    const conditions = [];
     if (detail.time_of_day) {
-        text += " (" + detail.time_of_day + ")";
+        conditions.push(detail.time_of_day);
+    }
+    if (detail.gender === 1) {
+        conditions.push("female");
+    } else if (detail.gender === 2) {
+        conditions.push("male");
+    }
+    if (detail.relative_physical_stats === 1) {
+        conditions.push("Atk > Def");
+    } else if (detail.relative_physical_stats === -1) {
+        conditions.push("Atk < Def");
+    } else if (detail.relative_physical_stats === 0) {
+        conditions.push("Atk = Def");
+    }
+    if (detail.party_species) {
+        conditions.push("with " + formatName(detail.party_species.name) + " in party");
+    }
+    if (detail.party_type) {
+        conditions.push("with a " + formatName(detail.party_type.name) + " type in party");
+    }
+    if (detail.needs_overworld_rain) {
+        conditions.push("in rain");
+    }
+    if (detail.turn_upside_down) {
+        conditions.push("console upside down");
+    }
+    if (detail.min_beauty) {
+        conditions.push("high Beauty");
+    }
+    if (conditions.length) {
+        text += " (" + conditions.join(", ") + ")";
     }
     return text;
 }
