@@ -47,3 +47,10 @@ test("typeChartMatrix reads each type's attacking relations", async () => {
     assert.equal(matrix.water.ground, 1);
     assert.equal(matrix.ground.electric, 2);
 });
+
+test("parseTeamParam keeps up to six valid ids", async () => {
+    const { parseTeamParam } = await import("../pokemon/team.js");
+    assert.deepEqual(parseTeamParam("6,94,x,25,0,-3"), [6, 94, 25]);
+    assert.deepEqual(parseTeamParam("1,2,3,4,5,6,7,8"), [1, 2, 3, 4, 5, 6]);
+    assert.deepEqual(parseTeamParam(null), []);
+});

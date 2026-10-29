@@ -594,3 +594,13 @@ test("the type chart opens on demand and highlights the hovered row and column",
     await page.hover(".typeChartTable tbody tr:nth-child(5) td:nth-child(3)");
     assert.ok((await page.locator(".typeChartTable .rowHighlight").count()) > 0);
 });
+
+test("a shared ?team= link offers to load that team", async () => {
+    await page.goto(baseUrl + "?team=25,94");
+    await page.waitForSelector("#sharedTeam:not([hidden])");
+    assert.match(await page.textContent("#sharedTeam"), /Pikachu, Gengar/);
+    await page.click("#sharedTeam .btn");
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
+    assert.doesNotMatch(page.url(), /team=/); // the offer is consumed
+    assert.equal(await page.isVisible("#teamShareBtn"), true);
+});

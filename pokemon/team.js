@@ -1,7 +1,7 @@
 // Team builder: up to six Pokémon, saved locally, with a type-coverage chart showing how
 // many team members are weak to / resist each attacking type.
-import { API_BASE, fetchJson, setSprite } from "./api.js";
-import { TYPE_ICONS, damageMultipliers, formatName } from "./utils.js";
+import { API_BASE, fetchJson, fetchPokemon, setSprite } from "./api.js";
+import { TYPE_ICONS, damageMultipliers, formatName, pokemonDisplayName } from "./utils.js";
 
 const TEAM_KEY = "pokedex:team:v1";
 export const TEAM_SIZE = 6;
@@ -11,6 +11,8 @@ const slotsElement = document.getElementById("teamSlots");
 const coverageElement = document.getElementById("teamCoverage");
 const teamButton = document.getElementById("teamAddBtn");
 const statusElement = document.getElementById("teamStatus");
+const shareTeamButton = document.getElementById("teamShareBtn");
+const sharedTeamElement = document.getElementById("sharedTeam");
 
 let team = []; // [{ id, name, label, types: ["fire", "flying"] }]
 let getCurrentPokemon = () => null;
@@ -181,6 +183,7 @@ async function renderCoverage() {
 
 function renderTeam() {
     section.hidden = false;
+    shareTeamButton.hidden = team.length === 0;
     renderSlots();
     renderCoverage();
     updateTeamButton();
@@ -191,10 +194,89 @@ export function onCardChange() {
     updateTeamButton();
 }
 
+// --- Sharing ---------------------------------------------------------------------------
+// A team travels as ?team=6,94,25 (Pokémon ids). Opening such a link offers to load it
+// rather than silently replacing the visitor's own team.
+
+export function parseTeamParam(value) {
+    return (value ?? "")
+        .split(",")
+        .map((part) => Number(part))
+        .filter((id) => Number.isInteger(id) && id > 0)
+        .slice(0, TEAM_SIZE);
+}
+
+async function shareTeam() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("team", team.map((member) => member.id).join(","));
+    try {
+        if (navigator.share) {
+            await navigator.share({ title: "My Pokémon team", url: url.href });
+            return;
+        }
+        await navigator.clipboard.writeText(url.href);
+        statusElement.textContent = "Team link copied";
+        shareTeamButton.textContent = "✓ Link copied";
+        setTimeout(() => (shareTeamButton.textContent = "Share team"), 1500);
+    } catch {
+        // share sheet dismissed or clipboard blocked
+    }
+}
+
+async function offerSharedTeam() {
+    const ids = parseTeamParam(new URLSearchParams(window.location.search).get("team"));
+    const sameAsMine = ids.length === team.length && ids.every((id, index) => team[index]?.id === id);
+    if (!ids.length || sameAsMine) {
+        return;
+    }
+    let members;
+    try {
+        members = (await Promise.all(ids.map((id) => fetchPokemon(String(id))))).map((pokemon) => ({
+            id: pokemon.id,
+            name: pokemon.name,
+            label: pokemonDisplayName(pokemon),
+            types: pokemon.types.map((entry) => entry.type.name),
+        }));
+    } catch {
+        return; // a broken link just shows your own team
+    }
+
+    const text = document.createElement("span");
+    text.textContent = "Someone shared a team: " + members.map((member) => member.label).join(", ") + ". ";
+    const load = Object.assign(document.createElement("button"), {
+        type: "button",
+        className: "btn",
+        textContent: "Load this team",
+    });
+    const dismiss = Object.assign(document.createElement("button"), {
+        type: "button",
+        className: "linkBtn",
+        textContent: "Keep mine",
+    });
+    const clearParam = () => {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("team");
+        history.replaceState(history.state, "", url);
+        sharedTeamElement.hidden = true;
+    };
+    load.addEventListener("click", () => {
+        team = members;
+        saveTeam();
+        renderTeam();
+        statusElement.textContent = "Shared team loaded";
+        clearParam();
+    });
+    dismiss.addEventListener("click", clearParam);
+    sharedTeamElement.replaceChildren(text, load, dismiss);
+    sharedTeamElement.hidden = false;
+}
+
 export function initTeam(options) {
     getCurrentPokemon = options.getCurrentPokemon;
     showPokemon = options.showPokemon;
     loadTeam();
     teamButton.addEventListener("click", toggleCurrent);
+    shareTeamButton.addEventListener("click", shareTeam);
     renderTeam();
+    offerSharedTeam();
 }

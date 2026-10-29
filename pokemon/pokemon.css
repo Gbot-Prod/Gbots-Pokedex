@@ -1963,3 +1963,37 @@ img.placeholderSprite {
         opacity: 0;
     }
 }
+
+#teamShareBtn,
+#sharedTeam .btn {
+    margin: 0 0 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #5871c1;
+    font-size: 1rem;
+}
+
+#sharedTeam {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin: 0 0 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-weight: 600;
+}
+
+#sharedTeam[hidden] {
+    display: none;
+}
+
+#sharedTeam .btn {
+    margin: 0;
+}
+
+#sharedTeam .linkBtn {
+    color: inherit;
+}
