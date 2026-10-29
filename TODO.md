@@ -17,6 +17,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Quiz step 2b: "type the name" mode (with the combobox) and a timed 60-second run with a high score
 - [ ] Team builder step 2b: offensive coverage (which types the team's own types hit super-effectively), drag to reorder, and "suggest a member" that patches the worst weakness
 - [ ] Animated sprites step 2: animated sprites in the evolution chain and team slots when the toggle is on; add showdown sprites to the fixtures so the toggle is tested offline
+- [ ] Theme picker: Classic, Retro Game Boy (4-shade green palette + pixel font) and Neon night, saved per visitor
+- [ ] "Pokémon of the day" hero at the top: deterministic pick from the date, shown as a big holo card with a "See it" button
+- [ ] Stat bars animate in from zero with count-up numbers when a Pokémon loads (instant under reduced motion)
+- [ ] Battle preview: pick two Pokémon, show who outspeeds, their best STAB move multiplier against each other and a simple "who has the edge" verdict
+- [ ] Optional sound effects (off by default): soft UI blips on navigation and quiz correct/wrong jingles via Web Audio
 - [ ] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading
 - [ ] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation
 
