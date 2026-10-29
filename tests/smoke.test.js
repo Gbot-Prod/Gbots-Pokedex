@@ -392,3 +392,20 @@ test(
         await context.setOffline(false);
     },
 );
+
+test("comparisons are kept in the URL and restored from a shared link", async () => {
+    await page.fill("#compareLeftInput", "pikachu");
+    await page.fill("#compareRightInput", "gengar");
+    await page.click("#compareBtn");
+    await page.waitForSelector("#compareResult:not([hidden])");
+    assert.match(page.url(), /[?&]compare=pikachu%2Cgengar|[?&]compare=pikachu,gengar/);
+
+    await page.goto(baseUrl + "?pokemon=raichu&compare=gengar,pikachu,raichu");
+    await page.waitForSelector("#compareResult:not([hidden])");
+    const headers = await page.$$eval("#compareTable thead th", (cells) => cells.map((cell) => cell.innerText));
+    assert.equal(headers.length, 4);
+    assert.match(headers[1], /Gengar/);
+    // The main card still follows ?pokemon=
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Raichu");
+    assert.match(page.url(), /compare=/);
+});

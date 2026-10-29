@@ -47,7 +47,27 @@ async function comparePokemon() {
 
     compareStatusElement.textContent = "";
     const pokemon = results.map((result) => result.value);
+    setCompareUrl(pokemon.map((entry) => entry.name));
     renderComparison(pokemon, await loadMatchupCounts(pokemon));
+}
+
+// The comparison lives in ?compare=pikachu,gengar so it can be shared. replaceState keeps
+// Back/Forward for the main card's ?pokemon= history.
+function setCompareUrl(names) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("compare", names.join(","));
+    history.replaceState(history.state, "", url);
+}
+
+function compareFromUrl() {
+    const names = (new URLSearchParams(window.location.search).get("compare") ?? "").split(",").filter(Boolean);
+    if (names.length < 2) {
+        return;
+    }
+    [compareLeftInput, compareRightInput, compareThirdInput].forEach((input, index) => {
+        input.value = names[index] ? formatName(names[index]) : "";
+    });
+    comparePokemon();
 }
 
 // { weak, resist, immune } counts per Pokémon, or null if the type data can't be loaded.
@@ -171,4 +191,6 @@ export function initCompare({ getCurrentPokemon, loadNameSuggestions, getUnits: 
         document.getElementById("compareSection").scrollIntoView({ behavior: "smooth" });
         compareRightInput.focus({ preventScroll: true });
     });
+
+    compareFromUrl();
 }
