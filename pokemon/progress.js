@@ -317,26 +317,30 @@ const BADGES = [
         kind: "collector",
         need: 50,
     },
+    // Tiered badges: bronze, silver and gold at each threshold in `tiers`.
     {
         icon: "🗺️",
-        label: "Region master: a regional Pokédex complete",
-        hint: "See every Pokémon of one region",
+        name: "Region master",
         kind: "regions",
-        need: 1,
+        tiers: [1, 3, 9],
+        unit: (n) => (n === 1 ? "a regional Pokédex complete" : n + " regional Pokédexes complete"),
+        hintFor: (n) => (n === 1 ? "See every Pokémon of one region" : "Complete " + n + " regions"),
     },
     {
         icon: "✨",
-        label: "Shiny hunter: 5 shinies caught",
-        hint: "Catch 5 shinies in the shiny hunt",
+        name: "Shiny hunter",
         kind: "shinies",
-        need: 5,
+        tiers: [5, 15, 50],
+        unit: (n) => n + " shinies caught",
+        hintFor: (n) => "Catch " + n + " shinies in the shiny hunt",
     },
     {
         icon: "🧠",
-        label: "Quiz whiz: a 20-answer quiz streak",
-        hint: "Get 20 quiz answers right in a row",
+        name: "Quiz whiz",
         kind: "quiz",
-        need: 20,
+        tiers: [20, 35, 50],
+        unit: (n) => "a " + n + "-answer quiz streak",
+        hintFor: (n) => "Get " + n + " quiz answers right in a row",
     },
     { icon: "👥", label: "Team player: a full team of six", hint: "Fill all six team slots", kind: "team", need: 6 },
 ];
@@ -345,8 +349,25 @@ const BADGES = [
 // progress: { streak, views, regions, shinies, quiz, team } (missing values count as 0).
 export function badgeShelf({ streak = 0, views: viewCounts = {}, regions = 0, shinies = 0, quiz = 0, team = 0 }) {
     const progress = { streak, collector: Math.max(0, ...Object.values(viewCounts)), regions, shinies, quiz, team };
-    return BADGES.map((badge) => ({ ...badge, earned: progress[badge.kind] >= badge.need }));
+    return BADGES.map((badge) => {
+        if (!badge.tiers) {
+            return { ...badge, earned: progress[badge.kind] >= badge.need, tier: 0 };
+        }
+        const tier = badge.tiers.filter((threshold) => progress[badge.kind] >= threshold).length;
+        const reached = badge.tiers[Math.max(0, tier - 1)];
+        return {
+            icon: badge.icon,
+            kind: badge.kind,
+            tier,
+            earned: tier > 0,
+            label: badge.name + ": " + badge.unit(reached) + (tier ? " (" + TIER_NAMES[tier - 1] + ")" : ""),
+            // what to aim for next: the first tier, or the next one up (none once gold)
+            hint: tier < badge.tiers.length ? badge.hintFor(badge.tiers[tier]) : null,
+        };
+    });
 }
+
+const TIER_NAMES = ["bronze", "silver", "gold"];
 
 // Everything the badges are measured on, from what this browser has saved.
 function badgeProgress(stats) {
@@ -781,7 +802,7 @@ function renderTrainerCard() {
     document.getElementById("trainerCardBadges").replaceChildren(
         ...shelf.map((badge) => {
             const item = document.createElement("li");
-            item.className = badge.kind + (badge.earned ? "" : " locked");
+            item.className = badge.kind + (badge.earned ? "" : " locked") + (badge.tier ? " tier" + badge.tier : "");
             item.title = badge.earned ? badge.label : "Locked: " + badge.hint;
             item.innerHTML = '<span aria-hidden="true"></span><span class="visuallyHidden"></span>';
             item.children[0].textContent = badge.earned ? badge.icon : "🔒";
@@ -789,7 +810,8 @@ function renderTrainerCard() {
             return item;
         }),
     );
-    const next = shelf.find((badge) => !badge.earned);
+    // Next goal: the first locked badge, else the next tier of a tiered one.
+    const next = shelf.find((badge) => !badge.earned) ?? shelf.find((badge) => badge.tier && badge.hint);
     document.getElementById("trainerNextBadge").textContent = next
         ? "Next badge: " + next.hint
         : "Every badge earned — legendary!";

@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Badge tiers: bronze/silver/gold rings on repeatable badges (e.g. Shiny hunter at 5/15/50) instead of one-off icons
 - [ ] Badge detail: tapping a badge on the shelf shows its description, when it was earned and progress toward the next tier
 - [ ] Toast polish: a tiny progress line along the toast's bottom edge showing time until the next queued toast
 - [ ] Hidden badge: a secret "Night owl" badge for opening 10 Pokémon between midnight and 4 am, shown as ❓ until earned
@@ -243,3 +242,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Toast queue: reuse the completion toast for other moments (shiny found, quiz best streak beaten, team full) with a small queue so toasts don't overlap (2026-10-30) — toasts now queue (4 s each) so e.g. "Kanto Pokédex complete!" is followed by the Region master badge toast instead of being overwritten
 - [x] Regression test for the Enter-before-suggestions race: delay the name/species list routes in the mocked smoke test so the pending lookup really resolves after Enter (a first attempt passed even without the fix) (2026-10-30) — the smoke test now clears the cached name list (localStorage + fetchJson's sessionStorage cache) and holds the /pokemon?limit request until after Enter; verified it fails on the pre-fix combobox and passes with the fix
 - [x] Test hygiene: a smoke-test helper that seeds Math.random per test and resets it, so no test inherits another's stubbed randomness (2026-10-30) — not needed: every smoke test already runs in a fresh browser context and page (beforeEach), so stubbed Math.random and storage can't leak between tests
+- [x] Badge tiers: bronze/silver/gold rings on repeatable badges (e.g. Shiny hunter at 5/15/50) instead of one-off icons (2026-10-30) — Region master (1/3/9 regions), Shiny hunter (5/15/50) and Quiz whiz (20/35/50 streak) now climb bronze → silver → gold with matching rings; tier-ups change the label so the unlock toast announces them, and the next-badge hint points at the next tier once everything is unlocked

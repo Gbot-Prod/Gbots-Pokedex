@@ -3822,6 +3822,24 @@ img.animatedSmall {
     box-shadow: 0 0 12px rgba(96, 165, 250, 0.7);
 }
 
+/* Tier rings on repeatable badges */
+#trainerCardBadges li.tier1 {
+    border-color: #cd7f32;
+}
+
+#trainerCardBadges li.tier2 {
+    border-color: #d9dde3;
+    outline: 2px solid #9aa3ad;
+}
+
+#trainerCardBadges li.tier3 {
+    border-color: #ffd447;
+    outline: 2px solid #ffe680;
+    box-shadow:
+        0 0 14px rgba(255, 212, 71, 0.95),
+        0 0 4px #ffffff inset;
+}
+
 #trainerCardBadges li.locked {
     border: 3px dashed rgba(127, 127, 127, 0.6);
     background: rgba(127, 127, 127, 0.15);

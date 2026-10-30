@@ -273,3 +273,15 @@ test("newlyEarned lists earned badges not seen before", async () => {
         ["👥"],
     );
 });
+
+test("tiered badges climb bronze, silver and gold", async () => {
+    const { badgeShelf } = await import("../pokemon/progress.js");
+    const shiny = (shinies) => badgeShelf({ shinies }).find((badge) => badge.kind === "shinies");
+    assert.equal(shiny(4).earned, false);
+    assert.equal(shiny(4).hint, "Catch 5 shinies in the shiny hunt");
+    assert.equal(shiny(5).label, "Shiny hunter: 5 shinies caught (bronze)");
+    assert.equal(shiny(5).hint, "Catch 15 shinies in the shiny hunt");
+    assert.equal(shiny(20).tier, 2);
+    assert.equal(shiny(50).label, "Shiny hunter: 50 shinies caught (gold)");
+    assert.equal(shiny(50).hint, null);
+});
