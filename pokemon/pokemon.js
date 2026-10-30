@@ -838,7 +838,7 @@ updateThemeButton();
 initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 initQuiz({ showPokemon });
-initProgress();
+initProgress({ showPokemon });
 initShinyHunt({ showPokemon });
 initTypeChart();
 initPotd({ showPokemon, isCardShowing: () => Boolean(getUrlPokemon()) || !pokemonCard.classList.contains("hidden") });

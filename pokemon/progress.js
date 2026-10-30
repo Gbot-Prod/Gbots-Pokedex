@@ -207,6 +207,7 @@ function applyCardStyle(style) {
 }
 
 function showPartner(id) {
+    document.getElementById("dexPartnerBtn").hidden = !id;
     for (const image of [document.getElementById("trainerAvatar"), partnerElement]) {
         image.hidden = !id;
         if (id && image.dataset.id !== String(id)) {
@@ -428,7 +429,13 @@ async function shareTrainerCard() {
     }
 }
 
-export function initProgress() {
+export function initProgress({ showPokemon }) {
+    document.getElementById("dexPartnerBtn").addEventListener("click", () => {
+        const partner = currentPartner();
+        if (partner) {
+            showPokemon(partner);
+        }
+    });
     showPartner(currentPartner());
     document.getElementById("trainerShareBtn").addEventListener("click", shareTrainerCard);
     document.getElementById("trainerImageBtn").addEventListener("click", saveTrainerCardImage);

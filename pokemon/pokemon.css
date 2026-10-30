@@ -2641,6 +2641,24 @@ img.animatedSmall {
     position: relative;
     display: inline-flex;
     flex: none;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+}
+
+.dexPartnerWrap[hidden] {
+    display: none;
+}
+
+.dexPartnerWrap:hover #dexPartner {
+    transform: scale(1.12);
+}
+
+.dexPartnerWrap:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 1px;
 }
 
 #dexPartnerBubble {

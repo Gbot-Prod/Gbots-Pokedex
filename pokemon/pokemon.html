@@ -47,10 +47,16 @@
                         </svg>
                         <span class="dexProgressCount" aria-hidden="true">0</span>
                     </button>
-                    <span class="dexPartnerWrap" aria-hidden="true">
+                    <button
+                        type="button"
+                        class="dexPartnerWrap"
+                        id="dexPartnerBtn"
+                        aria-label="Open your partner Pokémon"
+                        hidden
+                    >
                         <img id="dexPartner" alt="" width="48" height="48" hidden />
-                        <span id="dexPartnerBubble"></span>
-                    </span>
+                        <span id="dexPartnerBubble" aria-hidden="true"></span>
+                    </button>
                     <span class="dexTitle" aria-hidden="true">Pokédex</span>
                 </div>
                 <form id="searchForm" role="search">
