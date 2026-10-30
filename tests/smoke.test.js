@@ -804,6 +804,21 @@ test("the partner Pokémon reacts with a heart to its own evolution line", async
     await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("25"));
 });
 
+test("opening a Pokémon five times offers to make it your partner", async () => {
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:seen:v1", "[24, 25]");
+        localStorage.setItem("pokedex:trainer:v1", JSON.stringify({ partner: 24 }));
+        localStorage.setItem("pokedex:views:v1", JSON.stringify({ 25: 4 }));
+    });
+    await page.reload();
+    await search("pikachu");
+    await page.waitForSelector("#partnerOffer:not([hidden])");
+    assert.match(await page.textContent("#partnerOfferText"), /Pikachu seems to like you/);
+    await page.click("#partnerOfferYes");
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("pokedex:trainer:v1")).partner), 25);
+    assert.equal(await page.isHidden("#partnerOffer"), true);
+});
+
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
     await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
     await page.reload();

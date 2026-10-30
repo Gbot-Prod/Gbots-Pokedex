@@ -8,6 +8,8 @@ import { GENERATIONS, MAX_DEX_NUMBER, damageMultipliers, formatDexNumber, specie
 const SEEN_KEY = "pokedex:seen:v1";
 const TRAINER_KEY = "pokedex:trainer:v1";
 const VISITS_KEY = "pokedex:visits:v1";
+const VIEWS_KEY = "pokedex:views:v1";
+export const PARTNER_OFFER_VIEWS = 5;
 const RING_RADIUS = 18;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
 
@@ -339,6 +341,45 @@ export function partnerSay(text, duration = 2500) {
     bubbleTimer = setTimeout(() => bubble.classList.remove("visible"), duration);
 }
 
+// --- Views and the partner offer ----------------------------------------------------------
+// Opening the same Pokémon five times makes it want to join you as your partner.
+
+let views = readStored(VIEWS_KEY, {});
+
+function countView(dexNumber) {
+    views = { ...views, [dexNumber]: (views[dexNumber] ?? 0) + 1 };
+    try {
+        localStorage.setItem(VIEWS_KEY, JSON.stringify(views));
+    } catch {
+        // counts just won't persist
+    }
+    return views[dexNumber];
+}
+
+export function shouldOfferPartner(viewCount, dexNumber, partner) {
+    return viewCount === PARTNER_OFFER_VIEWS && dexNumber !== partner;
+}
+
+// Called for every Pokémon opened (with its display name).
+export function notePokemonView(dexNumber, name) {
+    const offer = document.getElementById("partnerOffer");
+    const count = countView(dexNumber);
+    offer.hidden = !shouldOfferPartner(count, dexNumber, currentPartner());
+    if (!offer.hidden) {
+        offer.dataset.id = dexNumber;
+        document.getElementById("partnerOfferText").textContent =
+            "💕 " + name + " seems to like you! Make it your partner?";
+    }
+}
+
+function acceptPartnerOffer() {
+    const offer = document.getElementById("partnerOffer");
+    saveTrainer({ partner: Number(offer.dataset.id) });
+    offer.hidden = true;
+    hopPartner();
+    partnerSay("❤️");
+}
+
 export function hopPartner() {
     showPartner(currentPartner());
     partnerElement.classList.remove("hop");
@@ -502,6 +543,10 @@ async function shareTrainerCard() {
 }
 
 export function initProgress({ showPokemon }) {
+    document.getElementById("partnerOfferYes").addEventListener("click", acceptPartnerOffer);
+    document.getElementById("partnerOfferNo").addEventListener("click", () => {
+        document.getElementById("partnerOffer").hidden = true;
+    });
     recordVisit();
     document.getElementById("dexPartnerBtn").addEventListener("click", () => {
         const partner = currentPartner();

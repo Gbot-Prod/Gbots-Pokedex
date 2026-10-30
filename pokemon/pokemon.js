@@ -14,7 +14,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initPotd, setPotdVisible } from "./potd.js";
-import { hopPartner, initProgress, markSeen, partnerSay, reactToPokemon } from "./progress.js";
+import { hopPartner, initProgress, markSeen, notePokemonView, partnerSay, reactToPokemon } from "./progress.js";
 import { initQuiz } from "./quiz.js";
 import { initShinyHunt } from "./shinyhunt.js";
 import { initTypeChart, showTypeInChart } from "./typechart.js";
@@ -48,6 +48,7 @@ import {
     learnset,
     normalizeQuery,
     pickSprite,
+    pokemonDisplayName,
     sizeComparison,
     suggestionScore,
 } from "./utils.js";
@@ -394,6 +395,7 @@ function renderPokemon(data, query) {
     addToRecent(currentPokemon);
     markSeen(currentDexNumber);
     hopPartner();
+    notePokemonView(currentDexNumber, pokemonDisplayName(data));
     announceResult(data);
     document.title = formatName(data.name) + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
     prevButton.disabled = currentDexNumber <= 1;

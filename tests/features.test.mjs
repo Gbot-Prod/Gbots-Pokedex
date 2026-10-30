@@ -178,3 +178,11 @@ test("streakBadges awards flames at 7 and 30 days", async () => {
         ["🔥", "☄️"],
     );
 });
+
+test("shouldOfferPartner fires once, on the fifth view of a non-partner", async () => {
+    const { shouldOfferPartner } = await import("../pokemon/progress.js");
+    assert.equal(shouldOfferPartner(4, 25, 6), false);
+    assert.equal(shouldOfferPartner(5, 25, 6), true);
+    assert.equal(shouldOfferPartner(6, 25, 6), false);
+    assert.equal(shouldOfferPartner(5, 6, 6), false);
+});
