@@ -3565,6 +3565,22 @@ img.animatedSmall {
     }
 }
 
+.quizPlusOne.combo {
+    color: #ea580c;
+    font-size: 1.15rem;
+    white-space: nowrap;
+}
+
+:root[data-theme="dark"] .quizPlusOne.combo {
+    color: #fdba74;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) .quizPlusOne.combo {
+        color: #fdba74;
+    }
+}
+
 @keyframes plusOneFloat {
     from {
         transform: translateY(6px) scale(0.6);

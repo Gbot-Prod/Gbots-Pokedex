@@ -137,7 +137,7 @@ function startTimedRun() {
     stopTimedRun(false);
     startButton.hidden = true;
     timedButton.disabled = true;
-    timedRun = { endsAt: Date.now() + TIMED_SECONDS * 1000, correct: 0, interval: null };
+    timedRun = { endsAt: Date.now() + TIMED_SECONDS * 1000, correct: 0, combo: 0, interval: null };
     const tick = () => {
         const left = Math.max(0, Math.ceil((timedRun.endsAt - Date.now()) / 1000));
         timerElement.textContent = "⏱ " + left + "s · " + timedRun.correct + " correct";
@@ -180,15 +180,16 @@ function stopTimedRun(showResult) {
     nextButton.focus({ preventScroll: true });
 }
 
-// A "+1" that floats up out of a correct answer in the challenge (skipped under reduced motion).
-function floatPlusOne(button) {
+// A "+1" (or "Combo ×N!" from 3 in a row) that floats up out of a correct answer in the
+// challenge (skipped under reduced motion).
+function floatPlusOne(button, combo) {
     if (reducedMotion.matches) {
         return;
     }
     const bubble = document.createElement("span");
-    bubble.className = "quizPlusOne";
+    bubble.className = "quizPlusOne" + (combo >= 3 ? " combo" : "");
     bubble.setAttribute("aria-hidden", "true");
-    bubble.textContent = "+1";
+    bubble.textContent = combo >= 3 ? "Combo ×" + combo + "!" : "+1";
     button.append(bubble);
     bubble.addEventListener("animationend", () => bubble.remove(), { once: true });
 }
@@ -200,9 +201,11 @@ function answerRound(choice, answer, chosenButton) {
         if (correct) {
             timedRun.correct++;
         }
+        // Answers in a row: from 3 on, each one flashes "Combo ×N!".
+        timedRun.combo = correct ? timedRun.combo + 1 : 0;
         revealAnswer(answer, chosenButton, correct);
         if (correct) {
-            floatPlusOne(chosenButton); // after the reveal, which matches buttons by their text
+            floatPlusOne(chosenButton, timedRun.combo); // after the reveal, which matches buttons by their text
         }
         resultElement.textContent = (correct ? "✓ " : "✗ ") + answer.label + " · " + timedRun.correct + " correct";
         setTimeout(() => timedRun && nextRound(), 700);
