@@ -250,25 +250,43 @@ function recordVisit() {
     document.documentElement.classList.toggle("onFire", visits.streak >= 7);
 }
 
-// Collector badges for opening one Pokémon many times: [icon, label].
-export function collectorBadges(viewCounts) {
-    const most = Math.max(0, ...Object.values(viewCounts));
-    return [
-        [25, "📚", "Collector: one Pokémon opened 25 times"],
-        [50, "🏆", "Superfan: one Pokémon opened 50 times"],
-    ]
-        .filter(([times]) => most >= times)
-        .map(([, icon, label]) => [icon, label]);
+// Every badge, in shelf order. `progress` picks the number it's measured on.
+const BADGES = [
+    { icon: "🔥", label: "Week flame: 7-day streak", hint: "Visit 7 days in a row", kind: "streak", need: 7 },
+    { icon: "☄️", label: "Month blaze: 30-day streak", hint: "Visit 30 days in a row", kind: "streak", need: 30 },
+    {
+        icon: "📚",
+        label: "Collector: one Pokémon opened 25 times",
+        hint: "Open one Pokémon 25 times",
+        kind: "collector",
+        need: 25,
+    },
+    {
+        icon: "🏆",
+        label: "Superfan: one Pokémon opened 50 times",
+        hint: "Open one Pokémon 50 times",
+        kind: "collector",
+        need: 50,
+    },
+];
+
+// All badges with whether each is earned, given the best streak and the view counts.
+export function badgeShelf(bestStreak, viewCounts) {
+    const progress = { streak: bestStreak, collector: Math.max(0, ...Object.values(viewCounts)) };
+    return BADGES.map((badge) => ({ ...badge, earned: progress[badge.kind] >= badge.need }));
 }
 
-// Flame badges for the best streak reached: [icon, label].
+// Earned badges only, as [icon, label].
+export function collectorBadges(viewCounts) {
+    return badgeShelf(0, viewCounts)
+        .filter((badge) => badge.kind === "collector" && badge.earned)
+        .map((badge) => [badge.icon, badge.label]);
+}
+
 export function streakBadges(best) {
-    return [
-        [7, "🔥", "Week flame: 7-day streak"],
-        [30, "☄️", "Month blaze: 30-day streak"],
-    ]
-        .filter(([days]) => best >= days)
-        .map(([, icon, label]) => [icon, label]);
+    return badgeShelf(best, {})
+        .filter((badge) => badge.kind === "streak" && badge.earned)
+        .map((badge) => [badge.icon, badge.label]);
 }
 
 function visitsText() {
@@ -660,17 +678,22 @@ function renderTrainerCard() {
     document.getElementById("trainerCardSeen").textContent = seenText(stats);
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
+    const shelf = badgeShelf(visits.best, views);
     document.getElementById("trainerCardBadges").replaceChildren(
-        ...[...streakBadges(visits.best), ...collectorBadges(views)].map(([icon, label]) => {
-            const badge = document.createElement("li");
-            badge.title = label;
-            badge.classList.toggle("collector", label.includes("opened"));
-            badge.innerHTML = '<span aria-hidden="true"></span><span class="visuallyHidden"></span>';
-            badge.children[0].textContent = icon;
-            badge.children[1].textContent = label;
-            return badge;
+        ...shelf.map((badge) => {
+            const item = document.createElement("li");
+            item.className = badge.kind + (badge.earned ? "" : " locked");
+            item.title = badge.earned ? badge.label : "Locked: " + badge.hint;
+            item.innerHTML = '<span aria-hidden="true"></span><span class="visuallyHidden"></span>';
+            item.children[0].textContent = badge.earned ? badge.icon : "🔒";
+            item.children[1].textContent = item.title;
+            return item;
         }),
     );
+    const next = shelf.find((badge) => !badge.earned);
+    document.getElementById("trainerNextBadge").textContent = next
+        ? "Next badge: " + next.hint
+        : "Every badge earned — legendary!";
     document.getElementById("trainerCardStats").replaceChildren(
         ...trainerFacts(stats).map(([icon, label, value]) => {
             const item = document.createElement("li");

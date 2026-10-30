@@ -741,7 +741,8 @@ test("a week-long visit streak earns a flame badge and orange LEDs", async () =>
     assert.equal(await page.evaluate(() => document.documentElement.classList.contains("onFire")), true);
     await page.click("#dexProgress");
     await page.waitForSelector("#trainerCard[open]");
-    assert.equal(await page.locator("#trainerCardBadges li").count(), 1);
+    assert.equal(await page.locator("#trainerCardBadges li:not(.locked)").count(), 1);
+    assert.equal(await page.textContent("#trainerNextBadge"), "Next badge: Visit 30 days in a row");
     assert.equal(await page.locator("#trainerCalendar span").count(), 28);
     assert.equal(await page.locator("#trainerCalendar span.today.visited").count(), 1);
     await page.click("#trainerCardClose");

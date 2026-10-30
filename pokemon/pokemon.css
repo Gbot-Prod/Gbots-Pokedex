@@ -3743,8 +3743,18 @@ img.animatedSmall {
     list-style: none;
 }
 
-#trainerCardBadges:empty {
-    display: none;
+#trainerCardBadges li.locked {
+    border: 3px dashed rgba(127, 127, 127, 0.6);
+    background: rgba(127, 127, 127, 0.15);
+    font-size: 1rem;
+    box-shadow: none;
+}
+
+#trainerNextBadge {
+    margin: -0.3rem 1rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 #trainerCardBadges li {
@@ -3760,7 +3770,7 @@ img.animatedSmall {
 }
 
 /* Collector badges are blue-purple to set them apart from the streak flames */
-#trainerCardBadges li.collector {
+#trainerCardBadges li.collector:not(.locked) {
     background: radial-gradient(circle at 35% 30%, #e8e2ff, #8b6cff 60%, #4c2fc7);
     box-shadow: 0 0 12px rgba(139, 108, 255, 0.7);
 }

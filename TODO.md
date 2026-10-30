@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Badge shelf: show locked badges greyed out with a hint ("Open one Pokémon 25 times") so there's something to aim for
 - [ ] Cameo step 3: a tiny animated "VS" flash between cameo and artwork when the matchup pill appears, coloured by who has the edge
 - [ ] Find the intermittent smoke-test failure seen once during a ship (passed on rerun); the ship script now keeps the log in the scratchpad
 - [ ] Calendar step 3: tap a calendar day to list the Pokémon first seen that day
@@ -231,3 +230,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Calendar step 2: colour each calendar day by how many new Pokémon were seen that day (heat-map shades), with the count in the tooltip (2026-10-30) — new Pokémon seen are counted per day (pokedex:seen-days:v1); visited days are shaded in 5 heat levels (pale → glowing gold, greens in retro) with "N new Pokémon" in the tooltip
 - [x] Cameo step 2: clicking the partner cameo on the card art makes the partner "cheer" (hop + 🎉 bubble) and shows the matchup between the two (2026-10-30) — the art-window cameo is a button: clicking makes it hop, the header partner says 🎉, and a pill shows "Charizard vs Venusaur: hits 2×, takes 1×" (best multiplier each way) for 5 s
 - [x] Top 5 step 2: "Collector" achievements on the trainer card when a Pokémon reaches 25 / 50 views (2026-10-30) — 📚 Collector (25 views of one Pokémon) and 🏆 Superfan (50) badges join the streak flames on the trainer card, in purple
+- [x] Badge shelf: show locked badges greyed out with a hint ("Open one Pokémon 25 times") so there's something to aim for (2026-10-30) — all four badges always show; locked ones are dashed grey 🔒 circles titled "Locked: <hint>", and a "Next badge: …" line names the next goal (badge list now data-driven via badgeShelf)
