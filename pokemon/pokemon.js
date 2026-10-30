@@ -798,14 +798,23 @@ function currentTheme() {
     return document.documentElement.dataset.theme || (prefersDark.matches ? "dark" : "light");
 }
 
+// The button cycles Light → Dark → Retro (Game Boy greens).
+const THEMES = ["light", "dark", "retro"];
+const THEME_ICONS = { light: "☀️", dark: "🌙", retro: "🎮" };
+
+function nextTheme() {
+    return THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length];
+}
+
 function updateThemeButton() {
-    const dark = currentTheme() === "dark";
-    themeToggleButton.textContent = dark ? "☀️" : "🌙";
-    themeToggleButton.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+    const next = nextTheme();
+    themeToggleButton.textContent = THEME_ICONS[next];
+    themeToggleButton.setAttribute("aria-label", "Switch to " + next + " theme");
+    themeToggleButton.title = "Theme: " + currentTheme() + " (switch to " + next + ")";
 }
 
 themeToggleButton.addEventListener("click", () => {
-    const next = currentTheme() === "dark" ? "light" : "dark";
+    const next = nextTheme();
     document.documentElement.dataset.theme = next;
     try {
         localStorage.setItem(THEME_KEY, next);

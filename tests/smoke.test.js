@@ -639,3 +639,15 @@ test("the 60-second quiz challenge counts down, accepts number keys and ends wit
     assert.equal(await page.isVisible("#quizTimer"), false);
     assert.match(await page.textContent("#quizScore"), /Best 60s run \d/);
 });
+
+test("the theme button cycles light → dark → retro and remembers the choice", async () => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.reload();
+    await page.click("#themeToggleBtn");
+    assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), "dark");
+    await page.click("#themeToggleBtn");
+    assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), "retro");
+    assert.match(await page.getAttribute("#themeToggleBtn", "aria-label"), /light theme/);
+    await page.reload();
+    assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), "retro");
+});

@@ -2075,3 +2075,66 @@ img.animatedSmall {
     object-fit: contain;
     image-rendering: pixelated;
 }
+
+/* --- Retro theme -------------------------------------------------------------------------
+   Game Boy's four greens everywhere, pixel-font headings, no glow or particles. The card's
+   per-type colours are inline styles, so the overrides need !important. */
+
+:root[data-theme="retro"] {
+    color-scheme: light;
+    --page-bg: #9bbc0f;
+    --input-bg: #8bac0f;
+    --ink: #0f380f;
+    --ink-on-accent: #0f380f;
+    --surface: rgba(15, 56, 15, 0.12);
+    --surface-hover: rgba(15, 56, 15, 0.22);
+    --surface-solid: #c4d97a;
+    --tile-bg: #8bac0f;
+    --tile-hover: #a8c94a;
+    --win: #0f380f;
+    --page-ink: #0f380f;
+    --danger-ink: #0f380f;
+}
+
+:root[data-theme="retro"] #pokemonCardContainer {
+    --type-strong: #306230 !important;
+    --type-light: #9bbc0f !important;
+    --type-deep: #0f380f !important;
+    --card-body: #b5cc3c;
+    background: #0f380f;
+    animation: cardReveal 0.35s ease-out;
+    box-shadow: 6px 6px 0 #306230;
+}
+
+:root[data-theme="retro"] :is(#headerTitle, .tileSection h2, #pokemonName) {
+    font-family: "Press Start 2P", monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+:root[data-theme="retro"] .btn {
+    background-color: #306230 !important;
+    border-radius: 0;
+    box-shadow: 3px 3px 0 #0f380f;
+}
+
+:root[data-theme="retro"] img:not(.typeIcon):not([src*="assets/"]) {
+    image-rendering: pixelated;
+}
+
+:root[data-theme="retro"] #typeBackdrop,
+:root[data-theme="retro"] #pokemonSpriteContainer::after {
+    display: none;
+}
+
+:root[data-theme="retro"] #pokemonSpriteContainer {
+    border-radius: 0;
+    border-color: #0f380f;
+    background-image: none;
+    background-color: #8bac0f;
+}
+
+/* the faded secondary text used elsewhere is too faint on the green palette */
+:root[data-theme="retro"] :is(.evolutionMember small, .teamSlot.empty, .browseTile small, .comboboxOption small) {
+    opacity: 1;
+}
