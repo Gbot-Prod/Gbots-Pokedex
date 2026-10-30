@@ -387,6 +387,7 @@ export function badgeShelf({ streak = 0, views: viewCounts = {}, regions = 0, sh
         return {
             icon: badge.icon,
             kind: badge.kind,
+            tiered: true,
             tier,
             earned: tier > 0,
             label: badge.name + ": " + badge.unit(reached) + (tier ? " (" + TIER_NAMES[tier - 1] + ")" : ""),
@@ -397,6 +398,11 @@ export function badgeShelf({ streak = 0, views: viewCounts = {}, regions = 0, sh
 }
 
 const TIER_NAMES = ["bronze", "silver", "gold"];
+
+export function allTiersGold(shelf) {
+    const tiered = shelf.filter((badge) => badge.tiered);
+    return tiered.length > 0 && tiered.every((badge) => badge.tier === 3);
+}
 
 // Everything the badges are measured on, from what this browser has saved.
 function badgeProgress(stats) {
@@ -853,6 +859,8 @@ function renderTrainerCard() {
     );
     // Hall of fame: gold-tier badges get a banner at the top of the card.
     const gold = shelf.filter((badge) => badge.tier === 3);
+    // Every tiered badge at gold: the whole card gets a gold-foil border, whatever its style.
+    trainerCard.classList.toggle("allGold", allTiersGold(shelf));
     const hall = document.getElementById("trainerHallOfFame");
     hall.hidden = gold.length === 0;
     hall.replaceChildren(

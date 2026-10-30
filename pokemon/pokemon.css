@@ -4309,3 +4309,65 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* Every tiered badge at gold: an animated gold-foil border, whatever the card style */
+#trainerCard.allGold {
+    border: 5px solid transparent;
+    background:
+        linear-gradient(170deg, #fffaf0, #f3e3b3) padding-box,
+        linear-gradient(115deg, #8a6200, #ffd447, #fff6c9, #ffd447, #b8860b, #ffd447, #8a6200) border-box;
+    background-size:
+        100% 100%,
+        250% 250%;
+    box-shadow:
+        0 0 30px rgba(255, 212, 71, 0.75),
+        0 24px 60px rgba(0, 0, 0, 0.5);
+    animation: goldFoil 5s linear infinite;
+}
+
+:root[data-theme="dark"] #trainerCard.allGold:not([data-style="retro"]) {
+    background:
+        linear-gradient(170deg, #2b2410, #17130a) padding-box,
+        linear-gradient(115deg, #8a6200, #ffd447, #fff6c9, #ffd447, #b8860b, #ffd447, #8a6200) border-box;
+    background-size:
+        100% 100%,
+        250% 250%;
+    color: #fff4d6;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCard.allGold:not([data-style="retro"]) {
+        background:
+            linear-gradient(170deg, #2b2410, #17130a) padding-box,
+            linear-gradient(115deg, #8a6200, #ffd447, #fff6c9, #ffd447, #b8860b, #ffd447, #8a6200) border-box;
+        background-size:
+            100% 100%,
+            250% 250%;
+        color: #fff4d6;
+    }
+}
+
+/* Retro keeps its Game Boy green inside the gold frame */
+#trainerCard.allGold[data-style="retro"] {
+    background:
+        linear-gradient(#9bbc0f, #9bbc0f) padding-box,
+        linear-gradient(115deg, #8a6200, #ffd447, #fff6c9, #ffd447, #b8860b, #ffd447, #8a6200) border-box;
+    background-size:
+        100% 100%,
+        250% 250%;
+    color: #0f380f;
+}
+
+@keyframes goldFoil {
+    to {
+        background-position:
+            0 0,
+            250% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #trainerCard.allGold {
+        animation: none;
+    }
+}

@@ -293,3 +293,9 @@ test("shinyTierProgress counts toward the next Shiny hunter tier", async () => {
     assert.equal(shinyTierProgress(49), "49 / 50 for gold");
     assert.equal(shinyTierProgress(50), null);
 });
+
+test("allTiersGold needs every tiered badge at gold", async () => {
+    const { allTiersGold, badgeShelf } = await import("../pokemon/progress.js");
+    assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 49 })), false);
+    assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 50 })), true);
+});
