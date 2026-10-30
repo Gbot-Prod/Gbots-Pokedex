@@ -3766,6 +3766,9 @@ img.animatedSmall {
 }
 
 .trainerCardTop {
+    position: sticky; /* the title bar and ✕ stay in view while the card scrolls on phones */
+    top: 0;
+    z-index: 4;
     display: flex;
     align-items: center;
     justify-content: space-between;
