@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Region chip step 2: clicking the "Only N to go!" chip turns on the region + "Unseen only" filters so the missing Pokémon are listed right away
+- [ ] Quiz tests: use the answer helper to also cover the 60-second challenge's scoring and the Quiz whiz tier line moving up
+- [ ] Trainer card: a "jump to" mini menu in the sticky title bar (Profile · Badges · Regions) for quick scrolling on phones
+- [ ] Banner heights: keep all region banners the same height when one shows the chip or ribbon (reserve the chip row)
+- [ ] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
 - [ ] Settings panel: one place for theme, units, animated sprites, sound and "reset my progress" (with confirmation)
