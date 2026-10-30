@@ -3530,12 +3530,23 @@ img.animatedSmall {
     }
 }
 
-#regionTier,
-#quizTier,
-#huntTier {
-    margin: 0 0 0.6rem;
+.tierLine {
+    display: block;
+    margin: 0 auto 0.6rem;
+    padding: 0.25rem 0.7rem;
+    border: none;
+    border-radius: 999px;
+    background: none;
+    color: inherit;
+    font-family: inherit;
     font-size: 0.9rem;
     font-weight: 700;
+    cursor: pointer;
+}
+
+.tierLine:hover {
+    background: rgba(127, 127, 127, 0.15);
+    text-decoration: underline;
 }
 
 #huntCharm[hidden] {

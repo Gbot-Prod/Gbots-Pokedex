@@ -992,6 +992,11 @@ async function shareTrainerCard() {
 
 let openPokemon = () => {};
 
+function openTrainerCard() {
+    renderTrainerCard();
+    trainerCard.showModal();
+}
+
 export function initProgress({ showPokemon }) {
     openPokemon = showPokemon;
     document.getElementById("partnerOfferYes").addEventListener("click", acceptPartnerOffer);
@@ -1025,10 +1030,14 @@ export function initProgress({ showPokemon }) {
     showPartner(currentPartner());
     document.getElementById("trainerShareBtn").addEventListener("click", shareTrainerCard);
     document.getElementById("trainerImageBtn").addEventListener("click", saveTrainerCardImage);
-    ringElement.addEventListener("click", () => {
-        renderTrainerCard();
-        trainerCard.showModal();
-    });
+    ringElement.addEventListener("click", openTrainerCard);
+    // The "badge: x / y for tier" lines open the card at the badge shelf.
+    for (const id of ["regionTier", "quizTier", "huntTier"]) {
+        document.getElementById(id).addEventListener("click", () => {
+            openTrainerCard();
+            document.getElementById("trainerCardBadges").scrollIntoView({ block: "center" });
+        });
+    }
     document.getElementById("trainerCardClose").addEventListener("click", () => trainerCard.close());
     document.getElementById("trainerName").addEventListener("input", (event) => {
         saveTrainer({ name: event.target.value.trim() });

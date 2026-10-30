@@ -997,6 +997,9 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     assert.equal(await page.textContent("#dexToast"), "🏅 Kanto Pokédex complete!");
     assert.equal(await page.locator('.regionBanner.regionComplete[data-generation="1"]').count(), 1);
     assert.equal(await page.textContent("#regionTier"), "🗺️ Region master badge: 1 / 3 regions for silver");
+    await page.click("#regionTier");
+    await page.waitForSelector("#trainerCard[open]");
+    assert.equal(await page.locator("#trainerCardBadges li.regions.tier1").count(), 1);
     // The Region master badge it earns is queued and shown next.
     await page.waitForFunction(() => document.getElementById("dexToast").textContent.includes("Region master"), null, {
         timeout: 6000,
