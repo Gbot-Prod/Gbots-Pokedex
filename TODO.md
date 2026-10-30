@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Badge shelf: show locked badges greyed out with a hint ("Open one Pokémon 25 times") so there's something to aim for
+- [ ] Cameo step 3: a tiny animated "VS" flash between cameo and artwork when the matchup pill appears, coloured by who has the edge
+- [ ] Find the intermittent smoke-test failure seen once during a ship (passed on rerun); the ship script now keeps the log in the scratchpad
+- [ ] Calendar step 3: tap a calendar day to list the Pokémon first seen that day
+- [ ] Partner moods: the header partner's idle animation changes with affection (sleepy at 1 heart, bouncy at 5)
 - [ ] Trainer card tabs: split the growing card into "Profile", "Progress" and "Badges" tabs so it fits phones without long scrolling
 - [ ] Backup/restore: export all saved progress (seen, visits, trainer, shinies, team) to a JSON file and import it on another device
 - [ ] Header on tiny phones: a compact "dex mode" (smaller lens, LEDs in a column) instead of hiding the title below 360px
