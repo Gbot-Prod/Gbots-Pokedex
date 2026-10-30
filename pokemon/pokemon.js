@@ -42,6 +42,7 @@ import {
     formatWeight,
     formLabel,
     idFromUrl,
+    isNightHour,
     learnset,
     normalizeQuery,
     pickSprite,
@@ -669,6 +670,13 @@ function createBackdropParticles(count = 18) {
 }
 createBackdropParticles();
 
+// After sunset the backdrop becomes a night sky (stars and a moon; see "Night sky" in pokemon.css).
+function updateNightSky() {
+    document.documentElement.classList.toggle("night", isNightHour(new Date().getHours()));
+}
+updateNightSky();
+setInterval(updateNightSky, 10 * 60 * 1000);
+
 function setTypeIcon(iconElement, type) {
     const icon = TYPE_ICONS[type];
     if (icon) {
@@ -818,6 +826,8 @@ function nextTheme() {
 }
 
 function updateThemeButton() {
+    // Lets CSS target "dark, whether chosen or from the system" (used by the night sky).
+    document.documentElement.classList.toggle("darkTheme", currentTheme() === "dark");
     const next = nextTheme();
     themeToggleButton.textContent = THEME_ICONS[next];
     themeToggleButton.setAttribute("aria-label", "Switch to " + next + " theme");

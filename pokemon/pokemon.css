@@ -2660,3 +2660,62 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* --- Night sky ----------------------------------------------------------------------------
+   From 7 pm to 6 am (html.night), in dark mode (html.darkTheme, set by pokemon.js), the backdrop gains a twinkling starfield and a
+   crescent moon. It sits behind everything, so text contrast is unchanged. */
+
+:root.night.darkTheme #typeBackdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(1.5px 1.5px at 10% 15%, #ffffff 50%, transparent 51%),
+        radial-gradient(1px 1px at 25% 35%, #ffffff 50%, transparent 51%),
+        radial-gradient(2px 2px at 40% 10%, #fff8d6 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 25%, #ffffff 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 70% 12%, #ffffff 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 30%, #ffffff 50%, transparent 51%),
+        radial-gradient(2px 2px at 92% 8%, #fff8d6 50%, transparent 51%),
+        radial-gradient(1px 1px at 15% 60%, #ffffff 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 33% 75%, #ffffff 50%, transparent 51%),
+        radial-gradient(1px 1px at 60% 55%, #ffffff 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 78% 70%, #ffffff 50%, transparent 51%),
+        radial-gradient(1px 1px at 95% 50%, #ffffff 50%, transparent 51%),
+        radial-gradient(1px 1px at 5% 88%, #ffffff 50%, transparent 51%),
+        radial-gradient(2px 2px at 48% 90%, #fff8d6 50%, transparent 51%);
+    background-size: 600px 600px;
+    opacity: 0.85;
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+/* crescent moon: a bright disc with an offset shadow-coloured disc cut out of it */
+:root.night.darkTheme #typeBackdrop::after {
+    content: "";
+    position: absolute;
+    top: 5.5rem;
+    right: 5%;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    box-shadow: 16px -6px 0 0 #fff4c2;
+    filter: drop-shadow(0 0 12px rgba(255, 244, 194, 0.7));
+    transform: rotate(-20deg);
+}
+
+@keyframes twinkle {
+    to {
+        opacity: 0.45;
+    }
+}
+
+:root[data-theme="retro"].night #typeBackdrop::before,
+:root[data-theme="retro"].night #typeBackdrop::after {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root.night #typeBackdrop::before {
+        animation: none;
+    }
+}

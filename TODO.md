@@ -15,7 +15,6 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Shiny hunt step 2: show names instead of numbers, an odds-boosting "Shiny Charm" after 100 encounters, and a per-generation hunt filter
-- [ ] Night sky mode: after sunset (local time) the page background becomes a starfield with a moon, and Ghost/Dark Pokémon get a subtle glow
 - [ ] Pokémon cry visualiser: when the cry plays, animate a waveform/equaliser bar under the name (Web Audio analyser)
 - [ ] Collection progress: a "Pokédex completion" ring showing how many of the 1,025 you've viewed (from recently viewed history, kept long-term)
 - [ ] Hover a browse tile to flip it and show its type icons and base stat total on the back
@@ -182,3 +181,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Size comparison: the Pokémon's silhouette next to a 1.7 m trainer silhouette, both scaled by real height (Wailord vs Joltik!) (2026-10-29) — type-coloured silhouette (CSS mask of the official artwork) next to a 1.7 m trainer silhouette, scaled by real height with a minimum size, labels follow the units toggle and official names, caption like 'Wailord is 8.5× as tall'; sizeComparison unit-tested + smoke test
 - [x] Device lens glows in the current Pokémon's type colour, and a burst of type particles plays when a new Pokémon loads (2026-10-29) — the device lens glows in the current type colour, and 22 type-coloured sparks burst out of the artwork when a Pokémon loads (fixed overlay so the art window doesn't clip them); nothing under reduced motion
 - [x] Shiny hunt step 1: 🌿 Encounter! shows a random wild Pokémon on a grass disc with an appear animation; 1-in-50 chance of a shiny with golden glow and sparkles; encounters and shiny collection saved locally, collection links to the Pokédex (shinyhunt.js) (2026-10-30). Also fixed the faded "Empty slot" text failing contrast
+- [x] Night sky mode: after sunset (local time) the page background becomes a starfield with a moon, and Ghost/Dark Pokémon get a subtle glow (2026-10-29) — 7 pm–6 am local time, in dark mode, the backdrop shows a twinkling starfield and a glowing crescent moon (html.night + html.darkTheme); off in light/Retro, no twinkle under reduced motion; isNightHour unit-tested. Ghost/Dark glow left for later

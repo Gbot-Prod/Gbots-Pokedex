@@ -446,3 +446,8 @@ export function sizeComparison(pokemonDecimetres, boxPx, trainerDecimetres = 17,
     const scale = (decimetres) => Math.max(minPx, Math.round((decimetres / tallest) * boxPx));
     return { pokemonPx: scale(pokemonDecimetres), trainerPx: scale(trainerDecimetres) };
 }
+
+// "Night" for the backdrop: 7 pm to 6 am local time.
+export function isNightHour(hour) {
+    return hour >= 19 || hour < 6;
+}
