@@ -361,6 +361,37 @@ for (const [colorScheme, width] of [
     });
 }
 
+// Hover states can fail contrast where the resting state passes (the jump pills on the retro
+// card did), so the trainer card is checked in every style with each of its buttons hovered.
+for (const colorScheme of ["light", "dark"]) {
+    test("trainer card buttons keep their contrast when hovered (" + colorScheme + " mode)", async () => {
+        await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+        await page.setViewportSize({ width: 375, height: 800 });
+        const problems = [];
+        for (const style of ["classic", "holo", "retro"]) {
+            await page.evaluate((cardStyle) => {
+                localStorage.setItem("pokedex:seen:v1", "[25]");
+                localStorage.setItem("pokedex:trainer:v1", JSON.stringify({ partner: 25, style: cardStyle }));
+            }, style);
+            await page.reload();
+            await page.click("#dexProgress");
+            await page.waitForSelector("#trainerCard[open]");
+            const buttons = page.locator("#trainerCard button:visible");
+            for (let index = 0; index < (await buttons.count()); index++) {
+                await buttons.nth(index).hover();
+                const results = await new AxeBuilder({ page })
+                    .include("#trainerCard")
+                    .withRules(["color-contrast"])
+                    .analyze();
+                for (const violation of results.violations) {
+                    problems.push(style + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));
+                }
+            }
+        }
+        assert.deepEqual([...new Set(problems)], []);
+    });
+}
+
 test("the units toggle switches the card and the comparison table to imperial", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");

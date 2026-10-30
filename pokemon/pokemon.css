@@ -3819,7 +3819,7 @@ img.animatedSmall {
     color: #1d2340;
 }
 
-.trainerJump button:hover {
+.trainerJump button:not([aria-current="true"]):hover {
     background: rgba(0, 0, 0, 0.38); /* darker, so white text keeps its contrast on every style */
 }
 
