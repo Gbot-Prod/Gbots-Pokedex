@@ -16,6 +16,11 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test hygiene: a smoke-test helper that seeds Math.random per test and resets it, so no test inherits another's stubbed randomness
 - [ ] Regression test for the Enter-before-suggestions race: delay the name/species list routes in the mocked smoke test so the pending lookup really resolves after Enter (a first attempt passed even without the fix)
+- [ ] Badge tiers: bronze/silver/gold rings on repeatable badges (e.g. Shiny hunter at 5/15/50) instead of one-off icons
+- [ ] Badge detail: tapping a badge on the shelf shows its description, when it was earned and progress toward the next tier
+- [ ] Toast polish: a tiny progress line along the toast's bottom edge showing time until the next queued toast
+- [ ] Hidden badge: a secret "Night owl" badge for opening 10 Pokémon between midnight and 4 am, shown as ❓ until earned
+- [ ] Combobox: show a small "Loading names…" row while the name list downloads on a fresh visit, instead of nothing
 - [ ] Matchup pill step 2: tap the pill to open the full type chart with both Pokémon's types highlighted
 - [ ] Trainer card: show badge count ("3 / 8 badges") under the shelf as a mini progress bar
 - [ ] Calendar step 3: tap a calendar day to list the Pokémon first seen that day
