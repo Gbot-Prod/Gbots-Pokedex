@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Region strip: the same tier line for Region master under the region banners ("2 / 3 regions for silver"), via tierProgress
+- [ ] Heart hint step 2: hearts fill with a little pop animation when a new heart is earned (seen next time the card opens)
+- [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
+- [ ] Quiz: celebrate beating your best streak mid-run with a small "New best!" flash on the score line
+- [ ] Settings panel: one place for theme, units, animated sprites, sound and "reset my progress" (with confirmation)
 - [ ] Trainer card step: a compact "summary" mode on phones showing only profile, seen % and badges, with "More" to expand stats/regions/calendar
 - [ ] Gold card PNG: the saved trainer card image uses the gold-foil frame when the card is all gold
 - [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
