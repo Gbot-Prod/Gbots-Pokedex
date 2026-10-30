@@ -788,6 +788,10 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
     );
     assert.equal(await page.textContent('.regionBanner[data-generation="9"] .regionProgressText'), "0/120 seen");
     assert.match(await page.textContent('.regionBanner[data-generation="1"] .regionChip'), /^Only \d+ to go!$/);
+    await page.click('.regionBanner[data-generation="1"] .regionChip');
+    assert.equal(await page.inputValue("#generationFilter"), "1");
+    assert.equal(await page.isChecked("#unseenFilter"), true);
+    await page.waitForFunction(() => !document.querySelector('#browseGrid .browseTile[data-id="25"]'));
     assert.ok((await page.locator('.browseTile[data-dex="25"] .tileSeen').count()) >= 1);
     assert.equal(await page.locator('#browseGrid .browseTile[data-dex="1"] .tileSeen').count(), 0);
 });

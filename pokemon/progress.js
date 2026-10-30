@@ -97,6 +97,7 @@ function render() {
         const chip = document.createElement("span");
         chip.className = "regionChip";
         chip.textContent = "Only " + (closest.total - closest.seen) + " to go!";
+        chip.title = "Show the ones you haven't seen";
         closestBanner.append(chip);
     }
 }

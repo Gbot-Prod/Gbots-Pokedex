@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Region chip step 2: clicking the "Only N to go!" chip turns on the region + "Unseen only" filters so the missing Pokémon are listed right away
 - [ ] Quiz tests: use the answer helper to also cover the 60-second challenge's scoring and the Quiz whiz tier line moving up
 - [ ] Trainer card: a "jump to" mini menu in the sticky title bar (Profile · Badges · Regions) for quick scrolling on phones
 - [ ] Banner heights: keep all region banners the same height when one shows the chip or ribbon (reserve the chip row)
@@ -280,3 +279,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Tier lines everywhere: make the three "badge: x / y for tier" lines tappable to open the trainer card at the badge shelf (2026-10-30) — the region, quiz and shiny-hunt tier lines are now buttons ("Open your badges") that open the trainer card with the badge shelf scrolled into view
 - [x] Region tier line: highlight the closest-to-complete region with a "only N to go!" chip (2026-10-30) — the started-but-unfinished region with the fewest Pokémon left gets a bobbing gold "Only N to go!" chip on its banner (closestRegion)
 - [x] Trainer card: a sticky mini header on phones (avatar + name + ✕) so closing doesn't need scrolling back up (2026-10-30) — the card's title bar (with ✕) is position: sticky, so it stays at the top while the card scrolls on phones; checked in all three card styles
+- [x] Region chip step 2: clicking the "Only N to go!" chip turns on the region + "Unseen only" filters so the missing Pokémon are listed right away (2026-10-30) — clicking the chip (inside the banner button) selects that region and ticks "Unseen only", so exactly the missing Pokémon are listed (live: Kanto with 4 left → Ditto, Articuno, Zapdos, Moltres)

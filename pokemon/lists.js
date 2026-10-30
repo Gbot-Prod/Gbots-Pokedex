@@ -449,9 +449,14 @@ function renderRegionStrip() {
                 starters.append(sprite);
             }
             button.append(starters, name, gen);
-            button.addEventListener("click", () => {
-                const selected = generationFilterElement.value === String(generation.number);
+            button.addEventListener("click", (event) => {
+                // The "Only N to go!" chip jumps straight to the missing ones: region + unseen only.
+                const chip = Boolean(event.target.closest(".regionChip"));
+                const selected = !chip && generationFilterElement.value === String(generation.number);
                 generationFilterElement.value = selected ? "" : String(generation.number);
+                if (chip) {
+                    unseenFilterElement.checked = true;
+                }
                 applyBrowseFilters();
                 if (!selected) {
                     browseGridElement.scrollIntoView({ behavior: "smooth", block: "start" });
