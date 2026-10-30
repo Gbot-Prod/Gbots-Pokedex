@@ -894,6 +894,8 @@ test("the completion ring opens a trainer card", async () => {
     assert.equal(await page.locator("#trainerCardRegions li").count(), 9);
     assert.match(await page.textContent("#trainerCardVisits"), /^Member since .+ · 🔥 \d+-day streak \(best \d+\)$/);
     assert.equal(await page.locator("#trainerCardStats li").count(), 6);
+    await page.click(".trainerJump button[data-target=trainerRegionsHeading]");
+    await page.waitForFunction(() => document.getElementById("trainerCard").scrollTop > 0);
     await page.fill("#trainerName", "Gbot");
     assert.equal(await page.inputValue("#trainerPartner"), "25");
     assert.equal(await page.isVisible("#dexPartner"), true);

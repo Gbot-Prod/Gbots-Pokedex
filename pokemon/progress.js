@@ -1059,6 +1059,17 @@ export function initProgress({ showPokemon }) {
         });
     }
     document.getElementById("trainerCardClose").addEventListener("click", () => trainerCard.close());
+    // Jump links in the sticky title bar scroll the card to a section (below the bar).
+    for (const button of document.querySelectorAll(".trainerJump button")) {
+        button.addEventListener("click", () => {
+            const target = document.getElementById(button.dataset.target);
+            const bar = trainerCard.querySelector(".trainerCardTop").offsetHeight;
+            trainerCard.scrollTo({
+                top: target.offsetTop - bar - 8,
+                behavior: reducedMotion.matches ? "auto" : "smooth",
+            });
+        });
+    }
     document.getElementById("trainerName").addEventListener("input", (event) => {
         saveTrainer({ name: event.target.value.trim() });
     });

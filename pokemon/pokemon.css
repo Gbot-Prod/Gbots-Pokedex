@@ -3778,6 +3778,34 @@ img.animatedSmall {
     color: #ffffff;
 }
 
+.trainerCardTop {
+    flex-wrap: wrap;
+}
+
+.trainerJump {
+    display: flex;
+    gap: 0.4rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.trainerJump button {
+    flex: 1;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.18);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.trainerJump button:hover {
+    background: rgba(0, 0, 0, 0.38); /* darker, so white text keeps its contrast on every style */
+}
+
 .trainerCardTop h2 {
     margin: 0;
     font-size: 1.3rem;

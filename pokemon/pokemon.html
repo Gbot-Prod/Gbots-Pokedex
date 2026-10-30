@@ -401,9 +401,14 @@
             <div class="trainerCardTop">
                 <h2 id="trainerCardHeading">Trainer card</h2>
                 <button type="button" id="trainerCardClose" aria-label="Close trainer card">✕</button>
+                <nav class="trainerJump" aria-label="Jump to">
+                    <button type="button" data-target="trainerProfileSection">Profile</button>
+                    <button type="button" data-target="trainerCardBadges">Badges</button>
+                    <button type="button" data-target="trainerRegionsHeading">Regions</button>
+                </nav>
             </div>
             <p id="trainerHallOfFame" hidden></p>
-            <div class="trainerProfile">
+            <div class="trainerProfile" id="trainerProfileSection">
                 <div class="trainerAvatarWrap">
                     <img id="trainerAvatar" alt="" width="96" height="96" />
                     <button
@@ -435,7 +440,7 @@
             <ul id="trainerCardStats"></ul>
             <h3 id="trainerTopHeading">Your top 5</h3>
             <ol id="trainerTop" aria-labelledby="trainerTopHeading"></ol>
-            <h3>Regions</h3>
+            <h3 id="trainerRegionsHeading">Regions</h3>
             <ul id="trainerCardRegions"></ul>
             <div class="trainerCardActions">
                 <button type="button" class="btn" id="trainerShareBtn">📋 Share trainer card</button>
