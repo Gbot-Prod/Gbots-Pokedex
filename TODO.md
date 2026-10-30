@@ -15,6 +15,12 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Hover a browse tile to flip it and show its type icons and base stat total on the back
+- [ ] Completion step 2: a small "seen" check on browse tiles and a "Show unseen only" filter, so you can hunt down the gaps in a region
+- [ ] Trainer card: clicking the completion ring opens a panel with per-region totals, your most-seen type and shiny count (the home for achievement badges)
+- [ ] Region complete celebration: when a region bar reaches 100%, a one-off confetti burst and a toast ("Kanto Pokédex complete!"), skipped under reduced motion
+- [ ] Cry visualiser step 2: the artwork gently pulses with the cry's loudness (same analyser), off under reduced motion
+- [ ] Shiny hunt step 3: a full-screen sparkle overlay on a shiny and a "shiny streak" (encounters since the last shiny) with a personal best
+- [ ] Shiny dex: a grid of every shiny caught with names and encounter numbers, sortable by dex number or catch order
 - [ ] Achievement badges (Kanto complete, 10 shinies, 50-streak quiz…) shown as gym-badge style icons in a trainer card
 - [ ] Download the holo card as a PNG (canvas render of art, name, types and stats) to share
 - [ ] Region landing view: clicking a region banner shows a header with the region's legendary trio and Pokédex count above the filtered grid
