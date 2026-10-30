@@ -796,6 +796,19 @@ test("a week-long visit streak earns a flame badge and orange LEDs", async () =>
     await page.click("#trainerCardClose");
 });
 
+test("an all-gold trainer turns the header ring gold", async () => {
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:seen:v1", JSON.stringify(Array.from({ length: 1025 }, (_, index) => index + 1)));
+        localStorage.setItem("pokedex:quiz:v1", JSON.stringify({ best: 50 }));
+        localStorage.setItem(
+            "pokedex:shiny-hunt:v1",
+            JSON.stringify({ encounters: 60, shinies: Array.from({ length: 50 }, (_, index) => ({ id: index + 1 })) }),
+        );
+    });
+    await page.reload();
+    assert.equal(await page.evaluate(() => document.documentElement.classList.contains("allGold")), true);
+});
+
 test("earning a new badge announces it with the toast", async () => {
     await page.evaluate(() => {
         localStorage.setItem("pokedex:badges-earned:v1", "[]");

@@ -2646,6 +2646,23 @@ img.animatedSmall {
     outline-offset: 3px;
 }
 
+/* All tiered badges gold: a golden ring and partner in the header */
+:root.allGold #dexProgress {
+    background: radial-gradient(circle, #6b4a00, #3d2a00);
+    box-shadow:
+        0 0 0 3px #ffd447,
+        0 0 16px 4px rgba(255, 212, 71, 0.8);
+}
+
+:root.allGold .dexProgressFill {
+    stroke: #fff3b0;
+    filter: drop-shadow(0 0 4px #ffd447);
+}
+
+:root.allGold #dexPartner:not([hidden]) {
+    filter: drop-shadow(0 0 6px #ffd447) drop-shadow(0 0 2px #fff3b0);
+}
+
 /* "New badge" dot until the trainer card has been opened */
 #dexProgress.hasNews::after {
     content: "";

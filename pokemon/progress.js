@@ -233,9 +233,10 @@ function updateNewsDot() {
         return; // before the first visit is recorded
     }
     const shown = readStored(SHELF_SHOWN_KEY, []);
-    const news = badgeShelf(badgeProgress(completionStats(seen))).some(
-        (badge) => badge.earned && !shown.includes(badge.label),
-    );
+    const shelf = badgeShelf(badgeProgress(completionStats(seen)));
+    const news = shelf.some((badge) => badge.earned && !shown.includes(badge.label));
+    // All tiered badges gold: the header ring and partner turn gold as well.
+    document.documentElement.classList.toggle("allGold", allTiersGold(shelf));
     ringElement.classList.toggle("hasNews", news);
     const label = ringElement.getAttribute("aria-label").replace(/ · new badge!$/, "");
     ringElement.setAttribute("aria-label", label + (news ? " · new badge!" : ""));
