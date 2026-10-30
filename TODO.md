@@ -14,6 +14,12 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Tile flip step 2: show the type-coloured back (gradient from the Pokémon's first type) and a tiny radar instead of bars on wide screens
+- [ ] Trainer card step 2: editable trainer name and a choice of avatar (any seen Pokémon's sprite), saved locally and shown on the card
+- [ ] Trainer card step 3: "Share trainer card" button that copies a text summary (seen count, shinies, regions complete) to the clipboard
+- [ ] Region banners: a gold "complete" ribbon and crown on banners whose region is 100% seen
+- [ ] Unseen filter step 2: a "Surprise me" button that opens a random unseen Pokémon (from the current filters)
+- [ ] Toast queue: reuse the completion toast for other moments (shiny found, quiz best streak beaten, team full) with a small queue so toasts don't overlap
 - [ ] Cry visualiser step 2: the artwork gently pulses with the cry's loudness (same analyser), off under reduced motion
 - [ ] Shiny hunt step 3: a full-screen sparkle overlay on a shiny and a "shiny streak" (encounters since the last shiny) with a personal best
 - [ ] Shiny dex: a grid of every shiny caught with names and encounter numbers, sortable by dex number or catch order
