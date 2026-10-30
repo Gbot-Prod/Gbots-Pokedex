@@ -317,6 +317,17 @@ function recordVisit() {
     document.documentElement.classList.toggle("onFire", visits.streak >= 7);
 }
 
+export const SHINY_TIERS = [5, 15, 50];
+
+// "3 / 5 for bronze": progress toward the next Shiny hunter tier, or null once gold.
+export function shinyTierProgress(shinies) {
+    const tier = SHINY_TIERS.filter((threshold) => shinies >= threshold).length;
+    if (tier === SHINY_TIERS.length) {
+        return null;
+    }
+    return shinies + " / " + SHINY_TIERS[tier] + " for " + TIER_NAMES[tier];
+}
+
 // Every badge, in shelf order. `progress` picks the number it's measured on.
 const BADGES = [
     { icon: "🔥", label: "Week flame: 7-day streak", hint: "Visit 7 days in a row", kind: "streak", need: 7 },
@@ -348,7 +359,7 @@ const BADGES = [
         icon: "✨",
         name: "Shiny hunter",
         kind: "shinies",
-        tiers: [5, 15, 50],
+        tiers: SHINY_TIERS,
         unit: (n) => n + " shinies caught",
         hintFor: (n) => "Catch " + n + " shinies in the shiny hunt",
     },

@@ -285,3 +285,11 @@ test("tiered badges climb bronze, silver and gold", async () => {
     assert.equal(shiny(50).label, "Shiny hunter: 50 shinies caught (gold)");
     assert.equal(shiny(50).hint, null);
 });
+
+test("shinyTierProgress counts toward the next Shiny hunter tier", async () => {
+    const { shinyTierProgress } = await import("../pokemon/progress.js");
+    assert.equal(shinyTierProgress(3), "3 / 5 for bronze");
+    assert.equal(shinyTierProgress(5), "5 / 15 for silver");
+    assert.equal(shinyTierProgress(49), "49 / 50 for gold");
+    assert.equal(shinyTierProgress(50), null);
+});

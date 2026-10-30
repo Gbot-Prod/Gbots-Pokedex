@@ -3459,6 +3459,12 @@ img.animatedSmall {
     font-size: 0.9rem;
 }
 
+#huntTier {
+    margin: 0 0 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
 #huntCharm[hidden] {
     display: none;
 }

@@ -1,6 +1,7 @@
 // Shiny hunt: press Encounter for a random wild Pokémon; 1 in 50 is shiny (1 in 25 once the
 // Shiny Charm is earned). Encounters and the shiny collection are saved locally.
 import { SPRITE_BASE, getSpeciesSlugs, setSprite } from "./api.js";
+import { shinyTierProgress } from "./progress.js";
 import { GENERATIONS, MAX_DEX_NUMBER, formatDexNumber, speciesDisplayName } from "./utils.js";
 
 export const SHINY_ODDS = 50;
@@ -16,6 +17,7 @@ const counterElement = document.getElementById("huntCounter");
 const collectionElement = document.getElementById("huntCollection");
 const generationSelect = document.getElementById("huntGeneration");
 const charmElement = document.getElementById("huntCharm");
+const tierElement = document.getElementById("huntTier");
 
 let state = { encounters: 0, shinies: [] }; // shinies: [{ id, encounter }]
 let showPokemon = () => {};
@@ -74,6 +76,10 @@ function renderCounter() {
     charmElement.textContent = charmed
         ? "🔮 Shiny Charm earned — shinies are twice as likely!"
         : "🔮 Shiny Charm in " + (CHARM_ENCOUNTERS - state.encounters) + " encounters";
+    const tier = shinyTierProgress(state.shinies.length);
+    tierElement.textContent = tier
+        ? "✨ Shiny hunter badge: " + tier
+        : "✨ Shiny hunter badge: gold — legendary hunter!";
 }
 
 function renderCollection() {

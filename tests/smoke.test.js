@@ -961,4 +961,5 @@ test("the shiny hunt counts encounters and collects shinies", async () => {
     assert.equal(await page.locator(".huntShiny").count(), 1);
     await page.reload();
     assert.match(await page.textContent("#huntCounter"), /Encounters: 2 · Shinies found: 1/);
+    assert.equal(await page.textContent("#huntTier"), "✨ Shiny hunter badge: 1 / 5 for bronze");
 });
