@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Quiz test hook: expose the current answer id on the quiz stage (data attribute, hidden from AT) so smoke tests can answer correctly and cover streak features
+- [ ] Tier lines everywhere: make the three "badge: x / y for tier" lines tappable to open the trainer card at the badge shelf
+- [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
+- [ ] Region tier line: highlight the closest-to-complete region with a "only N to go!" chip
+- [ ] Trainer card: a sticky mini header on phones (avatar + name + ✕) so closing doesn't need scrolling back up
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
 - [ ] Settings panel: one place for theme, units, animated sprites, sound and "reset my progress" (with confirmation)
 - [ ] Trainer card step: a compact "summary" mode on phones showing only profile, seen % and badges, with "More" to expand stats/regions/calendar
