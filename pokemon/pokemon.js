@@ -15,6 +15,7 @@ import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initPotd, setPotdVisible } from "./potd.js";
 import { initQuiz } from "./quiz.js";
+import { initShinyHunt } from "./shinyhunt.js";
 import { initTypeChart, showTypeInChart } from "./typechart.js";
 import { initTeam, onCardChange as updateTeamButton } from "./team.js";
 import {
@@ -839,6 +840,7 @@ updateThemeButton();
 initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 initQuiz({ showPokemon });
+initShinyHunt({ showPokemon });
 initTypeChart();
 initPotd({ showPokemon, isCardShowing: () => Boolean(getUrlPokemon()) || !pokemonCard.classList.contains("hidden") });
 

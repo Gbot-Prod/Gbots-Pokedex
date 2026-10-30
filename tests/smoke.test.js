@@ -698,3 +698,16 @@ test("the size comparison scales the Pokémon against a 1.7 m trainer", async ()
     ]);
     assert.deepEqual(heights, ["38px", "160px"]);
 });
+
+test("the shiny hunt counts encounters and collects shinies", async () => {
+    await page.click("#huntEncounterBtn");
+    await page.waitForSelector("#huntStage:not([hidden])");
+    assert.match(await page.textContent("#huntCounter"), /Encounters: 1/);
+
+    await page.evaluate(() => (Math.random = () => 0.001)); // force a shiny
+    await page.click("#huntEncounterBtn");
+    assert.match(await page.textContent("#huntResult"), /SHINY!/);
+    assert.equal(await page.locator(".huntShiny").count(), 1);
+    await page.reload();
+    assert.match(await page.textContent("#huntCounter"), /Encounters: 2 · Shinies found: 1/);
+});

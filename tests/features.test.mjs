@@ -79,3 +79,20 @@ test("dailyPokemonId is deterministic per date and within the National Dex", asy
         assert.ok(id >= 1 && id <= 1025, day + " -> " + id);
     }
 });
+
+test("rollShiny hits with probability 1/50", async () => {
+    const { rollShiny, SHINY_ODDS } = await import("../pokemon/shinyhunt.js");
+    assert.equal(SHINY_ODDS, 50);
+    assert.equal(
+        rollShiny(() => 0.019),
+        true,
+    );
+    assert.equal(
+        rollShiny(() => 0.02),
+        false,
+    );
+    assert.equal(
+        rollShiny(() => 0.5),
+        false,
+    );
+});

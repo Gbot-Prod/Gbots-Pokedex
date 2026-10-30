@@ -14,7 +14,7 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Shiny hunt mini-game: random wild encounters with a 1-in-50 shiny chance, encounter counter and shiny collection saved locally
+- [ ] Shiny hunt step 2: show names instead of numbers, an odds-boosting "Shiny Charm" after 100 encounters, and a per-generation hunt filter
 - [ ] Download the holo card as a PNG (canvas render of art, name, types and stats) to share
 - [ ] Region landing view: clicking a region banner shows a header with the region's legendary trio and Pokédex count above the filtered grid
 - [ ] Card flip: click a corner button to flip the holo card (3D) to a back side with a Poké Ball design and a quick stats summary
@@ -176,3 +176,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation (2026-10-29) — scrollable strip of 9 region banners (own gradient each, starter trio sprites, Gen N) above the browse filters; a click filters the grid to that generation and scrolls to it, clicking again clears it; aria-pressed follows the generation select
 - [x] Size comparison: the Pokémon's silhouette next to a 1.7 m trainer silhouette, both scaled by real height (Wailord vs Joltik!) (2026-10-29) — type-coloured silhouette (CSS mask of the official artwork) next to a 1.7 m trainer silhouette, scaled by real height with a minimum size, labels follow the units toggle and official names, caption like 'Wailord is 8.5× as tall'; sizeComparison unit-tested + smoke test
 - [x] Device lens glows in the current Pokémon's type colour, and a burst of type particles plays when a new Pokémon loads (2026-10-29) — the device lens glows in the current type colour, and 22 type-coloured sparks burst out of the artwork when a Pokémon loads (fixed overlay so the art window doesn't clip them); nothing under reduced motion
+- [x] Shiny hunt step 1: 🌿 Encounter! shows a random wild Pokémon on a grass disc with an appear animation; 1-in-50 chance of a shiny with golden glow and sparkles; encounters and shiny collection saved locally, collection links to the Pokédex (shinyhunt.js) (2026-10-30). Also fixed the faded "Empty slot" text failing contrast

@@ -19,6 +19,7 @@ pokemon/
   combobox.js    accessible search autocomplete (sprites, keyboard navigation)
   potd.js        "Pokémon of the day" hero card on the landing page
   quiz.js        "Who's that Pokémon?" silhouette quiz
+  shinyhunt.js   shiny hunt mini-game (1-in-50 shiny encounters, saved collection)
   team.js        team builder (6 slots) with a type-coverage chart
   typechart.js   interactive 18×18 type effectiveness chart
   api.js         PokéAPI requests with in-memory/sessionStorage caching

@@ -1641,6 +1641,7 @@ img.placeholderSprite {
 
 /* --- Who's that Pokémon? ----------------------------------------------------------- */
 
+#huntEncounterBtn,
 #quizStartBtn,
 #quizTimedBtn,
 #quizNextBtn {
@@ -1770,7 +1771,7 @@ img.placeholderSprite {
     border: 2px dashed currentColor;
     background: none;
     color: var(--page-ink);
-    opacity: 0.7;
+    font-weight: 500;
 }
 
 .teamMember {
@@ -2565,5 +2566,97 @@ img.animatedSmall {
     to {
         transform: rotate(var(--angle)) translateX(var(--distance)) scale(0.3);
         opacity: 0;
+    }
+}
+
+/* --- Shiny hunt ------------------------------------------------------------------------------ */
+
+#huntStage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 200px;
+    height: 200px;
+    margin: 1rem auto 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, #d9f2c7 0%, #8fcf6b 55%, #4f9a33 70%, transparent 71%);
+}
+
+#huntStage.shiny {
+    background: radial-gradient(circle, #fff7cc 0%, #ffd447 55%, #e3a21a 70%, transparent 71%);
+    box-shadow: 0 0 40px 10px rgba(255, 212, 71, 0.6);
+}
+
+#huntStage.shiny::before,
+#huntStage.shiny::after {
+    content: "✨";
+    position: absolute;
+    font-size: 2rem;
+    animation: sparkle 1s ease-in-out infinite alternate;
+}
+
+#huntStage.shiny::before {
+    top: 10%;
+    left: 8%;
+}
+
+#huntStage.shiny::after {
+    right: 8%;
+    bottom: 12%;
+    animation-delay: 0.5s;
+}
+
+@keyframes sparkle {
+    to {
+        transform: scale(1.4) rotate(20deg);
+        opacity: 0.5;
+    }
+}
+
+#huntSprite {
+    width: 160px;
+    height: 160px;
+    image-rendering: pixelated;
+}
+
+#huntSprite.appear {
+    animation: huntAppear 0.45s ease-out;
+}
+
+@keyframes huntAppear {
+    from {
+        transform: translateY(20px) scale(0.6);
+        opacity: 0;
+    }
+}
+
+#huntResult {
+    min-height: 1.5em;
+    font-weight: 700;
+}
+
+#huntCollection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.huntShiny {
+    padding: 0.2rem;
+    border: 2px solid #ffd447;
+    border-radius: 10px;
+    background-color: var(--tile-bg);
+    cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #huntSprite.appear,
+    #huntStage.shiny::before,
+    #huntStage.shiny::after {
+        animation: none;
     }
 }

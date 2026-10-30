@@ -253,6 +253,18 @@
                 </div>
             </section>
 
+            <section id="huntSection" class="tileSection" aria-labelledby="huntHeading">
+                <h2 id="huntHeading">Shiny hunt</h2>
+                <p id="huntCounter"></p>
+                <button type="button" class="btn" id="huntEncounterBtn">🌿 Encounter!</button>
+                <div id="huntStage" hidden>
+                    <img id="huntSprite" alt="" width="160" height="160" />
+                </div>
+                <p id="huntResult" role="status"></p>
+                <h3 class="visuallyHidden" id="huntCollectionHeading">Your shinies</h3>
+                <ul id="huntCollection" aria-labelledby="huntCollectionHeading"></ul>
+            </section>
+
             <section id="typeChartSection" class="tileSection" aria-labelledby="typeChartHeading" hidden>
                 <h2 id="typeChartHeading">Type chart</h2>
                 <button type="button" class="btn" id="typeChartBtn" aria-expanded="false" aria-controls="typeChart">

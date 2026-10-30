@@ -14,6 +14,7 @@ const SHELL_FILES = [
     "lists.js",
     "potd.js",
     "quiz.js",
+    "shinyhunt.js",
     "team.js",
     "typechart.js",
     "utils.js",
