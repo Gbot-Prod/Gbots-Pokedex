@@ -193,10 +193,12 @@ function answerRound(choice, answer, chosenButton) {
         return;
     }
     score.played++;
+    let newBest = false;
     if (correct) {
         score.correct++;
         score.streak++;
-        if (score.streak > score.best && score.streak >= 3) {
+        newBest = score.streak > score.best && score.streak >= 3;
+        if (newBest) {
             celebrate(); // new best streak
         }
         score.best = Math.max(score.best, score.streak);
@@ -205,6 +207,13 @@ function answerRound(choice, answer, chosenButton) {
     }
     saveScore();
     renderScore();
+    if (newBest) {
+        // A "New best!" tag flashes on the score line (gone at the next render).
+        const tag = document.createElement("span");
+        tag.className = "quizNewBest";
+        tag.textContent = " 🎉 New best!";
+        scoreElement.append(tag);
+    }
 
     revealAnswer(answer, chosenButton, correct);
 

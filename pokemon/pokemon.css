@@ -3493,6 +3493,43 @@ img.animatedSmall {
     font-size: 0.9rem;
 }
 
+.quizNewBest {
+    display: inline-block;
+    color: #be185d;
+    font-weight: 900;
+    animation: newBestFlash 0.9s ease-out 2;
+}
+
+:root[data-theme="dark"] .quizNewBest {
+    color: #ff8fb5;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) .quizNewBest {
+        color: #ff8fb5;
+    }
+}
+
+@keyframes newBestFlash {
+    0% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    40% {
+        transform: scale(1.25);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .quizNewBest {
+        animation: none;
+    }
+}
+
 #regionTier,
 #quizTier,
 #huntTier {
