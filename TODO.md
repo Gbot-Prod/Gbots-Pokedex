@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Test suite time is up to ~117 s (the hover-contrast pass adds ~27 s): run the axe/hover tests in a separate parallel file so the core suite stays fast
+- [ ] Quiz combo: in the 60-second challenge, 3 correct in a row shows "Combo ×3!" and doubles the next point
+- [ ] pokedex:seen event step 2: let other parts listen too (shiny hunt, quiz region filter) instead of each reading storage on render
+- [ ] Hover-contrast test step 2: run the same hover pass over the browse filters, region strip and team builder buttons
+- [ ] Unseen count: make "(10 left in Kanto)" a button that opens the first missing Pokémon
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
 - [ ] Region strip: arrow keys move between banners (roving tabindex) so the 9 banners + chip don't take 10 Tab presses
 - [ ] Jump menu: also offer "Top 5" and "Calendar" pills when the card is tall enough to need them (desktop shows all sections anyway)
