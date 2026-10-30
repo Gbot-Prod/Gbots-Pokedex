@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Max affection: at 5 hearts the partner gets a sparkly aura in the header and follows you onto the card art as a small cameo
+- [ ] Most viewed: a "Your top 5" strip on the trainer card from the view counts, with mini sprites that open each Pokémon
+- [ ] Streak calendar: a 4-week dot calendar on the trainer card showing which days you visited
+- [ ] Partner offer polish: remember a declined offer per Pokémon (don't ask again for 20 more views)
+- [ ] Header on tiny phones: a compact "dex mode" (smaller lens, LEDs in a column) instead of hiding the title below 360px
 - [ ] Trainer card image step 3: include the card style's flourishes in the PNG (holo rainbow edge, retro scanlines)
 - [ ] "Today" panel on the landing page: Pokémon of the day, your streak and one unseen Pokémon suggestion side by side
 - [ ] Holo foil for favourites: favourite Pokémon tiles in the browse grid get a subtle rainbow edge
