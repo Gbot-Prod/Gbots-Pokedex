@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Size comparison: the Pokémon's silhouette next to a 1.7 m trainer silhouette, both scaled by real height (Wailord vs Joltik!)
+- [ ] Device lens glows in the current Pokémon's type colour, and a burst of type particles plays when a new Pokémon loads
+- [ ] Shiny hunt mini-game: random wild encounters with a 1-in-50 shiny chance, encounter counter and shiny collection saved locally
+- [ ] Download the holo card as a PNG (canvas render of art, name, types and stats) to share
+- [ ] Region landing view: clicking a region banner shows a header with the region's legendary trio and Pokédex count above the filtered grid
 - [ ] Card flip: click a corner button to flip the holo card (3D) to a back side with a Poké Ball design and a quick stats summary
 - [ ] Breeding & capture panel from species data: gender-ratio bar, catch-rate gauge, egg groups, hatch steps and growth rate
 - [ ] "Evolve!" button on the evolution chain: white flash + morph animation into the next stage (instant under reduced motion)

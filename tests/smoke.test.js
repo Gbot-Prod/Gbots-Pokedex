@@ -440,19 +440,25 @@ test("the search combobox suggests Pokémon and can be driven with the keyboard"
 
 test("a sprite that fails to load is remembered and not requested again", async () => {
     let requests = 0;
-    await page.route("**/sprites/pokemon/1.png", (route) => {
+    // Ivysaur (#2) appears only once on the page (Bulbasaur is also in the region strip).
+    await page.route("**/sprites/pokemon/2.png", (route) => {
         requests++;
         route.fulfill({ status: 404, body: "" });
     });
     await page.reload();
-    await page.waitForFunction(() => (localStorage.getItem("pokedex:missing-sprites:v1") ?? "").includes("1"));
+    await page.waitForFunction(() =>
+        JSON.parse(localStorage.getItem("pokedex:missing-sprites:v1") ?? "[]").includes(2),
+    );
     assert.equal(requests, 1);
 
     await page.reload();
     await page.waitForSelector("#browseGrid .browseTile");
     assert.equal(requests, 1); // skipped on the next visit
     // A Poké Ball placeholder is shown instead.
-    assert.match(await page.locator("#browseGrid .browseTile img").first().getAttribute("src"), /favicon\.svg$/);
+    assert.match(
+        await page.locator("#browseGrid li:nth-child(2) .browseTile > img").getAttribute("src"),
+        /favicon\.svg$/,
+    );
 });
 
 test("an empty, focused search box offers recently viewed Pokémon", async () => {
