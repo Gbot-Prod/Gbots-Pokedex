@@ -21,6 +21,7 @@ import {
     pokemonDisplayName,
     pruneCacheEntries,
     radarPoints,
+    sizeComparison,
     speciesDisplayName,
     suggestionScore,
 } from "../pokemon/utils.js";
@@ -282,4 +283,11 @@ test("entrySpecies finds a form's species by the longest matching slug", () => {
     assert.deepEqual(entrySpecies({ id: 10168, name: "mr-mime-galar" }, slugs), { id: 122, slug: "mr-mime" });
     assert.equal(entrySpecies({ id: 10999, name: "unknown-form" }, slugs), null);
     assert.equal(entryDisplayName({ id: 10034, name: "charizard-mega-x" }, slugs), "Charizard (Mega X)");
+});
+
+test("sizeComparison scales the taller figure to the box and keeps tiny ones visible", () => {
+    assert.deepEqual(sizeComparison(4, 160), { pokemonPx: 38, trainerPx: 160 }); // Pikachu 0.4 m
+    assert.deepEqual(sizeComparison(145, 160), { pokemonPx: 160, trainerPx: 19 }); // Wailord 14.5 m
+    assert.equal(sizeComparison(1, 160).pokemonPx, 9); // Joltik 0.1 m
+    assert.equal(sizeComparison(0, 160).pokemonPx, 8); // minimum
 });

@@ -438,3 +438,11 @@ export const GENERATIONS = [
     { number: 8, region: "Galar", first: 810, last: 905 },
     { number: 9, region: "Paldea", first: 906, last: 1025 },
 ];
+
+// Pixel heights for the size comparison: the taller of the Pokémon and a 1.7 m trainer fills
+// the box; tiny Pokémon keep a minimum size so they stay visible. Heights in decimetres.
+export function sizeComparison(pokemonDecimetres, boxPx, trainerDecimetres = 17, minPx = 8) {
+    const tallest = Math.max(pokemonDecimetres, trainerDecimetres);
+    const scale = (decimetres) => Math.max(minPx, Math.round((decimetres / tallest) * boxPx));
+    return { pokemonPx: scale(pokemonDecimetres), trainerPx: scale(trainerDecimetres) };
+}

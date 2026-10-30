@@ -687,3 +687,14 @@ test("region banners filter the browse grid by generation and toggle off again",
     await page.click('.regionBanner[data-generation="2"]');
     assert.equal(await page.inputValue("#generationFilter"), "");
 });
+
+test("the size comparison scales the Pokémon against a 1.7 m trainer", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    assert.match(await page.textContent("#sizeCaption"), /Pikachu is 24% of a 1\.7 m trainer/);
+    const heights = await page.evaluate(() => [
+        document.getElementById("pokemonSilhouette").style.height,
+        document.getElementById("trainerSilhouette").style.height,
+    ]);
+    assert.deepEqual(heights, ["38px", "160px"]);
+});

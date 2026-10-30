@@ -2473,3 +2473,57 @@ img.animatedSmall {
         transform: none;
     }
 }
+
+/* --- Size comparison ------------------------------------------------------------------------ */
+
+#sizeComparison {
+    width: 100%;
+    max-width: 26rem;
+    margin: 0.5rem 1rem 1rem;
+    padding: 0.8rem;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background:
+        linear-gradient(to top, var(--surface) 0 2px, transparent 2px) bottom / 100% 100% no-repeat,
+        var(--surface);
+}
+
+#sizeStage {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2.5rem;
+    min-height: 190px;
+    border-bottom: 2px solid currentColor;
+}
+
+.sizeFigure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.sizeFigure span:last-child {
+    order: -1; /* label above the figure, so both line up on the ground */
+}
+
+#trainerSilhouette {
+    width: auto;
+    fill: currentColor;
+    opacity: 0.75;
+}
+
+#pokemonSilhouette {
+    display: block;
+    background-color: var(--type-strong);
+    -webkit-mask: var(--silhouette) center bottom / contain no-repeat;
+    mask: var(--silhouette) center bottom / contain no-repeat;
+}
+
+#sizeCaption {
+    margin-top: 0.5rem;
+    font-weight: 600;
+}

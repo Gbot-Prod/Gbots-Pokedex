@@ -2,6 +2,7 @@ import {
     ANIMATED_CHANGE_EVENT,
     ANIMATED_KEY,
     API_BASE,
+    SPRITE_BASE,
     fetchJson,
     fetchPokemon,
     getAllPokemonEntries,
@@ -43,6 +44,7 @@ import {
     learnset,
     normalizeQuery,
     pickSprite,
+    sizeComparison,
     suggestionScore,
 } from "./utils.js";
 
@@ -330,6 +332,9 @@ function applyDisplayName(species) {
 
     nameElement.textContent = displayName;
     renderSprite(); // refreshes the sprite's alt text with the new name
+    if (currentMeasurements) {
+        renderSizeComparison(); // label with the official name too
+    }
     const announcer = document.getElementById("resultAnnouncer");
     announcer.textContent = announcer.textContent.replace(previous, displayName);
     document.title = displayName + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
@@ -1142,8 +1147,35 @@ function renderMeasurements() {
     if (currentMeasurements) {
         heightElement.textContent = formatHeight(currentMeasurements.height, units);
         weightElement.textContent = formatWeight(currentMeasurements.weight, units);
+        renderSizeComparison();
     }
     unitsButton.textContent = units === "metric" ? "Show lbs / ft" : "Show kg / m";
+}
+
+// --- Size comparison --------------------------------------------------------------------
+// The Pokémon (as a silhouette in its type colour, masked from its artwork) next to a
+// 1.7 m trainer, both scaled to their real heights.
+const SIZE_BOX_PX = 160;
+const TRAINER_DECIMETRES = 17;
+
+function renderSizeComparison() {
+    const { height } = currentMeasurements;
+    const { pokemonPx, trainerPx } = sizeComparison(height, SIZE_BOX_PX, TRAINER_DECIMETRES);
+    const silhouette = document.getElementById("pokemonSilhouette");
+    const artwork = SPRITE_BASE + "other/official-artwork/" + currentPokemon.id + ".png";
+    silhouette.style.height = pokemonPx + "px";
+    silhouette.style.width = pokemonPx + "px";
+    silhouette.style.setProperty("--silhouette", "url(" + JSON.stringify(artwork) + ")");
+    document.getElementById("trainerSilhouette").style.height = trainerPx + "px";
+
+    const name = nameElement.textContent.trim();
+    document.getElementById("trainerLabel").textContent = "Trainer " + formatHeight(TRAINER_DECIMETRES, units);
+    document.getElementById("pokemonSizeLabel").textContent = name + " " + formatHeight(height, units);
+    const ratio = height / TRAINER_DECIMETRES;
+    document.getElementById("sizeCaption").textContent =
+        ratio >= 1
+            ? name + " is " + ratio.toFixed(1) + "× as tall as a 1.7 m trainer"
+            : name + " is " + Math.round(ratio * 100) + "% of a 1.7 m trainer's height";
 }
 
 unitsButton.addEventListener("click", () => {
