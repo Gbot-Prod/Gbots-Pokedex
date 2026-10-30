@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Streak rewards: at 7 and 30 days the trainer card earns a flame badge and the device LEDs glow orange for the day
+- [ ] Partner step 5: let the partner follow you — if you open the same Pokémon 5 times, offer to make it your partner
+- [ ] Partner affection: count views of the partner and show hearts (1–5) on the trainer card avatar
+- [ ] Trainer card image step 3: include the card style's flourishes in the PNG (holo rainbow edge, retro scanlines)
+- [ ] "Today" panel on the landing page: Pokémon of the day, your streak and one unseen Pokémon suggestion side by side
 - [ ] Holo foil for favourites: favourite Pokémon tiles in the browse grid get a subtle rainbow edge
 - [ ] Tile radar step 2: tint the radar fill with the second type (dual types read at a glance) and show the exact stat on hover of each axis label
 - [ ] Retro mode polish: pixel-font labels on the region banners and a dot-matrix scanline overlay on the card art
