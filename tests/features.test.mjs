@@ -313,3 +313,15 @@ test("tierProgress works for the quiz tiers too", async () => {
     assert.equal(tierProgress(35, QUIZ_TIERS), "35 / 50 for gold");
     assert.equal(tierProgress(50, QUIZ_TIERS), null);
 });
+
+test("closestRegion picks the started region with the fewest left", async () => {
+    const { closestRegion } = await import("../pokemon/progress.js");
+    const gens = [
+        { number: 1, seen: 151, total: 151 },
+        { number: 2, seen: 90, total: 100 },
+        { number: 3, seen: 130, total: 135 },
+        { number: 4, seen: 0, total: 107 },
+    ];
+    assert.equal(closestRegion(gens).number, 3);
+    assert.equal(closestRegion([{ number: 1, seen: 0, total: 151 }]), null);
+});

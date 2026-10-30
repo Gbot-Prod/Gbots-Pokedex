@@ -89,6 +89,25 @@ function render() {
         bar.querySelector(".regionProgressBar span").style.width = (100 * count) / total + "%";
         bar.querySelector(".regionProgressText").textContent = count + "/" + total + " seen";
     }
+    // A nudge on the region closest to complete.
+    document.querySelector(".regionChip")?.remove();
+    const closest = closestRegion(stats.generations);
+    const closestBanner = closest && document.querySelector('.regionBanner[data-generation="' + closest.number + '"]');
+    if (closestBanner) {
+        const chip = document.createElement("span");
+        chip.className = "regionChip";
+        chip.textContent = "Only " + (closest.total - closest.seen) + " to go!";
+        closestBanner.append(chip);
+    }
+}
+
+// The started-but-unfinished region with the fewest Pokémon left (ties: earliest region).
+export function closestRegion(generations) {
+    return (
+        generations
+            .filter((gen) => gen.seen > 0 && gen.seen < gen.total)
+            .sort((a, b) => a.total - a.seen - (b.total - b.seen) || a.number - b.number)[0] ?? null
+    );
 }
 
 // The "seen" tick on tiles for Pokémon already opened.

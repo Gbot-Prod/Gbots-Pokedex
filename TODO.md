@@ -15,7 +15,6 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
-- [ ] Region tier line: highlight the closest-to-complete region with a "only N to go!" chip
 - [ ] Trainer card: a sticky mini header on phones (avatar + name + ✕) so closing doesn't need scrolling back up
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
 - [ ] Settings panel: one place for theme, units, animated sprites, sound and "reset my progress" (with confirmation)
@@ -275,3 +274,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Quiz: celebrate beating your best streak mid-run with a small "New best!" flash on the score line (2026-10-30) — a pink "🎉 New best!" tag pops twice on the score line when a streak beats the best (from 3 up), alongside the existing confetti; verified live
 - [x] Quiz test hook: expose the current answer id on the quiz stage (data attribute, hidden from AT) so smoke tests can answer correctly and cover streak features (2026-10-30) — done without leaking the answer into the DOM: a smoke-test helper reads the artwork URL's dex number and clicks the choice matching the fixture name; new test covers the streak/New best! flash (fails on the pre-feature quiz)
 - [x] Tier lines everywhere: make the three "badge: x / y for tier" lines tappable to open the trainer card at the badge shelf (2026-10-30) — the region, quiz and shiny-hunt tier lines are now buttons ("Open your badges") that open the trainer card with the badge shelf scrolled into view
+- [x] Region tier line: highlight the closest-to-complete region with a "only N to go!" chip (2026-10-30) — the started-but-unfinished region with the fewest Pokémon left gets a bobbing gold "Only N to go!" chip on its banner (closestRegion)

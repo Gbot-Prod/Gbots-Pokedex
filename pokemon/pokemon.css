@@ -3285,6 +3285,30 @@ img.animatedSmall {
     transform: translateY(-3px);
 }
 
+.regionChip {
+    margin-top: 0.35rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    background: #ffd447;
+    color: #3d2a00;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-shadow: none;
+    animation: chipBob 1.8s ease-in-out infinite;
+}
+
+@keyframes chipBob {
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .regionChip {
+        animation: none;
+    }
+}
+
 /* Gold ribbon on regions whose Pokédex is complete */
 .regionBanner.regionComplete {
     position: relative;
