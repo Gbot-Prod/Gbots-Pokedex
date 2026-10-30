@@ -69,3 +69,13 @@ test("offensive coverage counts members whose own types hit a type super-effecti
     assert.equal(coverage.ice.hits, 1);
     assert.equal(coverage.normal.hits, 0);
 });
+
+test("dailyPokemonId is deterministic per date and within the National Dex", async () => {
+    const { dailyPokemonId } = await import("../pokemon/potd.js");
+    assert.equal(dailyPokemonId("2026-10-30"), dailyPokemonId("2026-10-30"));
+    assert.notEqual(dailyPokemonId("2026-10-30"), dailyPokemonId("2026-10-31"));
+    for (const day of ["2026-01-01", "2026-06-15", "2027-12-31"]) {
+        const id = dailyPokemonId(day);
+        assert.ok(id >= 1 && id <= 1025, day + " -> " + id);
+    }
+});

@@ -660,3 +660,12 @@ test("submitting the typed text closes the suggestion list", async () => {
     assert.equal(await page.getAttribute("#pokemonLookupInpt", "aria-expanded"), "false");
     await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
 });
+
+test("the Pokémon of the day shows on the landing page and hides once a Pokémon is shown", async () => {
+    await page.waitForSelector("#potdSection:not([hidden])");
+    assert.match(await page.textContent("#potdDetail"), /#\d{4}/);
+    await search("pikachu");
+    await page.waitForSelector("#potdSection[hidden]", { state: "attached" });
+    await page.click("#clearDataBtn");
+    await page.waitForSelector("#potdSection:not([hidden])");
+});

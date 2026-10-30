@@ -12,6 +12,7 @@ const SHELL_FILES = [
     "combobox.js",
     "compare.js",
     "lists.js",
+    "potd.js",
     "quiz.js",
     "team.js",
     "typechart.js",

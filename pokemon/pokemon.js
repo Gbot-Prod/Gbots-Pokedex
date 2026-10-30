@@ -12,6 +12,7 @@ import {
 } from "./api.js";
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
+import { initPotd, setPotdVisible } from "./potd.js";
 import { initQuiz } from "./quiz.js";
 import { initTypeChart, showTypeInChart } from "./typechart.js";
 import { initTeam, onCardChange as updateTeamButton } from "./team.js";
@@ -426,6 +427,7 @@ function renderPokemon(data, query) {
     renderSprite();
 
     pokemonCard.classList.remove("hidden");
+    setPotdVisible(false);
 }
 
 // Animated Showdown sprites (small GIFs) exist for most Pokémon; null when there isn't one.
@@ -832,6 +834,7 @@ initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 initQuiz({ showPokemon });
 initTypeChart();
+initPotd({ showPokemon, isCardShowing: () => Boolean(getUrlPokemon()) || !pokemonCard.classList.contains("hidden") });
 
 // The card's type icons open the type chart at that type.
 for (const icon of [type1IconElement, type2IconElement]) {
@@ -889,6 +892,7 @@ prevButton.addEventListener("click", () => goToDexNumber(currentDexNumber - 1));
 nextButton.addEventListener("click", () => goToDexNumber(currentDexNumber + 1));
 document.getElementById("clearDataBtn").addEventListener("click", () => {
     clearFields();
+    setPotdVisible(true);
     setUrlPokemon(null);
 });
 

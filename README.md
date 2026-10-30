@@ -17,6 +17,7 @@ pokemon/
   lists.js       browse grid with filters, favorites and recently viewed
   compare.js     side-by-side comparison table
   combobox.js    accessible search autocomplete (sprites, keyboard navigation)
+  potd.js        "Pokémon of the day" hero card on the landing page
   quiz.js        "Who's that Pokémon?" silhouette quiz
   team.js        team builder (6 slots) with a type-coverage chart
   typechart.js   interactive 18×18 type effectiveness chart
@@ -30,7 +31,7 @@ tests/
   utils.test.mjs unit tests for utils.js
   combobox.test.mjs  unit tests for the autocomplete matching
   api.test.mjs   unit tests for api.js (fetch and storage stubbed)
-  features.test.mjs  unit tests for the quiz, team and type-chart helpers
+  features.test.mjs  unit tests for the quiz, team, type-chart and Pokémon-of-the-day helpers
   fixtures/      trimmed PokéAPI responses used by the tests
   build-fixtures.mjs  regenerates the fixtures from the live API
 TODO.md          living improvement backlog
