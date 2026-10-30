@@ -176,16 +176,45 @@ function dayNumber(day) {
     return Date.UTC(year, month - 1, date) / 86400000;
 }
 
+// Also keeps the last 60 visited days for the calendar.
 export function updateVisits(visits, today) {
     if (!visits?.first) {
-        return { first: today, last: today, streak: 1, best: 1 };
+        return { first: today, last: today, streak: 1, best: 1, days: [today] };
     }
     const gap = dayNumber(today) - dayNumber(visits.last);
     if (gap <= 0) {
         return visits; // already counted today
     }
     const streak = gap === 1 ? visits.streak + 1 : 1;
-    return { ...visits, last: today, streak, best: Math.max(visits.best, streak) };
+    const days = [...(visits.days ?? [visits.last]), today].slice(-60);
+    return { ...visits, last: today, streak, best: Math.max(visits.best, streak), days };
+}
+
+// The last `count` days ending today, oldest first, each marked visited or not.
+export function calendarDays(visitedDays, today, count = 28) {
+    const visited = new Set(visitedDays);
+    const end = dayNumber(today);
+    return Array.from({ length: count }, (_, index) => {
+        const date = new Date((end - count + 1 + index) * 86400000);
+        const day = date.toISOString().slice(0, 10);
+        return { day, visited: visited.has(day) };
+    });
+}
+
+function renderCalendar() {
+    const today = localDay();
+    document.getElementById("trainerCalendar").replaceChildren(
+        ...calendarDays(visits.days ?? [visits.last], today).map(({ day, visited }) => {
+            const cell = document.createElement("span");
+            cell.className = (visited ? "visited" : "") + (day === today ? " today" : "");
+            cell.title = day + (visited ? " · visited" : "");
+            return cell;
+        }),
+    );
+    const count = calendarDays(visits.days ?? [visits.last], today).filter((entry) => entry.visited).length;
+    document
+        .getElementById("trainerCalendar")
+        .setAttribute("aria-label", "Visited on " + count + " of the last 28 days");
 }
 
 let visits = null;
@@ -543,6 +572,7 @@ function renderTrainerCard() {
     const stats = completionStats(seen);
     document.getElementById("trainerCardSeen").textContent = seenText(stats);
     document.getElementById("trainerCardVisits").textContent = visitsText();
+    renderCalendar();
     document.getElementById("trainerCardBadges").replaceChildren(
         ...streakBadges(visits.best).map(([icon, label]) => {
             const badge = document.createElement("li");

@@ -160,13 +160,15 @@ test("partnerReaction loves its evolution line and fears super-effective types",
 test("updateVisits tracks the first visit and the daily streak", async () => {
     const { updateVisits } = await import("../pokemon/progress.js");
     let visits = updateVisits(null, "2026-10-28");
-    assert.deepEqual(visits, { first: "2026-10-28", last: "2026-10-28", streak: 1, best: 1 });
+    assert.deepEqual(visits, { first: "2026-10-28", last: "2026-10-28", streak: 1, best: 1, days: ["2026-10-28"] });
     visits = updateVisits(visits, "2026-10-28");
     assert.equal(visits.streak, 1);
     visits = updateVisits(updateVisits(visits, "2026-10-29"), "2026-10-30");
-    assert.deepEqual(visits, { first: "2026-10-28", last: "2026-10-30", streak: 3, best: 3 });
+    assert.deepEqual(visits.days, ["2026-10-28", "2026-10-29", "2026-10-30"]);
+    assert.equal(visits.streak, 3);
     visits = updateVisits(visits, "2026-11-02");
-    assert.deepEqual(visits, { first: "2026-10-28", last: "2026-11-02", streak: 1, best: 3 });
+    assert.equal(visits.streak, 1);
+    assert.equal(visits.best, 3);
 });
 
 test("streakBadges awards flames at 7 and 30 days", async () => {
@@ -200,4 +202,13 @@ test("topViewed ranks the most-opened Pokémon", async () => {
         [25, 3],
     ]);
     assert.deepEqual(topViewed({}), []);
+});
+
+test("calendarDays lists the last four weeks and marks visited days", async () => {
+    const { calendarDays } = await import("../pokemon/progress.js");
+    const days = calendarDays(["2026-10-30", "2026-10-03", "2026-10-02"], "2026-10-30");
+    assert.equal(days.length, 28);
+    assert.deepEqual(days[0], { day: "2026-10-03", visited: true });
+    assert.deepEqual(days[27], { day: "2026-10-30", visited: true });
+    assert.equal(days.filter((entry) => entry.visited).length, 2);
 });

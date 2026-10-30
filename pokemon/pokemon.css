@@ -3610,6 +3610,37 @@ img.animatedSmall {
     text-align: center;
 }
 
+/* 4-week visit calendar: one square per day, oldest first, two rows of 14 */
+#trainerCalendar {
+    display: grid;
+    grid-template-columns: repeat(14, 0.85rem);
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 0 1rem 0.8rem;
+}
+
+#trainerCalendar span {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 3px;
+    background: rgba(127, 127, 127, 0.25);
+}
+
+#trainerCalendar span.visited {
+    background: linear-gradient(135deg, #ffb347, #ff6a1f);
+    box-shadow: 0 0 4px rgba(255, 138, 31, 0.6);
+}
+
+#trainerCalendar span.today {
+    outline: 2px solid currentColor;
+    outline-offset: 1px;
+}
+
+#trainerCard[data-style="retro"] #trainerCalendar span.visited {
+    background: #0f380f;
+    box-shadow: none;
+}
+
 #trainerCardBadges {
     display: flex;
     justify-content: center;
