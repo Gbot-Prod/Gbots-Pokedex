@@ -15,6 +15,11 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Tile flip step 3: a tiny stat radar instead of bars on wide screens
+- [ ] Trainer card step 4: a "Card style" picker (classic red, holo foil, retro green) that restyles the trainer card, saved with the trainer
+- [ ] Trainer card step 5: render the card to a PNG (canvas) so it can be shared as an image, not just text
+- [ ] Partner Pokémon: show the chosen partner's small sprite beside the completion ring in the header, hopping when you open a Pokémon
+- [ ] Tile flip step 4: on phones, a long-press flips a tile (with a short vibration where supported) instead of hover
+- [ ] National Dex finale: a special gold theme for the device header once all 1,025 are seen
 - [ ] Unseen filter step 2: a "Surprise me" button that opens a random unseen Pokémon (from the current filters)
 - [ ] Toast queue: reuse the completion toast for other moments (shiny found, quiz best streak beaten, team full) with a small queue so toasts don't overlap
 - [ ] Cry visualiser step 2: the artwork gently pulses with the cry's loudness (same analyser), off under reduced motion
