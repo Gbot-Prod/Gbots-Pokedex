@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Unseen count step 2: after opening one, a "Next missing →" button on the card walks through the rest of the region's unseen Pokémon
+- [ ] Combo step 2: a combo meter under the challenge timer that fills with each answer in a row and shakes on a miss
+- [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
+- [ ] Live check: run `npm run check:live` (both browser files) in a nightly CI job so API changes are caught even when nobody pushes
+- [ ] Quiz challenge: a "best combo" stat alongside "Best 60s run"
 - [ ] pokedex:seen event step 2: let other parts listen too (shiny hunt, quiz region filter) instead of each reading storage on render
 - [ ] Hover-contrast test step 2: run the same hover pass over the browse filters, region strip and team builder buttons
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
