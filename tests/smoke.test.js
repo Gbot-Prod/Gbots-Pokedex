@@ -740,6 +740,9 @@ test("the completion ring opens a trainer card", async () => {
     await page.fill("#trainerName", "Gbot");
     assert.equal(await page.inputValue("#trainerPartner"), "25");
     assert.equal(await page.isVisible("#trainerAvatar"), true);
+    await page.selectOption("#trainerStyle", "holo");
+    assert.equal(await page.getAttribute("#trainerCard", "data-style"), "holo");
+    await page.selectOption("#trainerStyle", "classic");
     await page.evaluate(() => {
         delete Navigator.prototype.share;
         navigator.clipboard.writeText = async (text) => (window.copiedText = text);

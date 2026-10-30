@@ -3256,7 +3256,8 @@ img.animatedSmall {
 }
 
 #trainerName,
-#trainerPartner {
+#trainerPartner,
+#trainerStyle {
     box-sizing: border-box;
     width: 100%;
     padding: 0.35rem 0.5rem;
@@ -3269,19 +3270,20 @@ img.animatedSmall {
     font-weight: 700;
 }
 
-#trainerName {
+#trainerName,
+#trainerPartner {
     margin-bottom: 0.3rem;
     font-size: 1.2rem;
 }
 
-:root[data-theme="dark"] :is(#trainerName, #trainerPartner) {
+:root[data-theme="dark"] :is(#trainerName, #trainerPartner, #trainerStyle) {
     border-color: #5a6390;
     background: #2f3654;
     color: #f2f4ff;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]):not([data-theme="retro"]) :is(#trainerName, #trainerPartner) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) :is(#trainerName, #trainerPartner, #trainerStyle) {
         border-color: #5a6390;
         background: #2f3654;
         color: #f2f4ff;
@@ -3381,28 +3383,125 @@ img.animatedSmall {
     background: linear-gradient(90deg, #ffd447, #ffffff, #ffd447);
 }
 
-:root[data-theme="dark"] #trainerCard {
+:root[data-theme="dark"] #trainerCard:not([data-style="retro"]) {
     background: linear-gradient(170deg, #262c44, #161a2a);
     color: #f2f4ff;
 }
 
-:root[data-theme="dark"] #trainerCardStats li {
+:root[data-theme="dark"] #trainerCard:not([data-style="retro"]) #trainerCardStats li {
     background: #2f3654;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCard {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCard:not([data-style="retro"]) {
         background: linear-gradient(170deg, #262c44, #161a2a);
         color: #f2f4ff;
     }
 
-    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCardStats li {
+    :root:not([data-theme="light"]):not([data-theme="retro"])
+        #trainerCard:not([data-style="retro"])
+        #trainerCardStats
+        li {
         background: #2f3654;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
     #trainerCard[open] {
+        animation: none;
+    }
+}
+
+/* Trainer card styles: holo foil (shifting rainbow edge and sheen) and retro (Game Boy greens). */
+#trainerCard[data-style="holo"] {
+    border-color: transparent;
+    background:
+        linear-gradient(170deg, rgba(255, 255, 255, 0.92), rgba(240, 236, 255, 0.92)) padding-box,
+        linear-gradient(120deg, #ff6b9d, #ffd447, #6bffb8, #6bc5ff, #b86bff, #ff6b9d) border-box;
+    background-size:
+        100% 100%,
+        300% 300%;
+    box-shadow:
+        0 0 24px rgba(184, 107, 255, 0.55),
+        0 24px 60px rgba(0, 0, 0, 0.5);
+    animation: holoEdge 6s linear infinite;
+}
+
+#trainerCard[data-style="holo"] .trainerCardTop {
+    background: linear-gradient(120deg, #7a3cff, #d43bb5, #ff7a3c);
+}
+
+#trainerCard[data-style="holo"] #trainerAvatar {
+    border-color: #b86bff;
+}
+
+@keyframes holoEdge {
+    to {
+        background-position:
+            0 0,
+            300% 0;
+    }
+}
+
+:root[data-theme="dark"] #trainerCard[data-style="holo"] {
+    background:
+        linear-gradient(170deg, rgba(38, 30, 68, 0.95), rgba(18, 16, 36, 0.95)) padding-box,
+        linear-gradient(120deg, #ff6b9d, #ffd447, #6bffb8, #6bc5ff, #b86bff, #ff6b9d) border-box;
+    background-size:
+        100% 100%,
+        300% 300%;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCard[data-style="holo"] {
+        background:
+            linear-gradient(170deg, rgba(38, 30, 68, 0.95), rgba(18, 16, 36, 0.95)) padding-box,
+            linear-gradient(120deg, #ff6b9d, #ffd447, #6bffb8, #6bc5ff, #b86bff, #ff6b9d) border-box;
+        background-size:
+            100% 100%,
+            300% 300%;
+    }
+}
+
+#trainerCard[data-style="retro"] {
+    border-color: #0f380f;
+    border-radius: 6px;
+    background: #9bbc0f;
+    color: #0f380f;
+    box-shadow:
+        6px 6px 0 #0f380f,
+        0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+#trainerCard[data-style="retro"] .trainerCardTop {
+    background: #306230;
+}
+
+#trainerCard[data-style="retro"] h2 {
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.85rem;
+}
+
+#trainerCard[data-style="retro"] #trainerCardStats li {
+    border: 2px solid #0f380f;
+    background: #8bac0f;
+    color: #0f380f;
+    box-shadow: none;
+}
+
+#trainerCard[data-style="retro"] #trainerAvatar {
+    border-color: #0f380f;
+    background: #8bac0f;
+}
+
+#trainerCard[data-style="retro"] :is(#trainerName, #trainerPartner, #trainerStyle) {
+    border-color: #0f380f;
+    background: #8bac0f;
+    color: #0f380f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #trainerCard[data-style="holo"] {
         animation: none;
     }
 }

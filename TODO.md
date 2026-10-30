@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Trainer card step 4: a "Card style" picker (classic red, holo foil, retro green) that restyles the trainer card, saved with the trainer
 - [ ] Trainer card step 5: render the card to a PNG (canvas) so it can be shared as an image, not just text
 - [ ] Partner Pokémon: show the chosen partner's small sprite beside the completion ring in the header, hopping when you open a Pokémon
 - [ ] Tile flip step 4: on phones, a long-press flips a tile (with a short vibration where supported) instead of hover
@@ -201,3 +200,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Trainer card step 3: "Share trainer card" button that copies a text summary (seen count, shinies, regions complete) to the clipboard (2026-10-30) — "📋 Share trainer card" uses the share sheet or copies a text summary (name, seen count and %, shinies, complete regions, link) with a "Copied" status
 - [x] Region banners: a gold "complete" ribbon and crown on banners whose region is 100% seen (2026-10-30) — complete regions get a gold glow and a diagonal "★ COMPLETE" corner ribbon
 - [x] Tile flip step 3: a tiny stat radar instead of bars on wide screens (2026-10-30) — screens ≥900px show a gold hexagon radar (6 labelled axes, scaled to 150) on the tile back instead of the bars; phones keep the bars
+- [x] Trainer card step 4: a "Card style" picker (classic red, holo foil, retro green) that restyles the trainer card, saved with the trainer (2026-10-30) — "Card style" select: classic red, holo foil (animated rainbow border + violet glow, still under reduced motion) or retro Game Boy greens with a pixel-font heading; saved with the trainer

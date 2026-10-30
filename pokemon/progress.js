@@ -175,6 +175,15 @@ function renderTrainerProfile() {
         partnerSelect.append(new Option("Open a Pokémon first", ""));
     }
     showPartner(partner);
+    applyCardStyle(trainer.style);
+}
+
+const CARD_STYLES = ["classic", "holo", "retro"];
+
+function applyCardStyle(style) {
+    const value = CARD_STYLES.includes(style) ? style : "classic";
+    document.getElementById("trainerStyle").value = value;
+    trainerCard.dataset.style = value;
 }
 
 function showPartner(id) {
@@ -288,6 +297,10 @@ export function initProgress() {
     document.getElementById("trainerCardClose").addEventListener("click", () => trainerCard.close());
     document.getElementById("trainerName").addEventListener("input", (event) => {
         saveTrainer({ name: event.target.value.trim() });
+    });
+    document.getElementById("trainerStyle").addEventListener("change", (event) => {
+        saveTrainer({ style: event.target.value });
+        applyCardStyle(event.target.value);
     });
     document.getElementById("trainerPartner").addEventListener("change", (event) => {
         const id = Number(event.target.value);
