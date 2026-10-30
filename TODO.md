@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Trainer card image step 2: share the PNG directly with the Web Share API (files) on phones, falling back to download
+- [ ] Partner step 3: more reactions — 😴 at night (night sky on), ⭐ when you open a shiny, 🎵 while a cry plays
+- [ ] Partner step 4: clicking the header partner opens its own card (quick jump to your partner)
+- [ ] Trainer card: a "member since" date (first Pokémon seen) and a daily-visit streak counter
+- [ ] Holo foil for favourites: favourite Pokémon tiles in the browse grid get a subtle rainbow edge
 - [ ] Tile radar step 2: tint the radar fill with the second type (dual types read at a glance) and show the exact stat on hover of each axis label
 - [ ] Retro mode polish: pixel-font labels on the region banners and a dot-matrix scanline overlay on the card art
 - [ ] Tile flip step 4: on phones, a long-press flips a tile (with a short vibration where supported) instead of hover
