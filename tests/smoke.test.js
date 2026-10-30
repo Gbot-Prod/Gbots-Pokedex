@@ -704,9 +704,10 @@ test("the shiny hunt counts encounters and collects shinies", async () => {
     await page.waitForSelector("#huntStage:not([hidden])");
     assert.match(await page.textContent("#huntCounter"), /Encounters: 1/);
 
-    await page.evaluate(() => (Math.random = () => 0.001)); // force a shiny
+    await page.selectOption("#huntGeneration", "1");
+    await page.evaluate(() => (Math.random = () => 0.001)); // force a shiny: #1 in Kanto
     await page.click("#huntEncounterBtn");
-    assert.match(await page.textContent("#huntResult"), /SHINY!/);
+    assert.match(await page.textContent("#huntResult"), /SHINY! A shiny (Bulbasaur|#0001) appeared/);
     assert.equal(await page.locator(".huntShiny").count(), 1);
     await page.reload();
     assert.match(await page.textContent("#huntCounter"), /Encounters: 2 · Shinies found: 1/);

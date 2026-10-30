@@ -256,7 +256,14 @@
             <section id="huntSection" class="tileSection" aria-labelledby="huntHeading">
                 <h2 id="huntHeading">Shiny hunt</h2>
                 <p id="huntCounter"></p>
-                <button type="button" class="btn" id="huntEncounterBtn">🌿 Encounter!</button>
+                <p id="huntCharm" hidden></p>
+                <div class="huntControls">
+                    <label for="huntGeneration">Hunt in</label>
+                    <select id="huntGeneration">
+                        <option value="">All regions</option>
+                    </select>
+                    <button type="button" class="btn" id="huntEncounterBtn">🌿 Encounter!</button>
+                </div>
                 <div id="huntStage" hidden>
                     <img id="huntSprite" alt="" width="160" height="160" />
                 </div>

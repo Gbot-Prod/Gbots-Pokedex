@@ -95,4 +95,26 @@ test("rollShiny hits with probability 1/50", async () => {
         rollShiny(() => 0.5),
         false,
     );
+    assert.equal(
+        rollShiny(() => 0.039, 25),
+        true,
+    );
+});
+
+test("huntOdds earns the Shiny Charm at 100 encounters and huntPick stays in the region", async () => {
+    const { huntOdds, huntPick } = await import("../pokemon/shinyhunt.js");
+    assert.equal(huntOdds(99), 50);
+    assert.equal(huntOdds(100), 25);
+    assert.equal(
+        huntPick(2, () => 0),
+        152,
+    );
+    assert.equal(
+        huntPick(2, () => 0.9999),
+        251,
+    );
+    assert.equal(
+        huntPick(null, () => 0.9999),
+        1025,
+    );
 });
