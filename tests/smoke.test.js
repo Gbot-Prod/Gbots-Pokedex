@@ -778,6 +778,9 @@ test("the partner Pokémon reacts with a heart to its own evolution line", async
     await search("pikachu");
     await page.waitForSelector("#dexPartnerBubble.visible");
     assert.equal(await page.textContent("#dexPartnerBubble"), "❤️");
+    await page.click("#shinyToggleBtn");
+    await page.waitForFunction(() => document.getElementById("dexPartnerBubble").textContent === "⭐");
+    await page.click("#shinyToggleBtn");
 });
 
 test("the unseen-only filter hides Pokémon you've already opened", async () => {

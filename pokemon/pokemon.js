@@ -14,7 +14,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initPotd, setPotdVisible } from "./potd.js";
-import { hopPartner, initProgress, markSeen, reactToPokemon } from "./progress.js";
+import { hopPartner, initProgress, markSeen, partnerSay, reactToPokemon } from "./progress.js";
 import { initQuiz } from "./quiz.js";
 import { initShinyHunt } from "./shinyhunt.js";
 import { initTypeChart, showTypeInChart } from "./typechart.js";
@@ -880,6 +880,9 @@ document.getElementById("randomPokemonBtn").addEventListener("click", () => {
 shinyButton.addEventListener("click", () => {
     showShiny = !showShiny;
     renderSprite();
+    if (showShiny) {
+        partnerSay("⭐");
+    }
 });
 animatedButton.addEventListener("click", () => {
     showAnimated = !showAnimated;
@@ -1209,7 +1212,10 @@ function playCry() {
         stopCryWave();
     };
     cryAudio.addEventListener("ended", stop, { once: true });
-    cryAudio.play().then(() => visualiseCry(cryAudio), stop); // e.g. format unsupported
+    cryAudio.play().then(() => {
+        visualiseCry(cryAudio);
+        partnerSay("🎵", Math.max(1500, (cryAudio.duration || 1.5) * 1000));
+    }, stop); // e.g. format unsupported
 }
 
 // Equaliser bars under the name that follow the cry (Web Audio analyser); skipped under

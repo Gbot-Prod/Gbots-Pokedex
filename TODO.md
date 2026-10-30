@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Partner step 3: more reactions — 😴 at night (night sky on), ⭐ when you open a shiny, 🎵 while a cry plays
 - [ ] Partner step 4: clicking the header partner opens its own card (quick jump to your partner)
 - [ ] Trainer card: a "member since" date (first Pokémon seen) and a daily-visit streak counter
 - [ ] Holo foil for favourites: favourite Pokémon tiles in the browse grid get a subtle rainbow edge
@@ -211,3 +210,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Trainer card holo step 2: a pointer-following sheen across the holo card (reuse the main card's tilt glare), off under reduced motion (2026-10-30) — with the holo style, a white glare plus a diagonal rainbow band (overlay blend) follows the pointer across the card; mouse/pen only, off under reduced motion
 - [x] Header ring: a tiny sparkle burst on the ring each time a never-seen Pokémon is counted (2026-10-30) — eight glowing ✦ stars fly out of the ring when a never-seen Pokémon is counted (0.8 s, skipped under reduced motion)
 - [x] Trainer card image step 2: share the PNG directly with the Web Share API (files) on phones, falling back to download (2026-10-30) — "Save image" hands the PNG to the share sheet where files can be shared (phones), falls back to downloading; dismissing the sheet does nothing
+- [x] Partner step 3: more reactions — 😴 at night (night sky on), ⭐ when you open a shiny, 🎵 while a cry plays (2026-10-30) — partnerSay() bubble: ⭐ when the shiny sprite is switched on, 🎵 for as long as a cry plays, and 😴 at night (night sky on) when a Pokémon gets no ❤️/😨 reaction

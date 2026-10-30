@@ -260,11 +260,21 @@ export async function reactToPokemon(chainIds, openedTypes) {
     } catch {
         return; // offline or not cached: no reaction
     }
+    // Nothing to feel about this one? At night the partner is just sleepy.
+    partnerSay(reaction ?? (document.documentElement.classList.contains("night") ? "😴" : null));
+}
+
+// Shows a speech bubble over the header partner (if there is one) for a while.
+export function partnerSay(text, duration = 2500) {
     const bubble = document.getElementById("dexPartnerBubble");
-    bubble.textContent = reaction ?? "";
-    bubble.classList.toggle("visible", Boolean(reaction));
+    if (!text || partnerElement.hidden) {
+        bubble.classList.remove("visible");
+        return;
+    }
+    bubble.textContent = text;
+    bubble.classList.add("visible");
     clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(() => bubble.classList.remove("visible"), 2500);
+    bubbleTimer = setTimeout(() => bubble.classList.remove("visible"), duration);
 }
 
 export function hopPartner() {

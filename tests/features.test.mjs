@@ -154,4 +154,5 @@ test("partnerReaction loves its evolution line and fears super-effective types",
     assert.equal(partnerReaction(6, [4, 5, 6], charizardTakes, ["fire"]), "❤️");
     assert.equal(partnerReaction(6, [7, 8, 9], charizardTakes, ["water"]), "😨");
     assert.equal(partnerReaction(6, [1, 2, 3], charizardTakes, ["grass", "poison"]), null);
+    assert.equal(partnerReaction(6, [7, 8, 9], {}, ["water"]), null);
 });
