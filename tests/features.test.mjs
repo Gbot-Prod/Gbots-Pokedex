@@ -306,3 +306,10 @@ test("heartHint says how many more partner views the next heart needs", async ()
     assert.equal(heartHint(5), "Open your partner 1 more time for the next heart.");
     assert.equal(heartHint(12), "Max affection: your partner adores you!");
 });
+
+test("tierProgress works for the quiz tiers too", async () => {
+    const { QUIZ_TIERS, tierProgress } = await import("../pokemon/progress.js");
+    assert.equal(tierProgress(12, QUIZ_TIERS), "12 / 20 for bronze");
+    assert.equal(tierProgress(35, QUIZ_TIERS), "35 / 50 for gold");
+    assert.equal(tierProgress(50, QUIZ_TIERS), null);
+});

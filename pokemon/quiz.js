@@ -1,5 +1,6 @@
 // "Who's that Pokémon?": guess a Pokémon from its silhouette, with four choices.
 import { makeConfetti } from "./effects.js";
+import { QUIZ_TIERS, tierProgress } from "./progress.js";
 import { SPRITE_BASE, getAllPokemonEntries, getSpeciesSlugs } from "./api.js";
 import { GENERATIONS, MAX_DEX_NUMBER, entryDisplayName } from "./utils.js";
 
@@ -54,6 +55,9 @@ function renderScore() {
         score.best +
         " · Best 60s run " +
         score.bestTimed;
+    const tier = tierProgress(score.best, QUIZ_TIERS);
+    document.getElementById("quizTier").textContent =
+        "🧠 Quiz whiz badge: " + (tier ? "best streak " + tier : "gold — quiz legend!");
 }
 
 // n distinct random items from a list.

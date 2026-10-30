@@ -605,6 +605,7 @@ test("the Who's that Pokémon? quiz reveals the answer and keeps score", async (
     await page.waitForSelector("#quizStage.revealed");
     assert.match(await page.textContent("#quizResult"), /Correct!|Not quite/);
     assert.match(await page.textContent("#quizScore"), /Score \d\/1/);
+    assert.match(await page.textContent("#quizTier"), /^🧠 Quiz whiz badge: best streak \d+ \/ 20 for bronze$/);
     assert.equal(await page.locator(".quizChoice.correct").count(), 1);
     await page.click("#quizNextBtn");
     await page.waitForSelector("#quizStage:not(.revealed)");

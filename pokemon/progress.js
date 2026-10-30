@@ -320,13 +320,19 @@ function recordVisit() {
 
 export const SHINY_TIERS = [5, 15, 50];
 
-// "3 / 5 for bronze": progress toward the next Shiny hunter tier, or null once gold.
-export function shinyTierProgress(shinies) {
-    const tier = SHINY_TIERS.filter((threshold) => shinies >= threshold).length;
-    if (tier === SHINY_TIERS.length) {
+export const QUIZ_TIERS = [20, 35, 50];
+
+// "3 / 5 for bronze": progress toward a badge's next tier, or null once gold.
+export function tierProgress(value, tiers) {
+    const tier = tiers.filter((threshold) => value >= threshold).length;
+    if (tier === tiers.length) {
         return null;
     }
-    return shinies + " / " + SHINY_TIERS[tier] + " for " + TIER_NAMES[tier];
+    return value + " / " + tiers[tier] + " for " + TIER_NAMES[tier];
+}
+
+export function shinyTierProgress(shinies) {
+    return tierProgress(shinies, SHINY_TIERS);
 }
 
 // Every badge, in shelf order. `progress` picks the number it's measured on.
@@ -368,7 +374,7 @@ const BADGES = [
         icon: "🧠",
         name: "Quiz whiz",
         kind: "quiz",
-        tiers: [20, 35, 50],
+        tiers: QUIZ_TIERS,
         unit: (n) => "a " + n + "-answer quiz streak",
         hintFor: (n) => "Get " + n + " quiz answers right in a row",
     },

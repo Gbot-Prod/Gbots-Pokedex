@@ -18,7 +18,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Gold card PNG: the saved trainer card image uses the gold-foil frame when the card is all gold
 - [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
 - [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
-- [ ] Quiz: the same "next tier" line for the Quiz whiz badge under the quiz score ("best 12 / 20 for bronze")
 - [ ] News dot step 2: a small "NEW" ribbon on the freshly earned badge inside the card, fading after the first view
 - [ ] Shiny hunt: a progress bar under the tier line filling toward the next tier, in the tier's metal colour
 - [ ] Toasts: a "Show me" button on badge toasts that opens the trainer card scrolled to the badge
@@ -264,3 +263,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] All-gold header: when the card is all gold, the header ring and partner aura turn gold too, so the achievement shows outside the card (2026-10-30) — html.allGold (set with the news dot from the badge shelf) gives the completion ring a dark-gold disc, gold ring glow and pale-gold fill, and the header partner a gold aura; retro keeps its own palette
 - [x] Browse grid step 2: fade tile names in when they change from the raw form name to the species name, instead of a hard swap (2026-10-30) — tile names that change when species names arrive ("Nidoran F" → "Nidoran♀") fade/unblur in over 0.5 s instead of swapping (instant under reduced motion); verified live by holding the species list
 - [x] Heart hint: tapping the affection hearts explains how to earn more ("open your partner 3 more times for the next heart") (2026-10-30) — the hearts are now a button (aria-expanded) that toggles a pink hint: "Open your partner N more times for the next heart" or the max-affection message
+- [x] Quiz: the same "next tier" line for the Quiz whiz badge under the quiz score ("best 12 / 20 for bronze") (2026-10-30) — "🧠 Quiz whiz badge: best streak 24 / 35 for silver" under the quiz score; shared tierProgress(value, tiers) + exported QUIZ_TIERS/SHINY_TIERS
