@@ -7,6 +7,7 @@ import { GENERATIONS, MAX_DEX_NUMBER, damageMultipliers, formatDexNumber, specie
 
 const SEEN_KEY = "pokedex:seen:v1";
 const TRAINER_KEY = "pokedex:trainer:v1";
+const VISITS_KEY = "pokedex:visits:v1";
 const RING_RADIUS = 18;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
 
@@ -156,6 +157,54 @@ function celebrateIfComplete(dexNumber) {
         document.body.append(burst);
         setTimeout(() => burst.remove(), 3000);
     }
+}
+
+// --- Visits --------------------------------------------------------------------------------
+// First visit ("member since") and the run of consecutive days with a visit. Days are local
+// calendar dates as "YYYY-MM-DD".
+
+export function localDay(date = new Date()) {
+    return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+        .map((part) => String(part).padStart(2, "0"))
+        .join("-");
+}
+
+function dayNumber(day) {
+    const [year, month, date] = day.split("-").map(Number);
+    return Date.UTC(year, month - 1, date) / 86400000;
+}
+
+export function updateVisits(visits, today) {
+    if (!visits?.first) {
+        return { first: today, last: today, streak: 1, best: 1 };
+    }
+    const gap = dayNumber(today) - dayNumber(visits.last);
+    if (gap <= 0) {
+        return visits; // already counted today
+    }
+    const streak = gap === 1 ? visits.streak + 1 : 1;
+    return { ...visits, last: today, streak, best: Math.max(visits.best, streak) };
+}
+
+let visits = null;
+
+function recordVisit() {
+    visits = updateVisits(readStored(VISITS_KEY, null), localDay());
+    try {
+        localStorage.setItem(VISITS_KEY, JSON.stringify(visits));
+    } catch {
+        // the streak just won't persist
+    }
+}
+
+function visitsText() {
+    const since = new Date(dayNumber(visits.first) * 86400000).toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC",
+    });
+    return "Member since " + since + " · 🔥 " + visits.streak + "-day streak (best " + visits.best + ")";
 }
 
 // --- Trainer card ------------------------------------------------------------------------
@@ -360,6 +409,7 @@ function renderTrainerCard() {
     document.getElementById("trainerShareStatus").textContent = "";
     const stats = completionStats(seen);
     document.getElementById("trainerCardSeen").textContent = seenText(stats);
+    document.getElementById("trainerCardVisits").textContent = visitsText();
     document.getElementById("trainerCardStats").replaceChildren(
         ...trainerFacts(stats).map(([icon, label, value]) => {
             const item = document.createElement("li");
@@ -430,6 +480,7 @@ async function shareTrainerCard() {
 }
 
 export function initProgress({ showPokemon }) {
+    recordVisit();
     document.getElementById("dexPartnerBtn").addEventListener("click", () => {
         const partner = currentPartner();
         if (partner) {

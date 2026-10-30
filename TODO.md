@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Trainer card: a "member since" date (first Pokémon seen) and a daily-visit streak counter
 - [ ] Holo foil for favourites: favourite Pokémon tiles in the browse grid get a subtle rainbow edge
 - [ ] Tile radar step 2: tint the radar fill with the second type (dual types read at a glance) and show the exact stat on hover of each axis label
 - [ ] Retro mode polish: pixel-font labels on the region banners and a dot-matrix scanline overlay on the card art
@@ -211,3 +210,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Trainer card image step 2: share the PNG directly with the Web Share API (files) on phones, falling back to download (2026-10-30) — "Save image" hands the PNG to the share sheet where files can be shared (phones), falls back to downloading; dismissing the sheet does nothing
 - [x] Partner step 3: more reactions — 😴 at night (night sky on), ⭐ when you open a shiny, 🎵 while a cry plays (2026-10-30) — partnerSay() bubble: ⭐ when the shiny sprite is switched on, 🎵 for as long as a cry plays, and 😴 at night (night sky on) when a Pokémon gets no ❤️/😨 reaction
 - [x] Partner step 4: clicking the header partner opens its own card (quick jump to your partner) (2026-10-30) — the header partner is now a button ("Open your partner Pokémon", focus ring, hover grow) that opens the partner's card
+- [x] Trainer card: a "member since" date (first Pokémon seen) and a daily-visit streak counter (2026-10-30) — visits are recorded per local day (pokedex:visits:v1); the card shows "Member since <date> · 🔥 N-day streak (best M)"; streak resets after a missed day

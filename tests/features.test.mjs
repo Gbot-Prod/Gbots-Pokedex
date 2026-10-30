@@ -156,3 +156,15 @@ test("partnerReaction loves its evolution line and fears super-effective types",
     assert.equal(partnerReaction(6, [1, 2, 3], charizardTakes, ["grass", "poison"]), null);
     assert.equal(partnerReaction(6, [7, 8, 9], {}, ["water"]), null);
 });
+
+test("updateVisits tracks the first visit and the daily streak", async () => {
+    const { updateVisits } = await import("../pokemon/progress.js");
+    let visits = updateVisits(null, "2026-10-28");
+    assert.deepEqual(visits, { first: "2026-10-28", last: "2026-10-28", streak: 1, best: 1 });
+    visits = updateVisits(visits, "2026-10-28");
+    assert.equal(visits.streak, 1);
+    visits = updateVisits(updateVisits(visits, "2026-10-29"), "2026-10-30");
+    assert.deepEqual(visits, { first: "2026-10-28", last: "2026-10-30", streak: 3, best: 3 });
+    visits = updateVisits(visits, "2026-11-02");
+    assert.deepEqual(visits, { first: "2026-10-28", last: "2026-11-02", streak: 1, best: 3 });
+});

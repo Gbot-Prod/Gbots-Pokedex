@@ -736,6 +736,7 @@ test("the completion ring opens a trainer card", async () => {
     await page.waitForSelector("#trainerCard[open]");
     assert.match(await page.textContent("#trainerCardSeen"), /of 1025 Pokémon seen/);
     assert.equal(await page.locator("#trainerCardRegions li").count(), 9);
+    assert.match(await page.textContent("#trainerCardVisits"), /^Member since .+ · 🔥 \d+-day streak \(best \d+\)$/);
     assert.equal(await page.locator("#trainerCardStats li").count(), 6);
     await page.fill("#trainerName", "Gbot");
     assert.equal(await page.inputValue("#trainerPartner"), "25");
