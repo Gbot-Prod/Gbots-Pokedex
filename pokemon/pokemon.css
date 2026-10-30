@@ -438,6 +438,35 @@ body {
     gap: 0.5rem;
 }
 
+/* Cry visualiser: equaliser bars under the name while the cry plays. */
+#cryWave {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 3px;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        height 0.25s ease,
+        opacity 0.25s ease;
+}
+
+#cryWave.active {
+    height: 36px;
+    opacity: 1;
+}
+
+#cryWave span {
+    width: 6px;
+    height: 100%;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(to top, var(--type-strong, #3b4cca), var(--type-light, #ffcb05));
+    box-shadow: 0 0 6px var(--type-light, #ffcb05);
+    transform: scaleY(0.08);
+    transform-origin: bottom;
+}
+
 #teamAddBtn,
 #shareBtn,
 #cryBtn {

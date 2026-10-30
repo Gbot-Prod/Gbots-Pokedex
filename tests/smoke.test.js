@@ -248,6 +248,9 @@ test("the cry button requests the Pokémon's cry", async () => {
     const cryRequest = page.waitForRequest((request) => request.url().endsWith("/latest/25.ogg"));
     await page.click("#cryBtn");
     await cryRequest;
+    // The mocked cry isn't real audio, so playback fails and the visualiser bars stay collapsed.
+    await page.waitForFunction(() => !document.getElementById("cryBtn").classList.contains("playing"));
+    assert.equal(await page.locator('#cryWave[aria-hidden="true"]:not(.active) span').count(), 24);
 });
 
 test("official spellings with punctuation resolve", async () => {

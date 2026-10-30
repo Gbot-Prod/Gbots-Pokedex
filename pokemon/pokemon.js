@@ -1210,11 +1210,67 @@ function playCry() {
         return;
     }
     cryAudio?.pause();
-    cryAudio = new Audio(currentCryUrl);
+    cryAudio = new Audio();
+    cryAudio.crossOrigin = "anonymous"; // the cries repo sends CORS headers, so the analyser can read it
+    cryAudio.src = currentCryUrl;
     cryAudio.volume = 0.5;
     cryButton.classList.add("playing");
-    cryAudio.addEventListener("ended", () => cryButton.classList.remove("playing"), { once: true });
-    cryAudio.play().catch(() => cryButton.classList.remove("playing")); // e.g. format unsupported
+    const stop = () => {
+        cryButton.classList.remove("playing");
+        stopCryWave();
+    };
+    cryAudio.addEventListener("ended", stop, { once: true });
+    cryAudio.play().then(() => visualiseCry(cryAudio), stop); // e.g. format unsupported
+}
+
+// Equaliser bars under the name that follow the cry (Web Audio analyser); skipped under
+// reduced motion or without Web Audio.
+const CRY_BARS = 24;
+const cryWave = document.createElement("div");
+cryWave.id = "cryWave";
+cryWave.setAttribute("aria-hidden", "true");
+cryWave.append(...Array.from({ length: CRY_BARS }, () => document.createElement("span")));
+document.getElementById("pokemonNameRow").after(cryWave);
+let audioContext = null;
+let cryAnalyser = null;
+let cryWaveFrame = 0;
+
+function visualiseCry(audio) {
+    if (reducedMotion.matches || !window.AudioContext || audio !== cryAudio) {
+        return;
+    }
+    try {
+        if (!audioContext) {
+            audioContext = new AudioContext();
+            cryAnalyser = audioContext.createAnalyser();
+            cryAnalyser.fftSize = 64;
+            cryAnalyser.smoothingTimeConstant = 0.6;
+            cryAnalyser.connect(audioContext.destination);
+        }
+        audioContext.createMediaElementSource(audio).connect(cryAnalyser);
+        audioContext.resume();
+    } catch {
+        return; // the cry still plays, just without bars
+    }
+    const levels = new Uint8Array(cryAnalyser.frequencyBinCount);
+    const bars = cryWave.children;
+    cancelAnimationFrame(cryWaveFrame);
+    cryWave.classList.add("active");
+    const draw = () => {
+        cryAnalyser.getByteFrequencyData(levels);
+        // Mirror the low (loudest) bins out from the centre so the bars look like a symmetric equaliser.
+        for (let index = 0; index < bars.length; index++) {
+            const level = (levels[Math.floor(Math.abs(index - (bars.length - 1) / 2))] / 255) ** 1.6;
+            bars[index].style.transform = "scaleY(" + Math.max(0.08, level).toFixed(3) + ")";
+        }
+        cryWaveFrame = requestAnimationFrame(draw);
+    };
+    draw();
+}
+
+function stopCryWave() {
+    cancelAnimationFrame(cryWaveFrame);
+    cryWave.classList.remove("active");
 }
 
 cryButton.addEventListener("click", playCry);
