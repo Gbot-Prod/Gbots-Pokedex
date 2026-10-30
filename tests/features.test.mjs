@@ -299,3 +299,10 @@ test("allTiersGold needs every tiered badge at gold", async () => {
     assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 49 })), false);
     assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 50 })), true);
 });
+
+test("heartHint says how many more partner views the next heart needs", async () => {
+    const { heartHint } = await import("../pokemon/progress.js");
+    assert.equal(heartHint(0), "Open your partner 3 more times for the next heart.");
+    assert.equal(heartHint(5), "Open your partner 1 more time for the next heart.");
+    assert.equal(heartHint(12), "Max affection: your partner adores you!");
+});

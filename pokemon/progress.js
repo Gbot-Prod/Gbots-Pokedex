@@ -601,7 +601,18 @@ function renderAffection(partner) {
     const hearts = affectionHearts(views[partner]);
     element.textContent = "♥".repeat(hearts) + "♡".repeat(5 - hearts);
     element.setAttribute("aria-label", "Affection " + hearts + " of 5");
-    element.setAttribute("role", "img");
+    element.title = "How do I earn more hearts?";
+    document.getElementById("trainerHeartHint").textContent = "💕 " + heartHint(views[partner]);
+}
+
+// What it takes to earn the next heart (a heart per 3 views of the partner).
+export function heartHint(viewCount = 0) {
+    const hearts = affectionHearts(viewCount);
+    if (hearts === 5) {
+        return "Max affection: your partner adores you!";
+    }
+    const more = hearts * 3 - viewCount;
+    return "Open your partner " + more + " more time" + (more === 1 ? "" : "s") + " for the next heart.";
 }
 
 let knownSlugs = null; // species names, once the list has loaded
@@ -953,6 +964,11 @@ let openPokemon = () => {};
 export function initProgress({ showPokemon }) {
     openPokemon = showPokemon;
     document.getElementById("partnerOfferYes").addEventListener("click", acceptPartnerOffer);
+    document.getElementById("trainerAffection").addEventListener("click", (event) => {
+        const hint = document.getElementById("trainerHeartHint");
+        hint.hidden = !hint.hidden;
+        event.currentTarget.setAttribute("aria-expanded", String(!hint.hidden));
+    });
     document.getElementById("partnerCameoBtn").addEventListener("click", cheerPartner);
     document.getElementById("partnerOfferNo").addEventListener("click", () => {
         const offer = document.getElementById("partnerOffer");

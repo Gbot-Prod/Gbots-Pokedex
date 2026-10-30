@@ -3776,6 +3776,20 @@ img.animatedSmall {
     margin: 1rem 1rem 0;
 }
 
+#trainerHeartHint {
+    margin: 0.5rem 1rem 0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    background: rgba(225, 29, 99, 0.12);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+#trainerHeartHint[hidden] {
+    display: none;
+}
+
 .trainerAvatarWrap {
     display: flex;
     flex: none;
@@ -3784,6 +3798,12 @@ img.animatedSmall {
 }
 
 #trainerAffection {
+    padding: 0.1rem 0.3rem;
+    border: none;
+    border-radius: 999px;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
     margin: 0.3rem 0 0;
     color: #e11d63;
     font-size: 1.05rem;

@@ -903,6 +903,8 @@ test("opening a Pokémon five times offers to make it your partner", async () =>
     assert.equal(await page.isHidden("#partnerOffer"), true);
     await page.click("#dexProgress");
     assert.equal(await page.getAttribute("#trainerAffection", "aria-label"), "Affection 2 of 5");
+    await page.click("#trainerAffection");
+    assert.equal(await page.textContent("#trainerHeartHint"), "💕 Open your partner 1 more time for the next heart.");
     assert.match(await page.getAttribute("#trainerTop li:first-child button", "aria-label"), /, opened 5 times$/);
     await page.click("#trainerCardClose");
 });

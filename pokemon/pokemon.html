@@ -404,7 +404,12 @@
             <div class="trainerProfile">
                 <div class="trainerAvatarWrap">
                     <img id="trainerAvatar" alt="" width="96" height="96" />
-                    <p id="trainerAffection"></p>
+                    <button
+                        type="button"
+                        id="trainerAffection"
+                        aria-expanded="false"
+                        aria-controls="trainerHeartHint"
+                    ></button>
                 </div>
                 <div class="trainerFields">
                     <label for="trainerName">Trainer name</label>
@@ -419,6 +424,7 @@
                     </select>
                 </div>
             </div>
+            <p id="trainerHeartHint" hidden></p>
             <p id="trainerCardSeen"></p>
             <p id="trainerCardVisits"></p>
             <div id="trainerCalendar" role="img" aria-label="Visit calendar"></div>
