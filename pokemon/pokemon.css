@@ -3528,6 +3528,43 @@ img.animatedSmall {
     animation: holoEdge 6s linear infinite;
 }
 
+/* Pointer-following sheen; --sheen-x/--sheen-y are set from progress.js. */
+#trainerCard[data-style="holo"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(
+            circle at var(--sheen-x, 50%) var(--sheen-y, 50%),
+            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0) 40%
+        ),
+        linear-gradient(
+            115deg,
+            transparent 20%,
+            rgba(255, 107, 157, 0.35) 35%,
+            rgba(107, 197, 255, 0.35) 50%,
+            rgba(107, 255, 184, 0.35) 65%,
+            transparent 80%
+        );
+    background-size:
+        100% 100%,
+        200% 200%;
+    background-position:
+        0 0,
+        var(--sheen-x, 50%) var(--sheen-y, 50%);
+    background-repeat: no-repeat;
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+#trainerCard[data-style="holo"].sheen::after {
+    opacity: 1;
+}
+
 #trainerCard[data-style="holo"] .trainerCardTop {
     background: linear-gradient(120deg, #7a3cff, #d43bb5, #ff7a3c);
 }

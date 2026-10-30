@@ -408,6 +408,17 @@ export function initProgress() {
         saveTrainer({ partner: id });
         showPartner(id);
     });
+    // Holo style: a light sheen follows the pointer across the card (not for touch or reduced motion).
+    trainerCard.addEventListener("pointermove", (event) => {
+        if (trainerCard.dataset.style !== "holo" || event.pointerType === "touch" || reducedMotion.matches) {
+            return;
+        }
+        const box = trainerCard.getBoundingClientRect();
+        trainerCard.style.setProperty("--sheen-x", (((event.clientX - box.left) / box.width) * 100).toFixed(1) + "%");
+        trainerCard.style.setProperty("--sheen-y", (((event.clientY - box.top) / box.height) * 100).toFixed(1) + "%");
+        trainerCard.classList.add("sheen");
+    });
+    trainerCard.addEventListener("pointerleave", () => trainerCard.classList.remove("sheen"));
     // Clicking the backdrop (outside the card) closes it too.
     trainerCard.addEventListener("click", (event) => event.target === trainerCard && trainerCard.close());
     ringElement.querySelector(".dexProgressFill").style.strokeDasharray = String(RING_LENGTH);

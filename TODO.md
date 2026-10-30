@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Trainer card holo step 2: a pointer-following sheen across the holo card (reuse the main card's tilt glare), off under reduced motion
 - [ ] Tile radar step 2: tint the radar fill with the second type (dual types read at a glance) and show the exact stat on hover of each axis label
 - [ ] Header ring: a tiny sparkle burst on the ring each time a never-seen Pokémon is counted
 - [ ] Retro mode polish: pixel-font labels on the region banners and a dot-matrix scanline overlay on the card art
@@ -206,3 +205,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Unseen filter step 2: a "Surprise me" button that opens a random unseen Pokémon (from the current filters) (2026-10-30) — "🎲 Surprise me" in the browse filters opens a random not-yet-seen Pokémon from the current type/generation filters (or says you've seen them all)
 - [x] Trainer card step 5: render the card to a PNG (canvas) so it can be shared as an image, not just text (2026-10-30) — "🖼️ Save image" draws the card (partner sprite via CORS, name, seen %, six stat tiles, region bars) on a 540×840 canvas in the chosen style and downloads trainer-card.png (cardimage.js)
 - [x] Partner step 2: the partner reacts to what you open — a heart over it when you view its own evolution line, a ⚡ when you open a type it's weak to (2026-10-30) — a speech bubble pops over the header partner for 2.5 s: ❤️ when the opened Pokémon is in its evolution line, 😨 when one of its types hits the partner super effectively (partner type matchups cached)
+- [x] Trainer card holo step 2: a pointer-following sheen across the holo card (reuse the main card's tilt glare), off under reduced motion (2026-10-30) — with the holo style, a white glare plus a diagonal rainbow band (overlay blend) follows the pointer across the card; mouse/pen only, off under reduced motion

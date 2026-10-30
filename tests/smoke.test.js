@@ -746,6 +746,8 @@ test("the completion ring opens a trainer card", async () => {
     assert.equal((await download).suggestedFilename(), "trainer-card.png");
     await page.selectOption("#trainerStyle", "holo");
     assert.equal(await page.getAttribute("#trainerCard", "data-style"), "holo");
+    await page.hover("#trainerCardSeen");
+    await page.waitForSelector("#trainerCard.sheen");
     await page.selectOption("#trainerStyle", "classic");
     await page.evaluate(() => {
         delete Navigator.prototype.share;
