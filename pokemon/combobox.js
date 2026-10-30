@@ -76,7 +76,21 @@ function getLabelledEntries() {
 // onSelect(entry) runs after the input is filled with the chosen Pokémon's name.
 // getEmptySuggestions() returns [{ id }] to offer while the input is empty (e.g. recently viewed);
 // onRemoveSuggestion(id), if given, lets Delete remove the highlighted one of those.
+// Fetch the labelled name list once the browser is idle, so suggestions are usually ready by
+// the time someone types (the "Loading names…" row covers the rest).
+let preloadScheduled = false;
+
+function preloadEntries() {
+    if (preloadScheduled) {
+        return;
+    }
+    preloadScheduled = true;
+    const whenIdle = window.requestIdleCallback ?? ((callback) => setTimeout(callback, 1500));
+    whenIdle(() => getLabelledEntries().catch(() => {}), { timeout: 4000 });
+}
+
 export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveSuggestion } = {}) {
+    preloadEntries();
     const listId = "combobox-list-" + ++comboboxCount;
     const list = document.createElement("ul");
     list.id = listId;
