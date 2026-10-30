@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Jump menu step 2: highlight the section currently in view (IntersectionObserver) with aria-current
+- [ ] Region chip step 3: make the chip reachable by keyboard as its own control (move it next to the banner rather than inside the button)
+- [ ] Smoke tests: an axe pass with every trainer card style while hovering its buttons, since hover states can fail contrast (as the jump pills did)
+- [ ] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge
+- [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
 - [ ] Banner heights: keep all region banners the same height when one shows the chip or ribbon (reserve the chip row)
 - [ ] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
