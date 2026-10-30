@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Calendar step 2: colour each calendar day by how many new Pokémon were seen that day (heat-map shades), with the count in the tooltip
 - [ ] Cameo step 2: clicking the partner cameo on the card art makes the partner "cheer" (hop + 🎉 bubble) and shows the matchup between the two
 - [ ] Top 5 step 2: "Collector" achievements on the trainer card when a Pokémon reaches 25 / 50 views
 - [ ] Trainer card tabs: split the growing card into "Profile", "Progress" and "Badges" tabs so it fits phones without long scrolling
@@ -226,3 +225,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Most viewed: a "Your top 5" strip on the trainer card from the view counts, with mini sprites that open each Pokémon (2026-10-30) — "Your top 5" row of sprite buttons (×N view badges, named labels) on the trainer card; clicking one closes the card and opens that Pokémon
 - [x] Streak calendar: a 4-week dot calendar on the trainer card showing which days you visited (2026-10-30) — two rows of 14 squares for the last 28 days (orange = visited, outlined = today, role=img "Visited on N of the last 28 days"); visits now keep the last 60 days
 - [x] Partner offer polish: remember a declined offer per Pokémon (don't ask again for 20 more views) (2026-10-30) — ✕ remembers the view count per Pokémon (pokedex:partner-declined:v1) and the offer comes back once, 20 views later
+- [x] Calendar step 2: colour each calendar day by how many new Pokémon were seen that day (heat-map shades), with the count in the tooltip (2026-10-30) — new Pokémon seen are counted per day (pokedex:seen-days:v1); visited days are shaded in 5 heat levels (pale → glowing gold, greens in retro) with "N new Pokémon" in the tooltip

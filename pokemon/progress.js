@@ -6,6 +6,7 @@ import { makeConfetti } from "./effects.js";
 import { GENERATIONS, MAX_DEX_NUMBER, damageMultipliers, formatDexNumber, speciesDisplayName } from "./utils.js";
 
 const SEEN_KEY = "pokedex:seen:v1";
+const SEEN_DAYS_KEY = "pokedex:seen-days:v1"; // { "YYYY-MM-DD": new Pokémon seen that day }
 const TRAINER_KEY = "pokedex:trainer:v1";
 const VISITS_KEY = "pokedex:visits:v1";
 const VIEWS_KEY = "pokedex:views:v1";
@@ -113,8 +114,12 @@ export function markSeen(dexNumber) {
         return;
     }
     seen.add(dexNumber);
+    const perDay = readStored(SEEN_DAYS_KEY, {});
+    const today = localDay();
+    perDay[today] = (perDay[today] ?? 0) + 1;
     try {
         localStorage.setItem(SEEN_KEY, JSON.stringify([...seen]));
+        localStorage.setItem(SEEN_DAYS_KEY, JSON.stringify(perDay));
     } catch {
         // progress just won't persist
     }
@@ -202,13 +207,20 @@ export function calendarDays(visitedDays, today, count = 28) {
     });
 }
 
+// Heat level 0–4 for a day's count of newly seen Pokémon.
+export function heatLevel(newSeen) {
+    return newSeen <= 0 ? 0 : newSeen < 3 ? 1 : newSeen < 8 ? 2 : newSeen < 20 ? 3 : 4;
+}
+
 function renderCalendar() {
     const today = localDay();
+    const perDay = readStored(SEEN_DAYS_KEY, {});
     document.getElementById("trainerCalendar").replaceChildren(
         ...calendarDays(visits.days ?? [visits.last], today).map(({ day, visited }) => {
             const cell = document.createElement("span");
-            cell.className = (visited ? "visited" : "") + (day === today ? " today" : "");
-            cell.title = day + (visited ? " · visited" : "");
+            const newSeen = perDay[day] ?? 0;
+            cell.className = (visited ? "visited heat" + heatLevel(newSeen) : "") + (day === today ? " today" : "");
+            cell.title = day + (visited ? " · visited, " + newSeen + " new Pokémon" : "");
             return cell;
         }),
     );

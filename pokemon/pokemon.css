@@ -3627,8 +3627,26 @@ img.animatedSmall {
 }
 
 #trainerCalendar span.visited {
-    background: linear-gradient(135deg, #ffb347, #ff6a1f);
+    background: #ffd9a8;
+}
+
+/* Heat-map: more new Pokémon that day = hotter */
+#trainerCalendar span.heat1 {
+    background: #ffb347;
+}
+
+#trainerCalendar span.heat2 {
+    background: #ff8a1f;
+}
+
+#trainerCalendar span.heat3 {
+    background: #e8590c;
     box-shadow: 0 0 4px rgba(255, 138, 31, 0.6);
+}
+
+#trainerCalendar span.heat4 {
+    background: linear-gradient(135deg, #ffd447, #d9480f);
+    box-shadow: 0 0 6px rgba(255, 212, 71, 0.9);
 }
 
 #trainerCalendar span.today {
@@ -3637,8 +3655,16 @@ img.animatedSmall {
 }
 
 #trainerCard[data-style="retro"] #trainerCalendar span.visited {
-    background: #0f380f;
+    background: #8bac0f;
     box-shadow: none;
+}
+
+#trainerCard[data-style="retro"] #trainerCalendar span:is(.heat1, .heat2) {
+    background: #306230;
+}
+
+#trainerCard[data-style="retro"] #trainerCalendar span:is(.heat3, .heat4) {
+    background: #0f380f;
 }
 
 #trainerCardBadges {

@@ -215,3 +215,8 @@ test("calendarDays lists the last four weeks and marks visited days", async () =
     assert.deepEqual(days[27], { day: "2026-10-30", visited: true });
     assert.equal(days.filter((entry) => entry.visited).length, 2);
 });
+
+test("heatLevel buckets a day's new Pokémon into five shades", async () => {
+    const { heatLevel } = await import("../pokemon/progress.js");
+    assert.deepEqual([0, 1, 3, 8, 20, 99].map(heatLevel), [0, 1, 2, 3, 4, 4]);
+});
