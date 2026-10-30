@@ -2835,6 +2835,63 @@ img.animatedSmall {
     }
 }
 
+/* "VS" flash between the cameo and the artwork; colour says who has the edge */
+#cameoVs {
+    position: absolute;
+    bottom: 4.3rem;
+    left: 1.1rem;
+    z-index: 3;
+    color: #ffd447;
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    text-shadow:
+        2px 2px 0 #1d2340,
+        0 0 10px currentColor;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#cameoVs.win {
+    color: #4ade80;
+}
+
+#cameoVs.lose {
+    color: #f87171;
+}
+
+#cameoVs.flash {
+    animation: vsFlash 1.6s ease-out forwards;
+}
+
+@keyframes vsFlash {
+    0% {
+        opacity: 0;
+        transform: scale(2.4) rotate(-12deg);
+    }
+    18% {
+        opacity: 1;
+        transform: scale(1) rotate(-8deg);
+    }
+    80% {
+        opacity: 1;
+        transform: scale(1) rotate(-8deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.9) rotate(-8deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #cameoVs.flash {
+        animation: none;
+        opacity: 1;
+        transform: rotate(-8deg);
+    }
+}
+
 #cameoMatchup {
     position: absolute;
     bottom: 0.9rem;

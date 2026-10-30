@@ -838,6 +838,7 @@ test("a partner at full affection glows and cameos on other Pokémon's art", asy
     await page.click("#partnerCameoBtn");
     await page.waitForSelector("#cameoMatchup.visible");
     assert.match(await page.textContent("#cameoMatchup"), /vs Pikachu: hits \S+×, takes \S+×/);
+    assert.match(await page.getAttribute("#cameoVs", "class"), /^flash (win|lose|even)$/);
     assert.equal(await page.evaluate(() => document.getElementById("dexPartner").classList.contains("devoted")), true);
     await search("arbok");
     await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("24"));
@@ -855,6 +856,16 @@ test("the unseen-only filter hides Pokémon you've already opened", async () => 
     const surprise = page.waitForRequest((request) => /\/pokemon\/3$/.test(request.url()));
     await page.click("#surpriseBtn");
     await surprise;
+    // Surprise me smooth-scrolls to the top; clicking the checkbox mid-scroll can miss it.
+    await page.waitForFunction(
+        () =>
+            new Promise((resolve) => {
+                const before = window.scrollY;
+                window.requestAnimationFrame(() =>
+                    window.requestAnimationFrame(() => resolve(window.scrollY === before)),
+                );
+            }),
+    );
     await page.uncheck("#unseenFilter");
     await page.waitForSelector('#browseGrid .browseTile[data-id="1"]');
 });
@@ -874,6 +885,7 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
 });
 
 test("the shiny hunt counts encounters and collects shinies", async () => {
+    await page.evaluate(() => (Math.random = () => 0.5)); // the first encounter must not be shiny (1 in 50)
     await page.click("#huntEncounterBtn");
     await page.waitForSelector("#huntStage:not([hidden])");
     assert.match(await page.textContent("#huntCounter"), /Encounters: 1/);

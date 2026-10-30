@@ -14,8 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Cameo step 3: a tiny animated "VS" flash between cameo and artwork when the matchup pill appears, coloured by who has the edge
-- [ ] Find the intermittent smoke-test failure seen once during a ship (passed on rerun); the ship script now keeps the log in the scratchpad
 - [ ] Calendar step 3: tap a calendar day to list the Pokémon first seen that day
 - [ ] Partner moods: the header partner's idle animation changes with affection (sleepy at 1 heart, bouncy at 5)
 - [ ] Trainer card tabs: split the growing card into "Profile", "Progress" and "Badges" tabs so it fits phones without long scrolling
@@ -231,3 +229,5 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Cameo step 2: clicking the partner cameo on the card art makes the partner "cheer" (hop + 🎉 bubble) and shows the matchup between the two (2026-10-30) — the art-window cameo is a button: clicking makes it hop, the header partner says 🎉, and a pill shows "Charizard vs Venusaur: hits 2×, takes 1×" (best multiplier each way) for 5 s
 - [x] Top 5 step 2: "Collector" achievements on the trainer card when a Pokémon reaches 25 / 50 views (2026-10-30) — 📚 Collector (25 views of one Pokémon) and 🏆 Superfan (50) badges join the streak flames on the trainer card, in purple
 - [x] Badge shelf: show locked badges greyed out with a hint ("Open one Pokémon 25 times") so there's something to aim for (2026-10-30) — all four badges always show; locked ones are dashed grey 🔒 circles titled "Locked: <hint>", and a "Next badge: …" line names the next goal (badge list now data-driven via badgeShelf)
+- [x] Cameo step 3: a tiny animated "VS" flash between cameo and artwork when the matchup pill appears, coloured by who has the edge (2026-10-30) — a slanted "VS" slams in above the cameo with the matchup pill: green when the partner has the edge, red when it's at a disadvantage, gold when even (static under reduced motion)
+- [x] Find the intermittent smoke-test failure seen once during a ship (passed on rerun); the ship script now keeps the log in the scratchpad (2026-10-30) — two flakes found from the saved ship log: the shiny-hunt test's first encounter was really random (1 in 50 shiny → count 2), now pinned to a non-shiny roll; and the unseen-filter test clicked the checkbox while Surprise me was still smooth-scrolling, now waits for the scroll to settle

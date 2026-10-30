@@ -549,6 +549,18 @@ function updateDevotion(openedDexNumber) {
     }
 }
 
+// Who comes out ahead: "win" (partner hits harder than it takes), "lose", or "even".
+export function matchupEdge(hits, takes) {
+    return hits > takes ? "win" : hits < takes ? "lose" : "even";
+}
+
+function flashVs(edge) {
+    const vs = document.getElementById("cameoVs");
+    vs.className = "";
+    void vs.offsetWidth; // restart the animation
+    vs.className = "flash " + edge;
+}
+
 // Clicking the cameo: the partner cheers and sizes up the Pokémon on the card.
 let matchupTimer = 0;
 
@@ -569,6 +581,7 @@ async function cheerPartner() {
             opened.types,
             await takenMultipliers(opened.types),
         );
+        flashVs(matchupEdge(hits, takes));
         pill.textContent =
             partnerLabel(partner) +
             " vs " +

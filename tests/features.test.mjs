@@ -253,3 +253,10 @@ test("badgeShelf marks each badge earned or locked", async () => {
     );
     assert.equal(shelf.find((badge) => !badge.earned).hint, "Visit 30 days in a row");
 });
+
+test("matchupEdge says who comes out ahead", async () => {
+    const { matchupEdge } = await import("../pokemon/progress.js");
+    assert.equal(matchupEdge(2, 1), "win");
+    assert.equal(matchupEdge(1, 2), "lose");
+    assert.equal(matchupEdge(1, 1), "even");
+});
