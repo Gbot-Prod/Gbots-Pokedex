@@ -11,6 +11,7 @@ const SHELL_FILES = [
     "api.js",
     "combobox.js",
     "compare.js",
+    "effects.js",
     "lists.js",
     "potd.js",
     "progress.js",

@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Region complete celebration: when a region bar reaches 100%, a one-off confetti burst and a toast ("Kanto Pokédex complete!"), skipped under reduced motion
 - [ ] Cry visualiser step 2: the artwork gently pulses with the cry's loudness (same analyser), off under reduced motion
 - [ ] Shiny hunt step 3: a full-screen sparkle overlay on a shiny and a "shiny streak" (encounters since the last shiny) with a personal best
 - [ ] Shiny dex: a grid of every shiny caught with names and encounter numbers, sortable by dex number or catch order
@@ -189,3 +188,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Hover a browse tile to flip it and show its type icons and base stat total on the back (2026-10-30) — after a 350 ms rest (mouse) or keyboard focus, tiles turn over to a dark back face with the base stat total and six mini stat bars (lazily fetched, cached); content swaps mid-turn, no rotation under reduced motion
 - [x] Completion step 3: a "Show unseen only" browse filter, so you can hunt down the gaps in a region (2026-10-30) — "Unseen only" checkbox in the browse filters combines with type/generation/sort; shows a 🎉 message when nothing unseen is left
 - [x] Trainer card: clicking the completion ring opens a panel with per-region totals, your most-seen type and shiny count (the home for achievement badges) (2026-10-30) — the ring is now a button opening a modal <dialog>: seen total, six stat tiles (shinies, encounters, quiz best, favorites, team, regions complete) and region-coloured progress rows; Esc/backdrop/✕ close it (most-seen type left for later)
+- [x] Region complete celebration: when a region bar reaches 100%, a one-off confetti burst and a toast ("Kanto Pokédex complete!"), skipped under reduced motion (2026-10-30) — completing a region (or all 1,025) shows a red/gold status toast and a full-screen confetti burst (no confetti under reduced motion); confetti moved to a shared effects.js used by the quiz too

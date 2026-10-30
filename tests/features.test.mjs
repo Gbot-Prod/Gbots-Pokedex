@@ -128,3 +128,12 @@ test("completionStats counts seen Pokémon overall and per generation", async ()
     assert.deepEqual(stats.generations[1], { number: 2, seen: 1, total: 100 });
     assert.deepEqual(stats.generations[8], { number: 9, seen: 1, total: 120 });
 });
+
+test("completionMessage celebrates a finished region or the whole Pokédex", async () => {
+    const { completionMessage } = await import("../pokemon/progress.js");
+    const kanto = new Set(Array.from({ length: 151 }, (_, index) => index + 1));
+    assert.equal(completionMessage(kanto, 25), "🏅 Kanto Pokédex complete!");
+    assert.equal(completionMessage(new Set([...kanto, 152]), 152), null);
+    const everything = new Set(Array.from({ length: 1025 }, (_, index) => index + 1));
+    assert.match(completionMessage(everything, 1025), /National Pokédex complete/);
+});

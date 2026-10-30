@@ -1,4 +1,5 @@
 // "Who's that Pokémon?": guess a Pokémon from its silhouette, with four choices.
+import { makeConfetti } from "./effects.js";
 import { SPRITE_BASE, getAllPokemonEntries, getSpeciesSlugs } from "./api.js";
 import { GENERATIONS, MAX_DEX_NUMBER, entryDisplayName } from "./utils.js";
 
@@ -224,19 +225,7 @@ function celebrate() {
     if (reducedMotion.matches) {
         return;
     }
-    const colors = ["#ffd447", "#ff6b6b", "#4dabf7", "#51cf66", "#cc5de8"];
-    const burst = document.createElement("div");
-    burst.className = "confetti";
-    burst.setAttribute("aria-hidden", "true");
-    for (let index = 0; index < 40; index++) {
-        const piece = document.createElement("span");
-        piece.style.setProperty("--x", (Math.random() * 100).toFixed(1) + "%");
-        piece.style.setProperty("--drift", ((Math.random() - 0.5) * 120).toFixed(0) + "px");
-        piece.style.setProperty("--delay", (Math.random() * 0.3).toFixed(2) + "s");
-        piece.style.setProperty("--spin", (Math.random() * 720 - 360).toFixed(0) + "deg");
-        piece.style.backgroundColor = colors[index % colors.length];
-        burst.append(piece);
-    }
+    const burst = makeConfetti();
     stage.append(burst);
     setTimeout(() => burst.remove(), 2200);
 }

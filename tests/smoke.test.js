@@ -748,6 +748,19 @@ test("the unseen-only filter hides Pokémon you've already opened", async () => 
     await page.waitForSelector('#browseGrid .browseTile[data-id="1"]');
 });
 
+test("seeing the last Pokémon of a region celebrates with a toast", async () => {
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:seen:v1",
+            JSON.stringify(Array.from({ length: 151 }, (_, index) => index + 1).filter((id) => id !== 25)),
+        ),
+    );
+    await page.reload();
+    await search("pikachu");
+    await page.waitForSelector("#dexToast.visible");
+    assert.equal(await page.textContent("#dexToast"), "🏅 Kanto Pokédex complete!");
+});
+
 test("the shiny hunt counts encounters and collects shinies", async () => {
     await page.click("#huntEncounterBtn");
     await page.waitForSelector("#huntStage:not([hidden])");

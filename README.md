@@ -17,6 +17,7 @@ pokemon/
   lists.js       browse grid with filters, favorites and recently viewed
   compare.js     side-by-side comparison table
   combobox.js    accessible search autocomplete (sprites, keyboard navigation)
+  effects.js     shared celebration effects (confetti)
   potd.js        "Pokémon of the day" hero card on the landing page
   progress.js    Pokédex completion ring and per-region "seen" progress
   quiz.js        "Who's that Pokémon?" silhouette quiz

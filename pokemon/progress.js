@@ -1,5 +1,6 @@
 // Pokédex completion: every species you open is remembered (localStorage) and shown as a
 // ring in the device header and a progress bar on each region banner.
+import { makeConfetti } from "./effects.js";
 import { GENERATIONS, MAX_DEX_NUMBER } from "./utils.js";
 
 const SEEN_KEY = "pokedex:seen:v1";
@@ -92,12 +93,46 @@ export function markSeen(dexNumber) {
         // progress just won't persist
     }
     render();
+    celebrateIfComplete(dexNumber);
     for (const tile of document.querySelectorAll('.browseTile[data-dex="' + dexNumber + '"]:not(:has(.tileSeen))')) {
         tile.append(seenMark());
     }
     ringElement.classList.remove("bump");
     void ringElement.offsetWidth; // restart the bump animation
     ringElement.classList.add("bump");
+}
+
+// --- Region complete celebration ---------------------------------------------------------
+
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let toastTimer = 0;
+
+// The message to show when this newly seen Pokémon completes something, or null.
+export function completionMessage(seenIds, dexNumber) {
+    const stats = completionStats(seenIds);
+    if (stats.seen === stats.total) {
+        return "🏆 National Pokédex complete! You've seen all " + stats.total + " Pokémon!";
+    }
+    const generation = GENERATIONS.find((gen) => dexNumber >= gen.first && dexNumber <= gen.last);
+    const counts = stats.generations.find((gen) => gen.number === generation?.number);
+    return counts && counts.seen === counts.total ? "🏅 " + generation.region + " Pokédex complete!" : null;
+}
+
+function celebrateIfComplete(dexNumber) {
+    const message = completionMessage(seen, dexNumber);
+    if (!message) {
+        return;
+    }
+    const toast = document.getElementById("dexToast");
+    toast.textContent = message;
+    toast.classList.add("visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("visible"), 5000);
+    if (!reducedMotion.matches) {
+        const burst = makeConfetti(90, "confetti fullscreen");
+        document.body.append(burst);
+        setTimeout(() => burst.remove(), 3000);
+    }
 }
 
 // --- Trainer card ------------------------------------------------------------------------

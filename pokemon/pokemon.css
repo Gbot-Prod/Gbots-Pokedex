@@ -2140,6 +2140,62 @@ img.placeholderSprite {
     }
 }
 
+.confetti.fullscreen {
+    position: fixed;
+    z-index: 30;
+}
+
+.confetti.fullscreen span {
+    width: 10px;
+    height: 14px;
+    animation-name: confettiFallFar;
+    animation-duration: 2.6s;
+}
+
+@keyframes confettiFallFar {
+    to {
+        transform: translate(var(--drift), 105vh) rotate(var(--spin));
+        opacity: 0.2;
+    }
+}
+
+/* Toast for completing a region's Pokédex */
+#dexToast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    z-index: 31;
+    width: max-content;
+    max-width: calc(100vw - 2rem);
+    margin: 0;
+    padding: 0.8rem 1.4rem;
+    border: 3px solid #ffd447;
+    border-radius: 999px;
+    background: linear-gradient(160deg, #ef4b4b, #b11f1f);
+    color: #ffffff;
+    font-family: inter, arial, sans-serif;
+    font-weight: 900;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transform: translate(-50%, 200%);
+    opacity: 0;
+    transition:
+        transform 0.4s cubic-bezier(0.2, 1.4, 0.4, 1),
+        opacity 0.3s;
+    pointer-events: none;
+}
+
+#dexToast.visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #dexToast {
+        transition: none;
+    }
+}
+
 #teamShareBtn,
 #sharedTeam .btn {
     margin: 0 0 1rem;
