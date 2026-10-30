@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Hall of fame step 2: a slow gold shimmer sweeping across the banner, and the gold badges' icons enlarged in it (static under reduced motion)
+- [ ] Trainer card "what's new": a small dot on the completion ring when a badge was earned/tiered up but the card hasn't been opened since
+- [ ] Browse grid: update tiles in place when names/types arrive instead of re-rendering the whole page (fewer image reloads, no flicker)
+- [ ] Gold everything: once all tiered badges are gold, the trainer card border turns animated gold foil regardless of the chosen style
+- [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
 - [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
 - [ ] Shiny hunt: show the current Shiny hunter tier and progress to the next ("3 / 5 for bronze") right above the Encounter button
 - [ ] Badge detail: tapping a badge on the shelf shows its description, when it was earned and progress toward the next tier
