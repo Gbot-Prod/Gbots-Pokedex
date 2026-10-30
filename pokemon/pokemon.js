@@ -433,6 +433,7 @@ function renderPokemon(data, query) {
 
     pokemonCard.classList.remove("hidden");
     setPotdVisible(false);
+    playTypeBurst();
 }
 
 // Animated Showdown sprites (small GIFs) exist for most Pokémon; null when there isn't one.
@@ -1299,6 +1300,29 @@ function loadFromUrl() {
 window.addEventListener("popstate", loadFromUrl);
 if (getUrlPokemon()) {
     loadFromUrl();
+}
+
+// A one-off burst of sparks in the type colour from the artwork (skipped under reduced motion).
+function playTypeBurst() {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const burst = document.createElement("div");
+    burst.className = "typeBurst";
+    burst.setAttribute("aria-hidden", "true");
+    const sparks = 22;
+    for (let index = 0; index < sparks; index++) {
+        const spark = document.createElement("span");
+        spark.style.setProperty("--angle", (index * 360) / sparks + Math.random() * 12 + "deg");
+        spark.style.setProperty("--distance", 110 + Math.random() * 60 + "px");
+        burst.append(spark);
+    }
+    // A fixed overlay centred on the artwork: the art window itself clips its contents.
+    const rect = artWindow.getBoundingClientRect();
+    burst.style.left = rect.left + rect.width / 2 + "px";
+    burst.style.top = rect.top + rect.height / 2 + "px";
+    document.body.append(burst);
+    setTimeout(() => burst.remove(), 900);
 }
 
 // --- Holo art tilt ---------------------------------------------------------------

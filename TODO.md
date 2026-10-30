@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Device lens glows in the current Pokémon's type colour, and a burst of type particles plays when a new Pokémon loads
 - [ ] Shiny hunt mini-game: random wild encounters with a 1-in-50 shiny chance, encounter counter and shiny collection saved locally
 - [ ] Download the holo card as a PNG (canvas render of art, name, types and stats) to share
 - [ ] Region landing view: clicking a region banner shows a header with the region's legendary trio and Pokédex count above the filtered grid
@@ -176,3 +175,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] "Pokémon of the day" hero at the top: deterministic pick from the date, shown as a big holo card with a "See it" button (2026-10-29) — landing-page hero card (potd.js): the date picks the same Pokémon for everyone (FNV hash of the UTC date), floating official artwork on an animated foil gradient, name/number/types and a 'See <name>' button; hides when a Pokémon is shown, returns on Clear; static under reduced motion, green in Retro
 - [x] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation (2026-10-29) — scrollable strip of 9 region banners (own gradient each, starter trio sprites, Gen N) above the browse filters; a click filters the grid to that generation and scrolls to it, clicking again clears it; aria-pressed follows the generation select
 - [x] Size comparison: the Pokémon's silhouette next to a 1.7 m trainer silhouette, both scaled by real height (Wailord vs Joltik!) (2026-10-29) — type-coloured silhouette (CSS mask of the official artwork) next to a 1.7 m trainer silhouette, scaled by real height with a minimum size, labels follow the units toggle and official names, caption like 'Wailord is 8.5× as tall'; sizeComparison unit-tested + smoke test
+- [x] Device lens glows in the current Pokémon's type colour, and a burst of type particles plays when a new Pokémon loads (2026-10-29) — the device lens glows in the current type colour, and 22 type-coloured sparks burst out of the artwork when a Pokémon loads (fixed overlay so the art window doesn't clip them); nothing under reduced motion

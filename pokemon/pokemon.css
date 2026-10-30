@@ -2187,7 +2187,8 @@ img.animatedSmall {
     background: radial-gradient(circle at 32% 30%, #ffffff 0 12%, #8ad4ff 16%, #1f7ae0 52%, #0b3c8c 100%);
     box-shadow:
         0 0 0 3px #222,
-        0 0 14px rgba(80, 180, 255, 0.7);
+        0 0 22px 6px var(--theme-strong, rgba(80, 180, 255, 0.7));
+    transition: box-shadow 0.5s;
 }
 
 .dexLed {
@@ -2526,4 +2527,43 @@ img.animatedSmall {
 #sizeCaption {
     margin-top: 0.5rem;
     font-weight: 600;
+}
+
+/* --- Type burst ---------------------------------------------------------------------------
+   Sparks in the type's colour fly out of the artwork when a new Pokémon loads (pokemon.js). */
+
+.typeBurst {
+    position: fixed;
+    width: 0;
+    height: 0;
+    z-index: 30;
+    pointer-events: none;
+}
+
+.typeBurst span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    margin: -8px;
+    border-radius: 50%;
+    /* the overlay lives outside the card, so use the page-level theme colours */
+    background: var(--theme-strong, #ffd447);
+    box-shadow: 0 0 10px var(--theme-light, #ffffff);
+    animation: burstOut 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes burstOut {
+    from {
+        transform: rotate(var(--angle)) translateX(0) scale(1.4);
+        opacity: 1;
+    }
+    65% {
+        opacity: 1;
+    }
+    to {
+        transform: rotate(var(--angle)) translateX(var(--distance)) scale(0.3);
+        opacity: 0;
+    }
 }
