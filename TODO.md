@@ -15,6 +15,7 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test hygiene: a smoke-test helper that seeds Math.random per test and resets it, so no test inherits another's stubbed randomness
+- [ ] Regression test for the Enter-before-suggestions race: delay the name/species list routes in the mocked smoke test so the pending lookup really resolves after Enter (a first attempt passed even without the fix)
 - [ ] Matchup pill step 2: tap the pill to open the full type chart with both Pokémon's types highlighted
 - [ ] Trainer card: show badge count ("3 / 8 badges") under the shelf as a mini progress bar
 - [ ] Calendar step 3: tap a calendar day to list the Pokémon first seen that day
@@ -59,6 +60,7 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 
 ## Done
 <!-- Move completed items here with the date and commit, e.g.
+- [x] Search suggestions popped open over the card when Enter was pressed before they had loaded (fresh visit, name list still downloading) (2026-10-30) — Enter with the list closed now cancels the pending lookup; verified live (open in 3/3 tries before, 0/3 after). The mocked smoke tests could not reproduce the race; see the test item in section 0
 - [x] Fix typo … (2026-10-28, abc1234) -->
 - [x] Fix `type2iconElement` typo (lowercase `i`) in `pokemon.js` — it throws a ReferenceError for Rock, Ghost and Dark types (2026-10-28) — renamed to type2IconElement; Rock/Ghost/Dark no longer throw
 - [x] Rock/Ghost/Dark in the *first* type switch set the second icon instead of the first (2026-10-28) — first switch now sets type1IconElement for these types

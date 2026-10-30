@@ -205,6 +205,12 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveS
     input.addEventListener("click", showEmptySuggestions);
     input.addEventListener("blur", close);
     input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && list.hidden) {
+            // Submitting before the suggestions arrive: drop the pending lookup so the list
+            // doesn't pop open over the card afterwards.
+            latestQuery++;
+            return;
+        }
         if (list.hidden) {
             if (event.key === "ArrowDown" && (input.value || getEmptySuggestions)) {
                 update();
