@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Partner offer polish: remember a declined offer per Pokémon (don't ask again for 20 more views)
 - [ ] Header on tiny phones: a compact "dex mode" (smaller lens, LEDs in a column) instead of hiding the title below 360px
 - [ ] Trainer card image step 3: include the card style's flourishes in the PNG (holo rainbow edge, retro scanlines)
 - [ ] "Today" panel on the landing page: Pokémon of the day, your streak and one unseen Pokémon suggestion side by side
@@ -221,3 +220,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Max affection: at 5 hearts the partner gets a sparkly aura in the header and follows you onto the card art as a small cameo (2026-10-30) — at 5 hearts the header partner gets a pulsing gold-pink aura (still under reduced motion) and a round cameo of it sits in the bottom-left of every other Pokémon's artwork
 - [x] Most viewed: a "Your top 5" strip on the trainer card from the view counts, with mini sprites that open each Pokémon (2026-10-30) — "Your top 5" row of sprite buttons (×N view badges, named labels) on the trainer card; clicking one closes the card and opens that Pokémon
 - [x] Streak calendar: a 4-week dot calendar on the trainer card showing which days you visited (2026-10-30) — two rows of 14 squares for the last 28 days (orange = visited, outlined = today, role=img "Visited on N of the last 28 days"); visits now keep the last 60 days
+- [x] Partner offer polish: remember a declined offer per Pokémon (don't ask again for 20 more views) (2026-10-30) — ✕ remembers the view count per Pokémon (pokedex:partner-declined:v1) and the offer comes back once, 20 views later

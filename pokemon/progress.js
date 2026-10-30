@@ -9,6 +9,7 @@ const SEEN_KEY = "pokedex:seen:v1";
 const TRAINER_KEY = "pokedex:trainer:v1";
 const VISITS_KEY = "pokedex:visits:v1";
 const VIEWS_KEY = "pokedex:views:v1";
+const DECLINED_KEY = "pokedex:partner-declined:v1";
 export const PARTNER_OFFER_VIEWS = 5;
 const RING_RADIUS = 18;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
@@ -450,8 +451,12 @@ function renderTopViewed() {
     );
 }
 
-export function shouldOfferPartner(viewCount, dexNumber, partner) {
-    return viewCount === PARTNER_OFFER_VIEWS && dexNumber !== partner;
+// Ask on the fifth view; after a "no thanks", ask once more 20 views later.
+export function shouldOfferPartner(viewCount, dexNumber, partner, declinedAt = null) {
+    if (dexNumber === partner) {
+        return false;
+    }
+    return declinedAt === null ? viewCount === PARTNER_OFFER_VIEWS : viewCount === declinedAt + 20;
 }
 
 // Called for every Pokémon opened (with its display name).
@@ -459,7 +464,8 @@ export function notePokemonView(dexNumber, name) {
     const offer = document.getElementById("partnerOffer");
     const count = countView(dexNumber);
     updateDevotion(dexNumber);
-    offer.hidden = !shouldOfferPartner(count, dexNumber, currentPartner());
+    const declinedAt = readStored(DECLINED_KEY, {})[dexNumber] ?? null;
+    offer.hidden = !shouldOfferPartner(count, dexNumber, currentPartner(), declinedAt);
     if (!offer.hidden) {
         offer.dataset.id = dexNumber;
         document.getElementById("partnerOfferText").textContent =
@@ -658,7 +664,17 @@ export function initProgress({ showPokemon }) {
     openPokemon = showPokemon;
     document.getElementById("partnerOfferYes").addEventListener("click", acceptPartnerOffer);
     document.getElementById("partnerOfferNo").addEventListener("click", () => {
-        document.getElementById("partnerOffer").hidden = true;
+        const offer = document.getElementById("partnerOffer");
+        offer.hidden = true;
+        const id = Number(offer.dataset.id);
+        try {
+            localStorage.setItem(
+                DECLINED_KEY,
+                JSON.stringify({ ...readStored(DECLINED_KEY, {}), [id]: views[id] ?? PARTNER_OFFER_VIEWS }),
+            );
+        } catch {
+            // it may just ask again sooner
+        }
     });
     recordVisit();
     document.getElementById("dexPartnerBtn").addEventListener("click", () => {

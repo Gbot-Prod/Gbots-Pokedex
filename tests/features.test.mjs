@@ -187,6 +187,9 @@ test("shouldOfferPartner fires once, on the fifth view of a non-partner", async 
     assert.equal(shouldOfferPartner(5, 25, 6), true);
     assert.equal(shouldOfferPartner(6, 25, 6), false);
     assert.equal(shouldOfferPartner(5, 6, 6), false);
+    assert.equal(shouldOfferPartner(5, 25, 6, 5), false);
+    assert.equal(shouldOfferPartner(25, 25, 6, 5), true);
+    assert.equal(shouldOfferPartner(26, 25, 6, 5), false);
 });
 
 test("affectionHearts grows one heart every three views, up to five", async () => {
