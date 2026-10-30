@@ -702,6 +702,18 @@ test("the size comparison scales the Pokémon against a 1.7 m trainer", async ()
     assert.deepEqual(heights, ["38px", "160px"]);
 });
 
+test("resting the mouse on a browse tile flips it to its base stats", async () => {
+    const tile = page.locator('#browseGrid .browseTile[data-id="24"]');
+    await tile.scrollIntoViewIfNeeded();
+    await tile.hover();
+    await page.waitForSelector('#browseGrid .browseTile.flipped[data-id="24"] .tileBackTotal');
+    assert.match(await tile.locator(".tileBackTotal").textContent(), /Base stats448/);
+    assert.equal(await tile.locator(".tileBackStat").count(), 6);
+    assert.equal(await tile.locator(".tileBack").getAttribute("aria-hidden"), "true");
+    await page.mouse.move(0, 0);
+    await page.waitForFunction(() => !document.querySelector(".browseTile.flipped"));
+});
+
 test("viewing a Pokémon fills the completion ring and its region's progress bar", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");

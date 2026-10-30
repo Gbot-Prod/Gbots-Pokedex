@@ -1,5 +1,5 @@
 // Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
-import { API_BASE, fetchJson, getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
+import { API_BASE, fetchJson, fetchPokemon, getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
 import { hasSeen, seenMark } from "./progress.js";
 import {
     GENERATIONS,
@@ -10,6 +10,7 @@ import {
     formatDexNumber,
     formatName,
     idFromUrl,
+    STAT_LABELS,
 } from "./utils.js";
 
 // Set by initLists: loads a Pokémon onto the main card / returns the one shown there.
@@ -232,8 +233,86 @@ function createBrowseTile(entry) {
         showPokemon(entry.id);
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
+    addTileBack(button, entry);
     item.append(button);
     return item;
+}
+
+// --- Tile flip ---------------------------------------------------------------------------
+// Resting the mouse on a tile (or focusing it with the keyboard) flips it to a back face with
+// the base stat total and mini stat bars. Stats are fetched only after a short delay, so
+// sweeping across the grid doesn't fire a request per tile.
+
+const FLIP_DELAY_MS = 350;
+const STAT_SHORT = {
+    hp: "HP",
+    attack: "Atk",
+    defense: "Def",
+    "special-attack": "SpA",
+    "special-defense": "SpD",
+    speed: "Spe",
+};
+
+function addTileBack(button, entry) {
+    const back = document.createElement("span");
+    back.className = "tileBack";
+    back.setAttribute("aria-hidden", "true");
+    button.append(back);
+    let timer = 0;
+    let loaded = false;
+    const flip = () => {
+        timer = setTimeout(async () => {
+            button.classList.remove("unflipping");
+            button.classList.add("flipped");
+            if (loaded) {
+                return;
+            }
+            loaded = true;
+            back.textContent = "…";
+            try {
+                renderTileBack(back, entry, await fetchPokemon(String(entry.id)));
+            } catch {
+                loaded = false;
+                back.textContent = "Stats unavailable";
+            }
+        }, FLIP_DELAY_MS);
+    };
+    const unflip = () => {
+        clearTimeout(timer);
+        if (button.classList.contains("flipped")) {
+            button.classList.replace("flipped", "unflipping");
+        }
+    };
+    button.addEventListener("animationend", () => button.classList.remove("unflipping"));
+    button.addEventListener("pointerenter", (event) => event.pointerType === "mouse" && flip());
+    button.addEventListener("pointerleave", unflip);
+    button.addEventListener("focus", () => button.matches(":focus-visible") && flip());
+    button.addEventListener("blur", unflip);
+}
+
+function renderTileBack(back, entry, pokemon) {
+    const total = pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0);
+    const name = document.createElement("span");
+    name.className = "tileBackName";
+    name.textContent = tileName(entry);
+    const bst = document.createElement("span");
+    bst.className = "tileBackTotal";
+    bst.innerHTML = "<small>Base stats</small>" + total;
+    const bars = document.createElement("span");
+    bars.className = "tileBackStats";
+    for (const stat of pokemon.stats) {
+        const row = document.createElement("span");
+        row.className = "tileBackStat";
+        row.title = STAT_LABELS[stat.stat.name] + " " + stat.base_stat;
+        const label = document.createElement("small");
+        label.textContent = STAT_SHORT[stat.stat.name] ?? stat.stat.name;
+        const bar = document.createElement("span");
+        bar.className = "tileBackBar";
+        bar.style.setProperty("--stat", Math.min(1, stat.base_stat / 180).toFixed(3));
+        row.append(label, bar);
+        bars.append(row);
+    }
+    back.replaceChildren(name, bst, bars);
 }
 
 typeFilterElement.addEventListener("change", applyBrowseFilters);

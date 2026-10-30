@@ -1279,6 +1279,107 @@ kbd {
     background-color: var(--tile-hover);
 }
 
+/* Tile flip: the back face covers the tile; it swaps in halfway through the turn. */
+.browseTile.flipped {
+    animation: tileFlip 0.45s ease;
+}
+
+.browseTile.unflipping {
+    animation: tileFlipBack 0.45s ease;
+}
+
+@keyframes tileFlip {
+    50% {
+        transform: perspective(600px) rotateY(90deg);
+    }
+}
+
+@keyframes tileFlipBack {
+    50% {
+        transform: perspective(600px) rotateY(-90deg);
+    }
+}
+
+.tileBack {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 10px;
+    background:
+        radial-gradient(circle at 50% 30%, rgba(255, 212, 71, 0.18), transparent 60%),
+        linear-gradient(160deg, #303754, #171b2b);
+    color: #ffffff;
+    font-size: 0.8rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0s 0.22s;
+}
+
+.browseTile.flipped .tileBack {
+    opacity: 1;
+}
+
+.tileBackName {
+    overflow: hidden;
+    font-weight: 900;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tileBackTotal {
+    color: #ffd447;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.tileBackTotal small {
+    display: block;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.tileBackStats {
+    display: grid;
+    gap: 2px;
+}
+
+.tileBackStat {
+    display: grid;
+    grid-template-columns: 2.1em 1fr;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.65rem;
+    text-align: left;
+}
+
+.tileBackBar {
+    height: 5px;
+    border-radius: 3px;
+    background:
+        linear-gradient(90deg, #ffd447, #ff8a3d) 0 0 / calc(var(--stat) * 100%) 100% no-repeat,
+        rgba(255, 255, 255, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .browseTile.flipped,
+    .browseTile.unflipping {
+        animation: none;
+    }
+
+    .tileBack {
+        transition: none;
+    }
+}
+
 .tileTypes {
     display: flex;
     gap: 0.2rem;

@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Hover a browse tile to flip it and show its type icons and base stat total on the back
 - [ ] Completion step 3: a "Show unseen only" browse filter, so you can hunt down the gaps in a region
 - [ ] Trainer card: clicking the completion ring opens a panel with per-region totals, your most-seen type and shiny count (the home for achievement badges)
 - [ ] Region complete celebration: when a region bar reaches 100%, a one-off confetti burst and a toast ("Kanto Pokédex complete!"), skipped under reduced motion
@@ -189,3 +188,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Pokémon cry visualiser: when the cry plays, animate a waveform/equaliser bar under the name (Web Audio analyser) (2026-10-30) — 24 type-coloured equaliser bars slide out under the name and follow the cry through a Web Audio analyser (CORS audio), mirrored from the centre; collapse when it ends, skipped under reduced motion
 - [x] Collection progress: a "Pokédex completion" ring showing how many of the 1,025 you've viewed (from recently viewed history, kept long-term) (2026-10-30) — progress.js remembers every species opened (pokedex:seen:v1); a glowing ring dial in the device header shows the count, and each region banner gets a seen/total bar (white-gold when complete)
 - [x] Completion step 2: a small "seen" check on browse tiles (2026-10-30) — green ✓ badge (with a visually hidden ", seen") on tiles for species already opened; added live to matching tiles when a Pokémon is viewed
+- [x] Hover a browse tile to flip it and show its type icons and base stat total on the back (2026-10-30) — after a 350 ms rest (mouse) or keyboard focus, tiles turn over to a dark back face with the base stat total and six mini stat bars (lazily fetched, cached); content swaps mid-turn, no rotation under reduced motion
