@@ -822,6 +822,12 @@ function renderTrainerCard() {
             return item;
         }),
     );
+    // Hall of fame: gold-tier badges get a banner at the top of the card.
+    const gold = shelf.filter((badge) => badge.tier === 3);
+    const hall = document.getElementById("trainerHallOfFame");
+    hall.hidden = gold.length === 0;
+    hall.textContent =
+        "🏛️ Hall of fame: " + gold.map((badge) => badge.icon + " " + badge.label.split(":")[0]).join(" · ");
     // Next goal: the first locked badge, else the next tier of a tiered one.
     const next = shelf.find((badge) => !badge.earned) ?? shelf.find((badge) => badge.tier && badge.hint);
     document.getElementById("trainerNextBadge").textContent = next

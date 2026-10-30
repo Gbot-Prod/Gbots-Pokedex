@@ -3651,6 +3651,21 @@ img.animatedSmall {
     cursor: pointer;
 }
 
+#trainerHallOfFame {
+    margin: 0;
+    padding: 0.45rem 1rem;
+    background: linear-gradient(90deg, #b8860b, #ffd447 30%, #fff3b0 50%, #ffd447 70%, #b8860b);
+    color: #3d2a00;
+    font-size: 0.85rem;
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+#trainerHallOfFame[hidden] {
+    display: none;
+}
+
 .trainerProfile {
     display: flex;
     align-items: center;
