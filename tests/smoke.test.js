@@ -119,6 +119,17 @@ afterEach(async () => {
     await context?.close();
 });
 
+// Clicks the right quiz answer the way a curious player could: the artwork URL holds the
+// Pokémon's number, and the fixture list gives its name (labels are title-cased names).
+async function answerQuizCorrectly() {
+    const id = (await page.getAttribute("#quizImage", "src")).match(/(\d+)\.png$/)[1];
+    const entry = pokemonList.find((candidate) => candidate.url.endsWith("/" + id + "/"));
+    const squash = (text) => text.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const labels = await page.locator(".quizChoice").allTextContents();
+    const index = labels.findIndex((label) => squash(label) === squash(entry.name));
+    await page.click(".quizChoice >> nth=" + index);
+}
+
 async function search(query) {
     await page.fill("#pokemonLookupInpt", query);
     await page.press("#pokemonLookupInpt", "Enter");
@@ -595,6 +606,22 @@ test("the share button copies a link to the current Pokémon", async () => {
     await page.click("#shareBtn");
     await page.waitForFunction(() => document.getElementById("shareStatus").textContent === "Link copied");
     assert.match(await page.evaluate(() => window.copiedText), /\?pokemon=gengar$/);
+});
+
+test("beating the best quiz streak flashes New best!", async () => {
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:quiz:v1",
+            JSON.stringify({ correct: 2, played: 2, streak: 2, best: 2, bestTimed: 0 }),
+        ),
+    );
+    await page.reload();
+    await page.click("#quizStartBtn");
+    await page.waitForSelector(".quizChoice");
+    await answerQuizCorrectly();
+    await page.waitForSelector("#quizStage.revealed");
+    assert.match(await page.textContent("#quizResult"), /^Correct!/);
+    assert.match(await page.textContent("#quizScore"), /Streak 3 · Best 3 .*🎉 New best!$/);
 });
 
 test("the Who's that Pokémon? quiz reveals the answer and keeps score", async () => {

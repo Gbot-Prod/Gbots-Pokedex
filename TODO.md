@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Quiz test hook: expose the current answer id on the quiz stage (data attribute, hidden from AT) so smoke tests can answer correctly and cover streak features
 - [ ] Tier lines everywhere: make the three "badge: x / y for tier" lines tappable to open the trainer card at the badge shelf
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
 - [ ] Region tier line: highlight the closest-to-complete region with a "only N to go!" chip
@@ -275,3 +274,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region strip: the same tier line for Region master under the region banners ("2 / 3 regions for silver"), via tierProgress (2026-10-30) — "🗺️ Region master badge: 2 / 3 regions for silver" under the region banners, updated as Pokémon are seen (REGION_TIERS exported)
 - [x] Heart hint step 2: hearts fill with a little pop animation when a new heart is earned (seen next time the card opens) (2026-10-30) — hearts earned since the card last showed this partner (pokedex:hearts-shown:v1) pop in one after another with a pink glow when the card opens; only once; none under reduced motion. Also re-loosened the missing-sprite smoke test (a double request still appears under full-suite load; cause filed as a TODO)
 - [x] Quiz: celebrate beating your best streak mid-run with a small "New best!" flash on the score line (2026-10-30) — a pink "🎉 New best!" tag pops twice on the score line when a streak beats the best (from 3 up), alongside the existing confetti; verified live
+- [x] Quiz test hook: expose the current answer id on the quiz stage (data attribute, hidden from AT) so smoke tests can answer correctly and cover streak features (2026-10-30) — done without leaking the answer into the DOM: a smoke-test helper reads the artwork URL's dex number and clicks the choice matching the fixture name; new test covers the streak/New best! flash (fails on the pre-feature quiz)
