@@ -2420,6 +2420,22 @@ img.animatedSmall {
     box-shadow: 0 0 0 3px var(--dex-red);
 }
 
+#dexProgress {
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+#dexProgress:hover {
+    transform: scale(1.1);
+}
+
+#dexProgress:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+}
+
 #dexProgress svg {
     transform: rotate(-90deg);
 }
@@ -3018,6 +3034,161 @@ img.animatedSmall {
 
 @media (prefers-reduced-motion: reduce) {
     :root.night #typeBackdrop::before {
+        animation: none;
+    }
+}
+
+/* --- Trainer card (opened from the completion ring) ---------------------------------------- */
+#trainerCard {
+    width: min(26rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    padding: 0 0 1rem;
+    overflow-y: auto;
+    border: 4px solid #ffd447;
+    border-radius: 20px;
+    background: linear-gradient(170deg, #fdfbf3, #efe7cf);
+    color: #1d2340;
+    box-shadow:
+        0 0 0 3px #b58a12,
+        0 24px 60px rgba(0, 0, 0, 0.5);
+    font-family: inter, arial, sans-serif;
+}
+
+#trainerCard::backdrop {
+    background: rgba(10, 12, 30, 0.6);
+    backdrop-filter: blur(3px);
+}
+
+#trainerCard[open] {
+    animation: trainerCardIn 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+@keyframes trainerCardIn {
+    from {
+        transform: translateY(30px) scale(0.92);
+        opacity: 0;
+    }
+}
+
+.trainerCardTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    background: linear-gradient(160deg, #ef4b4b, #d62f2f 45%, #b11f1f);
+    color: #ffffff;
+}
+
+.trainerCardTop h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+#trainerCardClose {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#trainerCardSeen {
+    margin: 0.9rem 1rem 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-align: center;
+}
+
+#trainerCardStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+#trainerCardStats li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 0.25rem;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    text-align: center;
+}
+
+#trainerCardStats strong {
+    font-size: 1.3rem;
+}
+
+#trainerCardStats small {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+#trainerCard h3 {
+    margin: 1rem 1rem 0.4rem;
+    font-size: 1rem;
+}
+
+#trainerCardRegions {
+    display: grid;
+    gap: 0.3rem;
+    margin: 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+#trainerCardRegions li {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr 4.2rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+.trainerRegionCount {
+    text-align: right;
+}
+
+#trainerCardRegions li.complete .regionProgressBar span {
+    background: linear-gradient(90deg, #ffd447, #ffffff, #ffd447);
+}
+
+:root[data-theme="dark"] #trainerCard {
+    background: linear-gradient(170deg, #262c44, #161a2a);
+    color: #f2f4ff;
+}
+
+:root[data-theme="dark"] #trainerCardStats li {
+    background: #2f3654;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCard {
+        background: linear-gradient(170deg, #262c44, #161a2a);
+        color: #f2f4ff;
+    }
+
+    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCardStats li {
+        background: #2f3654;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #trainerCard[open] {
         animation: none;
     }
 }

@@ -40,13 +40,13 @@
                     <span class="dexLed red" aria-hidden="true"></span>
                     <span class="dexLed yellow" aria-hidden="true"></span>
                     <span class="dexLed green" aria-hidden="true"></span>
-                    <span id="dexProgress" role="img" aria-label="Pokédex completion">
+                    <button type="button" id="dexProgress" aria-haspopup="dialog" aria-label="Pokédex completion">
                         <svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">
                             <circle class="dexProgressTrack" cx="22" cy="22" r="18" />
                             <circle class="dexProgressFill" cx="22" cy="22" r="18" />
                         </svg>
                         <span class="dexProgressCount" aria-hidden="true">0</span>
-                    </span>
+                    </button>
                     <span class="dexTitle" aria-hidden="true">Pokédex</span>
                 </div>
                 <form id="searchForm" role="search">
@@ -372,6 +372,16 @@
                 </nav>
             </section>
         </main>
+        <dialog id="trainerCard" aria-labelledby="trainerCardHeading">
+            <div class="trainerCardTop">
+                <h2 id="trainerCardHeading">Trainer card</h2>
+                <button type="button" id="trainerCardClose" aria-label="Close trainer card">✕</button>
+            </div>
+            <p id="trainerCardSeen"></p>
+            <ul id="trainerCardStats"></ul>
+            <h3>Regions</h3>
+            <ul id="trainerCardRegions"></ul>
+        </dialog>
         <script type="module" src="pokemon.js"></script>
     </body>
 </html>

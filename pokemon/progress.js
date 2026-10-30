@@ -7,6 +7,7 @@ const RING_RADIUS = 18;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
 
 const ringElement = document.getElementById("dexProgress");
+const trainerCard = document.getElementById("trainerCard");
 let seen = new Set();
 load(); // before any card renders, so a fast first load can't overwrite saved progress
 
@@ -99,7 +100,65 @@ export function markSeen(dexNumber) {
     ringElement.classList.add("bump");
 }
 
+// --- Trainer card ------------------------------------------------------------------------
+// A summary of everything saved in this browser: completion, shinies, quiz and team.
+
+function readStored(key, fallback) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    } catch {
+        return fallback;
+    }
+}
+
+function renderTrainerCard() {
+    const stats = completionStats(seen);
+    const hunt = readStored("pokedex:shiny-hunt:v1", {});
+    const quiz = readStored("pokedex:quiz:v1", {});
+    const percent = Math.floor((100 * stats.seen) / stats.total);
+    document.getElementById("trainerCardSeen").textContent =
+        stats.seen + " of " + stats.total + " Pokémon seen (" + percent + "%)";
+    const facts = [
+        ["✨", "Shinies caught", hunt.shinies?.length ?? 0],
+        ["🌿", "Wild encounters", hunt.encounters ?? 0],
+        ["❓", "Quiz best streak", quiz.best ?? 0],
+        ["⭐", "Favorites", readStored("pokedex:favorites:v1", []).length],
+        ["👥", "Team members", readStored("pokedex:team:v1", []).filter(Boolean).length],
+        ["🏅", "Regions complete", stats.generations.filter((gen) => gen.seen === gen.total).length],
+    ];
+    document.getElementById("trainerCardStats").replaceChildren(
+        ...facts.map(([icon, label, value]) => {
+            const item = document.createElement("li");
+            item.innerHTML = '<span aria-hidden="true"></span><strong></strong><small></small>';
+            item.children[0].textContent = icon;
+            item.children[1].textContent = value;
+            item.children[2].textContent = label;
+            return item;
+        }),
+    );
+    document.getElementById("trainerCardRegions").replaceChildren(
+        ...stats.generations.map(({ number, seen: count, total }) => {
+            const generation = GENERATIONS.find((gen) => gen.number === number);
+            const item = document.createElement("li");
+            item.className = "region" + number + (count === total ? " complete" : "");
+            item.innerHTML =
+                '<span class="trainerRegionName"></span><span class="regionProgressBar"><span></span></span><span class="trainerRegionCount"></span>';
+            item.children[0].textContent = generation.region;
+            item.querySelector(".regionProgressBar span").style.width = (100 * count) / total + "%";
+            item.children[2].textContent = count + "/" + total;
+            return item;
+        }),
+    );
+}
+
 export function initProgress() {
+    ringElement.addEventListener("click", () => {
+        renderTrainerCard();
+        trainerCard.showModal();
+    });
+    document.getElementById("trainerCardClose").addEventListener("click", () => trainerCard.close());
+    // Clicking the backdrop (outside the card) closes it too.
+    trainerCard.addEventListener("click", (event) => event.target === trainerCard && trainerCard.close());
     ringElement.querySelector(".dexProgressFill").style.strokeDasharray = String(RING_LENGTH);
     render();
 }

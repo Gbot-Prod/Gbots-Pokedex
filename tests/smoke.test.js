@@ -727,6 +727,16 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
     assert.equal(await page.locator('#browseGrid .browseTile[data-dex="1"] .tileSeen').count(), 0);
 });
 
+test("the completion ring opens a trainer card", async () => {
+    await page.click("#dexProgress");
+    await page.waitForSelector("#trainerCard[open]");
+    assert.match(await page.textContent("#trainerCardSeen"), /of 1025 Pokémon seen/);
+    assert.equal(await page.locator("#trainerCardRegions li").count(), 9);
+    assert.equal(await page.locator("#trainerCardStats li").count(), 6);
+    await page.click("#trainerCardClose");
+    await page.waitForSelector("#trainerCard:not([open])", { state: "attached" });
+});
+
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
     await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
     await page.reload();
