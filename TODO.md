@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation
 - [ ] Card flip: click a corner button to flip the holo card (3D) to a back side with a Poké Ball design and a quick stats summary
 - [ ] Breeding & capture panel from species data: gender-ratio bar, catch-rate gauge, egg groups, hatch steps and growth rate
 - [ ] "Evolve!" button on the evolution chain: white flash + morph animation into the next stage (instant under reduced motion)
@@ -171,3 +170,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading (2026-10-29) — search bar framed in a red Pokédex device: glossy blue lens, red/yellow/green LEDs that blink while a Pokémon loads (html.isLoading), hinge line and POKÉDEX label; darker red in dark mode, green in Retro; LEDs static under reduced motion. Also reordered section 0 by visual impact
 - [x] Bug: pressing Enter to search left the suggestion list open over the page; Enter without a highlighted suggestion now closes it (2026-10-30) — smoke test
 - [x] "Pokémon of the day" hero at the top: deterministic pick from the date, shown as a big holo card with a "See it" button (2026-10-29) — landing-page hero card (potd.js): the date picks the same Pokémon for everyone (FNV hash of the UTC date), floating official artwork on an animated foil gradient, name/number/types and a 'See <name>' button; hides when a Pokémon is shown, returns on Clear; static under reduced motion, green in Retro
+- [x] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation (2026-10-29) — scrollable strip of 9 region banners (own gradient each, starter trio sprites, Gen N) above the browse filters; a click filters the grid to that generation and scrolls to it, clicking again clears it; aria-pressed follows the generation select

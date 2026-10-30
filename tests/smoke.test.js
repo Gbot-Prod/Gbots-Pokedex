@@ -669,3 +669,15 @@ test("the Pokémon of the day shows on the landing page and hides once a Pokémo
     await page.click("#clearDataBtn");
     await page.waitForSelector("#potdSection:not([hidden])");
 });
+
+test("region banners filter the browse grid by generation and toggle off again", async () => {
+    await page.waitForSelector("#browseGrid .browseTile");
+    assert.equal(await page.locator(".regionBanner").count(), 9);
+    await page.click('.regionBanner[data-generation="2"]');
+    assert.equal(await page.inputValue("#generationFilter"), "2");
+    assert.equal(await page.getAttribute('.regionBanner[data-generation="2"]', "aria-pressed"), "true");
+    await page.waitForFunction(() => document.querySelector("#browseGrid .browseTile small").textContent === "#0152");
+
+    await page.click('.regionBanner[data-generation="2"]');
+    assert.equal(await page.inputValue("#generationFilter"), "");
+});

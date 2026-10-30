@@ -139,6 +139,7 @@ async function getTypeMemberIds(type) {
 }
 
 async function applyBrowseFilters() {
+    updateRegionStrip();
     const type = typeFilterElement.value;
     const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
     let entries = nationalDexEntries;
@@ -231,6 +232,73 @@ function createBrowseTile(entry) {
 
 typeFilterElement.addEventListener("change", applyBrowseFilters);
 generationFilterElement.addEventListener("change", applyBrowseFilters);
+
+// --- Region showcase ---------------------------------------------------------------------
+// One banner per region with its starter trio; clicking filters the grid to that generation.
+
+const REGION_STARTERS = {
+    1: [1, 4, 7],
+    2: [152, 155, 158],
+    3: [252, 255, 258],
+    4: [387, 390, 393],
+    5: [495, 498, 501],
+    6: [650, 653, 656],
+    7: [722, 725, 728],
+    8: [810, 813, 816],
+    9: [906, 909, 912],
+};
+
+function renderRegionStrip() {
+    const strip = document.getElementById("regionStrip");
+    strip.replaceChildren(
+        ...GENERATIONS.map((generation) => {
+            const item = document.createElement("li");
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "regionBanner region" + generation.number;
+            button.setAttribute("aria-pressed", "false");
+            button.dataset.generation = generation.number;
+
+            const name = document.createElement("span");
+            name.className = "regionName";
+            name.textContent = generation.region;
+            const gen = document.createElement("small");
+            gen.textContent = "Gen " + generation.number;
+            const starters = document.createElement("span");
+            starters.className = "regionStarters";
+            for (const id of REGION_STARTERS[generation.number]) {
+                const sprite = document.createElement("img");
+                sprite.alt = "";
+                sprite.width = 48;
+                sprite.height = 48;
+                sprite.loading = "lazy";
+                setSprite(sprite, id);
+                starters.append(sprite);
+            }
+            button.append(starters, name, gen);
+            button.addEventListener("click", () => {
+                const selected = generationFilterElement.value === String(generation.number);
+                generationFilterElement.value = selected ? "" : String(generation.number);
+                applyBrowseFilters();
+                if (!selected) {
+                    browseGridElement.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            });
+            item.append(button);
+            return item;
+        }),
+    );
+}
+
+// Keeps the banners' pressed state in step with the generation filter.
+function updateRegionStrip() {
+    for (const banner of document.querySelectorAll(".regionBanner")) {
+        banner.setAttribute("aria-pressed", String(banner.dataset.generation === generationFilterElement.value));
+    }
+}
+
+renderRegionStrip();
+generationFilterElement.addEventListener("change", updateRegionStrip);
 sortOrderElement.addEventListener("change", applyBrowseFilters);
 browsePrevButton.addEventListener("click", () => {
     browsePage--;

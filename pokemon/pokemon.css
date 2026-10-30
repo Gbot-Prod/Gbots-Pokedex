@@ -2373,3 +2373,103 @@ img.animatedSmall {
     color: #0f380f;
     animation: none;
 }
+
+/* --- Region showcase --------------------------------------------------------------------- */
+
+#regionStrip {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0 0 1rem;
+    padding: 0.2rem 0.2rem 0.6rem;
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x proximity;
+}
+
+.regionBanner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 9.5rem;
+    padding: 0.5rem 0.6rem 0.7rem;
+    border: 3px solid transparent;
+    border-radius: 14px;
+    color: #ffffff;
+    font-family: inherit;
+    cursor: pointer;
+    scroll-snap-align: start;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s;
+}
+
+.regionBanner:hover {
+    transform: translateY(-3px);
+}
+
+.regionBanner[aria-pressed="true"] {
+    border-color: #ffd447;
+}
+
+.regionStarters {
+    display: flex;
+}
+
+.regionStarters img {
+    width: 44px;
+    height: 44px;
+    margin: 0 -4px;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4));
+}
+
+.regionName {
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+}
+
+.regionBanner small {
+    font-weight: 700;
+    opacity: 0.95;
+}
+
+/* one gradient per region; all dark enough for white text */
+.region1 {
+    background: linear-gradient(135deg, #b8322b, #7d1d18);
+}
+.region2 {
+    background: linear-gradient(135deg, #8a6d1c, #5a4410);
+}
+.region3 {
+    background: linear-gradient(135deg, #1e6f8f, #124a61);
+}
+.region4 {
+    background: linear-gradient(135deg, #5a4c9c, #362c66);
+}
+.region5 {
+    background: linear-gradient(135deg, #3a3a3a, #161616);
+}
+.region6 {
+    background: linear-gradient(135deg, #2f5fb3, #1c3a73);
+}
+.region7 {
+    background: linear-gradient(135deg, #c0502a, #7a2f14);
+}
+.region8 {
+    background: linear-gradient(135deg, #8c2c6e, #561a43);
+}
+.region9 {
+    background: linear-gradient(135deg, #2d7a4a, #184a2b);
+}
+
+:root[data-theme="retro"] .regionBanner {
+    border-radius: 0;
+    background: #306230;
+    box-shadow: 4px 4px 0 #0f380f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .regionBanner:hover {
+        transform: none;
+    }
+}
