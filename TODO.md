@@ -22,7 +22,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Retro mode polish: pixel-font labels on the region banners and a dot-matrix scanline overlay on the card art
 - [ ] Tile flip step 4: on phones, a long-press flips a tile (with a short vibration where supported) instead of hover
 - [ ] National Dex finale: a special gold theme for the device header once all 1,025 are seen
-- [ ] Unseen filter step 2: a "Surprise me" button that opens a random unseen Pokémon (from the current filters)
 - [ ] Toast queue: reuse the completion toast for other moments (shiny found, quiz best streak beaten, team full) with a small queue so toasts don't overlap
 - [ ] Cry visualiser step 2: the artwork gently pulses with the cry's loudness (same analyser), off under reduced motion
 - [ ] Shiny hunt step 3: a full-screen sparkle overlay on a shiny and a "shiny streak" (encounters since the last shiny) with a personal best
@@ -206,3 +205,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Tile flip step 3: a tiny stat radar instead of bars on wide screens (2026-10-30) — screens ≥900px show a gold hexagon radar (6 labelled axes, scaled to 150) on the tile back instead of the bars; phones keep the bars
 - [x] Trainer card step 4: a "Card style" picker (classic red, holo foil, retro green) that restyles the trainer card, saved with the trainer (2026-10-30) — "Card style" select: classic red, holo foil (animated rainbow border + violet glow, still under reduced motion) or retro Game Boy greens with a pixel-font heading; saved with the trainer
 - [x] Partner Pokémon: show the chosen partner's small sprite beside the completion ring in the header, hopping when you open a Pokémon (2026-10-30) — the trainer card's partner (or first seen Pokémon) rides beside the ring in the header and hops on every Pokémon opened (still under reduced motion); narrow phones shrink partner and title so nothing clips
+- [x] Unseen filter step 2: a "Surprise me" button that opens a random unseen Pokémon (from the current filters) (2026-10-30) — "🎲 Surprise me" in the browse filters opens a random not-yet-seen Pokémon from the current type/generation filters (or says you've seen them all)

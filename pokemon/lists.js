@@ -373,6 +373,17 @@ typeFilterElement.addEventListener("change", applyBrowseFilters);
 generationFilterElement.addEventListener("change", applyBrowseFilters);
 unseenFilterElement.addEventListener("change", applyBrowseFilters);
 
+// Opens a random Pokémon you haven't seen yet, from whatever the filters currently show.
+document.getElementById("surpriseBtn").addEventListener("click", () => {
+    const unseen = browseEntries.filter((entry) => !hasSeen(entry.id));
+    if (!unseen.length) {
+        browseStatusElement.textContent = "🎉 You've seen every Pokémon that matches these filters!";
+        return;
+    }
+    showPokemon(unseen[Math.floor(Math.random() * unseen.length)].id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
 // --- Region showcase ---------------------------------------------------------------------
 // One banner per region with its starter trio; clicking filters the grid to that generation.
 

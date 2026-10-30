@@ -1213,6 +1213,12 @@ kbd {
     accent-color: #1f8a4c;
 }
 
+#surpriseBtn {
+    padding: 0.5rem 0.9rem;
+    background: linear-gradient(160deg, #7a3cff, #5a22d6);
+    font-size: 1rem;
+}
+
 #browseStatus:empty {
     display: none;
 }

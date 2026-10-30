@@ -762,6 +762,10 @@ test("the unseen-only filter hides Pokémon you've already opened", async () => 
     await page.check("#unseenFilter");
     await page.waitForFunction(() => document.querySelector("#browseGrid .browseTile")?.dataset.id === "3");
     assert.equal(await page.locator('#browseGrid .browseTile[data-id="4"]').count(), 0);
+    await page.evaluate(() => (Math.random = () => 0)); // the first unseen entry: #3
+    const surprise = page.waitForRequest((request) => /\/pokemon\/3$/.test(request.url()));
+    await page.click("#surpriseBtn");
+    await surprise;
     await page.uncheck("#unseenFilter");
     await page.waitForSelector('#browseGrid .browseTile[data-id="1"]');
 });
