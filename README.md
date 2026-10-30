@@ -32,6 +32,8 @@ pokemon/
   assets/        type icons (one PNG per type, e.g. FireIcon.png)
 tests/
   smoke.test.js  browser tests (Playwright) against mocked PokéAPI data
+  a11y.test.js   axe accessibility checks (runs in parallel with the smoke tests)
+  harness.js     shared browser-test setup: static server, mocked PokéAPI, fresh page per test
   utils.test.mjs unit tests for utils.js
   combobox.test.mjs  unit tests for the autocomplete matching
   api.test.mjs   unit tests for api.js (fetch and storage stubbed)

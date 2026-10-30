@@ -9,114 +9,15 @@
 
 const { test, before, after, beforeEach, afterEach } = require("node:test");
 const assert = require("node:assert/strict");
-const http = require("node:http");
-const fs = require("node:fs");
-const path = require("node:path");
-const { chromium } = require("playwright");
-const { AxeBuilder } = require("@axe-core/playwright");
+const { LIVE_API, pokemonList, useMockedPages } = require("./harness.js");
 
-const LIVE_API = Boolean(process.env.LIVE_API);
-const SITE_ROOT = path.join(__dirname, "..", "pokemon");
-const FIXTURES = path.join(__dirname, "fixtures");
-const CONTENT_TYPES = {
-    ".html": "text/html",
-    ".js": "text/javascript",
-    ".css": "text/css",
-    ".png": "image/png",
-    ".svg": "image/svg+xml",
-};
-// 1x1 transparent PNG used for every remote sprite.
-const BLANK_PNG = Buffer.from(
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
-    "base64",
-);
-
-const pokemonList = JSON.parse(fs.readFileSync(path.join(FIXTURES, "pokemon-list.json"), "utf8")).results;
-
-let server;
+// The harness serves the site, mocks PokéAPI from the fixtures and gives each test a fresh page.
 let baseUrl;
-let browser;
 let context;
 let page;
 let pageErrors;
-
-// Maps a PokéAPI URL to a fixture file, e.g. /api/v2/pokemon/pikachu -> pokemon-25.json.
-function fixtureFor(url) {
-    const { pathname } = new URL(url);
-    const [resource, key] = pathname
-        .replace(/^\/api\/v2\//, "")
-        .split("/")
-        .filter(Boolean);
-    if (resource === "pokemon" && !key) {
-        return "pokemon-list.json";
-    }
-    if (resource === "pokemon" && !/^\d+$/.test(key)) {
-        const entry = pokemonList.find((candidate) => candidate.name === key);
-        return entry ? "pokemon-" + entry.url.split("/").filter(Boolean).pop() + ".json" : null;
-    }
-    return resource + "-" + key + ".json";
-}
-
-before(async () => {
-    server = http.createServer((request, response) => {
-        const filePath = path.join(SITE_ROOT, decodeURIComponent(request.url.split("?")[0]));
-        fs.readFile(filePath, (error, data) => {
-            if (error) {
-                response.writeHead(404);
-                response.end();
-                return;
-            }
-            response.writeHead(200, {
-                "Content-Type": CONTENT_TYPES[path.extname(filePath)] || "application/octet-stream",
-            });
-            response.end(data);
-        });
-    });
-    await new Promise((resolve) => server.listen(0, resolve));
-    baseUrl = "http://localhost:" + server.address().port + "/pokemon.html";
-    browser = await chromium.launch();
-});
-
-after(async () => {
-    await browser?.close();
-    server?.close();
-});
-
-beforeEach(async () => {
-    // Service workers would bypass page.route, so the mocked tests block them.
-    context = await browser.newContext({ serviceWorkers: LIVE_API ? "allow" : "block" });
-    page = await context.newPage();
-    pageErrors = [];
-    // Fail fast: waits give up after a few seconds (longer against the real API), and any
-    // uncaught page error (e.g. a broken module import) is reported in the next wait's failure.
-    page.setDefaultTimeout(LIVE_API ? 15000 : 5000);
-    page.on("pageerror", (error) => {
-        pageErrors.push(error.message);
-        console.error("page error:", error.message);
-    });
-
-    if (LIVE_API) {
-        await page.goto(baseUrl);
-        return; // talk to the real PokéAPI and sprite hosts
-    }
-
-    await page.route("https://pokeapi.co/**", (route) => {
-        const fixture = fixtureFor(route.request().url());
-        const file = fixture && path.join(FIXTURES, fixture);
-        if (file && fs.existsSync(file)) {
-            route.fulfill({ status: 200, contentType: "application/json", body: fs.readFileSync(file) });
-        } else {
-            route.fulfill({ status: 404, body: "Not Found" });
-        }
-    });
-    await page.route("https://raw.githubusercontent.com/**", (route) =>
-        route.fulfill({ status: 200, contentType: "image/png", body: BLANK_PNG }),
-    );
-    await page.goto(baseUrl);
-});
-
-afterEach(async () => {
-    await context?.close();
+useMockedPages({ before, after, beforeEach, afterEach }, (state) => {
+    ({ baseUrl, context, page, pageErrors } = state);
 });
 
 // Clicks the right quiz answer the way a curious player could: the artwork URL holds the
@@ -327,70 +228,6 @@ test("species whose default form has a suffixed name can be searched by species 
 
 // Accessibility: no serious or critical axe-core violations in the main states, in both themes.
 // Run in light and dark mode, at desktop and phone width, with the install/offline UI showing.
-for (const [colorScheme, width] of [
-    ["light", 1280],
-    ["dark", 1280],
-    ["light", 375],
-    ["dark", 375],
-]) {
-    test("no serious accessibility violations (" + colorScheme + " mode, " + width + "px)", async () => {
-        await page.emulateMedia({ colorScheme });
-        await page.setViewportSize({ width, height: 900 });
-        // Show the install button and offline banner too.
-        await page.evaluate(() => {
-            const event = new Event("beforeinstallprompt", { cancelable: true });
-            event.prompt = () => {};
-            event.userChoice = Promise.resolve({ outcome: "dismissed" });
-            window.dispatchEvent(event);
-            document.getElementById("offlineBanner").hidden = false;
-        });
-        await search("pikachu");
-        await page.waitForSelector("#pokemonMoves:not([hidden])");
-        await page.click("#movesSummary");
-        await page.fill("#compareLeftInput", "pikachu");
-        await page.fill("#compareRightInput", "gengar");
-        await page.press("#compareRightInput", "Enter"); // submits; at phone width the suggestion list covers the button
-        await page.waitForSelector("#compareResult:not([hidden])");
-        await page.waitForSelector("#browseGrid .browseTile");
-
-        const results = await new AxeBuilder({ page }).analyze();
-        const serious = results.violations
-            .filter((violation) => ["serious", "critical"].includes(violation.impact))
-            .map((violation) => violation.id + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));
-        assert.deepEqual(serious, []);
-    });
-}
-
-// Hover states can fail contrast where the resting state passes (the jump pills on the retro
-// card did), so the trainer card is checked in every style with each of its buttons hovered.
-for (const colorScheme of ["light", "dark"]) {
-    test("trainer card buttons keep their contrast when hovered (" + colorScheme + " mode)", async () => {
-        await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
-        await page.setViewportSize({ width: 375, height: 800 });
-        const problems = [];
-        for (const style of ["classic", "holo", "retro"]) {
-            await page.evaluate((cardStyle) => {
-                localStorage.setItem("pokedex:seen:v1", "[25]");
-                localStorage.setItem("pokedex:trainer:v1", JSON.stringify({ partner: 25, style: cardStyle }));
-            }, style);
-            await page.reload();
-            await page.click("#dexProgress");
-            await page.waitForSelector("#trainerCard[open]");
-            const buttons = page.locator("#trainerCard button:visible");
-            for (let index = 0; index < (await buttons.count()); index++) {
-                await buttons.nth(index).hover();
-                const results = await new AxeBuilder({ page })
-                    .include("#trainerCard")
-                    .withRules(["color-contrast"])
-                    .analyze();
-                for (const violation of results.violations) {
-                    problems.push(style + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));
-                }
-            }
-        }
-        assert.deepEqual([...new Set(problems)], []);
-    });
-}
 
 test("the units toggle switches the card and the comparison table to imperial", async () => {
     await search("pikachu");

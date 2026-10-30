@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Test suite time is up to ~117 s (the hover-contrast pass adds ~27 s): run the axe/hover tests in a separate parallel file so the core suite stays fast
 - [ ] Quiz combo: in the 60-second challenge, 3 correct in a row shows "Combo ×3!" and doubles the next point
 - [ ] pokedex:seen event step 2: let other parts listen too (shiny hunt, quiz region filter) instead of each reading storage on render
 - [ ] Hover-contrast test step 2: run the same hover pass over the browse filters, region strip and team builder buttons
@@ -295,3 +294,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Smoke tests: an axe pass with every trainer card style while hovering its buttons, since hover states can fail contrast (as the jump pills did) (2026-10-30) — two smoke tests (light/dark) hover every visible trainer card button in the classic, holo and retro styles and run axe's colour-contrast rule; it immediately caught the highlighted jump pill turning dark-on-dark on hover, fixed by not applying the hover style to the current pill
 - [x] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge (2026-10-30) — a green "+1" floats up out of each correct answer in the 60-second challenge (lighter green in dark mode, none under reduced motion); added after the reveal, which matches buttons by text
 - [x] Unseen filter: show "N left" next to the checkbox when a region is selected, updating as Pokémon are seen (2026-10-30) — "(10 left in Kanto)" / "(all seen!)" beside Unseen only while a region is selected; progress.js dispatches a pokedex:seen event so it drops live as Pokémon are seen
+- [x] Test suite time is up to ~117 s (the hover-contrast pass adds ~27 s): run the axe/hover tests in a separate parallel file so the core suite stays fast (2026-10-30) — moved the shared server/browser/mocking setup into tests/harness.js and the axe + hover-contrast tests into tests/a11y.test.js, which node:test runs in parallel: same 125 tests, ~117 s → ~83 s; check:live covers both files

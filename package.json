@@ -9,7 +9,7 @@
         "lint": "eslint . && prettier --check .",
         "format": "prettier --write .",
         "fixtures": "NODE_USE_ENV_PROXY=1 node tests/build-fixtures.mjs",
-        "check:live": "LIVE_API=1 node --test tests/smoke.test.js",
+        "check:live": "LIVE_API=1 node --test tests/smoke.test.js tests/a11y.test.js",
         "lighthouse": "lhci autorun"
     },
     "devDependencies": {
