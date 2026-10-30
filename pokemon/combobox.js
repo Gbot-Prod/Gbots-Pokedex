@@ -51,17 +51,20 @@ export function highlightMatch(label, query) {
 let labelledEntriesPromise = null;
 
 // Every Pokémon with its display label, loaded once and shared by all comboboxes.
+let entriesReady = false;
+
 function getLabelledEntries() {
     if (!labelledEntriesPromise) {
         labelledEntriesPromise = Promise.all([getAllPokemonEntries(), getSpeciesSlugs().catch(() => null)])
-            .then(([entries, slugs]) =>
-                entries.map((entry) => ({
+            .then(([entries, slugs]) => {
+                entriesReady = true;
+                return entries.map((entry) => ({
                     ...entry,
                     label: entryDisplayName(entry, slugs),
                     // forms show their species' number, not their internal id (10034)
                     dexNumber: entrySpecies(entry, slugs)?.id ?? entry.id,
-                })),
-            )
+                }));
+            })
             .catch((error) => {
                 labelledEntriesPromise = null; // allow a retry
                 throw error;
@@ -133,6 +136,9 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveS
 
     async function update() {
         const queryId = ++latestQuery;
+        if (!entriesReady && input.value.trim() && document.activeElement === input) {
+            showLoading(); // first visit: the name list is still downloading
+        }
         let entries;
         try {
             entries = await getLabelledEntries();
@@ -194,6 +200,20 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveS
         }
     }
 
+    function showLoading() {
+        const item = document.createElement("li");
+        item.className = "comboboxLoading";
+        item.setAttribute("role", "option");
+        item.setAttribute("aria-disabled", "true");
+        item.setAttribute("aria-selected", "false");
+        item.textContent = "Loading names…";
+        options = [];
+        activeIndex = -1;
+        list.replaceChildren(item);
+        list.hidden = false;
+        input.setAttribute("aria-expanded", "true");
+    }
+
     input.addEventListener("input", update);
     // An empty box offers the empty-state suggestions as soon as it's focused or clicked.
     const showEmptySuggestions = () => {
@@ -218,7 +238,9 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveS
             }
             return;
         }
-        if (event.key === "ArrowDown") {
+        if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !options.length) {
+            event.preventDefault(); // only the "Loading names…" row: nothing to move to
+        } else if (event.key === "ArrowDown") {
             event.preventDefault();
             setActive((activeIndex + 1) % options.length);
         } else if (event.key === "ArrowUp") {
@@ -228,6 +250,7 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveS
             event.preventDefault(); // don't also submit the typed text
             choose(options[activeIndex]);
         } else if (event.key === "Enter") {
+            latestQuery++; // a lookup still loading mustn't reopen the list
             close(); // submitting the typed text: the suggestions are no longer needed
         } else if (event.key === "Delete" && activeIndex >= 0 && !input.value.trim() && onRemoveSuggestion) {
             event.preventDefault();

@@ -108,6 +108,37 @@ body {
     display: none;
 }
 
+.comboboxLoading {
+    padding: 0.6rem 0.8rem;
+    font-style: italic;
+    opacity: 0.85;
+}
+
+.comboboxLoading::before {
+    content: "";
+    display: inline-block;
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-right: 0.5rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    vertical-align: -0.1rem;
+    animation: comboSpin 0.8s linear infinite;
+}
+
+@keyframes comboSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .comboboxLoading::before {
+        animation: none;
+    }
+}
+
 .comboboxOption {
     display: flex;
     align-items: center;
