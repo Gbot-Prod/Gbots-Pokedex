@@ -14,7 +14,7 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Tile flip step 2: show the type-coloured back (gradient from the Pokémon's first type) and a tiny radar instead of bars on wide screens
+- [ ] Tile flip step 3: a tiny stat radar instead of bars on wide screens
 - [ ] Trainer card step 2: editable trainer name and a choice of avatar (any seen Pokémon's sprite), saved locally and shown on the card
 - [ ] Trainer card step 3: "Share trainer card" button that copies a text summary (seen count, shinies, regions complete) to the clipboard
 - [ ] Region banners: a gold "complete" ribbon and crown on banners whose region is 100% seen
@@ -195,3 +195,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Completion step 3: a "Show unseen only" browse filter, so you can hunt down the gaps in a region (2026-10-30) — "Unseen only" checkbox in the browse filters combines with type/generation/sort; shows a 🎉 message when nothing unseen is left
 - [x] Trainer card: clicking the completion ring opens a panel with per-region totals, your most-seen type and shiny count (the home for achievement badges) (2026-10-30) — the ring is now a button opening a modal <dialog>: seen total, six stat tiles (shinies, encounters, quiz best, favorites, team, regions complete) and region-coloured progress rows; Esc/backdrop/✕ close it (most-seen type left for later)
 - [x] Region complete celebration: when a region bar reaches 100%, a one-off confetti burst and a toast ("Kanto Pokédex complete!"), skipped under reduced motion (2026-10-30) — completing a region (or all 1,025) shows a red/gold status toast and a full-screen confetti burst (no confetti under reduced motion); confetti moved to a shared effects.js used by the quiz too
+- [x] Tile flip step 2: show the type-coloured back (gradient from the Pokémon's first type) (2026-10-30) — the back face is a gradient from the first type's card colour (TYPE_COLORS moved to utils.js and shared with the card theme) into near-black

@@ -1324,7 +1324,7 @@ kbd {
     border-radius: 10px;
     background:
         radial-gradient(circle at 50% 30%, rgba(255, 212, 71, 0.18), transparent 60%),
-        linear-gradient(160deg, #303754, #171b2b);
+        linear-gradient(160deg, var(--back-color, #303754), color-mix(in srgb, var(--back-color, #303754) 35%, #0d0f1a));
     color: #ffffff;
     font-size: 0.8rem;
     opacity: 0;

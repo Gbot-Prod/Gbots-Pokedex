@@ -11,6 +11,7 @@ import {
     formatName,
     idFromUrl,
     STAT_LABELS,
+    TYPE_COLORS,
 } from "./utils.js";
 
 // Set by initLists: loads a Pokémon onto the main card / returns the one shown there.
@@ -321,6 +322,11 @@ function renderTileBack(back, entry, pokemon) {
         bars.append(row);
     }
     back.replaceChildren(name, bst, bars);
+    // Tint the back with the Pokémon's first type (the strong shades keep white text readable).
+    const colors = TYPE_COLORS[pokemon.types[0]?.type.name];
+    if (colors) {
+        back.style.setProperty("--back-color", colors[0]);
+    }
 }
 
 typeFilterElement.addEventListener("change", applyBrowseFilters);
