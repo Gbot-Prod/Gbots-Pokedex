@@ -118,3 +118,13 @@ test("huntOdds earns the Shiny Charm at 100 encounters and huntPick stays in the
         1025,
     );
 });
+
+test("completionStats counts seen Pokémon overall and per generation", async () => {
+    const { completionStats } = await import("../pokemon/progress.js");
+    const stats = completionStats(new Set([1, 151, 152, 1025, 10034, 0]));
+    assert.equal(stats.seen, 4);
+    assert.equal(stats.total, 1025);
+    assert.deepEqual(stats.generations[0], { number: 1, seen: 2, total: 151 });
+    assert.deepEqual(stats.generations[1], { number: 2, seen: 1, total: 100 });
+    assert.deepEqual(stats.generations[8], { number: 9, seen: 1, total: 120 });
+});

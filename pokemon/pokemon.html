@@ -35,12 +35,19 @@
                 You're offline — Pokémon you've viewed before are still available.
             </p>
             <header class="dexDevice">
-                <div class="dexTop" aria-hidden="true">
-                    <span class="dexLens"></span>
-                    <span class="dexLed red"></span>
-                    <span class="dexLed yellow"></span>
-                    <span class="dexLed green"></span>
-                    <span class="dexTitle">Pokédex</span>
+                <div class="dexTop">
+                    <span class="dexLens" aria-hidden="true"></span>
+                    <span class="dexLed red" aria-hidden="true"></span>
+                    <span class="dexLed yellow" aria-hidden="true"></span>
+                    <span class="dexLed green" aria-hidden="true"></span>
+                    <span id="dexProgress" role="img" aria-label="Pokédex completion">
+                        <svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">
+                            <circle class="dexProgressTrack" cx="22" cy="22" r="18" />
+                            <circle class="dexProgressFill" cx="22" cy="22" r="18" />
+                        </svg>
+                        <span class="dexProgressCount" aria-hidden="true">0</span>
+                    </span>
+                    <span class="dexTitle" aria-hidden="true">Pokédex</span>
                 </div>
                 <form id="searchForm" role="search">
                     <div class="comboboxWrap">

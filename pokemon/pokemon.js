@@ -14,6 +14,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initPotd, setPotdVisible } from "./potd.js";
+import { initProgress, markSeen } from "./progress.js";
 import { initQuiz } from "./quiz.js";
 import { initShinyHunt } from "./shinyhunt.js";
 import { initTypeChart, showTypeInChart } from "./typechart.js";
@@ -384,6 +385,7 @@ function renderPokemon(data, query) {
     updateFavoriteButton();
     updateTeamButton();
     addToRecent(currentPokemon);
+    markSeen(currentDexNumber);
     announceResult(data);
     document.title = formatName(data.name) + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
     prevButton.disabled = currentDexNumber <= 1;
@@ -850,6 +852,7 @@ updateThemeButton();
 initCompare({ getCurrentPokemon: () => currentPokemon, getUnits: () => units });
 initLists({ showPokemon, getCurrentPokemon: () => currentPokemon });
 initQuiz({ showPokemon });
+initProgress();
 initShinyHunt({ showPokemon });
 initTypeChart();
 initPotd({ showPokemon, isCardShowing: () => Boolean(getUrlPokemon()) || !pokemonCard.classList.contains("hidden") });

@@ -13,6 +13,7 @@ const SHELL_FILES = [
     "compare.js",
     "lists.js",
     "potd.js",
+    "progress.js",
     "quiz.js",
     "shinyhunt.js",
     "team.js",

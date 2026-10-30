@@ -702,6 +702,17 @@ test("the size comparison scales the Pokémon against a 1.7 m trainer", async ()
     assert.deepEqual(heights, ["38px", "160px"]);
 });
 
+test("viewing a Pokémon fills the completion ring and its region's progress bar", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    assert.match(await page.getAttribute("#dexProgress", "aria-label"), /[1-9]\d* of 1025 Pokémon seen/);
+    assert.match(
+        await page.textContent('.regionBanner[data-generation="1"] .regionProgressText'),
+        /^[1-9]\d*\/151 seen$/,
+    );
+    assert.equal(await page.textContent('.regionBanner[data-generation="9"] .regionProgressText'), "0/120 seen");
+});
+
 test("the shiny hunt counts encounters and collects shinies", async () => {
     await page.click("#huntEncounterBtn");
     await page.waitForSelector("#huntStage:not([hidden])");

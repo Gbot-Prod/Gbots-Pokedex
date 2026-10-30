@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Collection progress: a "Pokédex completion" ring showing how many of the 1,025 you've viewed (from recently viewed history, kept long-term)
 - [ ] Hover a browse tile to flip it and show its type icons and base stat total on the back
 - [ ] Achievement badges (Kanto complete, 10 shinies, 50-streak quiz…) shown as gym-badge style icons in a trainer card
 - [ ] Download the holo card as a PNG (canvas render of art, name, types and stats) to share
@@ -182,3 +181,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Night sky mode: after sunset (local time) the page background becomes a starfield with a moon, and Ghost/Dark Pokémon get a subtle glow (2026-10-29) — 7 pm–6 am local time, in dark mode, the backdrop shows a twinkling starfield and a glowing crescent moon (html.night + html.darkTheme); off in light/Retro, no twinkle under reduced motion; isNightHour unit-tested. Ghost/Dark glow left for later
 - [x] Shiny hunt step 2: show names instead of numbers, an odds-boosting "Shiny Charm" after 100 encounters, and a per-generation hunt filter (2026-10-30) — shinies are named (species list), a Shiny Charm halves the odds to 1 in 25 after 100 encounters (with a countdown pill from 50), and a region select limits the hunt to one generation
 - [x] Pokémon cry visualiser: when the cry plays, animate a waveform/equaliser bar under the name (Web Audio analyser) (2026-10-30) — 24 type-coloured equaliser bars slide out under the name and follow the cry through a Web Audio analyser (CORS audio), mirrored from the centre; collapse when it ends, skipped under reduced motion
+- [x] Collection progress: a "Pokédex completion" ring showing how many of the 1,025 you've viewed (from recently viewed history, kept long-term) (2026-10-30) — progress.js remembers every species opened (pokedex:seen:v1); a glowing ring dial in the device header shows the count, and each region banner gets a seen/total bar (white-gold when complete)
