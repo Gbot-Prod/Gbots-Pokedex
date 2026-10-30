@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Calendar step 2: colour each calendar day by how many new Pokémon were seen that day (heat-map shades), with the count in the tooltip
+- [ ] Cameo step 2: clicking the partner cameo on the card art makes the partner "cheer" (hop + 🎉 bubble) and shows the matchup between the two
+- [ ] Top 5 step 2: "Collector" achievements on the trainer card when a Pokémon reaches 25 / 50 views
+- [ ] Trainer card tabs: split the growing card into "Profile", "Progress" and "Badges" tabs so it fits phones without long scrolling
+- [ ] Backup/restore: export all saved progress (seen, visits, trainer, shinies, team) to a JSON file and import it on another device
 - [ ] Header on tiny phones: a compact "dex mode" (smaller lens, LEDs in a column) instead of hiding the title below 360px
 - [ ] Trainer card image step 3: include the card style's flourishes in the PNG (holo rainbow edge, retro scanlines)
 - [ ] "Today" panel on the landing page: Pokémon of the day, your streak and one unseen Pokémon suggestion side by side
