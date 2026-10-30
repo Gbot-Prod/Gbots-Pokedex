@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] More badges: "Region master" (any region 100%), "Shiny hunter" (5 shinies), "Quiz whiz" (best streak 20), "Team player" (full team of 6) on the shelf
+- [ ] Badge unlock moment: when a badge is earned, show the completion toast with the badge icon and a small confetti burst
+- [ ] Test hygiene: a smoke-test helper that seeds Math.random per test and resets it, so no test inherits another's stubbed randomness
+- [ ] Matchup pill step 2: tap the pill to open the full type chart with both Pokémon's types highlighted
+- [ ] Trainer card: show badge count ("3 / 8 badges") under the shelf as a mini progress bar
 - [ ] Calendar step 3: tap a calendar day to list the Pokémon first seen that day
 - [ ] Partner moods: the header partner's idle animation changes with affection (sleepy at 1 heart, bouncy at 5)
 - [ ] Trainer card tabs: split the growing card into "Profile", "Progress" and "Badges" tabs so it fits phones without long scrolling
