@@ -1,9 +1,9 @@
 // Pokédex completion: every species you open is remembered (localStorage) and shown as a
 // ring in the device header and a progress bar on each region banner.
-import { getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
+import { API_BASE, fetchJson, fetchPokemon, getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
 import { drawTrainerCard, loadCanvasImage } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
-import { GENERATIONS, MAX_DEX_NUMBER, formatDexNumber, speciesDisplayName } from "./utils.js";
+import { GENERATIONS, MAX_DEX_NUMBER, damageMultipliers, formatDexNumber, speciesDisplayName } from "./utils.js";
 
 const SEEN_KEY = "pokedex:seen:v1";
 const TRAINER_KEY = "pokedex:trainer:v1";
@@ -204,6 +204,48 @@ const partnerElement = document.getElementById("dexPartner");
 function currentPartner() {
     const partner = readStored(TRAINER_KEY, {}).partner;
     return seen.has(partner) ? partner : [...seen][0];
+}
+
+// How the partner feels about the Pokémon just opened: ❤️ for its own evolution line, 😨 when
+// one of the opened Pokémon's types hits the partner super effectively, otherwise nothing.
+export function partnerReaction(partnerId, chainIds, partnerMultipliers, openedTypes) {
+    if (chainIds.includes(partnerId)) {
+        return "❤️";
+    }
+    return openedTypes.some((type) => (partnerMultipliers[type] ?? 1) > 1) ? "😨" : null;
+}
+
+const partnerMultipliersCache = new Map();
+
+async function getPartnerMultipliers(id) {
+    if (!partnerMultipliersCache.has(id)) {
+        const pokemon = await fetchPokemon(String(id));
+        const typeData = await Promise.all(
+            pokemon.types.map((entry) => fetchJson(API_BASE + "type/" + entry.type.name)),
+        );
+        partnerMultipliersCache.set(id, damageMultipliers(typeData));
+    }
+    return partnerMultipliersCache.get(id);
+}
+
+let bubbleTimer = 0;
+
+export async function reactToPokemon(chainIds, openedTypes) {
+    const partner = currentPartner();
+    if (!partner) {
+        return;
+    }
+    let reaction;
+    try {
+        reaction = partnerReaction(partner, chainIds, await getPartnerMultipliers(partner), openedTypes);
+    } catch {
+        return; // offline or not cached: no reaction
+    }
+    const bubble = document.getElementById("dexPartnerBubble");
+    bubble.textContent = reaction ?? "";
+    bubble.classList.toggle("visible", Boolean(reaction));
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => bubble.classList.remove("visible"), 2500);
 }
 
 export function hopPartner() {

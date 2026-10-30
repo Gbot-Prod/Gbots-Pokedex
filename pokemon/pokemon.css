@@ -2608,6 +2608,45 @@ img.animatedSmall {
     display: none;
 }
 
+.dexPartnerWrap {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+}
+
+#dexPartnerBubble {
+    position: absolute;
+    bottom: 70%;
+    left: 60%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border: 2px solid #222;
+    border-radius: 50% 50% 50% 4px;
+    background: #ffffff;
+    font-size: 0.95rem;
+    opacity: 0;
+    transform: scale(0.4);
+    transform-origin: bottom left;
+    transition:
+        opacity 0.2s,
+        transform 0.25s cubic-bezier(0.2, 1.6, 0.4, 1);
+    pointer-events: none;
+}
+
+#dexPartnerBubble.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #dexPartnerBubble {
+        transition: none;
+    }
+}
+
 #dexPartner.hop {
     animation: partnerHop 0.6s ease-out;
 }

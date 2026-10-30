@@ -147,3 +147,11 @@ test("trainerSummary lists seen count, shinies and complete regions", async () =
     );
     assert.match(trainerSummary({}, completionStats(new Set()), 1), /^🎴 Trainer's Pokédex\n.*\n✨ 1 shiny caught$/);
 });
+
+test("partnerReaction loves its evolution line and fears super-effective types", async () => {
+    const { partnerReaction } = await import("../pokemon/progress.js");
+    const charizardTakes = { water: 2, rock: 4, grass: 0.25 };
+    assert.equal(partnerReaction(6, [4, 5, 6], charizardTakes, ["fire"]), "❤️");
+    assert.equal(partnerReaction(6, [7, 8, 9], charizardTakes, ["water"]), "😨");
+    assert.equal(partnerReaction(6, [1, 2, 3], charizardTakes, ["grass", "poison"]), null);
+});

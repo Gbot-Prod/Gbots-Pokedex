@@ -14,7 +14,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initPotd, setPotdVisible } from "./potd.js";
-import { hopPartner, initProgress, markSeen } from "./progress.js";
+import { hopPartner, initProgress, markSeen, reactToPokemon } from "./progress.js";
 import { initQuiz } from "./quiz.js";
 import { initShinyHunt } from "./shinyhunt.js";
 import { initTypeChart, showTypeInChart } from "./typechart.js";
@@ -164,6 +164,7 @@ async function loadSpecies(url, requestId) {
         const chain = await fetchJson(species.evolution_chain.url);
         if (requestId === latestRequest) {
             renderEvolutionChain(chain.chain);
+            reactToPokemon(chainSpeciesIds(chain.chain), currentTypes);
         }
     } catch {
         if (requestId === latestRequest) {
@@ -173,6 +174,11 @@ async function loadSpecies(url, requestId) {
             formsElement.hidden = true;
         }
     }
+}
+
+// Every species id in an evolution chain (all branches).
+function chainSpeciesIds(node) {
+    return [idFromUrl(node.species.url), ...node.evolves_to.flatMap(chainSpeciesIds)];
 }
 
 // --- Type effectiveness -----------------------------------------------------

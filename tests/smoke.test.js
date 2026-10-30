@@ -758,6 +758,14 @@ test("the completion ring opens a trainer card", async () => {
     await page.waitForSelector("#trainerCard:not([open])", { state: "attached" });
 });
 
+test("the partner Pokémon reacts with a heart to its own evolution line", async () => {
+    await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[25]"));
+    await page.reload();
+    await search("pikachu");
+    await page.waitForSelector("#dexPartnerBubble.visible");
+    assert.equal(await page.textContent("#dexPartnerBubble"), "❤️");
+});
+
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
     await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
     await page.reload();
