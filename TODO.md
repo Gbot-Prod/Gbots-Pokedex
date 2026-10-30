@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Streak rewards: at 7 and 30 days the trainer card earns a flame badge and the device LEDs glow orange for the day
 - [ ] Partner step 5: let the partner follow you — if you open the same Pokémon 5 times, offer to make it your partner
 - [ ] Partner affection: count views of the partner and show hearts (1–5) on the trainer card avatar
 - [ ] Trainer card image step 3: include the card style's flourishes in the PNG (holo rainbow edge, retro scanlines)
@@ -216,3 +215,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Partner step 3: more reactions — 😴 at night (night sky on), ⭐ when you open a shiny, 🎵 while a cry plays (2026-10-30) — partnerSay() bubble: ⭐ when the shiny sprite is switched on, 🎵 for as long as a cry plays, and 😴 at night (night sky on) when a Pokémon gets no ❤️/😨 reaction
 - [x] Partner step 4: clicking the header partner opens its own card (quick jump to your partner) (2026-10-30) — the header partner is now a button ("Open your partner Pokémon", focus ring, hover grow) that opens the partner's card
 - [x] Trainer card: a "member since" date (first Pokémon seen) and a daily-visit streak counter (2026-10-30) — visits are recorded per local day (pokedex:visits:v1); the card shows "Member since <date> · 🔥 N-day streak (best M)"; streak resets after a missed day
+- [x] Streak rewards: at 7 and 30 days the trainer card earns a flame badge and the device LEDs glow orange for the day (2026-10-30) — 🔥 week-flame and ☄️ month-blaze badges on the trainer card for best streaks of 7/30 days; a running 7+ day streak turns the header LEDs flickering orange (html.onFire). Also fixed the header title overflowing by 16px on 375px phones (tighter gaps; title hidden below 360px)

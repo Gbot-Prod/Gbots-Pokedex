@@ -729,6 +729,22 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
     assert.equal(await page.locator('#browseGrid .browseTile[data-dex="1"] .tileSeen').count(), 0);
 });
 
+test("a week-long visit streak earns a flame badge and orange LEDs", async () => {
+    await page.evaluate(() => {
+        const yesterday = new Date(Date.now() - 86400000);
+        const day = [yesterday.getFullYear(), yesterday.getMonth() + 1, yesterday.getDate()]
+            .map((part) => String(part).padStart(2, "0"))
+            .join("-");
+        localStorage.setItem("pokedex:visits:v1", JSON.stringify({ first: day, last: day, streak: 6, best: 6 }));
+    });
+    await page.reload();
+    assert.equal(await page.evaluate(() => document.documentElement.classList.contains("onFire")), true);
+    await page.click("#dexProgress");
+    await page.waitForSelector("#trainerCard[open]");
+    assert.equal(await page.locator("#trainerCardBadges li").count(), 1);
+    await page.click("#trainerCardClose");
+});
+
 test("the completion ring opens a trainer card", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");

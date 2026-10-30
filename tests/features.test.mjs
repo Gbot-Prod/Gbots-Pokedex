@@ -168,3 +168,13 @@ test("updateVisits tracks the first visit and the daily streak", async () => {
     visits = updateVisits(visits, "2026-11-02");
     assert.deepEqual(visits, { first: "2026-10-28", last: "2026-11-02", streak: 1, best: 3 });
 });
+
+test("streakBadges awards flames at 7 and 30 days", async () => {
+    const { streakBadges } = await import("../pokemon/progress.js");
+    assert.deepEqual(streakBadges(6), []);
+    assert.equal(streakBadges(7).length, 1);
+    assert.deepEqual(
+        streakBadges(30).map(([icon]) => icon),
+        ["🔥", "☄️"],
+    );
+});

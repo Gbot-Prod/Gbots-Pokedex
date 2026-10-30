@@ -195,6 +195,18 @@ function recordVisit() {
     } catch {
         // the streak just won't persist
     }
+    // A week-long streak sets the device LEDs on fire for the day.
+    document.documentElement.classList.toggle("onFire", visits.streak >= 7);
+}
+
+// Flame badges for the best streak reached: [icon, label].
+export function streakBadges(best) {
+    return [
+        [7, "🔥", "Week flame: 7-day streak"],
+        [30, "☄️", "Month blaze: 30-day streak"],
+    ]
+        .filter(([days]) => best >= days)
+        .map(([, icon, label]) => [icon, label]);
 }
 
 function visitsText() {
@@ -410,6 +422,16 @@ function renderTrainerCard() {
     const stats = completionStats(seen);
     document.getElementById("trainerCardSeen").textContent = seenText(stats);
     document.getElementById("trainerCardVisits").textContent = visitsText();
+    document.getElementById("trainerCardBadges").replaceChildren(
+        ...streakBadges(visits.best).map(([icon, label]) => {
+            const badge = document.createElement("li");
+            badge.title = label;
+            badge.innerHTML = '<span aria-hidden="true"></span><span class="visuallyHidden"></span>';
+            badge.children[0].textContent = icon;
+            badge.children[1].textContent = label;
+            return badge;
+        }),
+    );
     document.getElementById("trainerCardStats").replaceChildren(
         ...trainerFacts(stats).map(([icon, label, value]) => {
             const item = document.createElement("li");
