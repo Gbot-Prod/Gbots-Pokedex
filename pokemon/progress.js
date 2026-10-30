@@ -65,6 +65,7 @@ function render() {
             "%)",
     );
     ringElement.title = stats.seen + " / " + stats.total + " seen";
+    updateNewsDot();
     for (const { number, seen: count, total } of stats.generations) {
         const banner = document.querySelector('.regionBanner[data-generation="' + number + '"]');
         if (!banner) {
@@ -222,6 +223,22 @@ function checkBadges() {
     if (known && fresh.length) {
         celebrate(fresh[0].icon + " Badge earned! " + fresh[0].label, 50);
     }
+    updateNewsDot();
+}
+
+// A dot on the ring while a badge has been earned (or tiered up) that the trainer card
+// hasn't shown yet.
+function updateNewsDot() {
+    if (!visits) {
+        return; // before the first visit is recorded
+    }
+    const shown = readStored(SHELF_SHOWN_KEY, []);
+    const news = badgeShelf(badgeProgress(completionStats(seen))).some(
+        (badge) => badge.earned && !shown.includes(badge.label),
+    );
+    ringElement.classList.toggle("hasNews", news);
+    const label = ringElement.getAttribute("aria-label").replace(/ · new badge!$/, "");
+    ringElement.setAttribute("aria-label", label + (news ? " · new badge!" : ""));
 }
 
 // --- Visits --------------------------------------------------------------------------------
@@ -808,6 +825,7 @@ function renderTrainerCard() {
     } catch {
         // the flourish may just repeat
     }
+    updateNewsDot(); // seen now: clear the ring's dot and label
     document.getElementById("trainerCardBadges").replaceChildren(
         ...shelf.map((badge) => {
             const item = document.createElement("li");

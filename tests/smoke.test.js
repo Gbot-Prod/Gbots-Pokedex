@@ -797,6 +797,14 @@ test("earning a new badge announces it with the toast", async () => {
     await search("pikachu");
     await page.waitForFunction(() => document.getElementById("dexToast").textContent.includes("Collector"));
     assert.match(await page.textContent("#dexToast"), /^📚 Badge earned! Collector/);
+    assert.equal(await page.evaluate(() => document.getElementById("dexProgress").classList.contains("hasNews")), true);
+    assert.match(await page.getAttribute("#dexProgress", "aria-label"), / · new badge!$/);
+    await page.click("#dexProgress"); // seeing the card clears the dot
+    assert.equal(
+        await page.evaluate(() => document.getElementById("dexProgress").classList.contains("hasNews")),
+        false,
+    );
+    assert.doesNotMatch(await page.getAttribute("#dexProgress", "aria-label"), /new badge/);
     assert.equal(await page.isVisible("#dexToast.visible"), true);
 });
 

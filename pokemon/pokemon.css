@@ -2646,6 +2646,33 @@ img.animatedSmall {
     outline-offset: 3px;
 }
 
+/* "New badge" dot until the trainer card has been opened */
+#dexProgress.hasNews::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 6px #22c55e;
+    animation: newsPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes newsPulse {
+    50% {
+        transform: scale(1.25);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #dexProgress.hasNews::after {
+        animation: none;
+    }
+}
+
 #dexProgress svg {
     transform: rotate(-90deg);
 }

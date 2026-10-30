@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Trainer card "what's new": a small dot on the completion ring when a badge was earned/tiered up but the card hasn't been opened since
 - [ ] Browse grid: update tiles in place when names/types arrive instead of re-rendering the whole page (fewer image reloads, no flicker)
 - [ ] Gold everything: once all tiered badges are gold, the trainer card border turns animated gold foil regardless of the chosen style
 - [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
@@ -254,3 +253,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Gold collection: a "Hall of fame" strip at the top of the trainer card listing only gold-tier badges (2026-10-30) — a gold-gradient "🏛️ Hall of fame: …" banner under the trainer card title lists every gold-tier badge; hidden until the first gold
 - [x] Combobox: preload the name list in the background on first visit (requestIdleCallback) so suggestions are usually ready by the time you type (2026-10-30) — the first combobox schedules getLabelledEntries() on requestIdleCallback (setTimeout fallback), so on a fresh visit both name lists are usually loaded before typing; verified live: suggestions instant after 5 s idle
 - [x] Hall of fame step 2: a slow gold shimmer sweeping across the banner, and the gold badges' icons enlarged in it (static under reduced motion) (2026-10-30) — a band of light sweeps across the gold banner every 3.5 s (none under reduced motion) and the gold badges' icons are enlarged with a drop shadow
+- [x] Trainer card "what's new": a small dot on the completion ring when a badge was earned/tiered up but the card hasn't been opened since (2026-10-30) — a pulsing green dot on the completion ring (and " · new badge!" in its label) while any earned/tiered-up badge hasn't been shown on the trainer card yet; opening the card clears it
