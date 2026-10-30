@@ -180,6 +180,19 @@ function stopTimedRun(showResult) {
     nextButton.focus({ preventScroll: true });
 }
 
+// A "+1" that floats up out of a correct answer in the challenge (skipped under reduced motion).
+function floatPlusOne(button) {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const bubble = document.createElement("span");
+    bubble.className = "quizPlusOne";
+    bubble.setAttribute("aria-hidden", "true");
+    bubble.textContent = "+1";
+    button.append(bubble);
+    bubble.addEventListener("animationend", () => bubble.remove(), { once: true });
+}
+
 function answerRound(choice, answer, chosenButton) {
     const correct = choice.id === answer.id;
     if (timedRun) {
@@ -188,6 +201,9 @@ function answerRound(choice, answer, chosenButton) {
             timedRun.correct++;
         }
         revealAnswer(answer, chosenButton, correct);
+        if (correct) {
+            floatPlusOne(chosenButton); // after the reveal, which matches buttons by their text
+        }
         resultElement.textContent = (correct ? "✓ " : "✗ ") + answer.label + " · " + timedRun.correct + " correct";
         setTimeout(() => timedRun && nextRound(), 700);
         return;

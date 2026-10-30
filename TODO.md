@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
 - [ ] Region strip: arrow keys move between banners (roving tabindex) so the 9 banners + chip don't take 10 Tab presses
 - [ ] Jump menu: also offer "Top 5" and "Calendar" pills when the card is tall enough to need them (desktop shows all sections anyway)
@@ -290,3 +289,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region chip step 3: make the chip reachable by keyboard as its own control (move it next to the banner rather than inside the button) (2026-10-30) — the chip is now its own button (descriptive aria-label) right after its banner, handled by a delegated click on the strip; Tab reaches it and Enter lists that region's unseen Pokémon. It's kept across renders so its bob (now 2 short bobs, not infinite) doesn't restart
 - [x] Banner heights: keep all region banners the same height when one shows the chip or ribbon (reserve the chip row) (2026-10-30) — solved with the chip move: the chip overlays the banner's bottom edge from outside, so all banners stay 131 px tall; the strip has extra bottom padding for it
 - [x] Smoke tests: an axe pass with every trainer card style while hovering its buttons, since hover states can fail contrast (as the jump pills did) (2026-10-30) — two smoke tests (light/dark) hover every visible trainer card button in the classic, holo and retro styles and run axe's colour-contrast rule; it immediately caught the highlighted jump pill turning dark-on-dark on hover, fixed by not applying the hover style to the current pill
+- [x] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge (2026-10-30) — a green "+1" floats up out of each correct answer in the 60-second challenge (lighter green in dark mode, none under reduced motion); added after the reveal, which matches buttons by text

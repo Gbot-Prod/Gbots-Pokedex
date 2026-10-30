@@ -3530,6 +3530,51 @@ img.animatedSmall {
     font-size: 0.9rem;
 }
 
+.quizChoice {
+    position: relative;
+}
+
+.quizPlusOne {
+    position: absolute;
+    top: -0.4rem;
+    right: 0.6rem;
+    color: #16a34a;
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-shadow:
+        0 0 3px #ffffff,
+        0 1px 0 #ffffff;
+    pointer-events: none;
+    animation: plusOneFloat 0.7s ease-out forwards;
+}
+
+:root[data-theme="dark"] .quizPlusOne {
+    color: #4ade80;
+    text-shadow: 0 1px 2px #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) .quizPlusOne {
+        color: #4ade80;
+        text-shadow: 0 1px 2px #000000;
+    }
+}
+
+@keyframes plusOneFloat {
+    from {
+        transform: translateY(6px) scale(0.6);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(-6px) scale(1.2);
+    }
+    to {
+        transform: translateY(-34px) scale(1);
+        opacity: 0;
+    }
+}
+
 .quizNewBest {
     display: inline-block;
     color: #be185d;

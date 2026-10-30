@@ -755,6 +755,7 @@ test("the 60-second challenge counts correct answers and records the best run", 
             (count) => document.getElementById("quizTimer").textContent.endsWith(count + " correct"),
             round,
         );
+        assert.equal(await page.locator(".quizChoice.correct .quizPlusOne").count(), 1);
         await page.clock.runFor(800); // the next silhouette follows after a short pause
     }
     await page.clock.runFor(61_000);
