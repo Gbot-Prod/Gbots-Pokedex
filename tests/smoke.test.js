@@ -253,6 +253,27 @@ test("the cry button requests the Pokémon's cry", async () => {
     assert.equal(await page.locator('#cryWave[aria-hidden="true"]:not(.active) span').count(), 24);
 });
 
+test("pressing Enter before suggestions load doesn't leave the list open", async () => {
+    // Hold back the Pokémon name list so the suggestion lookup is still pending at Enter.
+    let release;
+    const held = new Promise((resolve) => (release = resolve));
+    await page.route(/\/api\/v2\/pokemon\?limit=/, async (route) => {
+        await held;
+        await route.fallback();
+    });
+    await page.evaluate(() => {
+        window.localStorage.removeItem("pokedex:entries:v1"); // force a fresh download
+        window.sessionStorage.clear(); // fetchJson's response cache
+    });
+    await page.reload();
+    await page.fill("#pokemonLookupInpt", "25"); // a number doesn't wait for the name list
+    await page.press("#pokemonLookupInpt", "Enter");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    release();
+    await page.waitForTimeout(500);
+    assert.equal(await page.isHidden("#pokemonLookupInpt + [role=listbox]"), true);
+});
+
 test("official spellings with punctuation resolve", async () => {
     await search("Farfetch'd");
     await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("83"));
