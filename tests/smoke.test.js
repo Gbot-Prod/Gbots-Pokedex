@@ -451,7 +451,7 @@ test("ability chips expand to show a description", async () => {
 test("the search combobox suggests Pokémon and can be driven with the keyboard", async () => {
     await page.click("#pokemonLookupInpt");
     await page.keyboard.type("pika");
-    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true] + [role=listbox] .comboboxOption"); // real suggestions, not "Loading names…"
     assert.match(await page.textContent("[role=listbox] [role=option]"), /Pikachu/);
     assert.equal(await page.textContent("[role=listbox] [role=option] mark"), "Pika"); // matched part highlighted
 
@@ -494,7 +494,7 @@ test("an empty, focused search box offers recently viewed Pokémon", async () =>
     await page.fill("#pokemonLookupInpt", "");
     await page.locator("#pokemonNumber").click(); // move focus away
     await page.click("#pokemonLookupInpt");
-    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true] + [role=listbox] .comboboxOption"); // real suggestions, not "Loading names…"
     assert.match(await page.getAttribute("[role=listbox]:not([hidden])", "aria-label"), /^Recently viewed/);
     assert.match(await page.textContent("[role=listbox]:not([hidden]) [role=option]"), /Gengar/);
 });
@@ -507,7 +507,7 @@ test("Delete removes a Pokémon from the recently viewed suggestions", async () 
     await page.fill("#pokemonLookupInpt", "");
     await page.locator("#pokemonNumber").click();
     await page.click("#pokemonLookupInpt");
-    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true] + [role=listbox] .comboboxOption"); // real suggestions, not "Loading names…"
     await page.keyboard.press("ArrowDown"); // Gengar (most recent)
     await page.keyboard.press("Delete");
 
@@ -533,13 +533,13 @@ test("picking a compare suggestion moves on, so the list never blocks the Compar
     await page.setViewportSize({ width: 375, height: 800 });
     await page.click("#compareLeftInput");
     await page.keyboard.type("pika");
-    await page.waitForSelector("#compareLeftInput[aria-expanded=true]");
+    await page.waitForSelector("#compareLeftInput[aria-expanded=true] + [role=listbox] .comboboxOption"); // real suggestions, not "Loading names…"
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("Enter");
     assert.equal(await page.evaluate(() => document.activeElement.id), "compareRightInput");
 
     await page.keyboard.type("geng");
-    await page.waitForSelector("#compareRightInput[aria-expanded=true]");
+    await page.waitForSelector("#compareRightInput[aria-expanded=true] + [role=listbox] .comboboxOption"); // real suggestions, not "Loading names…"
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("Enter");
     // The optional third box is skipped; focus lands on the button with the list closed.
@@ -688,7 +688,7 @@ test("the theme button cycles light → dark → retro and remembers the choice"
 test("submitting the typed text closes the suggestion list", async () => {
     await page.click("#pokemonLookupInpt");
     await page.keyboard.type("gengar");
-    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true] + [role=listbox] .comboboxOption"); // real suggestions, not "Loading names…"
     await page.keyboard.press("Enter");
     assert.equal(await page.getAttribute("#pokemonLookupInpt", "aria-expanded"), "false");
     await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
@@ -766,6 +766,16 @@ test("a week-long visit streak earns a flame badge and orange LEDs", async () =>
     await page.click("#dexProgress");
     await page.waitForSelector("#trainerCard[open]");
     assert.equal(await page.locator("#trainerCardBadges li:not(.locked)").count(), 1);
+    await page.click("#trainerCardClose");
+    // Seen once: the next time it's shown it no longer spins; a new tier would.
+    await page.evaluate(() => localStorage.setItem("pokedex:quiz:v1", JSON.stringify({ best: 20 })));
+    await page.click("#dexProgress");
+    assert.deepEqual(
+        await page.evaluate(() =>
+            [...document.querySelectorAll("#trainerCardBadges li.fresh")].map((li) => li.className),
+        ),
+        ["quiz tier1 fresh"],
+    );
     assert.equal(await page.textContent("#trainerNextBadge"), "Next badge: Visit 30 days in a row");
     assert.equal(await page.locator("#trainerCalendar span").count(), 28);
     assert.equal(await page.locator("#trainerCalendar span.today.visited").count(), 1);

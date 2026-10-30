@@ -198,6 +198,7 @@ function showNextToast() {
 // Earned badges are remembered; a newly earned one gets the toast. The very first check only
 // records what's already earned, so existing trainers aren't flooded with old badges.
 const EARNED_KEY = "pokedex:badges-earned:v1";
+const SHELF_SHOWN_KEY = "pokedex:badges-shown:v1"; // earned badge labels the shelf last showed
 
 export function newlyEarned(shelf, known) {
     return shelf.filter((badge) => badge.earned && !known.includes(badge.label));
@@ -799,10 +800,21 @@ function renderTrainerCard() {
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
     const shelf = badgeShelf(badgeProgress(stats));
+    // Badges earned or tiered up since the shelf was last shown get a one-off spin.
+    const shownBefore = readStored(SHELF_SHOWN_KEY, null);
+    const earnedLabels = shelf.filter((badge) => badge.earned).map((badge) => badge.label);
+    try {
+        localStorage.setItem(SHELF_SHOWN_KEY, JSON.stringify(earnedLabels));
+    } catch {
+        // the flourish may just repeat
+    }
     document.getElementById("trainerCardBadges").replaceChildren(
         ...shelf.map((badge) => {
             const item = document.createElement("li");
             item.className = badge.kind + (badge.earned ? "" : " locked") + (badge.tier ? " tier" + badge.tier : "");
+            if (badge.earned && shownBefore && !shownBefore.includes(badge.label)) {
+                item.classList.add("fresh");
+            }
             item.title = badge.earned ? badge.label : "Locked: " + badge.hint;
             item.innerHTML = '<span aria-hidden="true"></span><span class="visuallyHidden"></span>';
             item.children[0].textContent = badge.earned ? badge.icon : "🔒";
