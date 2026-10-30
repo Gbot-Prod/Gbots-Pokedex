@@ -198,7 +198,15 @@ function fillTileDetails(button, entry) {
     const dexNumber = entrySpecies(entry, speciesSlugs)?.id ?? entry.id;
     button.dataset.dex = dexNumber;
     button.querySelector(".tileNumber").textContent = formatDexNumber(dexNumber);
-    button.querySelector(".tileName").textContent = tileName(entry);
+    const nameElement = button.querySelector(".tileName");
+    const name = tileName(entry);
+    if (nameElement.textContent && nameElement.textContent !== name) {
+        // e.g. "Zygarde 50" becoming "Zygarde" once species names arrive: fade instead of jumping
+        nameElement.classList.remove("nameUpdated");
+        void nameElement.offsetWidth; // restart the animation
+        nameElement.classList.add("nameUpdated");
+    }
+    nameElement.textContent = name;
     if (hasSeen(dexNumber) && !button.querySelector(".tileSeen")) {
         button.querySelector(".tileName").after(seenMark());
     }

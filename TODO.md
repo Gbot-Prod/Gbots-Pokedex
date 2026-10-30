@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Browse grid step 2: fade tile names in when they change from the raw form name to the species name, instead of a hard swap
 - [ ] Trainer card step: a compact "summary" mode on phones showing only profile, seen % and badges, with "More" to expand stats/regions/calendar
 - [ ] Gold card PNG: the saved trainer card image uses the gold-foil frame when the card is all gold
 - [ ] Heart hint: tapping the affection hearts explains how to earn more ("open your partner 3 more times for the next heart")
@@ -264,3 +263,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Browse grid: update tiles in place when names/types arrive instead of re-rendering the whole page (fewer image reloads, no flicker) (2026-10-30) — fillTileDetails() fills number/name/seen tick/type icons on existing tiles when the species names or type lists arrive (only a name sort re-renders); first tile stays the same element (new smoke test fails on the old code), and the missing-sprite test is strict again (exactly one request)
 - [x] Gold everything: once all tiered badges are gold, the trainer card border turns animated gold foil regardless of the chosen style (2026-10-30) — with all tiered badges at gold the trainer card gets an animated gold-foil border and glow (cream body in light, dark-gold in dark, retro keeps its green inside the gold frame); still under reduced motion
 - [x] All-gold header: when the card is all gold, the header ring and partner aura turn gold too, so the achievement shows outside the card (2026-10-30) — html.allGold (set with the news dot from the badge shelf) gives the completion ring a dark-gold disc, gold ring glow and pale-gold fill, and the header partner a gold aura; retro keeps its own palette
+- [x] Browse grid step 2: fade tile names in when they change from the raw form name to the species name, instead of a hard swap (2026-10-30) — tile names that change when species names arrive ("Nidoran F" → "Nidoran♀") fade/unblur in over 0.5 s instead of swapping (instant under reduced motion); verified live by holding the species list
