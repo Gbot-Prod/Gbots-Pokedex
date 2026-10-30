@@ -15,6 +15,11 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] A missing sprite can be requested twice on a first visit when the browse grid re-renders before the 404 is recorded; remember in-flight failures per URL (seen as a flaky smoke test)
+- [ ] Tier-up flourish: when a badge moves up a tier, the shelf badge spins once and its ring flashes the new metal colour
+- [ ] Gold collection: a "Hall of fame" strip at the top of the trainer card listing only gold-tier badges
+- [ ] Combobox: preload the name list in the background on first visit (requestIdleCallback) so suggestions are usually ready by the time you type
+- [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
+- [ ] Shiny hunt: show the current Shiny hunter tier and progress to the next ("3 / 5 for bronze") right above the Encounter button
 - [ ] Badge detail: tapping a badge on the shelf shows its description, when it was earned and progress toward the next tier
 - [ ] Toast polish: a tiny progress line along the toast's bottom edge showing time until the next queued toast
 - [ ] Hidden badge: a secret "Night owl" badge for opening 10 Pokémon between midnight and 4 am, shown as ❓ until earned
