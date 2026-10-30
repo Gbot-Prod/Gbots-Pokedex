@@ -3778,6 +3778,30 @@ img.animatedSmall {
     margin: 1rem 1rem 0;
 }
 
+.heartPop {
+    display: inline-block;
+    animation: heartPop 0.6s cubic-bezier(0.3, 1.8, 0.5, 1) both;
+}
+
+@keyframes heartPop {
+    0% {
+        transform: scale(0);
+    }
+    60% {
+        transform: scale(1.8);
+        text-shadow: 0 0 8px #ff8fb5;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .heartPop {
+        animation: none;
+    }
+}
+
 #trainerHeartHint {
     margin: 0.5rem 1rem 0;
     padding: 0.4rem 0.8rem;

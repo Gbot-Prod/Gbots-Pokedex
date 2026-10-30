@@ -17,6 +17,7 @@ const SEEN_DAYS_KEY = "pokedex:seen-days:v1"; // { "YYYY-MM-DD": new Pokémon se
 const TRAINER_KEY = "pokedex:trainer:v1";
 const VISITS_KEY = "pokedex:visits:v1";
 const VIEWS_KEY = "pokedex:views:v1";
+const HEARTS_SHOWN_KEY = "pokedex:hearts-shown:v1"; // { partner, hearts } as last shown on the card
 const DECLINED_KEY = "pokedex:partner-declined:v1";
 export const PARTNER_OFFER_VIEWS = 5;
 const RING_RADIUS = 18;
@@ -610,7 +611,26 @@ function renderAffection(partner) {
         return;
     }
     const hearts = affectionHearts(views[partner]);
-    element.textContent = "♥".repeat(hearts) + "♡".repeat(5 - hearts);
+    // Hearts earned since the card last showed this partner pop in.
+    const shown = readStored(HEARTS_SHOWN_KEY, {});
+    const before = shown.partner === partner ? shown.hearts : hearts;
+    element.replaceChildren(
+        ...Array.from({ length: 5 }, (_, index) => {
+            const heart = document.createElement("span");
+            heart.setAttribute("aria-hidden", "true");
+            heart.textContent = index < hearts ? "♥" : "♡";
+            if (index >= before && index < hearts) {
+                heart.className = "heartPop";
+                heart.style.animationDelay = 0.4 + (index - before) * 0.25 + "s";
+            }
+            return heart;
+        }),
+    );
+    try {
+        localStorage.setItem(HEARTS_SHOWN_KEY, JSON.stringify({ partner, hearts }));
+    } catch {
+        // the pop may just repeat
+    }
     element.setAttribute("aria-label", "Affection " + hearts + " of 5");
     element.title = "How do I earn more hearts?";
     document.getElementById("trainerHeartHint").textContent = "💕 " + heartHint(views[partner]);
