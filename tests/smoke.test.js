@@ -709,6 +709,8 @@ test("resting the mouse on a browse tile flips it to its base stats", async () =
     await page.waitForSelector('#browseGrid .browseTile.flipped[data-id="24"] .tileBackTotal');
     assert.match(await tile.locator(".tileBackTotal").textContent(), /Base stats448/);
     assert.equal(await tile.locator(".tileBackStat").count(), 6);
+    assert.equal(await tile.locator(".tileBackRadar .radarShape").count(), 1);
+    assert.equal(await tile.locator(".tileBackRadar text").count(), 6);
     assert.equal(await tile.locator(".tileBack").getAttribute("aria-hidden"), "true");
     await page.mouse.move(0, 0);
     await page.waitForFunction(() => !document.querySelector(".browseTile.flipped"));

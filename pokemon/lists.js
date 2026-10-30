@@ -10,6 +10,7 @@ import {
     formatDexNumber,
     formatName,
     idFromUrl,
+    radarPoints,
     STAT_LABELS,
     TYPE_COLORS,
 } from "./utils.js";
@@ -321,12 +322,51 @@ function renderTileBack(back, entry, pokemon) {
         row.append(label, bar);
         bars.append(row);
     }
-    back.replaceChildren(name, bst, bars);
+    back.replaceChildren(name, bst, bars, tileRadar(pokemon.stats));
     // Tint the back with the Pokémon's first type (the strong shades keep white text readable).
     const colors = TYPE_COLORS[pokemon.types[0]?.type.name];
     if (colors) {
         back.style.setProperty("--back-color", colors[0]);
     }
+}
+
+// A mini hexagon radar of the six stats (shown instead of the bars on wide screens).
+const SVG_NS = "http://www.w3.org/2000/svg";
+const RADAR_MAX = 150; // few base stats exceed this; higher values are capped at the edge
+
+function tileRadar(stats) {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("class", "tileBackRadar");
+    svg.setAttribute("viewBox", "0 0 100 98");
+    const shape = (className, points) => {
+        const polygon = document.createElementNS(SVG_NS, "polygon");
+        polygon.setAttribute("class", className);
+        polygon.setAttribute("points", points);
+        svg.append(polygon);
+    };
+    const center = [50, 48];
+    shape("radarGrid", radarPoints([1, 1, 1, 1, 1, 1], 1, 34, ...center));
+    shape("radarGrid", radarPoints([1, 1, 1, 1, 1, 1], 2, 34, ...center));
+    shape(
+        "radarShape",
+        radarPoints(
+            stats.map((stat) => stat.base_stat),
+            RADAR_MAX,
+            34,
+            ...center,
+        ),
+    );
+    radarPoints([1, 1, 1, 1, 1, 1], 1, 43, ...center)
+        .split(" ")
+        .forEach((point, index) => {
+            const [x, y] = point.split(",");
+            const label = document.createElementNS(SVG_NS, "text");
+            label.setAttribute("x", x);
+            label.setAttribute("y", Number(y) + 3);
+            label.textContent = STAT_SHORT[stats[index]?.stat.name] ?? "";
+            svg.append(label);
+        });
+    return svg;
 }
 
 typeFilterElement.addEventListener("change", applyBrowseFilters);

@@ -1374,6 +1374,44 @@ kbd {
     text-align: left;
 }
 
+.tileBackRadar {
+    display: none;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+}
+
+.tileBackRadar .radarGrid {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 0.8;
+}
+
+.tileBackRadar .radarShape {
+    fill: rgba(255, 212, 71, 0.55);
+    stroke: #ffd447;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+}
+
+.tileBackRadar text {
+    fill: #ffffff;
+    font-size: 8px;
+    font-weight: 700;
+    text-anchor: middle;
+}
+
+/* Wide screens have room for the radar instead of the bars. */
+@media (min-width: 900px) {
+    .tileBackRadar {
+        display: block;
+    }
+
+    .tileBackStats {
+        display: none;
+    }
+}
+
 .tileBackBar {
     height: 5px;
     border-radius: 3px;
