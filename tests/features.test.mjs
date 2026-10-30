@@ -220,3 +220,14 @@ test("heatLevel buckets a day's new Pokémon into five shades", async () => {
     const { heatLevel } = await import("../pokemon/progress.js");
     assert.deepEqual([0, 1, 3, 8, 20, 99].map(heatLevel), [0, 1, 2, 3, 4, 4]);
 });
+
+test("matchupSummary finds the best hit each way", async () => {
+    const { matchupSummary } = await import("../pokemon/progress.js");
+    // Charizard (fire/flying) vs Venusaur (grass/poison)
+    const charizardTakes = { water: 2, rock: 4, grass: 0.25, poison: 1 };
+    const venusaurTakes = { fire: 2, flying: 2, psychic: 2 };
+    assert.deepEqual(matchupSummary(["fire", "flying"], charizardTakes, ["grass", "poison"], venusaurTakes), {
+        hits: 2,
+        takes: 1,
+    });
+});

@@ -3,7 +3,14 @@
 import { API_BASE, fetchJson, fetchPokemon, getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
 import { drawTrainerCard, loadCanvasImage } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
-import { GENERATIONS, MAX_DEX_NUMBER, damageMultipliers, formatDexNumber, speciesDisplayName } from "./utils.js";
+import {
+    GENERATIONS,
+    MAX_DEX_NUMBER,
+    damageMultipliers,
+    formatDexNumber,
+    formatMultiplier,
+    speciesDisplayName,
+} from "./utils.js";
 
 const SEEN_KEY = "pokedex:seen:v1";
 const SEEN_DAYS_KEY = "pokedex:seen-days:v1"; // { "YYYY-MM-DD": new Pokémon seen that day }
@@ -343,17 +350,26 @@ export function partnerReaction(partnerId, chainIds, partnerMultipliers, openedT
     return openedTypes.some((type) => (partnerMultipliers[type] ?? 1) > 1) ? "😨" : null;
 }
 
-const partnerMultipliersCache = new Map();
+const partnerInfoCache = new Map();
 
-async function getPartnerMultipliers(id) {
-    if (!partnerMultipliersCache.has(id)) {
+// The partner's types and the damage multipliers it takes, cached per partner.
+async function getPartnerInfo(id) {
+    if (!partnerInfoCache.has(id)) {
         const pokemon = await fetchPokemon(String(id));
-        const typeData = await Promise.all(
-            pokemon.types.map((entry) => fetchJson(API_BASE + "type/" + entry.type.name)),
-        );
-        partnerMultipliersCache.set(id, damageMultipliers(typeData));
+        const types = pokemon.types.map((entry) => entry.type.name);
+        partnerInfoCache.set(id, { types, multipliers: await takenMultipliers(types) });
     }
-    return partnerMultipliersCache.get(id);
+    return partnerInfoCache.get(id);
+}
+
+async function takenMultipliers(types) {
+    return damageMultipliers(await Promise.all(types.map((type) => fetchJson(API_BASE + "type/" + type))));
+}
+
+// Best multiplier each side's types deal to the other: { hits, takes } from the partner's view.
+export function matchupSummary(partnerTypes, partnerTakes, openedTypes, openedTakes) {
+    const best = (types, takes) => Math.max(...types.map((type) => takes[type] ?? 1));
+    return { hits: best(partnerTypes, openedTakes), takes: best(openedTypes, partnerTakes) };
 }
 
 let bubbleTimer = 0;
@@ -365,7 +381,7 @@ export async function reactToPokemon(chainIds, openedTypes) {
     }
     let reaction;
     try {
-        reaction = partnerReaction(partner, chainIds, await getPartnerMultipliers(partner), openedTypes);
+        reaction = partnerReaction(partner, chainIds, (await getPartnerInfo(partner)).multipliers, openedTypes);
     } catch {
         return; // offline or not cached: no reaction
     }
@@ -472,7 +488,11 @@ export function shouldOfferPartner(viewCount, dexNumber, partner, declinedAt = n
 }
 
 // Called for every Pokémon opened (with its display name).
-export function notePokemonView(dexNumber, name) {
+let opened = { name: "", types: [] }; // the Pokémon on the card, for the cameo matchup
+
+export function notePokemonView(dexNumber, name, types = []) {
+    opened = { name, types };
+    document.getElementById("cameoMatchup").classList.remove("visible");
     const offer = document.getElementById("partnerOffer");
     const count = countView(dexNumber);
     updateDevotion(dexNumber);
@@ -492,11 +512,49 @@ function updateDevotion(openedDexNumber) {
     const devoted = Boolean(partner) && affectionHearts(views[partner]) === 5;
     partnerElement.classList.toggle("devoted", devoted);
     const cameo = document.getElementById("partnerCameo");
-    cameo.hidden = !devoted || openedDexNumber === partner;
-    if (!cameo.hidden && cameo.dataset.id !== String(partner)) {
+    const cameoButton = document.getElementById("partnerCameoBtn");
+    cameoButton.hidden = !devoted || openedDexNumber === partner;
+    if (!cameoButton.hidden && cameo.dataset.id !== String(partner)) {
         cameo.dataset.id = partner;
         setSprite(cameo, partner);
     }
+}
+
+// Clicking the cameo: the partner cheers and sizes up the Pokémon on the card.
+let matchupTimer = 0;
+
+async function cheerPartner() {
+    const partner = currentPartner();
+    const cameo = document.getElementById("partnerCameo");
+    cameo.classList.remove("cheer");
+    void cameo.offsetWidth; // restart the animation
+    cameo.classList.add("cheer");
+    partnerSay("🎉");
+    const pill = document.getElementById("cameoMatchup");
+    knownSlugs ??= await getSpeciesSlugs().catch(() => null);
+    try {
+        const info = await getPartnerInfo(partner);
+        const { hits, takes } = matchupSummary(
+            info.types,
+            info.multipliers,
+            opened.types,
+            await takenMultipliers(opened.types),
+        );
+        pill.textContent =
+            partnerLabel(partner) +
+            " vs " +
+            opened.name +
+            ": hits " +
+            formatMultiplier(hits) +
+            "×, takes " +
+            formatMultiplier(takes) +
+            "×";
+    } catch {
+        pill.textContent = partnerLabel(partner) + " is cheering you on!";
+    }
+    pill.classList.add("visible");
+    clearTimeout(matchupTimer);
+    matchupTimer = setTimeout(() => pill.classList.remove("visible"), 5000);
 }
 
 function acceptPartnerOffer() {
@@ -675,6 +733,7 @@ let openPokemon = () => {};
 export function initProgress({ showPokemon }) {
     openPokemon = showPokemon;
     document.getElementById("partnerOfferYes").addEventListener("click", acceptPartnerOffer);
+    document.getElementById("partnerCameoBtn").addEventListener("click", cheerPartner);
     document.getElementById("partnerOfferNo").addEventListener("click", () => {
         const offer = document.getElementById("partnerOffer");
         offer.hidden = true;

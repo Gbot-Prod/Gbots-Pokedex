@@ -395,7 +395,7 @@ function renderPokemon(data, query) {
     addToRecent(currentPokemon);
     markSeen(currentDexNumber);
     hopPartner();
-    notePokemonView(currentDexNumber, pokemonDisplayName(data));
+    notePokemonView(currentDexNumber, pokemonDisplayName(data), currentTypes);
     announceResult(data);
     document.title = formatName(data.name) + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
     prevButton.disabled = currentDexNumber <= 1;

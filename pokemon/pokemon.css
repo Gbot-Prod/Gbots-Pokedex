@@ -2798,11 +2798,82 @@ img.animatedSmall {
 }
 
 /* The devoted partner's cameo in the corner of the card art */
-#partnerCameo {
+#partnerCameoBtn {
     position: absolute;
     bottom: 0.4rem;
     left: 0.4rem;
     z-index: 2;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+}
+
+#partnerCameoBtn[hidden] {
+    display: none;
+}
+
+#partnerCameoBtn:focus-visible {
+    outline: 3px solid #ffd447;
+    outline-offset: 2px;
+}
+
+#partnerCameo.cheer {
+    animation: cameoCheer 0.7s ease-out;
+}
+
+@keyframes cameoCheer {
+    25% {
+        transform: translateY(-14px) rotate(-10deg) scale(1.1);
+    }
+    50% {
+        transform: translateY(0) rotate(0);
+    }
+    75% {
+        transform: translateY(-7px) rotate(8deg);
+    }
+}
+
+#cameoMatchup {
+    position: absolute;
+    bottom: 0.9rem;
+    left: 4.4rem;
+    right: 0.6rem;
+    z-index: 2;
+    width: fit-content;
+    margin: 0;
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+    background: rgba(20, 22, 40, 0.85);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+        opacity 0.25s,
+        transform 0.25s;
+    pointer-events: none;
+}
+
+#cameoMatchup.visible {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #partnerCameo.cheer {
+        animation: none;
+    }
+
+    #cameoMatchup {
+        transition: none;
+    }
+}
+
+#partnerCameo {
+    display: block;
     width: 56px;
     height: 56px;
     border: 2px solid rgba(255, 255, 255, 0.85);
@@ -2810,10 +2881,6 @@ img.animatedSmall {
     background: radial-gradient(circle, #ffffff, #ffd6e6);
     image-rendering: pixelated;
     box-shadow: 0 0 10px rgba(255, 143, 181, 0.8);
-}
-
-#partnerCameo[hidden] {
-    display: none;
 }
 
 /* The smallest phones drop the decorative title so the ring and partner fit. */

@@ -833,11 +833,14 @@ test("a partner at full affection glows and cameos on other Pokémon's art", asy
     });
     await page.reload();
     await search("pikachu");
-    await page.waitForSelector("#partnerCameo:not([hidden])");
+    await page.waitForSelector("#partnerCameoBtn:not([hidden])");
+    await page.click("#partnerCameoBtn");
+    await page.waitForSelector("#cameoMatchup.visible");
+    assert.match(await page.textContent("#cameoMatchup"), /vs Pikachu: hits \S+×, takes \S+×/);
     assert.equal(await page.evaluate(() => document.getElementById("dexPartner").classList.contains("devoted")), true);
     await search("arbok");
     await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("24"));
-    assert.equal(await page.isHidden("#partnerCameo"), true);
+    assert.equal(await page.isHidden("#partnerCameoBtn"), true);
 });
 
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
