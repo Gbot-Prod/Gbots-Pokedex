@@ -51,6 +51,10 @@ function load() {
 
 function render() {
     const stats = completionStats(seen);
+    const regionsDone = stats.generations.filter((gen) => gen.seen === gen.total).length;
+    const tier = tierProgress(regionsDone, REGION_TIERS);
+    document.getElementById("regionTier").textContent =
+        "🗺️ Region master badge: " + (tier ? tier.replace(" for ", " regions for ") : "gold — every region complete!");
     const fraction = stats.seen / stats.total;
     ringElement.querySelector(".dexProgressFill").style.strokeDashoffset = String(RING_LENGTH * (1 - fraction));
     ringElement.querySelector(".dexProgressCount").textContent = stats.seen;
@@ -321,6 +325,7 @@ function recordVisit() {
 export const SHINY_TIERS = [5, 15, 50];
 
 export const QUIZ_TIERS = [20, 35, 50];
+export const REGION_TIERS = [1, 3, 9];
 
 // "3 / 5 for bronze": progress toward a badge's next tier, or null once gold.
 export function tierProgress(value, tiers) {
@@ -358,7 +363,7 @@ const BADGES = [
         icon: "🗺️",
         name: "Region master",
         kind: "regions",
-        tiers: [1, 3, 9],
+        tiers: REGION_TIERS,
         unit: (n) => (n === 1 ? "a regional Pokédex complete" : n + " regional Pokédexes complete"),
         hintFor: (n) => (n === 1 ? "See every Pokémon of one region" : "Complete " + n + " regions"),
     },

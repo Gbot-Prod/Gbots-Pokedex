@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Region strip: the same tier line for Region master under the region banners ("2 / 3 regions for silver"), via tierProgress
 - [ ] Heart hint step 2: hearts fill with a little pop animation when a new heart is earned (seen next time the card opens)
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
 - [ ] Quiz: celebrate beating your best streak mid-run with a small "New best!" flash on the score line
@@ -269,3 +268,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Browse grid step 2: fade tile names in when they change from the raw form name to the species name, instead of a hard swap (2026-10-30) — tile names that change when species names arrive ("Nidoran F" → "Nidoran♀") fade/unblur in over 0.5 s instead of swapping (instant under reduced motion); verified live by holding the species list
 - [x] Heart hint: tapping the affection hearts explains how to earn more ("open your partner 3 more times for the next heart") (2026-10-30) — the hearts are now a button (aria-expanded) that toggles a pink hint: "Open your partner N more times for the next heart" or the max-affection message
 - [x] Quiz: the same "next tier" line for the Quiz whiz badge under the quiz score ("best 12 / 20 for bronze") (2026-10-30) — "🧠 Quiz whiz badge: best streak 24 / 35 for silver" under the quiz score; shared tierProgress(value, tiers) + exported QUIZ_TIERS/SHINY_TIERS
+- [x] Region strip: the same tier line for Region master under the region banners ("2 / 3 regions for silver"), via tierProgress (2026-10-30) — "🗺️ Region master badge: 2 / 3 regions for silver" under the region banners, updated as Pokémon are seen (REGION_TIERS exported)

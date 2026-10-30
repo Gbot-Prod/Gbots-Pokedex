@@ -3493,6 +3493,7 @@ img.animatedSmall {
     font-size: 0.9rem;
 }
 
+#regionTier,
 #quizTier,
 #huntTier {
     margin: 0 0 0.6rem;
