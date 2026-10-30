@@ -139,8 +139,23 @@ async function getTypeMemberIds(type) {
     return typeMembersCache.get(type);
 }
 
+// "(12 left)" beside "Unseen only" while a region is selected.
+function updateUnseenCount() {
+    const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
+    const left = generation
+        ? nationalDexEntries.filter(
+              (entry) => entry.id >= generation.first && entry.id <= generation.last && !hasSeen(entry.id),
+          ).length
+        : null;
+    document.getElementById("unseenCount").textContent =
+        left === null ? "" : left ? "(" + left + " left in " + generation.region + ")" : "(all seen!)";
+}
+
+window.addEventListener("pokedex:seen", updateUnseenCount);
+
 async function applyBrowseFilters() {
     updateRegionStrip();
+    updateUnseenCount();
     const type = typeFilterElement.value;
     const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
     let entries = nationalDexEntries;

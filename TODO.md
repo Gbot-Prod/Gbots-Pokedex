@@ -19,7 +19,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Jump menu: also offer "Top 5" and "Calendar" pills when the card is tall enough to need them (desktop shows all sections anyway)
 - [ ] Chip celebration: when the last missing Pokémon of the chip's region is seen, the chip bursts into sparkles before the region-complete toast
 - [ ] Test robustness: smoke tests that click animated elements should wait for animationend instead of relying on finite animation length
-- [ ] Unseen filter: show "N left" next to the checkbox when a region is selected, updating as Pokémon are seen
 - [ ] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
@@ -290,3 +289,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Banner heights: keep all region banners the same height when one shows the chip or ribbon (reserve the chip row) (2026-10-30) — solved with the chip move: the chip overlays the banner's bottom edge from outside, so all banners stay 131 px tall; the strip has extra bottom padding for it
 - [x] Smoke tests: an axe pass with every trainer card style while hovering its buttons, since hover states can fail contrast (as the jump pills did) (2026-10-30) — two smoke tests (light/dark) hover every visible trainer card button in the classic, holo and retro styles and run axe's colour-contrast rule; it immediately caught the highlighted jump pill turning dark-on-dark on hover, fixed by not applying the hover style to the current pill
 - [x] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge (2026-10-30) — a green "+1" floats up out of each correct answer in the 60-second challenge (lighter green in dark mode, none under reduced motion); added after the reveal, which matches buttons by text
+- [x] Unseen filter: show "N left" next to the checkbox when a region is selected, updating as Pokémon are seen (2026-10-30) — "(10 left in Kanto)" / "(all seen!)" beside Unseen only while a region is selected; progress.js dispatches a pokedex:seen event so it drops live as Pokémon are seen

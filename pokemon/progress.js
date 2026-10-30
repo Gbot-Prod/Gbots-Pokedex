@@ -168,6 +168,7 @@ export function markSeen(dexNumber) {
         // progress just won't persist
     }
     render();
+    window.dispatchEvent(new CustomEvent("pokedex:seen", { detail: dexNumber }));
     celebrateIfComplete(dexNumber);
     for (const tile of document.querySelectorAll('.browseTile[data-dex="' + dexNumber + '"]:not(:has(.tileSeen))')) {
         tile.append(seenMark());

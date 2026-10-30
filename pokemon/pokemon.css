@@ -1288,6 +1288,11 @@ kbd {
     cursor: pointer;
 }
 
+#unseenCount {
+    font-weight: 600;
+    opacity: 0.9;
+}
+
 .unseenToggle input {
     width: 1.1rem;
     height: 1.1rem;
