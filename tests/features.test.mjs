@@ -137,3 +137,13 @@ test("completionMessage celebrates a finished region or the whole Pokédex", asy
     const everything = new Set(Array.from({ length: 1025 }, (_, index) => index + 1));
     assert.match(completionMessage(everything, 1025), /National Pokédex complete/);
 });
+
+test("trainerSummary lists seen count, shinies and complete regions", async () => {
+    const { completionStats, trainerSummary } = await import("../pokemon/progress.js");
+    const kanto = new Set(Array.from({ length: 151 }, (_, index) => index + 1));
+    assert.equal(
+        trainerSummary({ name: "Gbot" }, completionStats(kanto), 2),
+        "🎴 Gbot's Pokédex\n👀 151/1025 Pokémon seen (14%)\n✨ 2 shiny Pokémon caught\n🏅 Complete: Kanto",
+    );
+    assert.match(trainerSummary({}, completionStats(new Set()), 1), /^🎴 Trainer's Pokédex\n.*\n✨ 1 shiny caught$/);
+});

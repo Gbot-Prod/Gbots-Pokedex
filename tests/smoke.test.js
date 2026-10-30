@@ -738,6 +738,13 @@ test("the completion ring opens a trainer card", async () => {
     await page.fill("#trainerName", "Gbot");
     assert.equal(await page.inputValue("#trainerPartner"), "25");
     assert.equal(await page.isVisible("#trainerAvatar"), true);
+    await page.evaluate(() => {
+        delete Navigator.prototype.share;
+        navigator.clipboard.writeText = async (text) => (window.copiedText = text);
+    });
+    await page.click("#trainerShareBtn");
+    await page.waitForSelector("#trainerShareStatus:has-text('Copied')");
+    assert.match(await page.evaluate(() => window.copiedText), /^🎴 Gbot's Pokédex\n👀 [1-9]\d*\/1025 Pokémon seen/);
     await page.click("#trainerCardClose");
     await page.waitForSelector("#trainerCard:not([open])", { state: "attached" });
 });

@@ -194,6 +194,7 @@ function saveTrainer(changes) {
 
 function renderTrainerCard() {
     renderTrainerProfile();
+    document.getElementById("trainerShareStatus").textContent = "";
     const stats = completionStats(seen);
     const hunt = readStored("pokedex:shiny-hunt:v1", {});
     const quiz = readStored("pokedex:quiz:v1", {});
@@ -233,7 +234,52 @@ function renderTrainerCard() {
     );
 }
 
+// A plain-text summary of the trainer card, for sharing.
+export function trainerSummary(trainer, stats, shinies) {
+    const lines = [
+        "🎴 " + (trainer.name || "Trainer") + "'s Pokédex",
+        "👀 " +
+            stats.seen +
+            "/" +
+            stats.total +
+            " Pokémon seen (" +
+            Math.floor((100 * stats.seen) / stats.total) +
+            "%)",
+        "✨ " + shinies + " shiny" + (shinies === 1 ? "" : " Pokémon") + " caught",
+    ];
+    const complete = stats.generations.filter((gen) => gen.seen === gen.total);
+    if (complete.length) {
+        const names = complete.map((gen) => GENERATIONS.find((entry) => entry.number === gen.number).region);
+        lines.push("🏅 Complete: " + names.join(", "));
+    }
+    return lines.join("\n");
+}
+
+async function shareTrainerCard() {
+    const status = document.getElementById("trainerShareStatus");
+    const text =
+        trainerSummary(
+            readStored(TRAINER_KEY, {}),
+            completionStats(seen),
+            readStored("pokedex:shiny-hunt:v1", {}).shinies?.length ?? 0,
+        ) +
+        "\n" +
+        location.origin +
+        location.pathname;
+    try {
+        if (navigator.share) {
+            await navigator.share({ title: "My trainer card", text });
+            return;
+        }
+        await navigator.clipboard.writeText(text);
+        status.textContent = "Copied to clipboard!";
+    } catch {
+        status.textContent = ""; // share sheet dismissed or clipboard blocked
+    }
+}
+
 export function initProgress() {
+    document.getElementById("trainerShareBtn").addEventListener("click", shareTrainerCard);
     ringElement.addEventListener("click", () => {
         renderTrainerCard();
         trainerCard.showModal();

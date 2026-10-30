@@ -3288,6 +3288,29 @@ img.animatedSmall {
     text-align: right;
 }
 
+.trainerCardActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 1rem 1rem 0;
+}
+
+#trainerShareBtn {
+    padding: 0.55rem 1.1rem;
+    background: linear-gradient(160deg, #d62f2f, #a01818);
+    font-size: 1rem;
+}
+
+#trainerShareStatus {
+    font-weight: 700;
+}
+
+#trainerShareStatus:empty {
+    display: none;
+}
+
 #trainerCardRegions li.complete .regionProgressBar span {
     background: linear-gradient(90deg, #ffd447, #ffffff, #ffd447);
 }
