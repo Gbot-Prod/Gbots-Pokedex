@@ -187,11 +187,29 @@ function applyCardStyle(style) {
 }
 
 function showPartner(id) {
-    const avatar = document.getElementById("trainerAvatar");
-    avatar.hidden = !id;
-    if (id) {
-        setSprite(avatar, id);
+    for (const image of [document.getElementById("trainerAvatar"), partnerElement]) {
+        image.hidden = !id;
+        if (id && image.dataset.id !== String(id)) {
+            image.dataset.id = id;
+            setSprite(image, id);
+        }
     }
+}
+
+// The partner (chosen on the trainer card, else the first Pokémon seen) rides along in the
+// header and hops whenever a Pokémon is opened.
+const partnerElement = document.getElementById("dexPartner");
+
+function currentPartner() {
+    const partner = readStored(TRAINER_KEY, {}).partner;
+    return seen.has(partner) ? partner : [...seen][0];
+}
+
+export function hopPartner() {
+    showPartner(currentPartner());
+    partnerElement.classList.remove("hop");
+    void partnerElement.offsetWidth; // restart the animation
+    partnerElement.classList.add("hop");
 }
 
 function saveTrainer(changes) {
@@ -289,6 +307,7 @@ async function shareTrainerCard() {
 }
 
 export function initProgress() {
+    showPartner(currentPartner());
     document.getElementById("trainerShareBtn").addEventListener("click", shareTrainerCard);
     ringElement.addEventListener("click", () => {
         renderTrainerCard();

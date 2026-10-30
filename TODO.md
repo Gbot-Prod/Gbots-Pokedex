@@ -15,7 +15,11 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Trainer card step 5: render the card to a PNG (canvas) so it can be shared as an image, not just text
-- [ ] Partner Pokémon: show the chosen partner's small sprite beside the completion ring in the header, hopping when you open a Pokémon
+- [ ] Partner step 2: the partner reacts to what you open — a heart over it when you view its own evolution line, a ⚡ when you open a type it's weak to
+- [ ] Trainer card holo step 2: a pointer-following sheen across the holo card (reuse the main card's tilt glare), off under reduced motion
+- [ ] Tile radar step 2: tint the radar fill with the second type (dual types read at a glance) and show the exact stat on hover of each axis label
+- [ ] Header ring: a tiny sparkle burst on the ring each time a never-seen Pokémon is counted
+- [ ] Retro mode polish: pixel-font labels on the region banners and a dot-matrix scanline overlay on the card art
 - [ ] Tile flip step 4: on phones, a long-press flips a tile (with a short vibration where supported) instead of hover
 - [ ] National Dex finale: a special gold theme for the device header once all 1,025 are seen
 - [ ] Unseen filter step 2: a "Surprise me" button that opens a random unseen Pokémon (from the current filters)
@@ -201,3 +205,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region banners: a gold "complete" ribbon and crown on banners whose region is 100% seen (2026-10-30) — complete regions get a gold glow and a diagonal "★ COMPLETE" corner ribbon
 - [x] Tile flip step 3: a tiny stat radar instead of bars on wide screens (2026-10-30) — screens ≥900px show a gold hexagon radar (6 labelled axes, scaled to 150) on the tile back instead of the bars; phones keep the bars
 - [x] Trainer card step 4: a "Card style" picker (classic red, holo foil, retro green) that restyles the trainer card, saved with the trainer (2026-10-30) — "Card style" select: classic red, holo foil (animated rainbow border + violet glow, still under reduced motion) or retro Game Boy greens with a pixel-font heading; saved with the trainer
+- [x] Partner Pokémon: show the chosen partner's small sprite beside the completion ring in the header, hopping when you open a Pokémon (2026-10-30) — the trainer card's partner (or first seen Pokémon) rides beside the ring in the header and hops on every Pokémon opened (still under reduced motion); narrow phones shrink partner and title so nothing clips

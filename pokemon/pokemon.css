@@ -2587,6 +2587,61 @@ img.animatedSmall {
     font-size: 0.5rem;
 }
 
+/* Partner Pokémon riding in the header */
+#dexPartner {
+    flex: none;
+    z-index: 1;
+    width: 48px;
+    height: 48px;
+    margin: -0.3rem 0 0 -0.2rem;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+#dexPartner[hidden] {
+    display: none;
+}
+
+#dexPartner.hop {
+    animation: partnerHop 0.6s ease-out;
+}
+
+/* Narrow phones: make room for the partner beside the title. */
+@media (max-width: 420px) {
+    #dexPartner {
+        width: 38px;
+        height: 38px;
+        margin-left: -0.4rem;
+    }
+
+    .dexTitle {
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+    }
+
+    :root[data-theme="retro"] .dexDevice .dexTitle {
+        font-size: 0.55rem;
+    }
+}
+
+@keyframes partnerHop {
+    30% {
+        transform: translateY(-12px) rotate(-6deg);
+    }
+    55% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-5px) rotate(4deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #dexPartner.hop {
+        animation: none;
+    }
+}
+
 /* Per-region "seen" bar on each region banner */
 .regionProgress {
     display: flex;

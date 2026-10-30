@@ -14,7 +14,7 @@ import {
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
 import { initPotd, setPotdVisible } from "./potd.js";
-import { initProgress, markSeen } from "./progress.js";
+import { hopPartner, initProgress, markSeen } from "./progress.js";
 import { initQuiz } from "./quiz.js";
 import { initShinyHunt } from "./shinyhunt.js";
 import { initTypeChart, showTypeInChart } from "./typechart.js";
@@ -387,6 +387,7 @@ function renderPokemon(data, query) {
     updateTeamButton();
     addToRecent(currentPokemon);
     markSeen(currentDexNumber);
+    hopPartner();
     announceResult(data);
     document.title = formatName(data.name) + " " + formatDexNumber(currentDexNumber) + " · Pokédex";
     prevButton.disabled = currentDexNumber <= 1;

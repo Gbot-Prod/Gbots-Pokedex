@@ -739,6 +739,7 @@ test("the completion ring opens a trainer card", async () => {
     assert.equal(await page.locator("#trainerCardStats li").count(), 6);
     await page.fill("#trainerName", "Gbot");
     assert.equal(await page.inputValue("#trainerPartner"), "25");
+    assert.equal(await page.isVisible("#dexPartner"), true);
     assert.equal(await page.isVisible("#trainerAvatar"), true);
     await page.selectOption("#trainerStyle", "holo");
     assert.equal(await page.getAttribute("#trainerCard", "data-style"), "holo");
