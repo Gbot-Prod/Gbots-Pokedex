@@ -186,3 +186,8 @@ test("shouldOfferPartner fires once, on the fifth view of a non-partner", async 
     assert.equal(shouldOfferPartner(6, 25, 6), false);
     assert.equal(shouldOfferPartner(5, 6, 6), false);
 });
+
+test("affectionHearts grows one heart every three views, up to five", async () => {
+    const { affectionHearts } = await import("../pokemon/progress.js");
+    assert.deepEqual([undefined, 2, 3, 9, 12, 40].map(affectionHearts), [1, 1, 2, 4, 5, 5]);
+});

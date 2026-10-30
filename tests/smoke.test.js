@@ -817,6 +817,9 @@ test("opening a Pokémon five times offers to make it your partner", async () =>
     await page.click("#partnerOfferYes");
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("pokedex:trainer:v1")).partner), 25);
     assert.equal(await page.isHidden("#partnerOffer"), true);
+    await page.click("#dexProgress");
+    assert.equal(await page.getAttribute("#trainerAffection", "aria-label"), "Affection 2 of 5");
+    await page.click("#trainerCardClose");
 });
 
 test("the unseen-only filter hides Pokémon you've already opened", async () => {

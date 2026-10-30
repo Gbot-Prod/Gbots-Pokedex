@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Partner affection: count views of the partner and show hearts (1–5) on the trainer card avatar
 - [ ] Trainer card image step 3: include the card style's flourishes in the PNG (holo rainbow edge, retro scanlines)
 - [ ] "Today" panel on the landing page: Pokémon of the day, your streak and one unseen Pokémon suggestion side by side
 - [ ] Holo foil for favourites: favourite Pokémon tiles in the browse grid get a subtle rainbow edge
@@ -216,3 +215,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Trainer card: a "member since" date (first Pokémon seen) and a daily-visit streak counter (2026-10-30) — visits are recorded per local day (pokedex:visits:v1); the card shows "Member since <date> · 🔥 N-day streak (best M)"; streak resets after a missed day
 - [x] Streak rewards: at 7 and 30 days the trainer card earns a flame badge and the device LEDs glow orange for the day (2026-10-30) — 🔥 week-flame and ☄️ month-blaze badges on the trainer card for best streaks of 7/30 days; a running 7+ day streak turns the header LEDs flickering orange (html.onFire). Also fixed the header title overflowing by 16px on 375px phones (tighter gaps; title hidden below 360px)
 - [x] Partner step 5: let the partner follow you — if you open the same Pokémon 5 times, offer to make it your partner (2026-10-30) — views are counted per species (pokedex:views:v1); on the 5th view of a non-partner a pink "💕 X seems to like you! Make it your partner?" offer appears under the name, with Make partner (partner hops and ❤️) or ✕
+- [x] Partner affection: count views of the partner and show hearts (1–5) on the trainer card avatar (2026-10-30) — ♥♥♥♡♡ row under the trainer card avatar (role=img "Affection N of 5"): one heart plus one more per 3 views of the partner, max 5

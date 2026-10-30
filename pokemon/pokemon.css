@@ -3463,6 +3463,35 @@ img.animatedSmall {
     margin: 1rem 1rem 0;
 }
 
+.trainerAvatarWrap {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+#trainerAffection {
+    margin: 0.3rem 0 0;
+    color: #e11d63;
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+    line-height: 1;
+}
+
+:root[data-theme="dark"] #trainerCard:not([data-style="retro"]) #trainerAffection {
+    color: #ff8fb5;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) #trainerCard:not([data-style="retro"]) #trainerAffection {
+        color: #ff8fb5;
+    }
+}
+
+#trainerCard[data-style="retro"] #trainerAffection {
+    color: #0f380f;
+}
+
 #trainerAvatar {
     flex: none;
     width: 96px;

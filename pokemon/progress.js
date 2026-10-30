@@ -259,6 +259,7 @@ function renderTrainerProfile() {
     }
     showPartner(partner);
     applyCardStyle(trainer.style);
+    renderAffection(partner);
 }
 
 const CARD_STYLES = ["classic", "holo", "retro"];
@@ -354,6 +355,23 @@ function countView(dexNumber) {
         // counts just won't persist
     }
     return views[dexNumber];
+}
+
+// Affection hearts (1–5) grow with how often you open your partner: one more every 3 views.
+export function affectionHearts(viewCount) {
+    return Math.min(5, 1 + Math.floor((viewCount ?? 0) / 3));
+}
+
+function renderAffection(partner) {
+    const element = document.getElementById("trainerAffection");
+    element.hidden = !partner;
+    if (!partner) {
+        return;
+    }
+    const hearts = affectionHearts(views[partner]);
+    element.textContent = "♥".repeat(hearts) + "♡".repeat(5 - hearts);
+    element.setAttribute("aria-label", "Affection " + hearts + " of 5");
+    element.setAttribute("role", "img");
 }
 
 export function shouldOfferPartner(viewCount, dexNumber, partner) {
