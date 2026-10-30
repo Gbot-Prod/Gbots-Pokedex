@@ -728,11 +728,16 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
 });
 
 test("the completion ring opens a trainer card", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
     await page.click("#dexProgress");
     await page.waitForSelector("#trainerCard[open]");
     assert.match(await page.textContent("#trainerCardSeen"), /of 1025 Pokémon seen/);
     assert.equal(await page.locator("#trainerCardRegions li").count(), 9);
     assert.equal(await page.locator("#trainerCardStats li").count(), 6);
+    await page.fill("#trainerName", "Gbot");
+    assert.equal(await page.inputValue("#trainerPartner"), "25");
+    assert.equal(await page.isVisible("#trainerAvatar"), true);
     await page.click("#trainerCardClose");
     await page.waitForSelector("#trainerCard:not([open])", { state: "attached" });
 });

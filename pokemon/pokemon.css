@@ -3153,6 +3153,75 @@ img.animatedSmall {
     cursor: pointer;
 }
 
+.trainerProfile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 1rem 0;
+}
+
+#trainerAvatar {
+    flex: none;
+    width: 96px;
+    height: 96px;
+    border: 4px solid #ffd447;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, #ffffff, #b9d8ff 60%, #5871c1);
+    image-rendering: pixelated;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+#trainerAvatar[hidden] {
+    display: none;
+}
+
+.trainerFields {
+    display: grid;
+    flex: 1;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.trainerFields label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+#trainerName,
+#trainerPartner {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    border: 2px solid #c9b46a;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1d2340;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+#trainerName {
+    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+}
+
+:root[data-theme="dark"] :is(#trainerName, #trainerPartner) {
+    border-color: #5a6390;
+    background: #2f3654;
+    color: #f2f4ff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) :is(#trainerName, #trainerPartner) {
+        border-color: #5a6390;
+        background: #2f3654;
+        color: #f2f4ff;
+    }
+}
+
 #trainerCardSeen {
     margin: 0.9rem 1rem 0.5rem;
     font-size: 1.1rem;

@@ -1,9 +1,11 @@
 // Pokédex completion: every species you open is remembered (localStorage) and shown as a
 // ring in the device header and a progress bar on each region banner.
+import { getSpeciesSlugs, setSprite } from "./api.js";
 import { makeConfetti } from "./effects.js";
-import { GENERATIONS, MAX_DEX_NUMBER } from "./utils.js";
+import { GENERATIONS, MAX_DEX_NUMBER, formatDexNumber, speciesDisplayName } from "./utils.js";
 
 const SEEN_KEY = "pokedex:seen:v1";
+const TRAINER_KEY = "pokedex:trainer:v1";
 const RING_RADIUS = 18;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
 
@@ -146,7 +148,52 @@ function readStored(key, fallback) {
     }
 }
 
+// Trainer name and partner Pokémon (any seen species; defaults to the first one seen).
+function renderTrainerProfile() {
+    const trainer = readStored(TRAINER_KEY, {});
+    const nameInput = document.getElementById("trainerName");
+    const partnerSelect = document.getElementById("trainerPartner");
+    nameInput.value = trainer.name ?? "";
+    const seenIds = [...seen].sort((a, b) => a - b);
+    const partner = seen.has(trainer.partner) ? trainer.partner : [...seen][0];
+    const label = (id, slugs) => {
+        const slug = slugs?.get(id);
+        return formatDexNumber(id) + " " + (slug ? speciesDisplayName(slug) : "");
+    };
+    const fillPartners = (slugs) => {
+        partnerSelect.replaceChildren(
+            ...seenIds.map((id) => new Option(label(id, slugs).trim(), id, false, id === partner)),
+        );
+    };
+    fillPartners(null);
+    getSpeciesSlugs()
+        .then(fillPartners)
+        .catch(() => {});
+    partnerSelect.disabled = seenIds.length === 0;
+    if (seenIds.length === 0) {
+        partnerSelect.append(new Option("Open a Pokémon first", ""));
+    }
+    showPartner(partner);
+}
+
+function showPartner(id) {
+    const avatar = document.getElementById("trainerAvatar");
+    avatar.hidden = !id;
+    if (id) {
+        setSprite(avatar, id);
+    }
+}
+
+function saveTrainer(changes) {
+    try {
+        localStorage.setItem(TRAINER_KEY, JSON.stringify({ ...readStored(TRAINER_KEY, {}), ...changes }));
+    } catch {
+        // the card just won't remember it
+    }
+}
+
 function renderTrainerCard() {
+    renderTrainerProfile();
     const stats = completionStats(seen);
     const hunt = readStored("pokedex:shiny-hunt:v1", {});
     const quiz = readStored("pokedex:quiz:v1", {});
@@ -192,6 +239,14 @@ export function initProgress() {
         trainerCard.showModal();
     });
     document.getElementById("trainerCardClose").addEventListener("click", () => trainerCard.close());
+    document.getElementById("trainerName").addEventListener("input", (event) => {
+        saveTrainer({ name: event.target.value.trim() });
+    });
+    document.getElementById("trainerPartner").addEventListener("change", (event) => {
+        const id = Number(event.target.value);
+        saveTrainer({ partner: id });
+        showPartner(id);
+    });
     // Clicking the backdrop (outside the card) closes it too.
     trainerCard.addEventListener("click", (event) => event.target === trainerCard && trainerCard.close());
     ringElement.querySelector(".dexProgressFill").style.strokeDasharray = String(RING_LENGTH);
