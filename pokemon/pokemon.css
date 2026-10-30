@@ -1200,6 +1200,19 @@ kbd {
     font-weight: 600;
 }
 
+.unseenToggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+}
+
+.unseenToggle input {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: #1f8a4c;
+}
+
 #browseStatus:empty {
     display: none;
 }

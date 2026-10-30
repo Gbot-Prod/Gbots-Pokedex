@@ -91,6 +91,7 @@ const browseNextButton = document.getElementById("browseNextBtn");
 const browseStatusElement = document.getElementById("browseStatus");
 const typeFilterElement = document.getElementById("typeFilter");
 const generationFilterElement = document.getElementById("generationFilter");
+const unseenFilterElement = document.getElementById("unseenFilter");
 const sortOrderElement = document.getElementById("sortOrder");
 
 const SORTERS = {
@@ -149,6 +150,9 @@ async function applyBrowseFilters() {
     if (generation) {
         entries = entries.filter((entry) => entry.id >= generation.first && entry.id <= generation.last);
     }
+    if (unseenFilterElement.checked) {
+        entries = entries.filter((entry) => !hasSeen(entry.id));
+    }
 
     try {
         if (type) {
@@ -169,7 +173,11 @@ async function applyBrowseFilters() {
 
     browseEntries = [...entries].sort(SORTERS[sortOrderElement.value] ?? SORTERS.number);
     browsePage = 0;
-    browseStatusElement.textContent = entries.length ? "" : "No Pokémon match these filters.";
+    browseStatusElement.textContent = entries.length
+        ? ""
+        : unseenFilterElement.checked
+          ? "🎉 You've seen every Pokémon that matches these filters!"
+          : "No Pokémon match these filters.";
     renderBrowsePage();
 }
 
@@ -317,6 +325,7 @@ function renderTileBack(back, entry, pokemon) {
 
 typeFilterElement.addEventListener("change", applyBrowseFilters);
 generationFilterElement.addEventListener("change", applyBrowseFilters);
+unseenFilterElement.addEventListener("change", applyBrowseFilters);
 
 // --- Region showcase ---------------------------------------------------------------------
 // One banner per region with its starter trio; clicking filters the grid to that generation.

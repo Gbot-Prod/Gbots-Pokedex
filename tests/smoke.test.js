@@ -727,6 +727,17 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
     assert.equal(await page.locator('#browseGrid .browseTile[data-dex="1"] .tileSeen').count(), 0);
 });
 
+test("the unseen-only filter hides Pokémon you've already opened", async () => {
+    await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
+    await page.reload();
+    await page.waitForSelector('#browseGrid .browseTile[data-id="1"]');
+    await page.check("#unseenFilter");
+    await page.waitForFunction(() => document.querySelector("#browseGrid .browseTile")?.dataset.id === "3");
+    assert.equal(await page.locator('#browseGrid .browseTile[data-id="4"]').count(), 0);
+    await page.uncheck("#unseenFilter");
+    await page.waitForSelector('#browseGrid .browseTile[data-id="1"]');
+});
+
 test("the shiny hunt counts encounters and collects shinies", async () => {
     await page.click("#huntEncounterBtn");
     await page.waitForSelector("#huntStage:not([hidden])");
