@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Browse grid: update tiles in place when names/types arrive instead of re-rendering the whole page (fewer image reloads, no flicker)
 - [ ] Gold everything: once all tiered badges are gold, the trainer card border turns animated gold foil regardless of the chosen style
 - [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
 - [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
@@ -259,3 +258,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Hall of fame step 2: a slow gold shimmer sweeping across the banner, and the gold badges' icons enlarged in it (static under reduced motion) (2026-10-30) — a band of light sweeps across the gold banner every 3.5 s (none under reduced motion) and the gold badges' icons are enlarged with a drop shadow
 - [x] Trainer card "what's new": a small dot on the completion ring when a badge was earned/tiered up but the card hasn't been opened since (2026-10-30) — a pulsing green dot on the completion ring (and " · new badge!" in its label) while any earned/tiered-up badge hasn't been shown on the trainer card yet; opening the card clears it
 - [x] Shiny hunt: show the current Shiny hunter tier and progress to the next ("3 / 5 for bronze") right above the Encounter button (2026-10-30) — "✨ Shiny hunter badge: 7 / 15 for silver" above the hunt controls (gold message once maxed); thresholds shared via SHINY_TIERS in progress.js
+- [x] Browse grid: update tiles in place when names/types arrive instead of re-rendering the whole page (fewer image reloads, no flicker) (2026-10-30) — fillTileDetails() fills number/name/seen tick/type icons on existing tiles when the species names or type lists arrive (only a name sort re-renders); first tile stays the same element (new smoke test fails on the old code), and the missing-sprite test is strict again (exactly one request)

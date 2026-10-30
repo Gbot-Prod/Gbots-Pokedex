@@ -463,6 +463,15 @@ test("the search combobox suggests Pokémon and can be driven with the keyboard"
     assert.deepEqual(pageErrors, []);
 });
 
+test("browse tiles are filled in place as names and types arrive, not re-rendered", async () => {
+    await page.evaluate(() => window.sessionStorage.clear());
+    await page.reload();
+    const firstTile = await page.waitForSelector("#browseGrid .browseTile");
+    await page.waitForSelector("#browseGrid .browseTile .tileTypes");
+    assert.equal(await firstTile.evaluate((tile) => tile.isConnected), true);
+    assert.equal(await firstTile.evaluate((tile) => tile.querySelector(".tileName").textContent), "Bulbasaur");
+});
+
 test("a sprite that fails to load is remembered and not requested again", async () => {
     let requests = 0;
     // Ivysaur (#2) appears only once on the page (Bulbasaur is also in the region strip).
@@ -474,8 +483,7 @@ test("a sprite that fails to load is remembered and not requested again", async 
     await page.waitForFunction(() =>
         JSON.parse(localStorage.getItem("pokedex:missing-sprites:v1") ?? "[]").includes(2),
     );
-    // The grid can re-render before the first 404 is recorded, so allow a repeat on this first load.
-    assert.ok(requests >= 1 && requests <= 2);
+    assert.equal(requests, 1); // tiles are updated in place, not re-rendered, so it's requested once
     const firstVisit = requests;
 
     await page.reload();

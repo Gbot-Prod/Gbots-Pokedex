@@ -36,9 +36,7 @@ let speciesSlugs = null;
 async function loadSpeciesSlugs() {
     try {
         speciesSlugs = await getSpeciesSlugs();
-        renderBrowsePage();
-        renderFavorites();
-        renderRecent();
+        refreshTiles();
     } catch {
         // tiles keep the title-cased Pokémon names
     }
@@ -64,9 +62,7 @@ async function loadTileTypes() {
             }
         }
         typesById = map;
-        renderBrowsePage();
-        renderFavorites();
-        renderRecent();
+        refreshTiles();
     } catch {
         // tiles simply stay without type icons
     }
@@ -195,6 +191,46 @@ function renderBrowsePage() {
     browseNextButton.disabled = browsePage >= pageCount - 1;
 }
 
+// Number, name, seen tick and type icons: everything on a tile that improves once the species
+// names and type lists arrive. Safe to call again on an existing tile (it only fills gaps), so
+// tiles are updated in place instead of re-rendered (no image reloads or flicker).
+function fillTileDetails(button, entry) {
+    const dexNumber = entrySpecies(entry, speciesSlugs)?.id ?? entry.id;
+    button.dataset.dex = dexNumber;
+    button.querySelector(".tileNumber").textContent = formatDexNumber(dexNumber);
+    button.querySelector(".tileName").textContent = tileName(entry);
+    if (hasSeen(dexNumber) && !button.querySelector(".tileSeen")) {
+        button.querySelector(".tileName").after(seenMark());
+    }
+
+    const types = typesById?.get(entry.id)?.filter(Boolean) ?? [];
+    if (types.length && !button.querySelector(".tileTypes")) {
+        const typeIcons = document.createElement("span");
+        typeIcons.className = "tileTypes";
+        for (const type of types) {
+            const icon = document.createElement("img");
+            icon.src = "assets/" + TYPE_ICONS[type];
+            icon.alt = formatName(type) + " type";
+            icon.title = formatName(type);
+            icon.width = 20;
+            icon.height = 20;
+            typeIcons.append(icon);
+        }
+        (button.querySelector(".tileSeen") ?? button.querySelector(".tileName")).after(typeIcons);
+    }
+}
+
+// Re-fills every tile on the page (browse grid, favorites, recent) after names or types load.
+// A name sort can change the grid's order, so that case re-renders the page instead.
+function refreshTiles() {
+    if (sortOrderElement.value.startsWith("name")) {
+        renderBrowsePage();
+    }
+    for (const button of document.querySelectorAll(".browseTile")) {
+        fillTileDetails(button, { id: Number(button.dataset.id), name: button.dataset.name });
+    }
+}
+
 function createBrowseTile(entry) {
     const item = document.createElement("li");
     const button = document.createElement("button");
@@ -210,34 +246,12 @@ function createBrowseTile(entry) {
     sprite.height = 96;
     sprite.loading = "lazy";
 
-    const dexNumber = entrySpecies(entry, speciesSlugs)?.id ?? entry.id;
-    button.dataset.dex = dexNumber;
     const number = document.createElement("small");
-    number.textContent = formatDexNumber(dexNumber);
-
+    number.className = "tileNumber";
     const name = document.createElement("span");
-    name.textContent = tileName(entry);
-
+    name.className = "tileName";
     button.append(sprite, number, name);
-    if (hasSeen(dexNumber)) {
-        button.append(seenMark());
-    }
-
-    const types = typesById?.get(entry.id)?.filter(Boolean) ?? [];
-    if (types.length) {
-        const typeIcons = document.createElement("span");
-        typeIcons.className = "tileTypes";
-        for (const type of types) {
-            const icon = document.createElement("img");
-            icon.src = "assets/" + TYPE_ICONS[type];
-            icon.alt = formatName(type) + " type";
-            icon.title = formatName(type);
-            icon.width = 20;
-            icon.height = 20;
-            typeIcons.append(icon);
-        }
-        button.append(typeIcons);
-    }
+    fillTileDetails(button, entry);
 
     button.addEventListener("click", () => {
         showPokemon(entry.id);
