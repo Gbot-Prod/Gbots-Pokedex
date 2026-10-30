@@ -16,7 +16,6 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] pokedex:seen event step 2: let other parts listen too (shiny hunt, quiz region filter) instead of each reading storage on render
 - [ ] Hover-contrast test step 2: run the same hover pass over the browse filters, region strip and team builder buttons
-- [ ] Unseen count: make "(10 left in Kanto)" a button that opens the first missing Pokémon
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
 - [ ] Region strip: arrow keys move between banners (roving tabindex) so the 9 banners + chip don't take 10 Tab presses
 - [ ] Jump menu: also offer "Top 5" and "Calendar" pills when the card is tall enough to need them (desktop shows all sections anyway)
@@ -295,3 +294,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Unseen filter: show "N left" next to the checkbox when a region is selected, updating as Pokémon are seen (2026-10-30) — "(10 left in Kanto)" / "(all seen!)" beside Unseen only while a region is selected; progress.js dispatches a pokedex:seen event so it drops live as Pokémon are seen
 - [x] Test suite time is up to ~117 s (the hover-contrast pass adds ~27 s): run the axe/hover tests in a separate parallel file so the core suite stays fast (2026-10-30) — moved the shared server/browser/mocking setup into tests/harness.js and the axe + hover-contrast tests into tests/a11y.test.js, which node:test runs in parallel: same 125 tests, ~117 s → ~83 s; check:live covers both files
 - [x] Quiz combo: in the 60-second challenge, 3 correct in a row shows "Combo ×3!" and doubles the next point (2026-10-30) — from 3 correct in a row the challenge's floating bubble becomes an orange "Combo ×N!" (resets on a miss). Kept it visual only: doubling points would change what "Best 60s run" (Pokémon named) means; verified live with 3 real correct answers
+- [x] Unseen count: make "(10 left in Kanto)" a button that opens the first missing Pokémon (2026-10-30) — the count is now its own link-style button ("11 left in Kanto →", next to the Unseen only label) that opens the region's first unseen Pokémon; disabled "All seen! 🎉" once the region is complete

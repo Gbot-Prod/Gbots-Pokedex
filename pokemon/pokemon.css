@@ -1281,16 +1281,24 @@ kbd {
     font-weight: 600;
 }
 
-.unseenToggle {
+.unseenToggle,
+.unseenToggle label {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
+}
+
+.unseenToggle label {
     cursor: pointer;
 }
 
 #unseenCount {
-    font-weight: 600;
-    opacity: 0.9;
+    font-weight: 700;
+}
+
+#unseenCount:disabled {
+    text-decoration: none;
+    cursor: default;
 }
 
 .unseenToggle input {

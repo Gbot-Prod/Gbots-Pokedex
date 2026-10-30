@@ -139,18 +139,33 @@ async function getTypeMemberIds(type) {
     return typeMembersCache.get(type);
 }
 
-// "(12 left)" beside "Unseen only" while a region is selected.
+// "(12 left in Kanto)" beside "Unseen only" while a region is selected; clicking it opens the
+// first Pokémon of that region you haven't seen yet.
+const unseenCountButton = document.getElementById("unseenCount");
+let firstUnseenId = null;
+
 function updateUnseenCount() {
     const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
-    const left = generation
+    const missing = generation
         ? nationalDexEntries.filter(
               (entry) => entry.id >= generation.first && entry.id <= generation.last && !hasSeen(entry.id),
-          ).length
-        : null;
-    document.getElementById("unseenCount").textContent =
-        left === null ? "" : left ? "(" + left + " left in " + generation.region + ")" : "(all seen!)";
+          )
+        : [];
+    firstUnseenId = missing[0]?.id ?? null;
+    unseenCountButton.hidden = !generation;
+    unseenCountButton.disabled = !firstUnseenId;
+    unseenCountButton.textContent = missing.length
+        ? missing.length + " left in " + (generation?.region ?? "") + " →"
+        : "All seen! 🎉";
+    unseenCountButton.title = firstUnseenId ? "Open the first one you haven't seen" : "";
 }
 
+unseenCountButton.addEventListener("click", () => {
+    if (firstUnseenId) {
+        showPokemon(firstUnseenId);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+});
 window.addEventListener("pokedex:seen", updateUnseenCount);
 
 async function applyBrowseFilters() {
