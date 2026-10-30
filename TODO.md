@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Top 5 step 2: "Collector" achievements on the trainer card when a Pokémon reaches 25 / 50 views
 - [ ] Trainer card tabs: split the growing card into "Profile", "Progress" and "Badges" tabs so it fits phones without long scrolling
 - [ ] Backup/restore: export all saved progress (seen, visits, trainer, shinies, team) to a JSON file and import it on another device
 - [ ] Header on tiny phones: a compact "dex mode" (smaller lens, LEDs in a column) instead of hiding the title below 360px
@@ -226,3 +225,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Partner offer polish: remember a declined offer per Pokémon (don't ask again for 20 more views) (2026-10-30) — ✕ remembers the view count per Pokémon (pokedex:partner-declined:v1) and the offer comes back once, 20 views later
 - [x] Calendar step 2: colour each calendar day by how many new Pokémon were seen that day (heat-map shades), with the count in the tooltip (2026-10-30) — new Pokémon seen are counted per day (pokedex:seen-days:v1); visited days are shaded in 5 heat levels (pale → glowing gold, greens in retro) with "N new Pokémon" in the tooltip
 - [x] Cameo step 2: clicking the partner cameo on the card art makes the partner "cheer" (hop + 🎉 bubble) and shows the matchup between the two (2026-10-30) — the art-window cameo is a button: clicking makes it hop, the header partner says 🎉, and a pill shows "Charizard vs Venusaur: hits 2×, takes 1×" (best multiplier each way) for 5 s
+- [x] Top 5 step 2: "Collector" achievements on the trainer card when a Pokémon reaches 25 / 50 views (2026-10-30) — 📚 Collector (25 views of one Pokémon) and 🏆 Superfan (50) badges join the streak flames on the trainer card, in purple

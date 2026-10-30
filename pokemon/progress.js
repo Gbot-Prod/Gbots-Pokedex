@@ -250,6 +250,17 @@ function recordVisit() {
     document.documentElement.classList.toggle("onFire", visits.streak >= 7);
 }
 
+// Collector badges for opening one Pokémon many times: [icon, label].
+export function collectorBadges(viewCounts) {
+    const most = Math.max(0, ...Object.values(viewCounts));
+    return [
+        [25, "📚", "Collector: one Pokémon opened 25 times"],
+        [50, "🏆", "Superfan: one Pokémon opened 50 times"],
+    ]
+        .filter(([times]) => most >= times)
+        .map(([, icon, label]) => [icon, label]);
+}
+
 // Flame badges for the best streak reached: [icon, label].
 export function streakBadges(best) {
     return [
@@ -650,9 +661,10 @@ function renderTrainerCard() {
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
     document.getElementById("trainerCardBadges").replaceChildren(
-        ...streakBadges(visits.best).map(([icon, label]) => {
+        ...[...streakBadges(visits.best), ...collectorBadges(views)].map(([icon, label]) => {
             const badge = document.createElement("li");
             badge.title = label;
+            badge.classList.toggle("collector", label.includes("opened"));
             badge.innerHTML = '<span aria-hidden="true"></span><span class="visuallyHidden"></span>';
             badge.children[0].textContent = icon;
             badge.children[1].textContent = label;

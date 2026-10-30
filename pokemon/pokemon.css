@@ -3759,6 +3759,12 @@ img.animatedSmall {
     box-shadow: 0 0 12px rgba(255, 138, 31, 0.7);
 }
 
+/* Collector badges are blue-purple to set them apart from the streak flames */
+#trainerCardBadges li.collector {
+    background: radial-gradient(circle at 35% 30%, #e8e2ff, #8b6cff 60%, #4c2fc7);
+    box-shadow: 0 0 12px rgba(139, 108, 255, 0.7);
+}
+
 #trainerCardStats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

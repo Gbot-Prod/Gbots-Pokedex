@@ -231,3 +231,14 @@ test("matchupSummary finds the best hit each way", async () => {
         takes: 1,
     });
 });
+
+test("collectorBadges rewards opening one Pokémon 25 and 50 times", async () => {
+    const { collectorBadges } = await import("../pokemon/progress.js");
+    assert.deepEqual(collectorBadges({}), []);
+    assert.deepEqual(collectorBadges({ 25: 24, 6: 3 }), []);
+    assert.equal(collectorBadges({ 25: 25 }).length, 1);
+    assert.deepEqual(
+        collectorBadges({ 25: 60 }).map(([icon]) => icon),
+        ["📚", "🏆"],
+    );
+});
