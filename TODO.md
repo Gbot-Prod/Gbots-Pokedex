@@ -17,6 +17,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Smoke tests: an axe pass with every trainer card style while hovering its buttons, since hover states can fail contrast (as the jump pills did)
 - [ ] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
+- [ ] Region strip: arrow keys move between banners (roving tabindex) so the 9 banners + chip don't take 10 Tab presses
+- [ ] Jump menu: also offer "Top 5" and "Calendar" pills when the card is tall enough to need them (desktop shows all sections anyway)
+- [ ] Chip celebration: when the last missing Pokémon of the chip's region is seen, the chip bursts into sparkles before the region-complete toast
+- [ ] Test robustness: smoke tests that click animated elements should wait for animationend instead of relying on finite animation length
+- [ ] Unseen filter: show "N left" next to the checkbox when a region is selected, updating as Pokémon are seen
 - [ ] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
