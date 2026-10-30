@@ -14,36 +14,23 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] "Pokémon of the day" hero at the top: deterministic pick from the date, shown as a big holo card with a "See it" button
+- [ ] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation
+- [ ] Card flip: click a corner button to flip the holo card (3D) to a back side with a Poké Ball design and a quick stats summary
+- [ ] Breeding & capture panel from species data: gender-ratio bar, catch-rate gauge, egg groups, hatch steps and growth rate
+- [ ] "Evolve!" button on the evolution chain: white flash + morph animation into the next stage (instant under reduced motion)
 - [ ] Quiz step 2c: "type the name" mode using the search combobox (accept official spellings via normalizeQuery)
 - [ ] Team builder step 2c: drag to reorder slots, and "suggest a member" that patches the worst weakness / biggest offensive gap
 - [ ] Animated sprites step 3: add showdown sprites to the fixtures so the toggle and small animated sprites are covered by offline smoke tests
 - [ ] Theme picker step 2: "Neon night" theme (glowing type-coloured outlines on near-black) and a small theme menu instead of cycling once there are 4+ themes
-- [ ] "Pokémon of the day" hero at the top: deterministic pick from the date, shown as a big holo card with a "See it" button
 - [ ] Battle preview: pick two Pokémon, show who outspeeds, their best STAB move multiplier against each other and a simple "who has the edge" verdict
 - [ ] Optional sound effects (off by default): soft UI blips on navigation and quiz correct/wrong jingles via Web Audio
 - [ ] Daily quiz: the same 10 silhouettes for everyone each day (seeded by the date), with a shareable emoji result grid
-- [ ] Breeding & capture panel from species data: gender-ratio bar, catch-rate gauge, egg groups, hatch steps and growth rate
-- [ ] Card flip: click a corner button to flip the holo card (3D) to a back side with a Poké Ball design and a quick stats summary
-- [ ] "Evolve!" button on the evolution chain: white flash + morph animation into the next stage (instant under reduced motion)
 - [ ] Swipe left/right on phones to go to the previous/next Pokémon, with a slide transition
-- [ ] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading
-- [ ] Region showcase: a strip of region banners (Kanto…Paldea) with each region's starter trio; clicking filters the browse grid by generation
-
-## 1. Bug fixes (do these first)
-
-## 2. Code quality
-
-## 3. Core Pokédex features
-
-## 4. Browsing & discovery
 - [ ] Clicking a type badge (card type icons or matchups) filters the browse grid by that type and scrolls to it
-
-## 5. Design & UX
 - [ ] Forms list can be huge (Pikachu has 16 cap forms, filling a phone screen); show the first ~5 with a "+11 more" toggle
 - [ ] Radar legend: click to pin a highlight (aria-pressed buttons instead of focusable list items)
 - [ ] Main card: use the Poké Ball placeholder when a Pokémon has no artwork at all, instead of hiding the image
-
-## 6. Performance, accessibility & polish
 - [ ] Combobox: Home/End and Page Up/Down in the suggestion list
 - [ ] Lighthouse performance is 0.8 (first paint 3.1 s): self-host or `preload` the Inter font with `font-display: swap`, and defer the browse grid until after the card renders
 - [ ] Tile type icons wait for 18 /type requests on every new session; store the id → types map in localStorage like the name list
@@ -182,3 +169,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team builder step 2b: offensive coverage — a "Your hits" column counting members whose own types hit each type super-effectively, gaps (0) in red; --danger-ink colour token added with AA contrast in both themes (2026-10-29) — unit test
 - [x] Animated sprites step 2: with "▶ Animated" on, the evolution chain and team slots use Showdown GIFs too (setSmallSprite in api.js, live switch via a custom event), falling back to the static sprite when a GIF is missing (2026-10-29)
 - [x] Theme picker step 1: the theme button cycles Light → Dark → Retro; Retro is a Game Boy look (four greens incl. the card, chunky shadows, Press Start 2P headings, pixelated sprites, no particles/sheen), saved per visitor, axe-clean (2026-10-30) — smoke test
+- [x] Pokédex device header: red device frame with a big blue lens and indicator LEDs that pulse while loading (2026-10-29) — search bar framed in a red Pokédex device: glossy blue lens, red/yellow/green LEDs that blink while a Pokémon loads (html.isLoading), hinge line and POKÉDEX label; darker red in dark mode, green in Retro; LEDs static under reduced motion. Also reordered section 0 by visual impact

@@ -688,6 +688,8 @@ function fetchPKMNType(pkmnType, pkmnType2) {
 
 function setLoading(isLoading) {
     loadingElement.classList.toggle("hidden", !isLoading);
+    // The Pokédex device's LEDs blink while a Pokémon loads.
+    document.documentElement.classList.toggle("isLoading", isLoading);
     searchButton.disabled = isLoading;
 }
 

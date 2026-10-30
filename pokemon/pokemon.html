@@ -34,20 +34,29 @@
             <p id="offlineBanner" role="status" hidden>
                 You're offline — Pokémon you've viewed before are still available.
             </p>
-            <form id="searchForm" role="search">
-                <div class="comboboxWrap">
-                    <input
-                        type="text"
-                        id="pokemonLookupInpt"
-                        placeholder="Name or number, e.g. 25"
-                        aria-label="Pokémon name or Pokédex number"
-                        autocomplete="off"
-                    />
+            <header class="dexDevice">
+                <div class="dexTop" aria-hidden="true">
+                    <span class="dexLens"></span>
+                    <span class="dexLed red"></span>
+                    <span class="dexLed yellow"></span>
+                    <span class="dexLed green"></span>
+                    <span class="dexTitle">Pokédex</span>
                 </div>
-                <button type="submit" class="btn" id="getPokemonBtn">Get Pokémon</button>
-                <button type="button" class="btn" id="randomPokemonBtn">Random</button>
-                <button type="button" class="btn" id="clearDataBtn">Clear</button>
-            </form>
+                <form id="searchForm" role="search">
+                    <div class="comboboxWrap">
+                        <input
+                            type="text"
+                            id="pokemonLookupInpt"
+                            placeholder="Name or number, e.g. 25"
+                            aria-label="Pokémon name or Pokédex number"
+                            autocomplete="off"
+                        />
+                    </div>
+                    <button type="submit" class="btn" id="getPokemonBtn">Get Pokémon</button>
+                    <button type="button" class="btn" id="randomPokemonBtn">Random</button>
+                    <button type="button" class="btn" id="clearDataBtn">Clear</button>
+                </form>
+            </header>
 
             <div class="hidden" id="loadingIndicator" role="status">
                 <span class="spinner" aria-hidden="true"></span>

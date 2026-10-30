@@ -2138,3 +2138,153 @@ img.animatedSmall {
 :root[data-theme="retro"] :is(.evolutionMember small, .teamSlot.empty, .browseTile small, .comboboxOption small) {
     opacity: 1;
 }
+
+/* --- Pokédex device header ---------------------------------------------------------------
+   The search bar sits in a red Pokédex frame with a glossy blue lens and three LEDs that
+   blink while a Pokémon loads (html.isLoading, set in setLoading). */
+
+.dexDevice {
+    --dex-red: #d62f2f;
+    --dex-red-dark: #8f1515;
+    position: relative;
+    margin: 0 0 1rem;
+    padding: 0.9rem 1rem 1rem;
+    border-radius: 22px 22px 14px 14px;
+    background: linear-gradient(160deg, #ef4b4b, var(--dex-red) 45%, #b11f1f);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.3),
+        inset 0 3px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -5px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* the hinge line under the lens, like the original device */
+.dexDevice::after {
+    content: "";
+    position: absolute;
+    left: 7.5rem;
+    right: 1rem;
+    top: 3.2rem;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--dex-red-dark);
+    opacity: 0.6;
+}
+
+.dexTop {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    height: 3.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.dexLens {
+    flex: none;
+    width: 3.4rem;
+    height: 3.4rem;
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, #ffffff 0 12%, #8ad4ff 16%, #1f7ae0 52%, #0b3c8c 100%);
+    box-shadow:
+        0 0 0 3px #222,
+        0 0 14px rgba(80, 180, 255, 0.7);
+}
+
+.dexLed {
+    flex: none;
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-top: 0.2rem;
+    border: 2px solid #222;
+    border-radius: 50%;
+}
+
+.dexLed.red {
+    background: #ff5050;
+}
+
+.dexLed.yellow {
+    background: #ffd447;
+}
+
+.dexLed.green {
+    background: #5be37a;
+}
+
+:root.isLoading .dexLed {
+    animation: ledBlink 0.6s ease-in-out infinite alternate;
+}
+
+:root.isLoading .dexLed.yellow {
+    animation-delay: 0.2s;
+}
+
+:root.isLoading .dexLed.green {
+    animation-delay: 0.4s;
+}
+
+@keyframes ledBlink {
+    from {
+        filter: brightness(0.6);
+    }
+    to {
+        filter: brightness(1.4);
+        box-shadow: 0 0 10px currentColor;
+    }
+}
+
+.dexTitle {
+    margin-left: auto;
+    color: #ffffff;
+    font-family: inter, arial, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 0 var(--dex-red-dark);
+}
+
+.dexDevice #searchForm {
+    padding: 0.5rem;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.18);
+}
+
+:root[data-theme="dark"] .dexDevice {
+    --dex-red: #b52323;
+    --dex-red-dark: #6b0f0f;
+    background: linear-gradient(160deg, #c93636, var(--dex-red) 45%, #861818);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="retro"]) .dexDevice {
+        --dex-red: #b52323;
+        --dex-red-dark: #6b0f0f;
+        background: linear-gradient(160deg, #c93636, var(--dex-red) 45%, #861818);
+    }
+}
+
+:root[data-theme="retro"] .dexDevice {
+    --dex-red-dark: #0f380f;
+    border-radius: 0;
+    background: #306230;
+    box-shadow: 6px 6px 0 #0f380f;
+}
+
+:root[data-theme="retro"] .dexLens {
+    background: #8bac0f;
+    box-shadow: 0 0 0 3px #0f380f;
+}
+
+:root[data-theme="retro"] .dexTitle {
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.9rem;
+    text-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root.isLoading .dexLed {
+        animation: none;
+        filter: brightness(1.3);
+    }
+}
