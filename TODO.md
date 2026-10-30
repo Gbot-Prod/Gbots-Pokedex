@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] All-gold header: when the card is all gold, the header ring and partner aura turn gold too, so the achievement shows outside the card
+- [ ] Browse grid step 2: fade tile names in when they change from the raw form name to the species name, instead of a hard swap
+- [ ] Trainer card step: a compact "summary" mode on phones showing only profile, seen % and badges, with "More" to expand stats/regions/calendar
+- [ ] Gold card PNG: the saved trainer card image uses the gold-foil frame when the card is all gold
+- [ ] Heart hint: tapping the affection hearts explains how to earn more ("open your partner 3 more times for the next heart")
 - [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
 - [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
 - [ ] Quiz: the same "next tier" line for the Quiz whiz badge under the quiz score ("best 12 / 20 for bronze")
