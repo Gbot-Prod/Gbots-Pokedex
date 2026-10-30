@@ -14,11 +14,9 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Region chip step 3: make the chip reachable by keyboard as its own control (move it next to the banner rather than inside the button)
 - [ ] Smoke tests: an axe pass with every trainer card style while hovering its buttons, since hover states can fail contrast (as the jump pills did)
 - [ ] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
-- [ ] Banner heights: keep all region banners the same height when one shows the chip or ribbon (reserve the chip row)
 - [ ] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
@@ -285,3 +283,5 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Quiz tests: use the answer helper to also cover the 60-second challenge's scoring and the Quiz whiz tier line moving up (2026-10-30) — new smoke test answers 3 timed rounds correctly under a fake clock and checks the "N correct" timer, the Time's up! result and "Best 60s run 3"; the New best! test now starts at a 19 streak and checks the Quiz whiz line moving to "20 / 35 for silver"
 - [x] Trainer card: a "jump to" mini menu in the sticky title bar (Profile · Badges · Regions) for quick scrolling on phones (2026-10-30) — Profile · Badges · Regions pills in a second row of the sticky title bar scroll the card to just below the bar (smooth, instant under reduced motion); hover darkens so white text passes contrast in every style (axe caught 4.45:1 on retro)
 - [x] Jump menu step 2: highlight the section currently in view (IntersectionObserver) with aria-current (2026-10-30) — a scroll listener marks the jump pill of the section at the top of the card with aria-current="true" (white pill); the last section wins at the bottom of the scroll since it can't reach the bar
+- [x] Region chip step 3: make the chip reachable by keyboard as its own control (move it next to the banner rather than inside the button) (2026-10-30) — the chip is now its own button (descriptive aria-label) right after its banner, handled by a delegated click on the strip; Tab reaches it and Enter lists that region's unseen Pokémon. It's kept across renders so its bob (now 2 short bobs, not infinite) doesn't restart
+- [x] Banner heights: keep all region banners the same height when one shows the chip or ribbon (reserve the chip row) (2026-10-30) — solved with the chip move: the chip overlays the banner's bottom edge from outside, so all banners stay 131 px tall; the strip has extra bottom padding for it

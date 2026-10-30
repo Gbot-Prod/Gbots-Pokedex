@@ -449,14 +449,9 @@ function renderRegionStrip() {
                 starters.append(sprite);
             }
             button.append(starters, name, gen);
-            button.addEventListener("click", (event) => {
-                // The "Only N to go!" chip jumps straight to the missing ones: region + unseen only.
-                const chip = Boolean(event.target.closest(".regionChip"));
-                const selected = !chip && generationFilterElement.value === String(generation.number);
+            button.addEventListener("click", () => {
+                const selected = generationFilterElement.value === String(generation.number);
                 generationFilterElement.value = selected ? "" : String(generation.number);
-                if (chip) {
-                    unseenFilterElement.checked = true;
-                }
                 applyBrowseFilters();
                 if (!selected) {
                     browseGridElement.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -467,6 +462,19 @@ function renderRegionStrip() {
         }),
     );
 }
+
+// The "Only N to go!" chip (added by progress.js) jumps straight to the missing ones:
+// that region with "Unseen only" ticked.
+document.getElementById("regionStrip").addEventListener("click", (event) => {
+    const chip = event.target.closest(".regionChip");
+    if (!chip) {
+        return;
+    }
+    generationFilterElement.value = chip.dataset.generation;
+    unseenFilterElement.checked = true;
+    applyBrowseFilters();
+    browseGridElement.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 // Keeps the banners' pressed state in step with the generation filter.
 function updateRegionStrip() {

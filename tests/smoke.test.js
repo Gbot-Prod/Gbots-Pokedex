@@ -808,8 +808,8 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
         /^[1-9]\d*\/151 seen$/,
     );
     assert.equal(await page.textContent('.regionBanner[data-generation="9"] .regionProgressText'), "0/120 seen");
-    assert.match(await page.textContent('.regionBanner[data-generation="1"] .regionChip'), /^Only \d+ to go!$/);
-    await page.click('.regionBanner[data-generation="1"] .regionChip');
+    assert.match(await page.textContent('.regionBanner[data-generation="1"] + .regionChip'), /^Only \d+ to go!$/);
+    await page.click('.regionBanner[data-generation="1"] + .regionChip');
     assert.equal(await page.inputValue("#generationFilter"), "1");
     assert.equal(await page.isChecked("#unseenFilter"), true);
     await page.waitForFunction(() => !document.querySelector('#browseGrid .browseTile[data-id="25"]'));

@@ -89,16 +89,27 @@ function render() {
         bar.querySelector(".regionProgressBar span").style.width = (100 * count) / total + "%";
         bar.querySelector(".regionProgressText").textContent = count + "/" + total + " seen";
     }
-    // A nudge on the region closest to complete.
-    document.querySelector(".regionChip")?.remove();
+    // A nudge on the region closest to complete. The chip is kept (and just relabelled) while
+    // it stays on the same region, so its little bob animation doesn't restart on every render.
     const closest = closestRegion(stats.generations);
     const closestBanner = closest && document.querySelector('.regionBanner[data-generation="' + closest.number + '"]');
+    let chip = document.querySelector(".regionChip");
+    if (chip && (!closestBanner || chip.dataset.generation !== String(closest.number))) {
+        chip.remove();
+        chip = null;
+    }
     if (closestBanner) {
-        const chip = document.createElement("span");
-        chip.className = "regionChip";
-        chip.textContent = "Only " + (closest.total - closest.seen) + " to go!";
-        chip.title = "Show the ones you haven't seen";
-        closestBanner.append(chip);
+        // Its own button beside the banner (not inside it), so keyboard users can reach it too.
+        if (!chip) {
+            chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "regionChip";
+            chip.dataset.generation = closest.number;
+            closestBanner.after(chip);
+        }
+        const left = closest.total - closest.seen;
+        chip.textContent = "Only " + left + " to go!";
+        chip.setAttribute("aria-label", "Only " + left + " to go: show the unseen Pokémon of this region");
     }
 }
 

@@ -3258,7 +3258,7 @@ img.animatedSmall {
     display: flex;
     gap: 0.6rem;
     margin: 0 0 1rem;
-    padding: 0.2rem 0.2rem 0.6rem;
+    padding: 0.2rem 0.2rem 1.1rem; /* room for the "Only N to go!" chip below a banner */
     overflow-x: auto;
     list-style: none;
     scroll-snap-type: x proximity;
@@ -3285,9 +3285,21 @@ img.animatedSmall {
     transform: translateY(-3px);
 }
 
+#regionStrip li {
+    position: relative;
+}
+
+/* Sits on the banner's bottom edge, so the banners keep one height */
 .regionChip {
+    position: absolute;
+    bottom: -0.95rem;
+    left: 50%;
+    z-index: 1;
+    border: 2px solid #3d2a00;
+    font-family: inherit;
+    white-space: nowrap;
+    translate: -50% 0;
     cursor: pointer;
-    margin-top: 0.35rem;
     padding: 0.1rem 0.5rem;
     border-radius: 999px;
     background: #ffd447;
@@ -3295,7 +3307,7 @@ img.animatedSmall {
     font-size: 0.7rem;
     font-weight: 900;
     text-shadow: none;
-    animation: chipBob 1.8s ease-in-out infinite;
+    animation: chipBob 1.2s ease-in-out 2; /* a couple of bobs to catch the eye, then it rests */
 }
 
 @keyframes chipBob {
