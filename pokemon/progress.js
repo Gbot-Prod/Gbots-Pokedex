@@ -826,8 +826,16 @@ function renderTrainerCard() {
     const gold = shelf.filter((badge) => badge.tier === 3);
     const hall = document.getElementById("trainerHallOfFame");
     hall.hidden = gold.length === 0;
-    hall.textContent =
-        "🏛️ Hall of fame: " + gold.map((badge) => badge.icon + " " + badge.label.split(":")[0]).join(" · ");
+    hall.replaceChildren(
+        "🏛️ Hall of fame: ",
+        ...gold.flatMap((badge, index) => {
+            const icon = document.createElement("span");
+            icon.className = "hallIcon";
+            icon.setAttribute("aria-hidden", "true");
+            icon.textContent = badge.icon;
+            return [index ? " · " : "", icon, " " + badge.label.split(":")[0]];
+        }),
+    );
     // Next goal: the first locked badge, else the next tier of a tiered one.
     const next = shelf.find((badge) => !badge.earned) ?? shelf.find((badge) => badge.tier && badge.hint);
     document.getElementById("trainerNextBadge").textContent = next

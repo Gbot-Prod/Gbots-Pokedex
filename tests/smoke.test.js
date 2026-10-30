@@ -784,6 +784,7 @@ test("a week-long visit streak earns a flame badge and orange LEDs", async () =>
     await page.evaluate(() => localStorage.setItem("pokedex:quiz:v1", JSON.stringify({ best: 50 })));
     await page.click("#dexProgress");
     assert.equal(await page.textContent("#trainerHallOfFame"), "🏛️ Hall of fame: 🧠 Quiz whiz");
+    assert.equal(await page.locator("#trainerHallOfFame .hallIcon").count(), 1);
     await page.click("#trainerCardClose");
 });
 

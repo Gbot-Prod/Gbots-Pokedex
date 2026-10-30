@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Hall of fame step 2: a slow gold shimmer sweeping across the banner, and the gold badges' icons enlarged in it (static under reduced motion)
 - [ ] Trainer card "what's new": a small dot on the completion ring when a badge was earned/tiered up but the card hasn't been opened since
 - [ ] Browse grid: update tiles in place when names/types arrive instead of re-rendering the whole page (fewer image reloads, no flicker)
 - [ ] Gold everything: once all tiered badges are gold, the trainer card border turns animated gold foil regardless of the chosen style
@@ -254,3 +253,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Tier-up flourish: when a badge moves up a tier, the shelf badge spins once and its ring flashes the new metal colour (2026-10-30) — badges earned or tiered up since the shelf was last shown (pokedex:badges-shown:v1) spin once with a bright ring flash when the trainer card opens; none under reduced motion. Also fixed a new flake: six combobox smoke tests waited for aria-expanded, which the "Loading names…" row now also sets, so they wait for a real .comboboxOption
 - [x] Gold collection: a "Hall of fame" strip at the top of the trainer card listing only gold-tier badges (2026-10-30) — a gold-gradient "🏛️ Hall of fame: …" banner under the trainer card title lists every gold-tier badge; hidden until the first gold
 - [x] Combobox: preload the name list in the background on first visit (requestIdleCallback) so suggestions are usually ready by the time you type (2026-10-30) — the first combobox schedules getLabelledEntries() on requestIdleCallback (setTimeout fallback), so on a fresh visit both name lists are usually loaded before typing; verified live: suggestions instant after 5 s idle
+- [x] Hall of fame step 2: a slow gold shimmer sweeping across the banner, and the gold badges' icons enlarged in it (static under reduced motion) (2026-10-30) — a band of light sweeps across the gold banner every 3.5 s (none under reduced motion) and the gold badges' icons are enlarged with a drop shadow

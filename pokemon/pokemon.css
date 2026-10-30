@@ -3666,6 +3666,42 @@ img.animatedSmall {
     display: none;
 }
 
+#trainerHallOfFame {
+    position: relative;
+    overflow: hidden;
+}
+
+/* A slow band of light sweeping across the gold */
+#trainerHallOfFame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.75) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: hallShimmer 3.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes hallShimmer {
+    60%,
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.hallIcon {
+    display: inline-block;
+    font-size: 1.35em;
+    vertical-align: -0.15em;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #trainerHallOfFame::after {
+        display: none;
+    }
+}
+
 .trainerProfile {
     display: flex;
     align-items: center;
