@@ -18,6 +18,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Gold everything: once all tiered badges are gold, the trainer card border turns animated gold foil regardless of the chosen style
 - [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
 - [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
+- [ ] Quiz: the same "next tier" line for the Quiz whiz badge under the quiz score ("best 12 / 20 for bronze")
+- [ ] News dot step 2: a small "NEW" ribbon on the freshly earned badge inside the card, fading after the first view
+- [ ] Shiny hunt: a progress bar under the tier line filling toward the next tier, in the tier's metal colour
+- [ ] Toasts: a "Show me" button on badge toasts that opens the trainer card scrolled to the badge
+- [ ] Region banners: a mini Region master progress ("2 / 3 regions for silver") under the region strip heading
 - [ ] Badge detail: tapping a badge on the shelf shows its description, when it was earned and progress toward the next tier
 - [ ] Toast polish: a tiny progress line along the toast's bottom edge showing time until the next queued toast
 - [ ] Hidden badge: a secret "Night owl" badge for opening 10 Pokémon between midnight and 4 am, shown as ❓ until earned
