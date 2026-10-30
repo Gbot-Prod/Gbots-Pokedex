@@ -191,3 +191,13 @@ test("affectionHearts grows one heart every three views, up to five", async () =
     const { affectionHearts } = await import("../pokemon/progress.js");
     assert.deepEqual([undefined, 2, 3, 9, 12, 40].map(affectionHearts), [1, 1, 2, 4, 5, 5]);
 });
+
+test("topViewed ranks the most-opened Pokémon", async () => {
+    const { topViewed } = await import("../pokemon/progress.js");
+    assert.deepEqual(topViewed({ 25: 3, 6: 9, 1: 3, 94: 1 }, 3), [
+        [6, 9],
+        [1, 3],
+        [25, 3],
+    ]);
+    assert.deepEqual(topViewed({}), []);
+});

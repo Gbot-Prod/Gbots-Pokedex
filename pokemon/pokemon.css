@@ -3669,6 +3669,57 @@ img.animatedSmall {
     font-size: 1rem;
 }
 
+#trainerTop {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 0.4rem;
+    margin: 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+#trainerTop button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3.3rem;
+    height: 3.3rem;
+    padding: 0;
+    border: 2px solid #ffd447;
+    border-radius: 12px;
+    background: radial-gradient(circle, #ffffff, #dbe6ff);
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+#trainerTop button:hover {
+    transform: translateY(-3px);
+}
+
+#trainerTop img {
+    width: 46px;
+    height: 46px;
+    image-rendering: pixelated;
+}
+
+#trainerTop span {
+    position: absolute;
+    right: -0.4rem;
+    bottom: -0.4rem;
+    padding: 0.05rem 0.35rem;
+    border-radius: 999px;
+    background: #be185d;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 900;
+}
+
+#trainerCard[data-style="retro"] #trainerTop button {
+    border-color: #0f380f;
+    background: #8bac0f;
+}
+
 #trainerCardRegions {
     display: grid;
     gap: 0.3rem;

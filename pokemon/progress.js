@@ -245,6 +245,8 @@ function renderTrainerProfile() {
         return formatDexNumber(id) + " " + (slug ? speciesDisplayName(slug) : "");
     };
     const fillPartners = (slugs) => {
+        knownSlugs = slugs ?? knownSlugs;
+        renderTopViewed();
         partnerSelect.replaceChildren(
             ...seenIds.map((id) => new Option(label(id, slugs).trim(), id, false, id === partner)),
         );
@@ -372,6 +374,51 @@ function renderAffection(partner) {
     element.textContent = "♥".repeat(hearts) + "♡".repeat(5 - hearts);
     element.setAttribute("aria-label", "Affection " + hearts + " of 5");
     element.setAttribute("role", "img");
+}
+
+let knownSlugs = null; // species names, once the list has loaded
+
+function partnerLabel(id) {
+    const slug = knownSlugs?.get(id);
+    return slug ? speciesDisplayName(slug) : formatDexNumber(id);
+}
+
+// The most-opened Pokémon as [dexNumber, views], most first (ties: lower number first).
+export function topViewed(viewCounts, count = 5) {
+    return Object.entries(viewCounts)
+        .map(([id, views]) => [Number(id), views])
+        .sort((a, b) => b[1] - a[1] || a[0] - b[0])
+        .slice(0, count);
+}
+
+function renderTopViewed() {
+    const top = topViewed(views);
+    document.getElementById("trainerTopHeading").hidden = top.length === 0;
+    document.getElementById("trainerTop").replaceChildren(
+        ...top.map(([id, count]) => {
+            const item = document.createElement("li");
+            const button = document.createElement("button");
+            button.type = "button";
+            const label = partnerLabel(id);
+            button.setAttribute("aria-label", label + ", opened " + count + " times");
+            button.title = label;
+            const sprite = document.createElement("img");
+            sprite.alt = "";
+            sprite.width = 56;
+            sprite.height = 56;
+            setSprite(sprite, id);
+            const badge = document.createElement("span");
+            badge.textContent = "×" + count;
+            badge.setAttribute("aria-hidden", "true");
+            button.append(sprite, badge);
+            button.addEventListener("click", () => {
+                trainerCard.close();
+                openPokemon(id);
+            });
+            item.append(button);
+            return item;
+        }),
+    );
 }
 
 export function shouldOfferPartner(viewCount, dexNumber, partner) {
@@ -575,7 +622,10 @@ async function shareTrainerCard() {
     }
 }
 
+let openPokemon = () => {};
+
 export function initProgress({ showPokemon }) {
+    openPokemon = showPokemon;
     document.getElementById("partnerOfferYes").addEventListener("click", acceptPartnerOffer);
     document.getElementById("partnerOfferNo").addEventListener("click", () => {
         document.getElementById("partnerOffer").hidden = true;
