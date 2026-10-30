@@ -67,6 +67,19 @@ function render() {
     }
 }
 
+// The "seen" tick on tiles for Pokémon already opened.
+export function seenMark() {
+    const mark = document.createElement("span");
+    mark.className = "tileSeen";
+    mark.title = "Seen";
+    mark.innerHTML = '<span aria-hidden="true">✓</span><span class="visuallyHidden">, seen</span>';
+    return mark;
+}
+
+export function hasSeen(dexNumber) {
+    return seen.has(dexNumber);
+}
+
 export function markSeen(dexNumber) {
     if (seen.has(dexNumber) || dexNumber < 1 || dexNumber > MAX_DEX_NUMBER) {
         return;
@@ -78,6 +91,9 @@ export function markSeen(dexNumber) {
         // progress just won't persist
     }
     render();
+    for (const tile of document.querySelectorAll('.browseTile[data-dex="' + dexNumber + '"]:not(:has(.tileSeen))')) {
+        tile.append(seenMark());
+    }
     ringElement.classList.remove("bump");
     void ringElement.offsetWidth; // restart the bump animation
     ringElement.classList.add("bump");

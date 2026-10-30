@@ -711,6 +711,8 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
         /^[1-9]\d*\/151 seen$/,
     );
     assert.equal(await page.textContent('.regionBanner[data-generation="9"] .regionProgressText'), "0/120 seen");
+    assert.ok((await page.locator('.browseTile[data-dex="25"] .tileSeen').count()) >= 1);
+    assert.equal(await page.locator('#browseGrid .browseTile[data-dex="1"] .tileSeen').count(), 0);
 });
 
 test("the shiny hunt counts encounters and collects shinies", async () => {

@@ -1,5 +1,6 @@
 // Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
 import { API_BASE, fetchJson, getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
+import { hasSeen, seenMark } from "./progress.js";
 import {
     GENERATIONS,
     MAX_DEX_NUMBER,
@@ -198,13 +199,18 @@ function createBrowseTile(entry) {
     sprite.height = 96;
     sprite.loading = "lazy";
 
+    const dexNumber = entrySpecies(entry, speciesSlugs)?.id ?? entry.id;
+    button.dataset.dex = dexNumber;
     const number = document.createElement("small");
-    number.textContent = formatDexNumber(entrySpecies(entry, speciesSlugs)?.id ?? entry.id);
+    number.textContent = formatDexNumber(dexNumber);
 
     const name = document.createElement("span");
     name.textContent = tileName(entry);
 
     button.append(sprite, number, name);
+    if (hasSeen(dexNumber)) {
+        button.append(seenMark());
+    }
 
     const types = typesById?.get(entry.id)?.filter(Boolean) ?? [];
     if (types.length) {

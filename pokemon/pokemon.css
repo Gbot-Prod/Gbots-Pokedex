@@ -1239,7 +1239,24 @@ kbd {
     padding: 0;
 }
 
+.tileSeen {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.35rem;
+    display: grid;
+    place-items: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: #1f8a4c;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 900;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
 .browseTile {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
