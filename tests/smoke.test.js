@@ -822,6 +822,21 @@ test("opening a Pokémon five times offers to make it your partner", async () =>
     await page.click("#trainerCardClose");
 });
 
+test("a partner at full affection glows and cameos on other Pokémon's art", async () => {
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:seen:v1", "[24, 25]");
+        localStorage.setItem("pokedex:trainer:v1", JSON.stringify({ partner: 24 }));
+        localStorage.setItem("pokedex:views:v1", JSON.stringify({ 24: 12 }));
+    });
+    await page.reload();
+    await search("pikachu");
+    await page.waitForSelector("#partnerCameo:not([hidden])");
+    assert.equal(await page.evaluate(() => document.getElementById("dexPartner").classList.contains("devoted")), true);
+    await search("arbok");
+    await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("24"));
+    assert.equal(await page.isHidden("#partnerCameo"), true);
+});
+
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
     await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
     await page.reload();

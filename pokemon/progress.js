@@ -382,11 +382,26 @@ export function shouldOfferPartner(viewCount, dexNumber, partner) {
 export function notePokemonView(dexNumber, name) {
     const offer = document.getElementById("partnerOffer");
     const count = countView(dexNumber);
+    updateDevotion(dexNumber);
     offer.hidden = !shouldOfferPartner(count, dexNumber, currentPartner());
     if (!offer.hidden) {
         offer.dataset.id = dexNumber;
         document.getElementById("partnerOfferText").textContent =
             "💕 " + name + " seems to like you! Make it your partner?";
+    }
+}
+
+// At full affection the partner glows in the header and pops into the corner of other
+// Pokémon's artwork as a little cameo.
+function updateDevotion(openedDexNumber) {
+    const partner = currentPartner();
+    const devoted = Boolean(partner) && affectionHearts(views[partner]) === 5;
+    partnerElement.classList.toggle("devoted", devoted);
+    const cameo = document.getElementById("partnerCameo");
+    cameo.hidden = !devoted || openedDexNumber === partner;
+    if (!cameo.hidden && cameo.dataset.id !== String(partner)) {
+        cameo.dataset.id = partner;
+        setSprite(cameo, partner);
     }
 }
 

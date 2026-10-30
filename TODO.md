@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Max affection: at 5 hearts the partner gets a sparkly aura in the header and follows you onto the card art as a small cameo
 - [ ] Most viewed: a "Your top 5" strip on the trainer card from the view counts, with mini sprites that open each Pokémon
 - [ ] Streak calendar: a 4-week dot calendar on the trainer card showing which days you visited
 - [ ] Partner offer polish: remember a declined offer per Pokémon (don't ask again for 20 more views)
@@ -221,3 +220,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Streak rewards: at 7 and 30 days the trainer card earns a flame badge and the device LEDs glow orange for the day (2026-10-30) — 🔥 week-flame and ☄️ month-blaze badges on the trainer card for best streaks of 7/30 days; a running 7+ day streak turns the header LEDs flickering orange (html.onFire). Also fixed the header title overflowing by 16px on 375px phones (tighter gaps; title hidden below 360px)
 - [x] Partner step 5: let the partner follow you — if you open the same Pokémon 5 times, offer to make it your partner (2026-10-30) — views are counted per species (pokedex:views:v1); on the 5th view of a non-partner a pink "💕 X seems to like you! Make it your partner?" offer appears under the name, with Make partner (partner hops and ❤️) or ✕
 - [x] Partner affection: count views of the partner and show hearts (1–5) on the trainer card avatar (2026-10-30) — ♥♥♥♡♡ row under the trainer card avatar (role=img "Affection N of 5"): one heart plus one more per 3 views of the partner, max 5
+- [x] Max affection: at 5 hearts the partner gets a sparkly aura in the header and follows you onto the card art as a small cameo (2026-10-30) — at 5 hearts the header partner gets a pulsing gold-pink aura (still under reduced motion) and a round cameo of it sits in the bottom-left of every other Pokémon's artwork

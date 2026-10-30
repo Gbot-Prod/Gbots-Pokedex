@@ -2777,6 +2777,45 @@ img.animatedSmall {
     animation: partnerHop 0.6s ease-out;
 }
 
+/* Full affection: a pulsing golden-pink aura around the header partner */
+#dexPartner.devoted {
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 240, 200, 0.95) 0%, rgba(255, 143, 181, 0.6) 45%, transparent 70%);
+    filter: drop-shadow(0 0 6px #ffd447) drop-shadow(0 0 3px #ff8fb5);
+    animation: devotedPulse 2.4s ease-in-out infinite;
+}
+
+#dexPartner.devoted.hop {
+    animation:
+        partnerHop 0.6s ease-out,
+        devotedPulse 2.4s ease-in-out 0.6s infinite;
+}
+
+@keyframes devotedPulse {
+    50% {
+        filter: drop-shadow(0 0 12px #ffd447) drop-shadow(0 0 6px #ff8fb5);
+    }
+}
+
+/* The devoted partner's cameo in the corner of the card art */
+#partnerCameo {
+    position: absolute;
+    bottom: 0.4rem;
+    left: 0.4rem;
+    z-index: 2;
+    width: 56px;
+    height: 56px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff, #ffd6e6);
+    image-rendering: pixelated;
+    box-shadow: 0 0 10px rgba(255, 143, 181, 0.8);
+}
+
+#partnerCameo[hidden] {
+    display: none;
+}
+
 /* The smallest phones drop the decorative title so the ring and partner fit. */
 @media (max-width: 359px) {
     .dexTitle {
@@ -2819,7 +2858,8 @@ img.animatedSmall {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #dexPartner.hop {
+    #dexPartner.hop,
+    #dexPartner.devoted {
         animation: none;
     }
 }
