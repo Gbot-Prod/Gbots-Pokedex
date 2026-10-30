@@ -3793,11 +3793,33 @@ img.animatedSmall {
 
 #trainerCardBadges {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 0.6rem;
-    margin: 0 1rem 0.7rem;
+    max-width: 14rem; /* two even rows of four */
+    margin: 0 auto 0.7rem;
     padding: 0;
     list-style: none;
+}
+
+#trainerCardBadges li.regions:not(.locked) {
+    background: radial-gradient(circle at 35% 30%, #e3ffe9, #4ade80 60%, #15803d);
+    box-shadow: 0 0 12px rgba(74, 222, 128, 0.7);
+}
+
+#trainerCardBadges li.shinies:not(.locked) {
+    background: radial-gradient(circle at 35% 30%, #fffbe0, #ffd447 55%, #ec4899);
+    box-shadow: 0 0 12px rgba(255, 212, 71, 0.8);
+}
+
+#trainerCardBadges li.quiz:not(.locked) {
+    background: radial-gradient(circle at 35% 30%, #e0fbff, #22d3ee 60%, #0e7490);
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+}
+
+#trainerCardBadges li.team:not(.locked) {
+    background: radial-gradient(circle at 35% 30%, #e0e9ff, #60a5fa 60%, #1d4ed8);
+    box-shadow: 0 0 12px rgba(96, 165, 250, 0.7);
 }
 
 #trainerCardBadges li.locked {

@@ -268,23 +268,58 @@ const BADGES = [
         kind: "collector",
         need: 50,
     },
+    {
+        icon: "🗺️",
+        label: "Region master: a regional Pokédex complete",
+        hint: "See every Pokémon of one region",
+        kind: "regions",
+        need: 1,
+    },
+    {
+        icon: "✨",
+        label: "Shiny hunter: 5 shinies caught",
+        hint: "Catch 5 shinies in the shiny hunt",
+        kind: "shinies",
+        need: 5,
+    },
+    {
+        icon: "🧠",
+        label: "Quiz whiz: a 20-answer quiz streak",
+        hint: "Get 20 quiz answers right in a row",
+        kind: "quiz",
+        need: 20,
+    },
+    { icon: "👥", label: "Team player: a full team of six", hint: "Fill all six team slots", kind: "team", need: 6 },
 ];
 
 // All badges with whether each is earned, given the best streak and the view counts.
-export function badgeShelf(bestStreak, viewCounts) {
-    const progress = { streak: bestStreak, collector: Math.max(0, ...Object.values(viewCounts)) };
+// progress: { streak, views, regions, shinies, quiz, team } (missing values count as 0).
+export function badgeShelf({ streak = 0, views: viewCounts = {}, regions = 0, shinies = 0, quiz = 0, team = 0 }) {
+    const progress = { streak, collector: Math.max(0, ...Object.values(viewCounts)), regions, shinies, quiz, team };
     return BADGES.map((badge) => ({ ...badge, earned: progress[badge.kind] >= badge.need }));
+}
+
+// Everything the badges are measured on, from what this browser has saved.
+function badgeProgress(stats) {
+    return {
+        streak: visits.best,
+        views,
+        regions: stats.generations.filter((gen) => gen.seen === gen.total).length,
+        shinies: readStored("pokedex:shiny-hunt:v1", {}).shinies?.length ?? 0,
+        quiz: readStored("pokedex:quiz:v1", {}).best ?? 0,
+        team: readStored("pokedex:team:v1", []).filter(Boolean).length,
+    };
 }
 
 // Earned badges only, as [icon, label].
 export function collectorBadges(viewCounts) {
-    return badgeShelf(0, viewCounts)
+    return badgeShelf({ views: viewCounts })
         .filter((badge) => badge.kind === "collector" && badge.earned)
         .map((badge) => [badge.icon, badge.label]);
 }
 
 export function streakBadges(best) {
-    return badgeShelf(best, {})
+    return badgeShelf({ streak: best })
         .filter((badge) => badge.kind === "streak" && badge.earned)
         .map((badge) => [badge.icon, badge.label]);
 }
@@ -691,7 +726,7 @@ function renderTrainerCard() {
     document.getElementById("trainerCardSeen").textContent = seenText(stats);
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
-    const shelf = badgeShelf(visits.best, views);
+    const shelf = badgeShelf(badgeProgress(stats));
     document.getElementById("trainerCardBadges").replaceChildren(
         ...shelf.map((badge) => {
             const item = document.createElement("li");
