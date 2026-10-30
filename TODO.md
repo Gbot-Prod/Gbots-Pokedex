@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Badge unlock moment: when a badge is earned, show the completion toast with the badge icon and a small confetti burst
 - [ ] Test hygiene: a smoke-test helper that seeds Math.random per test and resets it, so no test inherits another's stubbed randomness
 - [ ] Matchup pill step 2: tap the pill to open the full type chart with both Pokémon's types highlighted
 - [ ] Trainer card: show badge count ("3 / 8 badges") under the shelf as a mini progress bar
@@ -30,7 +29,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Retro mode polish: pixel-font labels on the region banners and a dot-matrix scanline overlay on the card art
 - [ ] Tile flip step 4: on phones, a long-press flips a tile (with a short vibration where supported) instead of hover
 - [ ] National Dex finale: a special gold theme for the device header once all 1,025 are seen
-- [ ] Toast queue: reuse the completion toast for other moments (shiny found, quiz best streak beaten, team full) with a small queue so toasts don't overlap
 - [ ] Cry visualiser step 2: the artwork gently pulses with the cry's loudness (same analyser), off under reduced motion
 - [ ] Shiny hunt step 3: a full-screen sparkle overlay on a shiny and a "shiny streak" (encounters since the last shiny) with a personal best
 - [ ] Shiny dex: a grid of every shiny caught with names and encounter numbers, sortable by dex number or catch order
@@ -236,3 +234,5 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Cameo step 3: a tiny animated "VS" flash between cameo and artwork when the matchup pill appears, coloured by who has the edge (2026-10-30) — a slanted "VS" slams in above the cameo with the matchup pill: green when the partner has the edge, red when it's at a disadvantage, gold when even (static under reduced motion)
 - [x] Find the intermittent smoke-test failure seen once during a ship (passed on rerun); the ship script now keeps the log in the scratchpad (2026-10-30) — two flakes found from the saved ship log: the shiny-hunt test's first encounter was really random (1 in 50 shiny → count 2), now pinned to a non-shiny roll; and the unseen-filter test clicked the checkbox while Surprise me was still smooth-scrolling, now waits for the scroll to settle
 - [x] More badges: "Region master" (any region 100%), "Shiny hunter" (5 shinies), "Quiz whiz" (best streak 20), "Team player" (full team of 6) on the shelf (2026-10-30) — 🗺️ Region master, ✨ Shiny hunter (5), 🧠 Quiz whiz (streak 20) and 👥 Team player (6) join the shelf in their own colours; 8 badges in two rows of four; badgeShelf now takes one progress object
+- [x] Badge unlock moment: when a badge is earned, show the completion toast with the badge icon and a small confetti burst (2026-10-30) — newly earned badges (checked on load, on each Pokémon view and when the trainer card opens) get the red-gold toast and confetti; the first check records existing badges silently
+- [x] Toast queue: reuse the completion toast for other moments (shiny found, quiz best streak beaten, team full) with a small queue so toasts don't overlap (2026-10-30) — toasts now queue (4 s each) so e.g. "Kanto Pokédex complete!" is followed by the Region master badge toast instead of being overwritten

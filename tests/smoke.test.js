@@ -748,6 +748,18 @@ test("a week-long visit streak earns a flame badge and orange LEDs", async () =>
     await page.click("#trainerCardClose");
 });
 
+test("earning a new badge announces it with the toast", async () => {
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:badges-earned:v1", "[]");
+        localStorage.setItem("pokedex:views:v1", JSON.stringify({ 25: 24 }));
+    });
+    await page.reload();
+    await search("pikachu");
+    await page.waitForFunction(() => document.getElementById("dexToast").textContent.includes("Collector"));
+    assert.match(await page.textContent("#dexToast"), /^📚 Badge earned! Collector/);
+    assert.equal(await page.isVisible("#dexToast.visible"), true);
+});
+
 test("the completion ring opens a trainer card", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
@@ -882,6 +894,10 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     await page.waitForSelector("#dexToast.visible");
     assert.equal(await page.textContent("#dexToast"), "🏅 Kanto Pokédex complete!");
     assert.equal(await page.locator('.regionBanner.regionComplete[data-generation="1"]').count(), 1);
+    // The Region master badge it earns is queued and shown next.
+    await page.waitForFunction(() => document.getElementById("dexToast").textContent.includes("Region master"), null, {
+        timeout: 6000,
+    });
 });
 
 test("the shiny hunt counts encounters and collects shinies", async () => {

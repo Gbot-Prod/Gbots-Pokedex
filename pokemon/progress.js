@@ -144,7 +144,6 @@ export function markSeen(dexNumber) {
 // --- Region complete celebration ---------------------------------------------------------
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-let toastTimer = 0;
 
 // The message to show when this newly seen Pokémon completes something, or null.
 export function completionMessage(seenIds, dexNumber) {
@@ -159,18 +158,68 @@ export function completionMessage(seenIds, dexNumber) {
 
 function celebrateIfComplete(dexNumber) {
     const message = completionMessage(seen, dexNumber);
-    if (!message) {
-        return;
+    if (message) {
+        celebrate(message, 90);
     }
+}
+
+// The red-and-gold toast at the bottom, with a confetti burst (no confetti under reduced motion).
+// Toasts queue up so a region completion and the badge it earns are both shown, one after another.
+const toastQueue = [];
+
+function celebrate(message, confettiCount) {
+    toastQueue.push({ message, confettiCount });
+    if (toastQueue.length === 1) {
+        showNextToast();
+    }
+}
+
+function showNextToast() {
     const toast = document.getElementById("dexToast");
+    const { message, confettiCount } = toastQueue[0];
     toast.textContent = message;
     toast.classList.add("visible");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("visible"), 5000);
     if (!reducedMotion.matches) {
-        const burst = makeConfetti(90, "confetti fullscreen");
+        const burst = makeConfetti(confettiCount, "confetti fullscreen");
         document.body.append(burst);
         setTimeout(() => burst.remove(), 3000);
+    }
+    setTimeout(() => {
+        toastQueue.shift();
+        if (toastQueue.length) {
+            showNextToast();
+        } else {
+            toast.classList.remove("visible");
+        }
+    }, 4000);
+}
+
+// --- Badge unlocks -----------------------------------------------------------------------
+// Earned badges are remembered; a newly earned one gets the toast. The very first check only
+// records what's already earned, so existing trainers aren't flooded with old badges.
+const EARNED_KEY = "pokedex:badges-earned:v1";
+
+export function newlyEarned(shelf, known) {
+    return shelf.filter((badge) => badge.earned && !known.includes(badge.label));
+}
+
+function checkBadges() {
+    const shelf = badgeShelf(badgeProgress(completionStats(seen)));
+    const known = readStored(EARNED_KEY, null);
+    const fresh = newlyEarned(shelf, known ?? []);
+    if (!fresh.length && known) {
+        return;
+    }
+    try {
+        localStorage.setItem(
+            EARNED_KEY,
+            JSON.stringify(shelf.filter((badge) => badge.earned).map((badge) => badge.label)),
+        );
+    } catch {
+        return; // can't remember badges, so don't announce them over and over
+    }
+    if (known && fresh.length) {
+        celebrate(fresh[0].icon + " Badge earned! " + fresh[0].label, 50);
     }
 }
 
@@ -559,6 +608,7 @@ export function notePokemonView(dexNumber, name, types = []) {
     document.getElementById("cameoMatchup").classList.remove("visible");
     const offer = document.getElementById("partnerOffer");
     const count = countView(dexNumber);
+    checkBadges();
     updateDevotion(dexNumber);
     const declinedAt = readStored(DECLINED_KEY, {})[dexNumber] ?? null;
     offer.hidden = !shouldOfferPartner(count, dexNumber, currentPartner(), declinedAt);
@@ -721,6 +771,7 @@ async function saveTrainerCardImage() {
 
 function renderTrainerCard() {
     renderTrainerProfile();
+    checkBadges();
     document.getElementById("trainerShareStatus").textContent = "";
     const stats = completionStats(seen);
     document.getElementById("trainerCardSeen").textContent = seenText(stats);
@@ -831,6 +882,7 @@ export function initProgress({ showPokemon }) {
         }
     });
     recordVisit();
+    checkBadges();
     document.getElementById("dexPartnerBtn").addEventListener("click", () => {
         const partner = currentPartner();
         if (partner) {

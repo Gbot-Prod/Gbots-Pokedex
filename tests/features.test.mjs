@@ -260,3 +260,16 @@ test("matchupEdge says who comes out ahead", async () => {
     assert.equal(matchupEdge(1, 2), "lose");
     assert.equal(matchupEdge(1, 1), "even");
 });
+
+test("newlyEarned lists earned badges not seen before", async () => {
+    const { badgeShelf, newlyEarned } = await import("../pokemon/progress.js");
+    const shelf = badgeShelf({ streak: 8, team: 6 });
+    assert.deepEqual(
+        newlyEarned(shelf, []).map((badge) => badge.icon),
+        ["🔥", "👥"],
+    );
+    assert.deepEqual(
+        newlyEarned(shelf, ["Week flame: 7-day streak"]).map((badge) => badge.icon),
+        ["👥"],
+    );
+});
