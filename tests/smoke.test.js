@@ -612,7 +612,7 @@ test("beating the best quiz streak flashes New best!", async () => {
     await page.evaluate(() =>
         localStorage.setItem(
             "pokedex:quiz:v1",
-            JSON.stringify({ correct: 2, played: 2, streak: 2, best: 2, bestTimed: 0 }),
+            JSON.stringify({ correct: 19, played: 19, streak: 19, best: 19, bestTimed: 0 }),
         ),
     );
     await page.reload();
@@ -621,7 +621,9 @@ test("beating the best quiz streak flashes New best!", async () => {
     await answerQuizCorrectly();
     await page.waitForSelector("#quizStage.revealed");
     assert.match(await page.textContent("#quizResult"), /^Correct!/);
-    assert.match(await page.textContent("#quizScore"), /Streak 3 · Best 3 .*🎉 New best!$/);
+    assert.match(await page.textContent("#quizScore"), /Streak 20 · Best 20 .*🎉 New best!$/);
+    // ...and the Quiz whiz line moves up to the next tier.
+    assert.equal(await page.textContent("#quizTier"), "🧠 Quiz whiz badge: best streak 20 / 35 for silver");
 });
 
 test("the Who's that Pokémon? quiz reveals the answer and keeps score", async () => {
@@ -709,6 +711,25 @@ test("the 60-second quiz challenge counts down, accepts number keys and ends wit
     await page.waitForFunction(() => document.getElementById("quizResult").textContent.startsWith("Time's up!"));
     assert.equal(await page.isVisible("#quizTimer"), false);
     assert.match(await page.textContent("#quizScore"), /Best 60s run \d/);
+});
+
+test("the 60-second challenge counts correct answers and records the best run", async () => {
+    await page.clock.install();
+    await page.reload();
+    await page.click("#quizTimedBtn");
+    for (let round = 1; round <= 3; round++) {
+        await page.waitForSelector(".quizChoice:not(:disabled)");
+        await answerQuizCorrectly();
+        await page.waitForFunction(
+            (count) => document.getElementById("quizTimer").textContent.endsWith(count + " correct"),
+            round,
+        );
+        await page.clock.runFor(800); // the next silhouette follows after a short pause
+    }
+    await page.clock.runFor(61_000);
+    await page.waitForFunction(() => document.getElementById("quizResult").textContent.startsWith("Time's up!"));
+    assert.match(await page.textContent("#quizResult"), /^Time's up! .*\b3\b/);
+    assert.match(await page.textContent("#quizScore"), /Best 60s run 3\b/);
 });
 
 test("the theme button cycles light → dark → retro and remembers the choice", async () => {
