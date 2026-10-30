@@ -2572,6 +2572,35 @@ img.animatedSmall {
     animation: progressBump 0.5s ease;
 }
 
+.ringSparkles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.ringSparkles span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #ffd447;
+    font-size: 1.05rem;
+    text-shadow:
+        0 0 4px #ffffff,
+        0 0 8px rgba(255, 212, 71, 0.9);
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0);
+    animation: ringSparkle 0.8s ease-out forwards;
+}
+
+@keyframes ringSparkle {
+    60% {
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-34px) scale(0.4);
+        opacity: 0;
+    }
+}
+
 @keyframes progressBump {
     40% {
         transform: scale(1.25);

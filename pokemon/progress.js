@@ -86,6 +86,24 @@ export function hasSeen(dexNumber) {
     return seen.has(dexNumber);
 }
 
+// Eight little stars fly out of the ring when a new Pokémon is counted.
+function sparkleRing() {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const burst = document.createElement("span");
+    burst.className = "ringSparkles";
+    burst.setAttribute("aria-hidden", "true");
+    for (let index = 0; index < 8; index++) {
+        const star = document.createElement("span");
+        star.textContent = "✦";
+        star.style.setProperty("--angle", index * 45 + "deg");
+        burst.append(star);
+    }
+    ringElement.append(burst);
+    setTimeout(() => burst.remove(), 900);
+}
+
 export function markSeen(dexNumber) {
     if (seen.has(dexNumber) || dexNumber < 1 || dexNumber > MAX_DEX_NUMBER) {
         return;
@@ -101,6 +119,7 @@ export function markSeen(dexNumber) {
     for (const tile of document.querySelectorAll('.browseTile[data-dex="' + dexNumber + '"]:not(:has(.tileSeen))')) {
         tile.append(seenMark());
     }
+    sparkleRing();
     ringElement.classList.remove("bump");
     void ringElement.offsetWidth; // restart the bump animation
     ringElement.classList.add("bump");
