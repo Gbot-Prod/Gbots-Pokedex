@@ -15,6 +15,11 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Shiny hunt step 2: show names instead of numbers, an odds-boosting "Shiny Charm" after 100 encounters, and a per-generation hunt filter
+- [ ] Night sky mode: after sunset (local time) the page background becomes a starfield with a moon, and Ghost/Dark Pokémon get a subtle glow
+- [ ] Pokémon cry visualiser: when the cry plays, animate a waveform/equaliser bar under the name (Web Audio analyser)
+- [ ] Collection progress: a "Pokédex completion" ring showing how many of the 1,025 you've viewed (from recently viewed history, kept long-term)
+- [ ] Hover a browse tile to flip it and show its type icons and base stat total on the back
+- [ ] Achievement badges (Kanto complete, 10 shinies, 50-streak quiz…) shown as gym-badge style icons in a trainer card
 - [ ] Download the holo card as a PNG (canvas render of art, name, types and stats) to share
 - [ ] Region landing view: clicking a region banner shows a header with the region's legendary trio and Pokédex count above the filtered grid
 - [ ] Card flip: click a corner button to flip the holo card (3D) to a back side with a Poké Ball design and a quick stats summary
