@@ -744,6 +744,18 @@ test("the completion ring opens a trainer card", async () => {
     const download = page.waitForEvent("download");
     await page.click("#trainerImageBtn");
     assert.equal((await download).suggestedFilename(), "trainer-card.png");
+    // Where files can be shared (phones), the image goes to the share sheet instead.
+    await page.evaluate(() => {
+        navigator.canShare = () => true;
+        navigator.share = async (data) => (window.sharedFiles = data.files.map((file) => file.name));
+    });
+    await page.click("#trainerImageBtn");
+    await page.waitForFunction(() => window.sharedFiles);
+    assert.deepEqual(await page.evaluate(() => window.sharedFiles), ["trainer-card.png"]);
+    await page.evaluate(() => {
+        delete navigator.canShare;
+        delete navigator.share;
+    });
     await page.selectOption("#trainerStyle", "holo");
     assert.equal(await page.getAttribute("#trainerCard", "data-style"), "holo");
     await page.hover("#trainerCardSeen");

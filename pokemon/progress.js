@@ -324,6 +324,18 @@ async function saveTrainerCardImage() {
         await loadCanvasImage(partner ? spriteUrl(partner) : null),
     );
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    // Phones can hand the image straight to another app; everywhere else it downloads.
+    const file = new File([blob], "trainer-card.png", { type: "image/png" });
+    if (navigator.canShare?.({ files: [file] })) {
+        try {
+            await navigator.share({ files: [file], title: "My trainer card" });
+            return;
+        } catch (error) {
+            if (error.name === "AbortError") {
+                return; // share sheet dismissed
+            }
+        }
+    }
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "trainer-card.png";
