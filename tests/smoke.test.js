@@ -741,6 +741,9 @@ test("the completion ring opens a trainer card", async () => {
     assert.equal(await page.inputValue("#trainerPartner"), "25");
     assert.equal(await page.isVisible("#dexPartner"), true);
     assert.equal(await page.isVisible("#trainerAvatar"), true);
+    const download = page.waitForEvent("download");
+    await page.click("#trainerImageBtn");
+    assert.equal((await download).suggestedFilename(), "trainer-card.png");
     await page.selectOption("#trainerStyle", "holo");
     assert.equal(await page.getAttribute("#trainerCard", "data-style"), "holo");
     await page.selectOption("#trainerStyle", "classic");

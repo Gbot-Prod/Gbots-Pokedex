@@ -1,6 +1,7 @@
 // Pokédex completion: every species you open is remembered (localStorage) and shown as a
 // ring in the device header and a progress bar on each region banner.
-import { getSpeciesSlugs, setSprite } from "./api.js";
+import { getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
+import { drawTrainerCard, loadCanvasImage } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
 import { GENERATIONS, MAX_DEX_NUMBER, formatDexNumber, speciesDisplayName } from "./utils.js";
 
@@ -220,25 +221,63 @@ function saveTrainer(changes) {
     }
 }
 
-function renderTrainerCard() {
-    renderTrainerProfile();
-    document.getElementById("trainerShareStatus").textContent = "";
-    const stats = completionStats(seen);
+function seenText(stats) {
+    return stats.seen + " of " + stats.total + " Pokémon seen (" + Math.floor((100 * stats.seen) / stats.total) + "%)";
+}
+
+// The six stat tiles: [icon, label, value].
+function trainerFacts(stats) {
     const hunt = readStored("pokedex:shiny-hunt:v1", {});
-    const quiz = readStored("pokedex:quiz:v1", {});
-    const percent = Math.floor((100 * stats.seen) / stats.total);
-    document.getElementById("trainerCardSeen").textContent =
-        stats.seen + " of " + stats.total + " Pokémon seen (" + percent + "%)";
-    const facts = [
+    return [
         ["✨", "Shinies caught", hunt.shinies?.length ?? 0],
         ["🌿", "Wild encounters", hunt.encounters ?? 0],
-        ["❓", "Quiz best streak", quiz.best ?? 0],
+        ["❓", "Quiz best streak", readStored("pokedex:quiz:v1", {}).best ?? 0],
         ["⭐", "Favorites", readStored("pokedex:favorites:v1", []).length],
         ["👥", "Team members", readStored("pokedex:team:v1", []).filter(Boolean).length],
         ["🏅", "Regions complete", stats.generations.filter((gen) => gen.seen === gen.total).length],
     ];
+}
+
+// Draws the card as it is now and downloads it as trainer-card.png.
+async function saveTrainerCardImage() {
+    const stats = completionStats(seen);
+    const trainer = readStored(TRAINER_KEY, {});
+    const partner = currentPartner();
+    const partnerSelect = document.getElementById("trainerPartner");
+    const canvas = document.createElement("canvas");
+    await document.fonts?.ready;
+    drawTrainerCard(
+        canvas,
+        {
+            name: trainer.name,
+            partnerName: partner ? partnerSelect.selectedOptions[0]?.textContent.replace(/^#\d+\s*/, "") : "",
+            seenText: seenText(stats),
+            facts: trainerFacts(stats),
+            regions: stats.generations.map(({ number, seen: count, total }) => ({
+                name: GENERATIONS.find((gen) => gen.number === number).region,
+                seen: count,
+                total,
+            })),
+            style: trainerCard.dataset.style,
+        },
+        await loadCanvasImage(partner ? spriteUrl(partner) : null),
+    );
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "trainer-card.png";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+    document.getElementById("trainerShareStatus").textContent = "Image saved!";
+}
+
+function renderTrainerCard() {
+    renderTrainerProfile();
+    document.getElementById("trainerShareStatus").textContent = "";
+    const stats = completionStats(seen);
+    document.getElementById("trainerCardSeen").textContent = seenText(stats);
     document.getElementById("trainerCardStats").replaceChildren(
-        ...facts.map(([icon, label, value]) => {
+        ...trainerFacts(stats).map(([icon, label, value]) => {
             const item = document.createElement("li");
             item.innerHTML = '<span aria-hidden="true"></span><strong></strong><small></small>';
             item.children[0].textContent = icon;
@@ -309,6 +348,7 @@ async function shareTrainerCard() {
 export function initProgress() {
     showPartner(currentPartner());
     document.getElementById("trainerShareBtn").addEventListener("click", shareTrainerCard);
+    document.getElementById("trainerImageBtn").addEventListener("click", saveTrainerCardImage);
     ringElement.addEventListener("click", () => {
         renderTrainerCard();
         trainerCard.showModal();

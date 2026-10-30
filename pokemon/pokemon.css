@@ -3426,7 +3426,8 @@ img.animatedSmall {
     margin: 1rem 1rem 0;
 }
 
-#trainerShareBtn {
+#trainerShareBtn,
+#trainerImageBtn {
     padding: 0.55rem 1.1rem;
     background: linear-gradient(160deg, #d62f2f, #a01818);
     font-size: 1rem;

@@ -16,6 +16,7 @@ pokemon/
   pokemon.js     main card: search, rendering, navigation, theme (ES module entry)
   lists.js       browse grid with filters, favorites and recently viewed
   compare.js     side-by-side comparison table
+  cardimage.js   draws the trainer card on a canvas for "Save image"
   combobox.js    accessible search autocomplete (sprites, keyboard navigation)
   effects.js     shared celebration effects (confetti)
   potd.js        "Pokémon of the day" hero card on the landing page
