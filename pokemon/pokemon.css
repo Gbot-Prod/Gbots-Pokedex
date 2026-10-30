@@ -3802,6 +3802,11 @@ img.animatedSmall {
     cursor: pointer;
 }
 
+.trainerJump button[aria-current="true"] {
+    background: #ffffff;
+    color: #1d2340;
+}
+
 .trainerJump button:hover {
     background: rgba(0, 0, 0, 0.38); /* darker, so white text keeps its contrast on every style */
 }

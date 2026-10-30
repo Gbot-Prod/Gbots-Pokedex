@@ -1059,6 +1059,26 @@ export function initProgress({ showPokemon }) {
         });
     }
     document.getElementById("trainerCardClose").addEventListener("click", () => trainerCard.close());
+    // The jump link for the section at the top of the card is marked current as it scrolls.
+    const jumpButtons = [...document.querySelectorAll(".trainerJump button")];
+    const markCurrentSection = () => {
+        const line = trainerCard.scrollTop + trainerCard.querySelector(".trainerCardTop").offsetHeight + 24;
+        const atBottom = trainerCard.scrollTop + trainerCard.clientHeight >= trainerCard.scrollHeight - 2;
+        const current = atBottom
+            ? jumpButtons.at(-1) // the last section can't scroll up to the bar
+            : (jumpButtons
+                  .filter((button) => document.getElementById(button.dataset.target).offsetTop <= line)
+                  .at(-1) ?? jumpButtons[0]);
+        for (const button of jumpButtons) {
+            if (button === current) {
+                button.setAttribute("aria-current", "true");
+            } else {
+                button.removeAttribute("aria-current");
+            }
+        }
+    };
+    trainerCard.addEventListener("scroll", markCurrentSection, { passive: true });
+    trainerCard.addEventListener("toggle", markCurrentSection);
     // Jump links in the sticky title bar scroll the card to a section (below the bar).
     for (const button of document.querySelectorAll(".trainerJump button")) {
         button.addEventListener("click", () => {

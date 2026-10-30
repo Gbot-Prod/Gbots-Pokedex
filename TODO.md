@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Jump menu step 2: highlight the section currently in view (IntersectionObserver) with aria-current
 - [ ] Region chip step 3: make the chip reachable by keyboard as its own control (move it next to the banner rather than inside the button)
 - [ ] Smoke tests: an axe pass with every trainer card style while hovering its buttons, since hover states can fail contrast (as the jump pills did)
 - [ ] Quiz: show a small "x correct" counter bubble flying up from the chosen answer in the 60-second challenge
@@ -285,3 +284,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region chip step 2: clicking the "Only N to go!" chip turns on the region + "Unseen only" filters so the missing Pokémon are listed right away (2026-10-30) — clicking the chip (inside the banner button) selects that region and ticks "Unseen only", so exactly the missing Pokémon are listed (live: Kanto with 4 left → Ditto, Articuno, Zapdos, Moltres)
 - [x] Quiz tests: use the answer helper to also cover the 60-second challenge's scoring and the Quiz whiz tier line moving up (2026-10-30) — new smoke test answers 3 timed rounds correctly under a fake clock and checks the "N correct" timer, the Time's up! result and "Best 60s run 3"; the New best! test now starts at a 19 streak and checks the Quiz whiz line moving to "20 / 35 for silver"
 - [x] Trainer card: a "jump to" mini menu in the sticky title bar (Profile · Badges · Regions) for quick scrolling on phones (2026-10-30) — Profile · Badges · Regions pills in a second row of the sticky title bar scroll the card to just below the bar (smooth, instant under reduced motion); hover darkens so white text passes contrast in every style (axe caught 4.45:1 on retro)
+- [x] Jump menu step 2: highlight the section currently in view (IntersectionObserver) with aria-current (2026-10-30) — a scroll listener marks the jump pill of the section at the top of the card with aria-current="true" (white pill); the last section wins at the bottom of the scroll since it can't reach the bar
