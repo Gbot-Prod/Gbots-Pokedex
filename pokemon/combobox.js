@@ -221,6 +221,8 @@ export function attachCombobox(input, { onSelect, getEmptySuggestions, onRemoveS
         } else if (event.key === "Enter" && activeIndex >= 0) {
             event.preventDefault(); // don't also submit the typed text
             choose(options[activeIndex]);
+        } else if (event.key === "Enter") {
+            close(); // submitting the typed text: the suggestions are no longer needed
         } else if (event.key === "Delete" && activeIndex >= 0 && !input.value.trim() && onRemoveSuggestion) {
             event.preventDefault();
             const removed = options[activeIndex];

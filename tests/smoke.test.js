@@ -651,3 +651,12 @@ test("the theme button cycles light → dark → retro and remembers the choice"
     await page.reload();
     assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), "retro");
 });
+
+test("submitting the typed text closes the suggestion list", async () => {
+    await page.click("#pokemonLookupInpt");
+    await page.keyboard.type("gengar");
+    await page.waitForSelector("#pokemonLookupInpt[aria-expanded=true]");
+    await page.keyboard.press("Enter");
+    assert.equal(await page.getAttribute("#pokemonLookupInpt", "aria-expanded"), "false");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
+});
