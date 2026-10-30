@@ -771,6 +771,7 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     await search("pikachu");
     await page.waitForSelector("#dexToast.visible");
     assert.equal(await page.textContent("#dexToast"), "🏅 Kanto Pokédex complete!");
+    assert.equal(await page.locator('.regionBanner.regionComplete[data-generation="1"]').count(), 1);
 });
 
 test("the shiny hunt counts encounters and collects shinies", async () => {

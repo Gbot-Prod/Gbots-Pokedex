@@ -66,6 +66,7 @@ function render() {
             banner.append(bar);
         }
         bar.classList.toggle("complete", count === total);
+        banner.classList.toggle("regionComplete", count === total);
         bar.querySelector(".regionProgressBar span").style.width = (100 * count) / total + "%";
         bar.querySelector(".regionProgressText").textContent = count + "/" + total + " seen";
     }

@@ -2754,6 +2754,34 @@ img.animatedSmall {
     transform: translateY(-3px);
 }
 
+/* Gold ribbon on regions whose Pokédex is complete */
+.regionBanner.regionComplete {
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 2px #ffd447,
+        0 0 16px rgba(255, 212, 71, 0.7),
+        0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.regionBanner.regionComplete::after {
+    content: "★ COMPLETE";
+    position: absolute;
+    top: 1.3rem;
+    right: -2.2rem;
+    width: 8.5rem;
+    padding: 0.1rem 0;
+    background: linear-gradient(90deg, #f5c518, #ffe680, #f5c518);
+    color: #4a3200;
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-align: center;
+    text-shadow: none;
+    transform: rotate(35deg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 .regionBanner[aria-pressed="true"] {
     border-color: #ffd447;
 }

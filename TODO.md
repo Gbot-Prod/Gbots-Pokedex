@@ -15,7 +15,6 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Tile flip step 3: a tiny stat radar instead of bars on wide screens
-- [ ] Region banners: a gold "complete" ribbon and crown on banners whose region is 100% seen
 - [ ] Unseen filter step 2: a "Surprise me" button that opens a random unseen Pokémon (from the current filters)
 - [ ] Toast queue: reuse the completion toast for other moments (shiny found, quiz best streak beaten, team full) with a small queue so toasts don't overlap
 - [ ] Cry visualiser step 2: the artwork gently pulses with the cry's loudness (same analyser), off under reduced motion
@@ -196,3 +195,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Tile flip step 2: show the type-coloured back (gradient from the Pokémon's first type) (2026-10-30) — the back face is a gradient from the first type's card colour (TYPE_COLORS moved to utils.js and shared with the card theme) into near-black
 - [x] Trainer card step 2: editable trainer name and a choice of avatar (any seen Pokémon's sprite), saved locally and shown on the card (2026-10-30) — trainer name input and a partner Pokémon select (seen species, named once the species list loads) with the partner's sprite as a round avatar; saved in pokedex:trainer:v1
 - [x] Trainer card step 3: "Share trainer card" button that copies a text summary (seen count, shinies, regions complete) to the clipboard (2026-10-30) — "📋 Share trainer card" uses the share sheet or copies a text summary (name, seen count and %, shinies, complete regions, link) with a "Copied" status
+- [x] Region banners: a gold "complete" ribbon and crown on banners whose region is 100% seen (2026-10-30) — complete regions get a gold glow and a diagonal "★ COMPLETE" corner ribbon
