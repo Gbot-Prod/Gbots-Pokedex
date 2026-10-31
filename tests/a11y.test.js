@@ -103,3 +103,22 @@ for (const colorScheme of ["light", "dark"]) {
         assert.deepEqual(serious, []);
     });
 }
+
+test("the National Dex parade passes axe", async () => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:seen:v1",
+            JSON.stringify(Array.from({ length: 1025 }, (_, index) => index + 1).filter((id) => id !== 25)),
+        ),
+    );
+    await page.reload();
+    await page.fill("#pokemonLookupInpt", "pikachu");
+    await page.press("#pokemonLookupInpt", "Enter");
+    await page.waitForSelector("#finaleParade[open]");
+    const results = await new AxeBuilder({ page }).include("#finaleParade").analyze();
+    const serious = results.violations
+        .filter((violation) => ["serious", "critical"].includes(violation.impact))
+        .map((violation) => violation.id + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));
+    assert.deepEqual(serious, []);
+});

@@ -7,6 +7,7 @@ import { isStoredEntry, isTeamMember } from "./storage.js";
 import {
     GENERATIONS,
     MAX_DEX_NUMBER,
+    REGION_STARTERS,
     damageMultipliers,
     formatDexNumber,
     formatMultiplier,
@@ -195,8 +196,49 @@ export function completionMessage(seenIds, dexNumber) {
     return counts && counts.seen === counts.total ? "🏅 " + generation.region + " Pokédex complete!" : null;
 }
 
+// The first time all 1,025 are seen: a full-screen parade of every region's starter trio
+// marching across under "Pokédex complete!" (a still lineup under reduced motion). Once only.
+const FINALE_KEY = "pokedex:finale-shown:v1";
+
+function showFinaleParade() {
+    try {
+        if (localStorage.getItem(FINALE_KEY)) {
+            return;
+        }
+        localStorage.setItem(FINALE_KEY, "1");
+    } catch {
+        return; // can't remember it, so don't risk showing it on every visit
+    }
+    const dialog = document.createElement("dialog");
+    dialog.id = "finaleParade";
+    dialog.setAttribute("aria-labelledby", "finaleHeading");
+    dialog.innerHTML =
+        '<h2 id="finaleHeading">🏆 Pokédex complete!</h2>' +
+        "<p>All 1,025 Pokémon seen. Every region's partners came to celebrate.</p>" +
+        '<div class="paradeTrack" aria-hidden="true"><div class="paradeLine"></div></div>' +
+        '<form method="dialog"><button class="btn" id="finaleClose">Hooray!</button></form>';
+    const line = dialog.querySelector(".paradeLine");
+    for (const id of Object.values(REGION_STARTERS).flat()) {
+        const sprite = document.createElement("img");
+        sprite.alt = "";
+        sprite.width = 104;
+        sprite.height = 104;
+        setSprite(sprite, id);
+        line.append(sprite);
+    }
+    dialog.addEventListener("close", () => dialog.remove());
+    document.body.append(dialog);
+    dialog.showModal();
+    if (!reducedMotion.matches) {
+        dialog.append(makeConfetti(160, "confetti fullscreen")); // inside, so it shows over the backdrop
+    }
+}
+
 function celebrateIfComplete(dexNumber) {
     const message = completionMessage(seen, dexNumber);
+    if (message?.startsWith("🏆")) {
+        showFinaleParade();
+    }
     if (message) {
         // A region's toast offers "Show me" to that region in the browse grid.
         const generation = message.startsWith("🏅")

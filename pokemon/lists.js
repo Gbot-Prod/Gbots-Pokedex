@@ -5,6 +5,7 @@ import { isStoredEntry } from "./storage.js";
 import {
     GENERATIONS,
     MAX_DEX_NUMBER,
+    REGION_STARTERS,
     TYPE_ICONS,
     entryDisplayName,
     entrySpecies,
@@ -533,18 +534,6 @@ document.getElementById("surpriseBtn").addEventListener("click", () => {
 
 // --- Region showcase ---------------------------------------------------------------------
 // One banner per region with its starter trio; clicking filters the grid to that generation.
-
-const REGION_STARTERS = {
-    1: [1, 4, 7],
-    2: [152, 155, 158],
-    3: [252, 255, 258],
-    4: [387, 390, 393],
-    5: [495, 498, 501],
-    6: [650, 653, 656],
-    7: [722, 725, 728],
-    8: [810, 813, 816],
-    9: [906, 909, 912],
-};
 
 function renderRegionStrip() {
     const strip = document.getElementById("regionStrip");

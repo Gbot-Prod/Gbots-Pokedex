@@ -1079,6 +1079,12 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     await page.waitForSelector("#browseGrid .browseTile");
     await page.selectOption("#generationFilter", "1");
     await search("pikachu");
+    // The once-only parade: all nine starter trios under "Pokédex complete!".
+    await page.waitForSelector("#finaleParade[open]");
+    assert.equal(await page.locator("#finaleParade .paradeLine img").count(), 27);
+    await page.click("#finaleClose");
+    await page.waitForSelector("#finaleParade", { state: "detached" });
+    assert.equal(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), "1");
     await page.waitForFunction(() =>
         document.getElementById("nextMissingBtn").textContent.startsWith("🏆 National Dex complete!"),
     );
