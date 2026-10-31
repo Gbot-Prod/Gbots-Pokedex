@@ -32,6 +32,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
 - [ ] Card preview step 5: a "Download all" on the trainer card that zips every card you can make (finale, regions, team, trainer)
+- [ ] Shared team card: show the sharer's name when the link carries one (?team=…&by=Ash, added by "Share team" when a trainer name is set)
+- [ ] Team card: highlight the team's MVP (the member resisting the most of the team's weaknesses) with a small ★ on its panel
+- [ ] Card preview: pinch/scroll to zoom into the card image (it's tiny on phones), with a "fit" button to reset
+- [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
+- [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
