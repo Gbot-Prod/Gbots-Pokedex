@@ -1,7 +1,7 @@
 // Pokédex completion: every species you open is remembered (localStorage) and shown as a
 // ring in the device header and a progress bar on each region banner.
 import { API_BASE, fetchJson, fetchPokemon, getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
-import { drawTrainerCard, loadCanvasImage } from "./cardimage.js";
+import { drawFinaleCard, drawTrainerCard, loadCanvasImage } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
 import { isStoredEntry, isTeamMember } from "./storage.js";
 import {
@@ -232,6 +232,7 @@ function showFinaleParade({ replay = false } = {}) {
         '<div class="paradeTrack" aria-hidden="true"><div class="paradeLine"></div></div>' +
         '<form method="dialog" class="finaleActions">' +
         '<button type="button" class="btn" id="finaleShare">📋 Share</button>' +
+        '<button type="button" class="btn" id="finaleImage">🖼️ Save image</button>' +
         '<button class="btn" id="finaleClose" autofocus>Hooray!</button></form>' +
         '<p id="finaleShareStatus" role="status"></p>';
     const line = dialog.querySelector(".paradeLine");
@@ -339,12 +340,57 @@ function showFinaleParade({ replay = false } = {}) {
         // Seen it before: start mid-march with the line already filling the screen.
         line.style.animationDelay = "-5s";
     }
+    dialog
+        .querySelector("#finaleImage")
+        .addEventListener("click", () => saveFinaleImage(dialog.querySelector("#finaleShareStatus")));
     dialog.addEventListener("close", () => dialog.remove());
     document.body.append(dialog);
     dialog.showModal();
     if (!reducedMotion.matches) {
         dialog.append(makeConfetti(160, "confetti fullscreen")); // inside, so it shows over the backdrop
     }
+}
+
+// The parade as a 1200×630 picture: shared straight to another app on phones, downloaded
+// as pokedex-complete.png everywhere else.
+async function saveFinaleImage(status) {
+    status.textContent = "Drawing…";
+    const load = (ids) => Promise.all(ids.map((id) => loadCanvasImage(spriteUrl(id))));
+    const [starters, legends] = await Promise.all([
+        load(Object.values(REGION_STARTERS).flat()),
+        load(Object.values(REGION_MASCOTS)),
+    ]);
+    const finaleDay = readStoredText(FINALE_KEY);
+    const dateText = /^\d{4}-\d{2}-\d{2}$/.test(finaleDay ?? "")
+        ? new Date(finaleDay + "T12:00").toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+          })
+        : "";
+    const canvas = document.createElement("canvas");
+    await document.fonts?.ready;
+    drawFinaleCard(canvas, { dateText }, starters, legends);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    const file = new File([blob], "pokedex-complete.png", { type: "image/png" });
+    if (navigator.canShare?.({ files: [file] })) {
+        try {
+            await navigator.share({ files: [file], title: "Pokédex complete!" });
+            status.textContent = "";
+            return;
+        } catch (error) {
+            if (error.name === "AbortError") {
+                status.textContent = "";
+                return; // share sheet dismissed
+            }
+        }
+    }
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "pokedex-complete.png";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+    status.textContent = "Image saved!";
 }
 
 function celebrateIfComplete(dexNumber) {

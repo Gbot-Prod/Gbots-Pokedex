@@ -1108,6 +1108,12 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     await page.click("#finaleShare");
     await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent.startsWith("Copied!"));
     assert.match(await page.evaluate(() => window.copiedText), /^🏆 I completed the National Pokédex — all 1,025/);
+    // ...or as a picture of the parade, downloaded where there's no file sharing.
+    await page.evaluate(() => delete Navigator.prototype.canShare);
+    const download = page.waitForEvent("download");
+    await page.click("#finaleImage");
+    assert.equal((await download).suggestedFilename(), "pokedex-complete.png");
+    await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent === "Image saved!");
     // Cries are capped at three at once: with cries that never finish, six taps make three.
     await page.evaluate(() => {
         window.criesMade = 0;

@@ -6072,3 +6072,18 @@ img.animatedSmall {
 #trainerCard[data-style="retro"] #trainerCompletedOn {
     color: inherit;
 }
+
+#finaleImage {
+    padding: 0.6rem 1.4rem;
+    border: 3px solid #ffd447;
+    border-radius: 999px;
+    background: transparent;
+    color: #ffd447;
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+#finaleImage:hover,
+#finaleImage:focus-visible {
+    background: rgba(255, 212, 71, 0.15);
+}

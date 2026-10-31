@@ -178,3 +178,59 @@ export function loadCanvasImage(src) {
         image.src = src;
     });
 }
+
+export const FINALE_WIDTH = 1200;
+export const FINALE_HEIGHT = 630;
+
+// The "Pokédex complete" share image: a night sky, the title in gold, the starters lined up in
+// three rows and the region legendaries in front. starters/legends: loaded images or nulls.
+export function drawFinaleCard(canvas, { dateText }, starters, legends) {
+    canvas.width = FINALE_WIDTH;
+    canvas.height = FINALE_HEIGHT;
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false; // crisp pixel sprites
+    context.fillStyle = gradient(context, 0, 0, 0, FINALE_HEIGHT, ["#0b1030", "#3b2a6b"]);
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+    const glow = context.createRadialGradient(600, 760, 40, 600, 760, 520);
+    glow.addColorStop(0, "rgba(255, 212, 71, 0.5)");
+    glow.addColorStop(1, "rgba(255, 212, 71, 0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+    // a scatter of stars (fixed pattern, so every image looks the same)
+    context.fillStyle = "rgba(255, 255, 255, 0.7)";
+    for (let index = 0; index < 70; index++) {
+        context.fillRect((index * 397) % FINALE_WIDTH, (index * 151) % 330, 2, 2);
+    }
+
+    context.textAlign = "center";
+    context.font = "900 64px inter, arial, sans-serif";
+    context.fillStyle = "#b11f1f";
+    context.fillText("🏆 Pokédex complete!", FINALE_WIDTH / 2, 98);
+    context.shadowColor = "rgba(255, 212, 71, 0.8)";
+    context.shadowBlur = 20;
+    context.fillStyle = "#ffd447";
+    context.fillText("🏆 Pokédex complete!", FINALE_WIDTH / 2, 92);
+    context.shadowBlur = 0;
+    context.font = "700 26px inter, arial, sans-serif";
+    context.fillStyle = "#ffffff";
+    context.fillText("1,025 / 1,025 Pokémon seen" + (dateText ? " · " + dateText : ""), FINALE_WIDTH / 2, 138);
+
+    // 27 starters: three rows of nine, one column per region
+    starters.forEach((image, index) => {
+        if (image) {
+            const column = Math.floor(index / 3);
+            const row = index % 3;
+            context.drawImage(image, 60 + column * 122, 160 + row * 74, 84, 84);
+        }
+    });
+    // the nine legendaries along the bottom, bigger
+    legends.forEach((image, index) => {
+        if (image) {
+            context.drawImage(image, 18 + index * 130, 392, 150, 150);
+        }
+    });
+
+    context.font = "600 20px inter, arial, sans-serif";
+    context.fillStyle = "rgba(255, 255, 255, 0.85)";
+    context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
+}
