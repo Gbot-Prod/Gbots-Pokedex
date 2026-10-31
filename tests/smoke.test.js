@@ -1073,7 +1073,8 @@ test("finishing a region with Next missing offers the next unfinished region", a
     }
 });
 
-test("seeing every Pokémon turns the region button into the National Dex finale", async () => {
+// Everything but Pikachu seen, then Pikachu: the National Dex finale parade opens.
+async function openFinale() {
     await page.evaluate(() =>
         localStorage.setItem(
             "pokedex:seen:v1",
@@ -1084,11 +1085,37 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     await page.waitForSelector("#browseGrid .browseTile");
     await page.selectOption("#generationFilter", "1");
     await search("pikachu");
-    // The once-only parade: all nine starter trios under "Pokédex complete!".
     await page.waitForSelector("#finaleParade[open]");
+}
+
+test("seeing every Pokémon opens the once-only finale parade and turns the region button gold", async () => {
+    await openFinale();
+    // All nine starter trios under "Pokédex complete!", then the region legendaries.
     assert.equal(await page.locator("#finaleParade .paradeLine img").count(), 27 + 9);
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeLegend").count(), 9);
-    // Tapping a marcher makes it jump and call out its cry (dispatched: it's moving).
+    assert.equal(await page.evaluate(() => document.activeElement.id), "finaleClose"); // focus on the way out
+    await page.click("#finaleClose");
+    await page.waitForSelector("#finaleParade", { state: "detached" });
+    assert.match(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), /^\d{4}-\d{2}-\d{2}$/);
+    await page.waitForFunction(() =>
+        document.getElementById("nextMissingBtn").textContent.startsWith("🏆 National Dex complete!"),
+    );
+    await page.click("#nextMissingBtn");
+    await page.waitForSelector("#trainerCard[open]");
+    assert.match(await page.textContent("#trainerCompletedOn"), /^🏆 National Dex completed \S/);
+    // The once-only parade can be replayed from the card, already mid-march.
+    await page.click("#replayParadeBtn");
+    await page.waitForSelector("#finaleParade[open]");
+    assert.equal(
+        await page.evaluate(() => document.querySelector("#finaleParade .paradeLine").style.animationDelay),
+        "-5s",
+    );
+    assert.equal(await page.locator("#trainerCard[open]").count(), 0);
+});
+
+test("tapped parade marchers jump, cry and say their name (three cries at most)", async () => {
+    await openFinale();
+    // Dispatched clicks: the marchers are moving.
     const bulbasaurCry = page.waitForRequest((request) => request.url().endsWith("/latest/1.ogg"));
     await page.locator("#finaleParade .paradeLine img").first().dispatchEvent("click");
     await bulbasaurCry;
@@ -1101,28 +1128,7 @@ test("seeing every Pokémon turns the region button into the National Dex finale
         true,
     );
     assert.match(await page.textContent("#finaleParade .paradeBubble"), /^(Bulbasaur|#0001)! · Kanto$/);
-    assert.equal(await page.evaluate(() => document.activeElement.id), "finaleClose"); // focus on the way out
-    await page.click("#finaleParade .finaleWave"); // the title: everyone jumps in a wave
-    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeJump").count(), 36);
-    await page.click("#finaleParade .finaleWave"); // next mood: a spin
-    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeSpin").count(), 36);
-    await page.click("#finaleParade .finaleWave"); // then a bow
-    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeBow").count(), 36);
-    // Share: without a share sheet the brag goes to the clipboard.
-    await page.evaluate(() => {
-        delete Navigator.prototype.share;
-        navigator.clipboard.writeText = async (text) => (window.copiedText = text);
-    });
-    await page.click("#finaleShare");
-    await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent.startsWith("Copied!"));
-    assert.match(await page.evaluate(() => window.copiedText), /^🏆 I completed the National Pokédex — all 1,025/);
-    // ...or as a picture of the parade, downloaded where there's no file sharing.
-    await page.evaluate(() => delete Navigator.prototype.canShare);
-    const download = page.waitForEvent("download");
-    await page.click("#finaleImage");
-    assert.equal((await download).suggestedFilename(), "pokedex-complete.png");
-    await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent === "Image saved!");
-    // Cries are capped at three at once: with cries that never finish, six taps make three.
+    // With cries that never finish, six more taps make only three.
     await page.evaluate(() => {
         window.criesMade = 0;
         window.Audio = class {
@@ -1139,23 +1145,34 @@ test("seeing every Pokémon turns the region button into the National Dex finale
         await page.locator("#finaleParade .paradeLine img").nth(index).dispatchEvent("click");
     }
     assert.equal(await page.evaluate(() => window.criesMade), 3);
-    await page.click("#finaleClose");
-    await page.waitForSelector("#finaleParade", { state: "detached" });
-    assert.match(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), /^\d{4}-\d{2}-\d{2}$/);
-    await page.waitForFunction(() =>
-        document.getElementById("nextMissingBtn").textContent.startsWith("🏆 National Dex complete!"),
-    );
-    await page.click("#nextMissingBtn");
-    await page.waitForSelector("#trainerCard[open]");
-    assert.match(await page.textContent("#trainerCompletedOn"), /^🏆 National Dex completed \S/);
-    // The once-only parade can be replayed from the card.
-    await page.click("#replayParadeBtn");
-    await page.waitForSelector("#finaleParade[open]");
-    assert.equal(
-        await page.evaluate(() => document.querySelector("#finaleParade .paradeLine").style.animationDelay),
-        "-5s",
-    );
-    assert.equal(await page.locator("#trainerCard[open]").count(), 0);
+});
+
+test("the finale title sets off a jump, then a spin, then a bow wave", async () => {
+    await openFinale();
+    await page.click("#finaleParade .finaleWave");
+    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeJump").count(), 36);
+    await page.click("#finaleParade .finaleWave");
+    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeSpin").count(), 36);
+    await page.click("#finaleParade .finaleWave");
+    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeBow").count(), 36);
+});
+
+test("the finale can be shared as text or saved as an image", async () => {
+    await openFinale();
+    // Without a share sheet the brag goes to the clipboard...
+    await page.evaluate(() => {
+        delete Navigator.prototype.share;
+        navigator.clipboard.writeText = async (text) => (window.copiedText = text);
+    });
+    await page.click("#finaleShare");
+    await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent.startsWith("Copied!"));
+    assert.match(await page.evaluate(() => window.copiedText), /^🏆 I completed the National Pokédex — all 1,025/);
+    // ...and the picture of the parade downloads where there's no file sharing.
+    await page.evaluate(() => delete Navigator.prototype.canShare);
+    const download = page.waitForEvent("download");
+    await page.click("#finaleImage");
+    assert.equal((await download).suggestedFilename(), "pokedex-complete.png");
+    await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent === "Image saved!");
 });
 
 test("the unseen-only filter hides Pokémon you've already opened", async () => {

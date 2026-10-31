@@ -29,7 +29,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region complete image: a smaller share card when a single region is completed (its banner colours, trio and seen count), offered from the region toast
 - [ ] Wave moods step 2: a fourth secret mood after the bow — everyone turns shiny for a moment (swap to shiny sprites for one wave)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
-- [ ] Test tidy: split the long National Dex finale smoke test into finale / parade toys / share & image tests so a failure points at one feature
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -386,3 +385,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Regional footprints step 3: a short legend in the region banner tooltip ("Galar leaves boot prints") so the trails are discoverable (2026-10-31) — each region banner's tooltip now reads 'Show only Galar · complete it to see its starters leave boot prints' (REGION_TRAILS in lists.js, matching the CSS trails)
 - [x] Parade step 7: the wave button cycles through moods — jump wave, then a spin wave, then a "bow" (everyone dips) on the third press (2026-10-31) — the title button cycles three wave moods: jump, spin (rotateY) and bow (a tilted dip), each staggered left to right; gold outline for all of them under reduced motion
 - [x] Finale image step 2: put the trainer's name and partner on the share image ("Red & Pikachu completed the National Pokédex") (2026-10-31) — the share image's subtitle now leads with the trainer and partner ('Ash & Pikachu · 1,025 / 1,025 Pokémon seen · Oct 31, 2026'); either part is left out if unset
+- [x] Test tidy: split the long National Dex finale smoke test into finale / parade toys / share & image tests so a failure points at one feature (2026-10-31) — one test became four (finale + replay, tapping toys + cry cap, wave moods, share & image) sharing an openFinale() helper; same assertions
