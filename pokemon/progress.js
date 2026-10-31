@@ -380,7 +380,20 @@ function showNextToast() {
         const text = document.createElement("span");
         text.textContent = message;
         const showRegion = () => window.dispatchEvent(new CustomEvent("pokedex:show-region", { detail: region }));
-        toast.replaceChildren(text, toastShowMe(toast, showRegion));
+        // The region's starter trio walks across the top of the toast (stands still under
+        // reduced motion).
+        const trio = document.createElement("span");
+        trio.className = "toastParade";
+        trio.setAttribute("aria-hidden", "true");
+        for (const id of REGION_STARTERS[region]) {
+            const sprite = document.createElement("img");
+            sprite.alt = "";
+            sprite.width = 60;
+            sprite.height = 60;
+            setSprite(sprite, id);
+            trio.append(sprite);
+        }
+        toast.replaceChildren(trio, text, toastShowMe(toast, showRegion));
     } else if (opensCard) {
         // The "+N more" summary is a button straight to the badge shelf.
         const button = document.createElement("button");

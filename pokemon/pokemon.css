@@ -5551,3 +5551,49 @@ img.animatedSmall {
         height: 76px;
     }
 }
+
+/* A completed region's starter trio walks along the top edge of its toast */
+.toastParade {
+    position: absolute;
+    bottom: calc(100% - 1.3rem); /* the sprites' own transparent margin sits behind the toast */
+    left: 0;
+    display: flex;
+    gap: 0.2rem;
+    pointer-events: none;
+    animation: toastParadeWalk 4s linear forwards;
+}
+
+.toastParade img {
+    width: 60px;
+    height: 60px;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.35));
+    animation: paradeHop 0.35s ease-in-out infinite alternate;
+}
+
+.toastParade img:nth-child(2) {
+    animation-delay: 0.17s;
+}
+
+@keyframes toastParadeWalk {
+    from {
+        left: 0;
+        transform: translateX(-50%);
+    }
+    to {
+        left: 100%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toastParade {
+        left: 50%;
+        transform: translateX(-50%);
+        animation: none;
+    }
+
+    .toastParade img {
+        animation: none;
+    }
+}
