@@ -31,7 +31,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
-- [ ] Team card step 2: retro type pills — draw them as outlined boxes in retro so they stay visible after the four-shade conversion
 - [ ] Team card step 3: a mini 18-type coverage strip along the bottom (green/red squares per type) instead of the text lines
 - [ ] Shared team links: the "Share team" link opens with the team card preview ready for the recipient too ("Ash shared a team")
 - [ ] Card preview step 5: a "Download all" on the trainer card that zips every card you can make (finale, regions, team, trainer)
@@ -411,3 +410,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Preview polish: a short crossfade between styles when a chip is pressed (instant under reduced motion) (2026-10-31) — each restyle fades the new card in from a light blur (0.3 s), none under reduced motion
 - [x] Trainer card PNG: route "Save image" on the trainer card through the same preview (style chips, copy, share) for consistency (2026-10-31) — the trainer card's Save image now opens the shared preview (style chips redraw the card in classic/holo/retro, Save, Copy, Share); the preview caps tall images to the viewport so the portrait card's buttons stay on screen
 - [x] Share cards step: a "Team card" — the six team members on a card with their types and the coverage summary (2026-10-31) — a '🖼️ Team card' button in the team section opens a 1200×630 card through the shared preview: '<name>'s team', six panels with sprite, name and type-coloured pills, 'Watch out for: Rock ×3…' and 'Hits hard: …' from the coverage data; solid panels so the retro style still reads
+- [x] Team card step 2: retro type pills — draw them as outlined boxes in retro so they stay visible after the four-shade conversion (2026-10-31) — in retro the team card's type pills are drawn as square outlined boxes (Game Boy menu style) so they stay readable after the four-shade conversion; classic/holo keep the type-coloured pills

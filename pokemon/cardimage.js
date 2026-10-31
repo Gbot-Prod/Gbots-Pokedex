@@ -388,7 +388,14 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
         context.fillText(member.label, x + 150, y + 62, 200);
         member.types.forEach((type, typeIndex) => {
             const pillX = x + 150 + typeIndex * 100;
-            roundRect(context, pillX, y + 82, 92, 32, 16, typeColors[type] ?? "#888888");
+            if (retro) {
+                // outlined boxes: filled pills would melt into the panel at four shades
+                context.lineWidth = 3;
+                context.strokeStyle = "#ffffff";
+                context.strokeRect(pillX + 1.5, y + 83.5, 89, 29);
+            } else {
+                roundRect(context, pillX, y + 82, 92, 32, 16, typeColors[type] ?? "#888888");
+            }
             context.fillStyle = "#ffffff";
             context.font = cardFont(800, 17, retro);
             context.textAlign = "center";
