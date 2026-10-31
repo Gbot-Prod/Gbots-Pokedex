@@ -561,8 +561,9 @@ test("a card type icon opens the type chart at that type, and arrow keys move ar
 test("the animated-sprite toggle only shows when an animation exists", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
-    // The trimmed fixtures have no Showdown animations, so the toggle stays hidden.
-    assert.equal(await page.isVisible("#animatedToggleBtn"), false);
+    // The trimmed fixtures have no Showdown animations, so the toggle stays hidden there; the
+    // real Pikachu has one, so against the live API it shows.
+    assert.equal(await page.isVisible("#animatedToggleBtn"), LIVE_API);
 });
 
 test("the 60-second quiz challenge counts down, accepts number keys and ends with a result", async () => {

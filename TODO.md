@@ -15,7 +15,6 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
-- [ ] Live check: run `npm run check:live` (both browser files) in a nightly CI job so API changes are caught even when nobody pushes
 - [ ] Toast queue step 2: when unlocks are dropped, show one summary toast ("+2 more badges — see your trainer card") instead of losing them silently
 - [ ] Next missing step 2: also offer it from the region chip's "Only N to go!" flow, and show "3 left" on the button itself
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
@@ -305,3 +304,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Combo step 2: a combo meter under the challenge timer that fills with each answer in a row and shakes on a miss (2026-10-31) — five pips under the challenge timer light orange per answer in a row, glow gold from 5, and the meter shakes when a miss breaks the chain (no shake under reduced motion); decorative, aria-hidden
 - [x] Quiz challenge: a "best combo" stat alongside "Best 60s run" (2026-10-31) — the longest challenge combo is saved with the quiz score and shown as " · Best combo ×N" once it reaches 3
 - [x] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s (2026-10-31) — enqueueToast() skips a message that's already queued and drops new ones once 3 are waiting, so a burst of badge unlocks can't keep toasts up for 20 s (the currently shown toast counts as the first)
+- [x] Live check: run `npm run check:live` (both browser files) in a nightly CI job so API changes are caught even when nobody pushes (2026-10-31) — new .github/workflows/live-check.yml runs npm run check:live nightly (04:17 UTC) and on demand (scheduled runs start once it's on the default branch). A local live run found one fixture-only assumption (animated toggle hidden for Pikachu); that test now expects the toggle against the real API. Live run: 62/63 before the fix
