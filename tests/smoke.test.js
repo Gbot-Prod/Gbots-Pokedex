@@ -1153,6 +1153,11 @@ test("the shiny hunt counts encounters and collects shinies", async () => {
     await page.click("#huntEncounterBtn");
     await page.waitForSelector("#huntStage:not([hidden])");
     assert.match(await page.textContent("#huntCounter"), /Encounters: 1/);
+    // Odometer: only the digit that changed (0000 → 0001) rolls in.
+    assert.deepEqual(
+        await page.$$eval(".lcdCell:first-child b span", (digits) => digits.map((digit) => digit.className)),
+        ["", "", "", "roll"],
+    );
 
     await page.selectOption("#huntGeneration", "1");
     await page.evaluate(() => (Math.random = () => 0.001)); // force a shiny: #1 in Kanto

@@ -63,13 +63,29 @@ function save() {
 
 // One readout on the counter's LCD: a label over zero-padded digits, with faint "8"s behind
 // them like unlit segments.
+// Digits that changed since the last render roll in from above, like an odometer (CSS keeps
+// them still under reduced motion).
+const lastShown = {};
+
 function lcdCell(label, value, width) {
     const cell = document.createElement("span");
     cell.className = "lcdCell";
     const name = document.createElement("small");
     name.textContent = label;
     const digits = document.createElement("b");
-    digits.textContent = String(value).padStart(width, "0");
+    const text = String(value).padStart(width, "0");
+    const before = lastShown[label];
+    digits.append(
+        ...[...text].map((digit, index) => {
+            const span = document.createElement("span");
+            span.textContent = digit;
+            if (before !== undefined && (before.length !== text.length || before[index] !== digit)) {
+                span.className = "roll";
+            }
+            return span;
+        }),
+    );
+    lastShown[label] = text;
     digits.dataset.ghost = "8".repeat(Math.max(width, String(value).length));
     cell.append(name, digits);
     return cell;
