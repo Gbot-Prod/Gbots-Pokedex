@@ -335,6 +335,10 @@ function showFinaleParade({ replay = false } = {}) {
             status.textContent = navigator.share ? "" : "Couldn't copy — your browser blocked the clipboard.";
         }
     });
+    if (replay) {
+        // Seen it before: start mid-march with the line already filling the screen.
+        line.style.animationDelay = "-5s";
+    }
     dialog.addEventListener("close", () => dialog.remove());
     document.body.append(dialog);
     dialog.showModal();
