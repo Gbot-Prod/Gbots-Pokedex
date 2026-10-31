@@ -414,7 +414,23 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
         context.textAlign = "center";
         context.fillText(type.slice(0, 3).toUpperCase(), x + square / 2, 506);
         context.textAlign = "left";
-        if (state) {
+        if (state && retro) {
+            // red and green become one Game Boy shade, so retro marks by shape: ✕ weak, ● hits
+            const centreX = x + square / 2;
+            context.fillStyle = context.strokeStyle = "#ffffff";
+            context.lineWidth = 3;
+            context.beginPath();
+            if (state === "weak") {
+                context.moveTo(centreX - 6, 515);
+                context.lineTo(centreX + 6, 527);
+                context.moveTo(centreX + 6, 515);
+                context.lineTo(centreX - 6, 527);
+                context.stroke();
+            } else {
+                context.arc(centreX, 521, 6, 0, 2 * Math.PI);
+                context.fill();
+            }
+        } else if (state) {
             context.fillStyle = state === "weak" ? "#ff5a4a" : "#5ee07a";
             context.fillRect(x + 2, 512, square - 4, 5);
         }
@@ -423,9 +439,9 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
     context.font = cardFont(700, 22, retro);
     context.fillStyle = "#ffb4a8";
     const watch = team.weakTo.map(([type, count]) => capitalise(type) + " ×" + count).join(", ");
-    context.fillText("Watch out for: " + (watch || "nothing — nicely balanced!"), 50, 545, FINALE_WIDTH - 100);
+    context.fillText("Watch out for: " + (watch || "nothing — nicely balanced!"), 50, 553, FINALE_WIDTH - 100);
     context.fillStyle = "#b9f5c0";
-    context.fillText("Hits hard: " + (team.hits.map(capitalise).join(", ") || "—"), 50, 575, FINALE_WIDTH - 100);
+    context.fillText("Hits hard: " + (team.hits.map(capitalise).join(", ") || "—"), 50, 580, FINALE_WIDTH - 100);
 
     context.textAlign = "center";
     context.font = cardFont(600, 18, retro);
