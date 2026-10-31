@@ -22,7 +22,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region pulse step 2: if the region strip is off-screen when the region switches, show a small "Now browsing Hoenn" chip near the card instead of an unseen pulse
 - [ ] National Dex finale step 2: a one-time full-screen "Pokédex complete" celebration (all 9 starter trios parading across) the first time all 1,025 are seen
 - [ ] Trainer card: a "Regions" row of mini banners that light up as each is completed (mirrors the browse strip)
-- [ ] Next missing: a keyboard shortcut (N) for "Next missing" while a region filter is active
 - [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
 - [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
@@ -320,3 +319,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Next region step 2: when every region is complete, the button becomes "🏆 National Dex complete!" and opens the trainer card (2026-10-31) — with every region complete the gold button reads "🏆 National Dex complete! See your trainer card →" and opens the trainer card (openTrainerCard exported from progress.js)
 - [x] Region switch flourish: when "on to Johto?" switches regions, the Johto banner pulses in the region strip so the change is visible (2026-10-31) — "on to Hoenn?" now slides the region strip sideways to the new banner and pulses it gold twice (outline only under reduced motion), without scrolling the page
 - [x] Smoke test for the "+N more" summary toast (seed several badges at once and click through to the card) (2026-10-31) — seeds several badges at once, fast-forwards the three queued 4 s toasts with page.clock, checks the "✨ +N more achievements" button and that it opens the trainer card
+- [x] Next missing: a keyboard shortcut (N) for "Next missing" while a region filter is active (2026-10-31) — N follows the Next missing button whenever it's visible (gaps, next region, finale); aria-keyshortcuts + tip line; smoke test presses N to reach Bulbasaur

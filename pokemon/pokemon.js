@@ -1299,7 +1299,8 @@ shareButton.addEventListener("click", async () => {
 });
 
 // --- Keyboard shortcuts -------------------------------------------------------
-// ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny, "c" plays the cry.
+// ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny, "c" plays the cry,
+// "n" follows the "Next missing" button while a region filter is active.
 
 function isTypingTarget(element) {
     return element.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(element.tagName);
@@ -1323,6 +1324,11 @@ document.addEventListener("keydown", (event) => {
         shinyButton.click();
     } else if (event.key.toLowerCase() === "c" && cardVisible && !cryButton.hidden) {
         playCry();
+    } else if (event.key.toLowerCase() === "n") {
+        const nextMissing = document.getElementById("nextMissingBtn");
+        if (!nextMissing.hidden) {
+            nextMissing.click();
+        }
     }
 });
 

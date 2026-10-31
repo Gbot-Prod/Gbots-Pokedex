@@ -691,6 +691,10 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
     await page.waitForFunction(() => !document.querySelector('#browseGrid .browseTile[data-id="25"]'));
     assert.ok((await page.locator('.browseTile[data-dex="25"] .tileSeen').count()) >= 1);
     assert.equal(await page.locator('#browseGrid .browseTile[data-dex="1"] .tileSeen').count(), 0);
+    // "N" follows the Next missing button: Bulbasaur (#1) is Kanto's first gap.
+    const bulbasaurRequest = page.waitForRequest((request) => /\/pokemon\/1$/.test(request.url()));
+    await page.keyboard.press("n");
+    await bulbasaurRequest;
 });
 
 test("a week-long visit streak earns a flame badge and orange LEDs", async () => {
