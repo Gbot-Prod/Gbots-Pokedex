@@ -2351,9 +2351,12 @@ img.placeholderSprite {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     transform: translate(-50%, 200%);
     opacity: 0;
+    /* hidden toasts keep their buttons out of the tab order */
+    visibility: hidden;
     transition:
         transform 0.4s cubic-bezier(0.2, 1.4, 0.4, 1),
-        opacity 0.3s;
+        opacity 0.3s,
+        visibility 0.4s;
     pointer-events: none;
 }
 
@@ -2409,6 +2412,49 @@ img.placeholderSprite {
 #dexToast.visible {
     transform: translate(-50%, 0);
     opacity: 1;
+    visibility: visible;
+}
+
+.toastShowMe {
+    flex: none;
+    margin-left: 0.3rem;
+    padding: 0.35rem 0.8rem;
+    border: 2px solid #ffd447;
+    border-radius: 999px;
+    background: #ffd447;
+    color: #7a1010;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.toastShowMe:hover,
+.toastShowMe:focus-visible {
+    background: #ffffff;
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* the badge a toast's "Show me" pointed at */
+#trainerCardBadges li.spotlight {
+    animation: badgeSpotlight 0.8s ease-in-out 3;
+}
+
+@keyframes badgeSpotlight {
+    50% {
+        transform: scale(1.35);
+        box-shadow:
+            0 0 0 4px #ffd447,
+            0 0 18px 6px rgba(255, 212, 71, 0.9);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #trainerCardBadges li.spotlight {
+        animation: none;
+        box-shadow: 0 0 0 4px #ffd447;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

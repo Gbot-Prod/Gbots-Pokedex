@@ -219,9 +219,9 @@ export function enqueueToast(queue, toast) {
 
 let droppedToasts = 0; // over the cap; summed up in one last toast
 
-function celebrate(message, confettiCount, icon = "") {
+function celebrate(message, confettiCount, icon = "", badgeLabel = "") {
     const duplicate = toastQueue.some((queued) => queued.message === message);
-    if (enqueueToast(toastQueue, { message, confettiCount, icon })) {
+    if (enqueueToast(toastQueue, { message, confettiCount, icon, badgeLabel })) {
         if (toastQueue.length === 1) {
             showNextToast();
         }
@@ -234,16 +234,72 @@ export function droppedSummary(count) {
     return "✨ +" + count + " more achievement" + (count === 1 ? "" : "s") + " — see your trainer card";
 }
 
+// Opens the trainer card on the badge shelf, scrolled to (and flashing) one badge if given.
+function showBadgeOnCard(label) {
+    openTrainerCard();
+    const item = label && document.querySelector('#trainerCardBadges li[data-badge="' + CSS.escape(label) + '"]');
+    (item || document.getElementById("trainerCardBadges")).scrollIntoView({ block: "center" });
+    if (item) {
+        item.classList.add("spotlight");
+        setTimeout(() => item.classList.remove("spotlight"), 2400);
+    }
+}
+
+// The toast's countdown pauses while it's hovered or focused, so "Show me" can be reached.
+const TOAST_DURATION = 4000;
+let toastTimer = null;
+let toastRemaining = 0;
+let toastStarted = 0;
+
+function startToastTimer() {
+    toastStarted = Date.now();
+    toastTimer = setTimeout(nextToast, toastRemaining);
+}
+
+function pauseToastTimer() {
+    if (toastTimer !== null) {
+        clearTimeout(toastTimer);
+        toastTimer = null;
+        toastRemaining = Math.max(500, toastRemaining - (Date.now() - toastStarted));
+    }
+}
+
+function resumeToastTimer() {
+    const toast = document.getElementById("dexToast");
+    if (toastTimer === null && toastQueue.length && !toast.matches(":hover, :focus-within")) {
+        startToastTimer();
+    }
+}
+
+const toastElement = document.getElementById("dexToast");
+if (toastElement?.addEventListener) {
+    toastElement.addEventListener("pointerenter", pauseToastTimer);
+    toastElement.addEventListener("focusin", pauseToastTimer);
+    toastElement.addEventListener("pointerleave", resumeToastTimer);
+    toastElement.addEventListener("focusout", () => setTimeout(resumeToastTimer));
+}
+
 function showNextToast() {
     const toast = document.getElementById("dexToast");
-    const { message, confettiCount, icon, opensCard } = toastQueue[0];
-    // Badge toasts lead with the badge itself, large, like an achievement pop-up.
+    const { message, confettiCount, icon, opensCard, badgeLabel } = toastQueue[0];
+    // Badge toasts lead with the badge itself, large, like an achievement pop-up, and offer
+    // a "Show me" button to that badge on the trainer card.
     toast.classList.toggle("withIcon", Boolean(icon));
     if (icon) {
         const badge = document.createElement("span");
         badge.className = "toastIcon";
         badge.textContent = icon;
-        toast.replaceChildren(badge, " " + message);
+        const text = document.createElement("span");
+        text.textContent = message;
+        const showMe = document.createElement("button");
+        showMe.type = "button";
+        showMe.className = "toastShowMe";
+        showMe.textContent = "Show me";
+        showMe.addEventListener("click", () => {
+            toast.classList.remove("visible");
+            showBadgeOnCard(badgeLabel);
+        });
+        toast.replaceChildren(badge, " ", text, showMe);
     } else if (opensCard) {
         // The "+N more" summary is a button straight to the badge shelf.
         const button = document.createElement("button");
@@ -252,32 +308,35 @@ function showNextToast() {
         button.textContent = message;
         button.addEventListener("click", () => {
             toast.classList.remove("visible");
-            openTrainerCard();
-            document.getElementById("trainerCardBadges").scrollIntoView({ block: "center" });
+            showBadgeOnCard("");
         });
         toast.replaceChildren(button);
     } else {
         toast.textContent = message;
     }
-    toast.classList.toggle("clickable", Boolean(opensCard));
+    toast.classList.toggle("clickable", Boolean(opensCard || icon));
     toast.classList.add("visible");
     if (confettiCount && !reducedMotion.matches) {
         const burst = makeConfetti(confettiCount, "confetti fullscreen");
         document.body.append(burst);
         setTimeout(() => burst.remove(), 3000);
     }
-    setTimeout(() => {
-        toastQueue.shift();
-        if (!toastQueue.length && droppedToasts) {
-            toastQueue.push({ message: droppedSummary(droppedToasts), confettiCount: 0, opensCard: true });
-            droppedToasts = 0;
-        }
-        if (toastQueue.length) {
-            showNextToast();
-        } else {
-            toast.classList.remove("visible");
-        }
-    }, 4000);
+    toastRemaining = TOAST_DURATION;
+    startToastTimer();
+}
+
+function nextToast() {
+    toastTimer = null;
+    toastQueue.shift();
+    if (!toastQueue.length && droppedToasts) {
+        toastQueue.push({ message: droppedSummary(droppedToasts), confettiCount: 0, opensCard: true });
+        droppedToasts = 0;
+    }
+    if (toastQueue.length) {
+        showNextToast();
+    } else {
+        document.getElementById("dexToast").classList.remove("visible");
+    }
 }
 
 // --- Badge unlocks -----------------------------------------------------------------------
@@ -308,7 +367,7 @@ function checkBadges() {
     if (known) {
         // Each new badge gets its toast; past the queue cap they're summed up in one.
         for (const badge of fresh) {
-            celebrate("Badge earned! " + badge.label, 50, badge.icon);
+            celebrate("Badge earned! " + badge.label, 50, badge.icon, badge.label);
         }
     }
     updateNewsDot();
@@ -976,6 +1035,7 @@ function renderTrainerCard() {
             if (badge.earned && shownBefore && !shownBefore.includes(badge.label)) {
                 item.classList.add("fresh");
             }
+            item.dataset.badge = badge.label;
             item.title = badge.earned ? badge.label : "Locked: " + badge.hint;
             item.innerHTML = '<span aria-hidden="true"></span><span class="visuallyHidden"></span>';
             item.children[0].textContent = badge.earned ? badge.icon : "🔒";

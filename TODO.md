@@ -16,7 +16,6 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
-- [ ] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
 - [ ] Region pulse step 2: if the region strip is off-screen when the region switches, show a small "Now browsing Hoenn" chip near the card instead of an unseen pulse
@@ -43,7 +42,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
 - [ ] News dot step 2: a small "NEW" ribbon on the freshly earned badge inside the card, fading after the first view
 - [ ] Shiny hunt: a progress bar under the tier line filling toward the next tier, in the tier's metal colour
-- [ ] Toasts: a "Show me" button on badge toasts that opens the trainer card scrolled to the badge
 - [ ] Region banners: a mini Region master progress ("2 / 3 regions for silver") under the region strip heading
 - [ ] Badge detail: tapping a badge on the shelf shows its description, when it was earned and progress toward the next tier
 - [ ] Toast polish: a tiny progress line along the toast's bottom edge showing time until the next queued toast
@@ -320,3 +318,5 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region switch flourish: when "on to Johto?" switches regions, the Johto banner pulses in the region strip so the change is visible (2026-10-31) — "on to Hoenn?" now slides the region strip sideways to the new banner and pulses it gold twice (outline only under reduced motion), without scrolling the page
 - [x] Smoke test for the "+N more" summary toast (seed several badges at once and click through to the card) (2026-10-31) — seeds several badges at once, fast-forwards the three queued 4 s toasts with page.clock, checks the "✨ +N more achievements" button and that it opens the trainer card
 - [x] Next missing: a keyboard shortcut (N) for "Next missing" while a region filter is active (2026-10-31) — N follows the Next missing button whenever it's visible (gaps, next region, finale); aria-keyshortcuts + tip line; smoke test presses N to reach Bulbasaur
+- [x] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused (2026-10-31) — badge toasts carry a gold 'Show me' pill that opens the trainer card on that badge (3× spotlight pulse; static ring under reduced motion); the countdown pauses on hover/focus; hidden toasts are visibility:hidden so their buttons leave the tab order
+- [x] Toasts: a "Show me" button on badge toasts that opens the trainer card scrolled to the badge (2026-10-31) — merged into badge toast step 2 (same day)

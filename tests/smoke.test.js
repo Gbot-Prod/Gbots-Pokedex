@@ -766,6 +766,24 @@ test("earning a new badge announces it with the toast", async () => {
     assert.equal(await page.isVisible("#dexToast.visible"), true);
 });
 
+test("a badge toast pauses while hovered and its Show me button spotlights the badge", async () => {
+    await page.clock.install();
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:badges-earned:v1", "[]");
+        localStorage.setItem("pokedex:views:v1", JSON.stringify({ 25: 24 }));
+    });
+    await page.reload();
+    await search("pikachu");
+    await page.waitForFunction(() => document.getElementById("dexToast").textContent.includes("Collector"));
+    await page.hover("#dexToast .toastShowMe");
+    await page.clock.runFor(8000); // well past the 4 s countdown
+    assert.equal(await page.isVisible("#dexToast.visible"), true);
+    await page.click("#dexToast .toastShowMe");
+    await page.waitForSelector("#trainerCard[open]");
+    assert.match(await page.getAttribute("#trainerCardBadges li.spotlight", "data-badge"), /^Collector/);
+    assert.equal(await page.isVisible("#dexToast.visible"), false);
+});
+
 test("badges beyond the toast queue are summed up in one clickable toast", async () => {
     await page.clock.install();
     await page.evaluate(() => {
