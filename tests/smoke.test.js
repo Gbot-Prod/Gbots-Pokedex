@@ -1195,6 +1195,13 @@ test("the finale can be shared as text or saved as an image", async () => {
     await page.click('.cardStyleChip[data-style="retro"]');
     await page.waitForFunction((src) => document.querySelector("#cardPreview img").src !== src, before);
     assert.equal(await page.getAttribute('.cardStyleChip[data-style="retro"]', "aria-pressed"), "true");
+    // Copy image: the shown card goes to the clipboard as a PNG.
+    await page.evaluate(() => {
+        navigator.clipboard.write = async (items) => (window.copiedTypes = items.flatMap((item) => item.types));
+    });
+    await page.click("#cardPreviewCopy");
+    await page.waitForFunction(() => document.getElementById("cardPreviewStatus").textContent.startsWith("Copied!"));
+    assert.deepEqual(await page.evaluate(() => window.copiedTypes), ["image/png"]);
     await page.click("#cardPreviewSave");
     assert.equal((await download).suggestedFilename(), "pokedex-complete.png");
     await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent === "Image saved!");

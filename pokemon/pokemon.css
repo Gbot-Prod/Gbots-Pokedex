@@ -6342,3 +6342,23 @@ img.animatedSmall {
     outline: 2px solid #ffffff;
     outline-offset: 2px;
 }
+
+#cardPreviewCopy {
+    padding: 0.5rem 1.3rem;
+    border: 2px solid #ffd447;
+    border-radius: 999px;
+    background: transparent;
+    color: #ffd447;
+    font-weight: 900;
+}
+
+#cardPreviewCopy[hidden] {
+    display: none;
+}
+
+#cardPreviewStatus {
+    min-height: 1.3em;
+    margin: 0.5rem 0 0;
+    color: #ffd447;
+    font-size: 0.9rem;
+}

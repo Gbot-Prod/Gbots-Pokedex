@@ -444,7 +444,9 @@ async function shareOrDownload(render, filename, title) {
         '<form method="dialog" class="cardPreviewActions">' +
         '<button class="btn" id="cardPreviewSave" value="save" autofocus>💾 Save</button>' +
         '<button class="btn" id="cardPreviewShare" value="share" hidden>📤 Share</button>' +
-        '<button class="btn" id="cardPreviewCancel" value="cancel">Cancel</button></form>';
+        '<button type="button" class="btn" id="cardPreviewCopy" hidden>📋 Copy image</button>' +
+        '<button class="btn" id="cardPreviewCancel" value="cancel">Cancel</button></form>' +
+        '<p id="cardPreviewStatus" role="status"></p>';
     const image = preview.querySelector("img");
     image.src = url;
     image.alt = "Preview of the " + title + " card";
@@ -472,6 +474,18 @@ async function shareOrDownload(render, filename, title) {
     preview.querySelector("#cardPreviewShare").hidden = !canShareFiles(
         new File([blob], filename, { type: "image/png" }),
     );
+    // Copy the shown card as a picture, where the clipboard takes images.
+    const copyButton = preview.querySelector("#cardPreviewCopy");
+    copyButton.hidden = !(window.ClipboardItem && navigator.clipboard?.write);
+    copyButton.addEventListener("click", async () => {
+        const status = preview.querySelector("#cardPreviewStatus");
+        try {
+            await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+            status.textContent = "Copied! Paste it into a chat or a post.";
+        } catch {
+            status.textContent = "Couldn't copy the image — try Save instead.";
+        }
+    });
     document.body.append(preview);
     preview.showModal();
     const choice = await new Promise((resolve) =>

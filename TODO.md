@@ -28,7 +28,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
 - [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
-- [ ] Card preview step 3: a "Copy image" button using the async Clipboard API (ClipboardItem) where it's supported
 - [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -401,3 +400,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region rows: a tiny ✓ badge on completed regions in the browse strip's banners matching the trainer card's 🖼️ rows (2026-10-31) — not needed: completed banners already carry the '★ COMPLETE' ribbon (checked today)
 - [x] Shiny wave step 3: the parade's background flashes to a deep purple "shiny night" for the length of the shiny wave (2026-10-31) — during the shiny wave the parade's sky fades to a deep purple 'shiny night' (a fixed ::before layer, 0.5 s fade, instant under reduced motion) and back when the sprites change back
 - [x] Card preview step 2: a style switcher in the preview (classic / holo / retro chips) that redraws the card live before saving (2026-10-31) — the preview has Classic / ✨ Holo / 👾 Retro chips (aria-pressed) that redraw the card live, starting from the trainer card's style; Save/Share use the shown version; both card fonts load up front so redraws are instant
+- [x] Card preview step 3: a "Copy image" button using the async Clipboard API (ClipboardItem) where it's supported (2026-10-31) — '📋 Copy image' in the preview writes the shown card to the clipboard as a PNG (ClipboardItem), with a status line; hidden where the clipboard can't take images
