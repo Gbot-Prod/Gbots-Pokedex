@@ -15,7 +15,6 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
-- [ ] Robust storage: loadStoredList should drop malformed entries (a favourites list of bare numbers crashes the page on load) — found while seeding screenshots
 - [ ] Shortcuts screen step 2: "G" opens a "go to number" prompt on the LCD (type 1-1025, Enter jumps there)
 - [ ] Shortcuts on phones: a small ⌨️ button only shown when a hardware keyboard is detected (first keydown), since the tip line is hidden on touch
 - [ ] Count-up step 3: region progress bars on the trainer card fill from empty with the same stagger as the stat tiles
@@ -330,3 +329,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Now browsing chip step 2: tapping the chip scrolls back up to the region strip (make it a button while visible) (2026-10-31) — the chip is a button while visible (↑ hint); tapping it scrolls the region strip into view; smoke test checks the strip ends up on screen
 - [x] Count-up polish: the stat tiles (shinies, encounters, quiz streak…) roll up too, staggered by 80 ms each (2026-10-31) — countUpSeen generalised to countUp(element, target, format, delay); the six stat tiles roll up 80 ms apart after the seen line, tabular digits, final values for screen readers, instant under reduced motion
 - [x] Toast "Show me" for region completions too: open the browse grid filtered to that region with its banner glowing gold (2026-10-31) — region-complete toasts carry the same gold Show me pill; it fires a pokedex:show-region event (no import cycle) that lists.js answers by selecting the region, bringing the strip into view and pulsing its banner
+- [x] Robust storage: loadStoredList should drop malformed entries (a favourites list of bare numbers crashes the page on load) — found while seeding screenshots (2026-10-31) — favourites and history drop entries that aren't { id, name } objects (isStoredEntry) instead of crashing on load; smoke test seeds junk and failed before the fix

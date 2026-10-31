@@ -167,6 +167,19 @@ test("? opens the keyboard shortcut list and Esc closes it", async () => {
     await page.waitForSelector("#shortcutsDialog[open]", { state: "detached" });
 });
 
+test("malformed saved favourites and history are skipped instead of breaking the page", async () => {
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:favorites:v1", JSON.stringify([1, null, "x", { id: 25, name: "pikachu" }]));
+        localStorage.setItem("pokedex:recent:v1", JSON.stringify([{ id: "7" }, 4]));
+    });
+    await page.reload();
+    await search("gengar");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
+    assert.equal(await page.locator("#favoritesList .browseTile").count(), 1);
+    assert.match(await page.innerText("#favoritesList"), /Pikachu/);
+    assert.equal(await page.locator("#recentList .browseTile").count(), 1); // just Gengar
+});
+
 test("the cry button requests the Pokémon's cry", async () => {
     await search("pikachu");
     await page.waitForSelector("#cryBtn:not([hidden])");

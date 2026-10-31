@@ -626,10 +626,16 @@ const favoriteButton = document.getElementById("favoriteBtn");
 const favoritesSection = document.getElementById("favoritesSection");
 const favoritesListElement = document.getElementById("favoritesList");
 
+// Each saved entry is a { id, name, ... } summary; anything else (hand-edited or from an old
+// version) is dropped rather than crashing the tiles that render it.
+export function isStoredEntry(entry) {
+    return Boolean(entry) && Number.isInteger(entry.id) && typeof entry.name === "string";
+}
+
 function loadStoredList(key) {
     try {
         const list = JSON.parse(localStorage.getItem(key));
-        return Array.isArray(list) ? list : [];
+        return Array.isArray(list) ? list.filter(isStoredEntry) : [];
     } catch {
         return [];
     }
