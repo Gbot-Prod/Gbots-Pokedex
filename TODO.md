@@ -16,6 +16,11 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live check: run `npm run check:live` (both browser files) in a nightly CI job so API changes are caught even when nobody pushes
+- [ ] Toast queue step 2: when unlocks are dropped, show one summary toast ("+2 more badges — see your trainer card") instead of losing them silently
+- [ ] Next missing step 2: also offer it from the region chip's "Only N to go!" flow, and show "3 left" on the button itself
+- [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
+- [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
+- [ ] Harness: let useMockedPages take per-file options (initial URL, storage seed applied with addInitScript before the first load)
 - [ ] pokedex:seen event step 2: let other parts listen too (shiny hunt, quiz region filter) instead of each reading storage on render
 - [ ] Hover-contrast test step 2: run the same hover pass over the browse filters, region strip and team builder buttons
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
