@@ -1205,7 +1205,7 @@ test("share cards take the trainer card's style (retro becomes Game Boy green)",
         };
         return { classic: sample("classic"), retro: sample("retro") };
     });
-    assert.deepEqual(pixels.classic, [255, 255, 255]); // left as drawn
+    assert.deepEqual(pixels.classic, [255, 255, 255]); // only framed, the middle is as drawn
     assert.deepEqual(pixels.retro, [155, 188, 15]); // white maps to the lightest Game Boy green
 });
 

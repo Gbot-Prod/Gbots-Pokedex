@@ -289,7 +289,7 @@ export function drawRegionCard(canvas, { number, region, total, byline, retro },
 
 // Gives a finished share card the trainer card's style: "holo" lays a rainbow foil sheen and a
 // gradient frame over it, "retro" turns it into a four-shade Game Boy screen with scanlines,
-// "classic" (or anything else) leaves it as drawn.
+// "classic" (or anything else) just gets the Pokédex's red-and-gold frame.
 export function styleShareCard(canvas, style) {
     const context = canvas.getContext("2d");
     const { width, height } = canvas;
@@ -329,5 +329,13 @@ export function styleShareCard(canvas, style) {
         context.lineWidth = 12;
         context.strokeStyle = "#0f380f";
         context.strokeRect(6, 6, width - 12, height - 12);
+    } else {
+        // classic: the Pokédex's red frame with a thin gold inner line
+        context.lineWidth = 14;
+        context.strokeStyle = "#b11f1f";
+        context.strokeRect(7, 7, width - 14, height - 14);
+        context.lineWidth = 3;
+        context.strokeStyle = "#ffd447";
+        context.strokeRect(15.5, 15.5, width - 31, height - 31);
     }
 }
