@@ -4590,7 +4590,8 @@ img.animatedSmall {
 
 #trainerCardRegions li {
     display: grid;
-    grid-template-columns: 4.5rem 1fr 4.2rem;
+    /* name, bar, count, and a slot for a completed region's 🖼️ button */
+    grid-template-columns: 4.5rem 1fr 4.2rem 1.4rem;
     align-items: center;
     gap: 0.5rem;
     padding: 0.3rem 0.6rem;
@@ -6170,4 +6171,25 @@ img.animatedSmall {
         flex-basis: 100%;
         text-align: center;
     }
+}
+
+/* 🖼️ on a completed region's row: save that region's share card */
+.regionCardBtn {
+    width: 1.4rem;
+    height: 1.4rem;
+    margin: -0.15rem 0; /* no taller than the row */
+    padding: 0;
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.regionCardBtn:hover,
+.regionCardBtn:focus-visible {
+    background: rgba(255, 255, 255, 0.3);
+    outline: 2px solid #ffd447;
+    outline-offset: 1px;
 }

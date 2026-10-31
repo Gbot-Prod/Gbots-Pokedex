@@ -1452,6 +1452,17 @@ function renderTrainerCard() {
             item.children[0].textContent = generation.region;
             item.querySelector(".regionProgressBar span").style.width = (100 * count) / total + "%";
             countUp(item.children[2], count, (shown) => shown + "/" + total, 300 + 70 * index);
+            // Completed regions can save their share card from here too (the toast doesn't last).
+            if (count === total) {
+                const cardButton = document.createElement("button");
+                cardButton.type = "button";
+                cardButton.className = "regionCardBtn";
+                cardButton.textContent = "🖼️";
+                cardButton.title = "Save the " + generation.region + " share card";
+                cardButton.setAttribute("aria-label", cardButton.title);
+                cardButton.addEventListener("click", () => saveRegionCard(number));
+                item.append(cardButton);
+            }
             return item;
         }),
     );

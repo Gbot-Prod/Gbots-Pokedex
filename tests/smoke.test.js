@@ -1282,6 +1282,13 @@ test("a region toast's picture button saves that region's share card", async () 
     const download = page.waitForEvent("download");
     await page.click("#dexToast.visible .toastCard");
     assert.equal((await download).suggestedFilename(), "kanto-complete.png");
+    // ...and later from the region's row on the trainer card.
+    await page.click("#dexProgress");
+    await page.waitForSelector("#trainerCard[open]");
+    assert.equal(await page.locator("#trainerCardRegions .regionCardBtn").count(), 1); // only Kanto is done
+    const again = page.waitForEvent("download");
+    await page.click("#trainerCardRegions li.region1 .regionCardBtn");
+    assert.equal((await again).suggestedFilename(), "kanto-complete.png");
 });
 
 test("the shiny hunt counts encounters and collects shinies", async () => {
