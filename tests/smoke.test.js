@@ -1126,12 +1126,13 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     );
     await page.click("#finaleClose");
     await page.waitForSelector("#finaleParade", { state: "detached" });
-    assert.equal(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), "1");
+    assert.match(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), /^\d{4}-\d{2}-\d{2}$/);
     await page.waitForFunction(() =>
         document.getElementById("nextMissingBtn").textContent.startsWith("🏆 National Dex complete!"),
     );
     await page.click("#nextMissingBtn");
     await page.waitForSelector("#trainerCard[open]");
+    assert.match(await page.textContent("#trainerCompletedOn"), /^🏆 National Dex completed \S/);
     // The once-only parade can be replayed from the card.
     await page.click("#replayParadeBtn");
     await page.waitForSelector("#finaleParade[open]");

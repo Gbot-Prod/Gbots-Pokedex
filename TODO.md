@@ -30,7 +30,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Finale share step 2: share an image — a canvas card with the parade line-up and "1,025 / 1,025" in gold, like the trainer card PNG
 - [ ] Regional footprints step 3: a short legend in the region banner tooltip ("Galar leaves boot prints") so the trails are discoverable
 - [ ] Region toast colours: tint each region's toast with its banner gradient instead of the shared red
-- [ ] Completion date: remember when the National Dex was completed and show "Completed Oct 31, 2026" under the trainer card's hall of fame
 - [ ] Finale replay polish: the replay skips the confetti delay and starts the march already on screen, so it's instantly fun the second time
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -381,3 +380,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Reduced-motion parade: instead of no jump, tapped marchers get a brief gold outline so the tap still visibly lands (2026-10-31) — under reduced motion a tapped (or waved) marcher gets a brief gold outline instead of the leap; the jump class is now cleared after 700 ms in both modes
 - [x] Regional footprints step 2: Johto leaves leaves 🍃, Unova lightning zig-zags, Kalos sparkles ✦, Alola sand dots, Galar boot prints, Paldea stars (2026-10-31) — every region now has its own trail: leaves ❦ (Johto), sparks ϟ (Unova), sparkles ✦ (Kalos), sand ∴ (Alola), boot prints ▰ (Galar), stars ★ (Paldea), alongside Kanto paws, Hoenn ripples and Sinnoh snowflakes
 - [x] Finale screen: a small "Share" button that copies "I completed the National Pokédex! 🏆" plus the date to the clipboard (2026-10-31) — an outlined gold '📋 Share' beside 'Hooray!' uses the share sheet where there is one, else copies '🏆 I completed the National Pokédex — all 1,025 Pokémon seen! (date)' and says so in a status line; smoke + axe (with the status showing)
+- [x] Completion date: remember when the National Dex was completed and show "Completed Oct 31, 2026" under the trainer card's hall of fame (2026-10-31) — the finale flag now stores the day (YYYY-MM-DD); the trainer card shows '🏆 National Dex completed Oct 31, 2026' above the replay button (gold in dark, ink on retro, older '1' flags just skip the line)

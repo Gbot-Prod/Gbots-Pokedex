@@ -6052,3 +6052,23 @@ img.animatedSmall {
     color: #ffd447;
     font-size: 0.95rem;
 }
+
+#trainerCompletedOn {
+    margin: 0.6rem 1rem 0;
+    color: #8a6100;
+    font-size: 0.85rem;
+    font-weight: 900;
+    text-align: center;
+}
+
+#trainerCompletedOn[hidden] {
+    display: none;
+}
+
+:root[data-theme="dark"] #trainerCard:not([data-style="retro"]) #trainerCompletedOn {
+    color: #ffd447;
+}
+
+#trainerCard[data-style="retro"] #trainerCompletedOn {
+    color: inherit;
+}

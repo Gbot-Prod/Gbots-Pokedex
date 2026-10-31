@@ -197,6 +197,14 @@ export function completionMessage(seenIds, dexNumber) {
     return counts && counts.seen === counts.total ? "🏅 " + generation.region + " Pokédex complete!" : null;
 }
 
+function readStoredText(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+}
+
 // The first time all 1,025 are seen: a full-screen parade of every region's starter trio
 // marching across under "Pokédex complete!" (a still lineup under reduced motion). Once only.
 const FINALE_KEY = "pokedex:finale-shown:v1";
@@ -210,7 +218,7 @@ function showFinaleParade({ replay = false } = {}) {
             if (localStorage.getItem(FINALE_KEY)) {
                 return;
             }
-            localStorage.setItem(FINALE_KEY, "1");
+            localStorage.setItem(FINALE_KEY, new Date().toISOString().slice(0, 10)); // the day it was done
         } catch {
             return; // can't remember it, so don't risk showing it on every visit
         }
@@ -1245,6 +1253,20 @@ function renderTrainerCard() {
     countUp(document.getElementById("trainerCardSeen"), stats.seen, (seen) => seenText({ ...stats, seen }));
     // A finished National Dex can watch its parade again from the card.
     document.getElementById("replayParadeBtn").hidden = stats.seen < stats.total;
+    // ...and the day it was completed, if this browser saw it happen.
+    const completedOn = document.getElementById("trainerCompletedOn");
+    const finaleDay = readStoredText(FINALE_KEY);
+    completedOn.hidden = stats.seen < stats.total || !/^\d{4}-\d{2}-\d{2}$/.test(finaleDay ?? "");
+    if (!completedOn.hidden) {
+        const [year, month, day] = finaleDay.split("-").map(Number);
+        completedOn.textContent =
+            "🏆 National Dex completed " +
+            new Date(year, month - 1, day).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            });
+    }
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
     const shelf = badgeShelf(badgeProgress(stats));
