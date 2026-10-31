@@ -61,15 +61,35 @@ function save() {
     }
 }
 
+// One readout on the counter's LCD: a label over zero-padded digits, with faint "8"s behind
+// them like unlit segments.
+function lcdCell(label, value, width) {
+    const cell = document.createElement("span");
+    cell.className = "lcdCell";
+    const name = document.createElement("small");
+    name.textContent = label;
+    const digits = document.createElement("b");
+    digits.textContent = String(value).padStart(width, "0");
+    digits.dataset.ghost = "8".repeat(Math.max(width, String(value).length));
+    cell.append(name, digits);
+    return cell;
+}
+
 function renderCounter() {
-    counterElement.textContent =
-        "Encounters: " +
-        state.encounters +
-        " · Shinies found: " +
-        state.shinies.length +
-        " (odds 1 in " +
-        huntOdds(state.encounters) +
-        ")";
+    const odds = huntOdds(state.encounters);
+    const spoken = document.createElement("span");
+    spoken.className = "visuallyHidden";
+    spoken.textContent =
+        "Encounters: " + state.encounters + " · Shinies found: " + state.shinies.length + " (odds 1 in " + odds + ")";
+    const screen = document.createElement("span");
+    screen.className = "lcdScreen";
+    screen.setAttribute("aria-hidden", "true");
+    screen.append(
+        lcdCell("Encounters", state.encounters, 4),
+        lcdCell("Shinies", state.shinies.length, 2),
+        lcdCell("Odds 1 in", odds, 1),
+    );
+    counterElement.replaceChildren(spoken, screen);
     const charmed = state.encounters >= CHARM_ENCOUNTERS;
     charmElement.hidden = !charmed && state.encounters < CHARM_ENCOUNTERS / 2;
     charmElement.classList.toggle("earned", charmed);

@@ -19,7 +19,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
 - [ ] Go-to step 5: a quiet "beep" on each keystroke and a two-tone chime on Enter when sound effects are on (Web Audio, LCD theme)
 - [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
-- [ ] LCD theme everywhere: reuse the green-screen look for the quiz timer and the shiny-hunt encounter counter
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
@@ -340,3 +339,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Go-to prompt step 2: type a name too ("gen" → Gengar) with the first match shown live on the LCD under the digits (2026-10-31) — the G prompt takes a name prefix too ('gen' → Gengar, 'No match' otherwise); Enter re-resolves the final text so a fast Enter can't land on a stale preview; numbers still work offline
 - [x] Go-to names: show proper display names on the LCD ("Farfetch’d", "Mr. Mime") by reusing pokemonDisplayName-style rules instead of formatName on the slug (2026-10-31) — the LCD label uses entryDisplayName with the species list (live: farf → Farfetch’d, mr-m → Mr. Mime); falls back to the plain slug name when the species list is unavailable
 - [x] Go-to step 4: ↑/↓ on the LCD cycles through every name matching the prefix ("char" → Charmander, Charmeleon, Charizard…) (2026-10-31) — ↑/↓ cycles every name matching the prefix with an 'N/M' counter on the LCD (wraps); Enter goes to the shown one; hint line mentions ↑↓
+- [x] LCD theme everywhere: reuse the green-screen look for the quiz timer and the shiny-hunt encounter counter (2026-10-31) — step 1: the shiny-hunt counter is now a green handheld LCD with Encounters / Shinies / Odds readouts, zero-padded glowing digits over faint unlit '8' segments; screen readers get the plain sentence (quiz timer still to do)
