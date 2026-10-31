@@ -1090,6 +1090,10 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     );
     await page.click("#nextMissingBtn");
     await page.waitForSelector("#trainerCard[open]");
+    // The once-only parade can be replayed from the card.
+    await page.click("#replayParadeBtn");
+    await page.waitForSelector("#finaleParade[open]");
+    assert.equal(await page.locator("#trainerCard[open]").count(), 0);
 });
 
 test("the unseen-only filter hides Pokémon you've already opened", async () => {

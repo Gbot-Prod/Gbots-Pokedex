@@ -200,14 +200,16 @@ export function completionMessage(seenIds, dexNumber) {
 // marching across under "Pokédex complete!" (a still lineup under reduced motion). Once only.
 const FINALE_KEY = "pokedex:finale-shown:v1";
 
-function showFinaleParade() {
-    try {
-        if (localStorage.getItem(FINALE_KEY)) {
-            return;
+function showFinaleParade({ replay = false } = {}) {
+    if (!replay) {
+        try {
+            if (localStorage.getItem(FINALE_KEY)) {
+                return;
+            }
+            localStorage.setItem(FINALE_KEY, "1");
+        } catch {
+            return; // can't remember it, so don't risk showing it on every visit
         }
-        localStorage.setItem(FINALE_KEY, "1");
-    } catch {
-        return; // can't remember it, so don't risk showing it on every visit
     }
     const dialog = document.createElement("dialog");
     dialog.id = "finaleParade";
@@ -1121,6 +1123,8 @@ function renderTrainerCard() {
     document.getElementById("trainerShareStatus").textContent = "";
     const stats = completionStats(seen);
     countUp(document.getElementById("trainerCardSeen"), stats.seen, (seen) => seenText({ ...stats, seen }));
+    // A finished National Dex can watch its parade again from the card.
+    document.getElementById("replayParadeBtn").hidden = stats.seen < stats.total;
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
     const shelf = badgeShelf(badgeProgress(stats));
@@ -1256,6 +1260,10 @@ export function initProgress({ showPokemon }) {
         event.currentTarget.setAttribute("aria-expanded", String(!hint.hidden));
     });
     document.getElementById("partnerCameoBtn").addEventListener("click", cheerPartner);
+    document.getElementById("replayParadeBtn").addEventListener("click", () => {
+        trainerCard.close();
+        showFinaleParade({ replay: true });
+    });
     document.getElementById("partnerOfferNo").addEventListener("click", () => {
         const offer = document.getElementById("partnerOffer");
         offer.hidden = true;

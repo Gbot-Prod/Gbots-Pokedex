@@ -5514,3 +5514,19 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+#replayParadeBtn {
+    display: block;
+    margin: 0.6rem auto 0;
+    padding: 0.4rem 1.1rem;
+    border: 2px solid #b8860b;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ffd447, #fff3b0, #ffd447);
+    color: #3d2a00;
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+#replayParadeBtn[hidden] {
+    display: none;
+}
