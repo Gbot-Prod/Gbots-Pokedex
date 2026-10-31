@@ -201,6 +201,8 @@ export function completionMessage(seenIds, dexNumber) {
 // marching across under "Pokédex complete!" (a still lineup under reduced motion). Once only.
 const FINALE_KEY = "pokedex:finale-shown:v1";
 const CRY_BASE = "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/";
+const MAX_PARADE_CRIES = 3;
+const playingCries = new Set();
 
 function showFinaleParade({ replay = false } = {}) {
     if (!replay) {
@@ -249,9 +251,17 @@ function showFinaleParade({ replay = false } = {}) {
         sprite.classList.remove("paradeJump");
         void sprite.offsetWidth; // restart the jump
         sprite.classList.add("paradeJump");
+        // At most three cries at once, so frantic tapping doesn't build a wall of sound.
+        if (playingCries.size >= MAX_PARADE_CRIES) {
+            return;
+        }
         const cry = new Audio(CRY_BASE + sprite.dataset.id + ".ogg");
         cry.volume = 0.5;
-        cry.play().catch(() => {}); // blocked or offline: the jump alone will do
+        playingCries.add(cry);
+        const done = () => playingCries.delete(cry);
+        cry.addEventListener("ended", done);
+        cry.addEventListener("error", done);
+        cry.play().catch(done); // blocked or offline: the jump alone will do
     });
     dialog.addEventListener("close", () => dialog.remove());
     document.body.append(dialog);
