@@ -1088,7 +1088,7 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     const bulbasaurCry = page.waitForRequest((request) => request.url().endsWith("/latest/1.ogg"));
     await page.locator("#finaleParade .paradeLine img").first().dispatchEvent("click");
     await bulbasaurCry;
-    assert.match(await page.textContent("#finaleParade .paradeBubble"), /^(Bulbasaur|#0001)!$/);
+    assert.match(await page.textContent("#finaleParade .paradeBubble"), /^(Bulbasaur|#0001)! · Kanto$/);
     assert.equal(await page.evaluate(() => document.activeElement.id), "finaleClose"); // focus on the way out
     await page.click("#finaleParade .finaleWave"); // the title: everyone jumps in a wave
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeJump").count(), 36);

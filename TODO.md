@@ -25,7 +25,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
-- [ ] Parade bubbles step 2: the bubble also shows the region in small print ("Reshiram · Unova")
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -371,3 +370,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Parade step 6: tapping the "Pokédex complete!" title makes every marcher jump at once in a wave from left to right (2026-10-31) — the 'Pokédex complete!' title is a button: pressing it makes all 36 marchers jump in a 45 ms-staggered wave (keyboard too); 'Hooray!' keeps the initial focus via autofocus
 - [x] Region toasts step 3: Kanto's trio (the default hop) gets a signature walk too — a classic Game Boy two-frame shuffle (steps(2) bob) (2026-10-31) — Kanto's trio now shuffles like a Game Boy overworld sprite: two hard frames (steps(1)) of a tiny bob and lean, alternating between neighbours
 - [x] Toast footprints step 2: footprint shape per region (paw prints for Kanto, wave ripples for Hoenn, snowflakes for Sinnoh) (2026-10-31) — footprints by region (data-region on the trail): paw prints in Kanto, ripples (〰) in Hoenn, snowflakes in Sinnoh, dots elsewhere; same reveal and fade
+- [x] Parade bubbles step 2: the bubble also shows the region in small print ("Reshiram · Unova") (2026-10-31) — bubbles add the home region in small print ('Reshiram! · Unova'), and are nudged back inside the parade strip (--nudge) so ones at a row's or the screen's edge aren't cut off

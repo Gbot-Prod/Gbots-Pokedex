@@ -5866,7 +5866,7 @@ img.animatedSmall {
     font-size: 0.85rem;
     font-weight: 900;
     white-space: nowrap;
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% + var(--nudge, 0px)));
     animation: bubblePop 1.4s ease-out forwards;
     pointer-events: none;
 }
@@ -5885,16 +5885,16 @@ img.animatedSmall {
 @keyframes bubblePop {
     0% {
         opacity: 0;
-        transform: translate(-50%, 6px) scale(0.6);
+        transform: translate(calc(-50% + var(--nudge, 0px)), 6px) scale(0.6);
     }
     15%,
     80% {
         opacity: 1;
-        transform: translate(-50%, 0) scale(1);
+        transform: translate(calc(-50% + var(--nudge, 0px)), 0) scale(1);
     }
     100% {
         opacity: 0;
-        transform: translate(-50%, -6px) scale(1);
+        transform: translate(calc(-50% + var(--nudge, 0px)), -6px) scale(1);
     }
 }
 
@@ -5991,4 +5991,10 @@ img.animatedSmall {
 
 .toastFootprints[data-region="4"]::before {
     content: "❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄";
+}
+
+.paradeBubble small {
+    font-size: 0.7rem;
+    font-weight: 700;
+    opacity: 0.75;
 }

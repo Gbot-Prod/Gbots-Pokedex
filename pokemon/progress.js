@@ -263,8 +263,17 @@ function showFinaleParade({ replay = false } = {}) {
         sprite.parentElement.querySelector(".paradeBubble")?.remove();
         const bubble = document.createElement("span");
         bubble.className = "paradeBubble";
-        bubble.textContent = partnerLabel(Number(sprite.dataset.id)) + "!";
+        const id = Number(sprite.dataset.id);
+        const home = GENERATIONS.find((gen) => id >= gen.first && id <= gen.last);
+        const where = document.createElement("small");
+        where.textContent = home ? " · " + home.region : "";
+        bubble.append(partnerLabel(id) + "!", where);
         sprite.parentElement.append(bubble);
+        // Keep it inside the parade strip (marchers at the edges of a row or the screen).
+        const box = bubble.getBoundingClientRect();
+        const strip = line.parentElement.getBoundingClientRect();
+        const nudge = Math.max(strip.left + 4 - box.left, 0) + Math.min(strip.right - 4 - box.right, 0);
+        bubble.style.setProperty("--nudge", nudge + "px");
         setTimeout(() => bubble.remove(), 1400);
         // At most three cries at once, so frantic tapping doesn't build a wall of sound.
         if (playingCries.size >= MAX_PARADE_CRIES) {
