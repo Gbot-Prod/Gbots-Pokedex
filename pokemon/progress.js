@@ -440,7 +440,7 @@ async function shareOrDownload(render, filename, title) {
     preview.setAttribute("aria-label", title + " card preview");
     preview.innerHTML =
         '<img alt="" width="600" height="315" />' +
-        '<div class="cardStyleChips" role="group" aria-label="Card style"></div>' +
+        '<div class="cardStyleChips" role="group" aria-label="Card style (left and right arrow keys switch)"></div>' +
         '<form method="dialog" class="cardPreviewActions">' +
         '<button class="btn" id="cardPreviewSave" value="save" autofocus>💾 Save</button>' +
         '<button class="btn" id="cardPreviewShare" value="share" hidden>📤 Share</button>' +
@@ -474,6 +474,18 @@ async function shareOrDownload(render, filename, title) {
     preview.querySelector("#cardPreviewShare").hidden = !canShareFiles(
         new File([blob], filename, { type: "image/png" }),
     );
+    // ←/→ step through the styles from anywhere in the preview.
+    preview.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+            return;
+        }
+        event.preventDefault();
+        const step = event.key === "ArrowRight" ? 1 : -1;
+        const next = (CARD_STYLES.indexOf(style) + step + CARD_STYLES.length) % CARD_STYLES.length;
+        const chip = chips.children[next];
+        chip.click();
+        chip.focus();
+    });
     // Copy the shown card as a picture, where the clipboard takes images.
     const copyButton = preview.querySelector("#cardPreviewCopy");
     copyButton.hidden = !(window.ClipboardItem && navigator.clipboard?.write);

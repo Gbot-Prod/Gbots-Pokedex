@@ -32,7 +32,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
 - [ ] Trainer card PNG: route "Save image" on the trainer card through the same preview (style chips, copy, share) for consistency
-- [ ] Card preview keyboard: ←/→ switch styles while the preview is open; C copies, S saves
 - [ ] Share cards step: a "Team card" — the six team members on a card with their types and the coverage summary
 - [ ] Preview polish: a short crossfade between styles when a chip is pressed (instant under reduced motion)
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -406,3 +405,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Shiny wave step 3: the parade's background flashes to a deep purple "shiny night" for the length of the shiny wave (2026-10-31) — during the shiny wave the parade's sky fades to a deep purple 'shiny night' (a fixed ::before layer, 0.5 s fade, instant under reduced motion) and back when the sprites change back
 - [x] Card preview step 2: a style switcher in the preview (classic / holo / retro chips) that redraws the card live before saving (2026-10-31) — the preview has Classic / ✨ Holo / 👾 Retro chips (aria-pressed) that redraw the card live, starting from the trainer card's style; Save/Share use the shown version; both card fonts load up front so redraws are instant
 - [x] Card preview step 3: a "Copy image" button using the async Clipboard API (ClipboardItem) where it's supported (2026-10-31) — '📋 Copy image' in the preview writes the shown card to the clipboard as a PNG (ClipboardItem), with a status line; hidden where the clipboard can't take images
+- [x] Card preview keyboard: ←/→ switch styles while the preview is open; C copies, S saves (2026-10-31) — ←/→ anywhere in the preview step through Classic / Holo / Retro (wrapping) and focus the chosen chip; the chip group's label says so (C/S shortcuts left out: they'd clash with typing names elsewhere)
