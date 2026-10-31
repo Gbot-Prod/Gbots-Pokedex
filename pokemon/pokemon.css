@@ -5597,3 +5597,15 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* A new quickest shiny: the Best readout blinks (after the SHINY! flash) */
+.lcdCell.newBest b {
+    animation: lcdBlink 0.5s steps(1) 2s 6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lcdCell.newBest b {
+        animation: none;
+        text-decoration: underline;
+    }
+}

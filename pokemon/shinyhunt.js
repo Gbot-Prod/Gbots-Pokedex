@@ -61,6 +61,19 @@ function save() {
     }
 }
 
+// Fewest encounters it took to find a shiny (counted from the previous shiny, or from the
+// start of the hunt for the first); null before any shiny.
+export function bestShinyGap(shinies) {
+    let best = null;
+    let previous = 0;
+    for (const { encounter } of [...shinies].sort((a, b) => a.encounter - b.encounter)) {
+        const gap = encounter - previous;
+        best = best === null ? gap : Math.min(best, gap);
+        previous = encounter;
+    }
+    return best;
+}
+
 // One readout on the counter's LCD: a label over zero-padded digits, with faint "8"s behind
 // them like unlit segments.
 // Digits that changed since the last render roll in from above, like an odometer (CSS keeps
@@ -91,12 +104,20 @@ function lcdCell(label, value, width) {
     return cell;
 }
 
-function renderCounter() {
+function renderCounter({ newBest = false } = {}) {
     const odds = huntOdds(state.encounters);
+    const best = bestShinyGap(state.shinies);
     const spoken = document.createElement("span");
     spoken.className = "visuallyHidden";
     spoken.textContent =
-        "Encounters: " + state.encounters + " · Shinies found: " + state.shinies.length + " (odds 1 in " + odds + ")";
+        "Encounters: " +
+        state.encounters +
+        " · Shinies found: " +
+        state.shinies.length +
+        " (odds 1 in " +
+        odds +
+        ")" +
+        (best === null ? "" : " · Best: a shiny in " + best + (best === 1 ? " encounter" : " encounters"));
     const screen = document.createElement("span");
     screen.className = "lcdScreen";
     screen.setAttribute("aria-hidden", "true");
@@ -105,6 +126,12 @@ function renderCounter() {
         lcdCell("Shinies", state.shinies.length, 2),
         lcdCell("Odds 1 in", odds, 1),
     );
+    if (best !== null) {
+        // The quickest shiny so far; it blinks when a new shiny beats it.
+        const bestCell = lcdCell("Best", best, 1);
+        bestCell.classList.toggle("newBest", newBest);
+        screen.append(bestCell);
+    }
     counterElement.replaceChildren(spoken, screen);
     const charmed = state.encounters >= CHARM_ENCOUNTERS;
     charmElement.hidden = !charmed && state.encounters < CHARM_ENCOUNTERS / 2;
@@ -166,7 +193,9 @@ function encounter() {
         resultElement.textContent = "A wild " + name + " appeared. Not shiny — keep hunting!";
     }
     save();
-    renderCounter();
+    const previousBest = bestShinyGap(state.shinies.slice(0, -1));
+    const best = bestShinyGap(state.shinies);
+    renderCounter({ newBest: shiny && previousBest !== null && best < previousBest });
     if (shiny) {
         flashShinyOnLcd();
     }

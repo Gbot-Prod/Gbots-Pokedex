@@ -1189,6 +1189,8 @@ test("the shiny hunt counts encounters and collects shinies", async () => {
     assert.match(await page.textContent("#huntResult"), /SHINY! A shiny (Bulbasaur|#0001) appeared/);
     assert.equal(await page.locator(".huntShiny").count(), 1);
     assert.equal(await page.textContent("#huntCounter .lcdScreen.shinyFlash .lcdShiny"), "✦ SHINY! ✦");
+    // A "Best" readout appears with the first shiny: found on encounter 2.
+    assert.equal(await page.textContent("#huntCounter .lcdCell:nth-child(4) b"), "2");
     await page.reload();
     assert.match(await page.textContent("#huntCounter"), /Encounters: 2 · Shinies found: 1/);
     assert.equal(await page.textContent("#huntTier"), "✨ Shiny hunter badge: 1 / 5 for bronze");

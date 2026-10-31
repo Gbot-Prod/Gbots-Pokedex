@@ -22,7 +22,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Odometer step 2: the trainer card's stat tiles reuse the hunt counter's rolling digits instead of the plain count-up
 - [ ] Quiz timer step 3: a short "tick" sound per second in the last 5 s and a buzzer at 0 when sound effects are on
 - [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
-- [ ] Hunt LCD step 4: a tiny "best streak" (fewest encounters to a shiny) readout that blinks when beaten
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -356,3 +355,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Parade step 3: the marching starters are followed by each region's legendary mascot, bigger, as the grand finale of the line (2026-10-31) — the nine box-art legendaries (REGION_MASCOTS in utils.js: Mewtwo → Koraidon) close the parade at 148 px with a gold aura and slower hops (march slowed to 24 s); also fixed the dialog being taller than the screen (content-box 100vh + padding pushed the button off on phones)
 - [x] Region complete step: a smaller per-region parade (just that region's trio crossing the toast) when a region is completed (2026-10-31) — a region-complete toast carries that region's starter trio (60 px, drop shadow) hopping along its top edge from left to right over 4 s; centred and still under reduced motion; smoke test counts the trio
 - [x] Toast icons for region completions too (the region's starter trio as a mini sprite strip) (2026-10-31) — covered by the walking starter trio on region toasts (same day)
+- [x] Hunt LCD step 4: a tiny "best streak" (fewest encounters to a shiny) readout that blinks when beaten (2026-10-31) — a fourth 'Best' readout (fewest encounters from one shiny to the next, bestShinyGap with a unit test) appears after the first shiny and blinks after the SHINY! flash when a new shiny beats it (underlined under reduced motion); also in the screen-reader sentence

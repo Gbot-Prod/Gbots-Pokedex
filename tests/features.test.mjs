@@ -365,3 +365,17 @@ test("stored list entries are validated by shape", async () => {
     assert.equal(isTeamMember({ id: 94, label: "Gengar", types: ["ghost", "poison"] }), true);
     assert.equal(isTeamMember({ id: 94, label: "Gengar" }), false);
 });
+
+test("the best shiny gap is the fewest encounters between shinies", async () => {
+    const { bestShinyGap } = await import("../pokemon/shinyhunt.js");
+    assert.equal(bestShinyGap([]), null);
+    assert.equal(bestShinyGap([{ id: 1, encounter: 40 }]), 40);
+    assert.equal(
+        bestShinyGap([
+            { id: 1, encounter: 40 },
+            { id: 4, encounter: 140 },
+            { id: 7, encounter: 152 },
+        ]),
+        12,
+    );
+});
