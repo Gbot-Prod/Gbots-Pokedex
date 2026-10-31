@@ -241,11 +241,11 @@ async function shareTeam() {
 
 // The team as a share card (through the same preview as the other cards): the six members,
 // the types that hit the most of them with nobody resisting, and the types they hit hardest.
-async function saveTeamCard() {
+async function saveTeamCard(members = team, byline = null, heading = undefined) {
     let summary = { weakTo: [], hits: [], strip: [] };
     try {
         const memberTypeData = await Promise.all(
-            team.map((member) => Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
+            members.map((member) => Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
         );
         const coverage = teamCoverage(memberTypeData.map(damageMultipliers), memberTypeData.map(superEffectiveTargets));
         summary = {
@@ -269,19 +269,25 @@ async function saveTeamCard() {
     } catch {
         // no type data (offline): the card shows the members alone
     }
-    const sprites = await Promise.all(team.map((member) => loadCanvasImage(spriteUrl(member.id))));
-    let byline = "";
-    try {
-        byline = (JSON.parse(localStorage.getItem("pokedex:trainer:v1"))?.name ?? "").trim();
-    } catch {
-        // no trainer name
+    const sprites = await Promise.all(members.map((member) => loadCanvasImage(spriteUrl(member.id))));
+    if (byline === null) {
+        try {
+            byline = (JSON.parse(localStorage.getItem("pokedex:trainer:v1"))?.name ?? "").trim();
+        } catch {
+            byline = ""; // no trainer name
+        }
     }
     const typeColors = Object.fromEntries(Object.entries(TYPE_COLORS).map(([type, colours]) => [type, colours[0]]));
     await cardFontsReady();
     await shareOrDownload(
         (style) => {
             const canvas = document.createElement("canvas");
-            drawTeamCard(canvas, { members: team, ...summary, byline, retro: style === "retro" }, sprites, typeColors);
+            drawTeamCard(
+                canvas,
+                { members, ...summary, heading, byline, retro: style === "retro" },
+                sprites,
+                typeColors,
+            );
             styleShareCard(canvas, style);
             return canvas;
         },
@@ -333,8 +339,15 @@ async function offerSharedTeam() {
         statusElement.textContent = "Shared team loaded";
         clearParam();
     });
+    // See it as a team card first, headed "A shared team" (it's someone else's).
+    const viewCard = Object.assign(document.createElement("button"), {
+        type: "button",
+        className: "btn",
+        textContent: "🖼️ View as card",
+    });
+    viewCard.addEventListener("click", () => saveTeamCard(members, "", "A shared team"));
     dismiss.addEventListener("click", clearParam);
-    sharedTeamElement.replaceChildren(text, load, dismiss);
+    sharedTeamElement.replaceChildren(text, load, viewCard, dismiss);
     sharedTeamElement.hidden = false;
 }
 
@@ -344,7 +357,7 @@ export function initTeam(options) {
     loadTeam();
     teamButton.addEventListener("click", toggleCurrent);
     shareTeamButton.addEventListener("click", shareTeam);
-    teamCardButton.addEventListener("click", saveTeamCard);
+    teamCardButton.addEventListener("click", () => saveTeamCard());
     window.addEventListener(ANIMATED_CHANGE_EVENT, renderSlots);
     renderTeam();
     offerSharedTeam();

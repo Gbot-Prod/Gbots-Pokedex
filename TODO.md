@@ -31,7 +31,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
-- [ ] Shared team links: the "Share team" link opens with the team card preview ready for the recipient too ("Ash shared a team")
 - [ ] Card preview step 5: a "Download all" on the trainer card that zips every card you can make (finale, regions, team, trainer)
 - [ ] Preview layout: on short landscape phones put the style chips and buttons beside the image instead of under it
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -412,3 +411,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team card step 2: retro type pills — draw them as outlined boxes in retro so they stay visible after the four-shade conversion (2026-10-31) — in retro the team card's type pills are drawn as square outlined boxes (Game Boy menu style) so they stay readable after the four-shade conversion; classic/holo keep the type-coloured pills
 - [x] Team card step 3: a mini 18-type coverage strip along the bottom (green/red squares per type) instead of the text lines (2026-10-31) — an 18-type strip under the panels (type-coloured squares with 3-letter labels) marks each type red where more of the team is weak than resists it, green where someone hits it super-effectively; the text lines stay (in retro the red/green marks become one shade — follow-up idea)
 - [x] Retro team strip: in retro, draw weak marks as ✕ and hit marks as ● above the squares, since red and green become the same Game Boy shade (2026-10-31) — in retro the coverage strip marks weak types with a drawn ✕ and hit types with a ● under each square (shape instead of red/green, which merge at four shades); classic/holo keep the coloured underlines
+- [x] Shared team links: the "Share team" link opens with the team card preview ready for the recipient too ("Ash shared a team") (2026-10-31) — the shared-team offer gains a '🖼️ View as card' button that opens the team card for the shared members (headed 'A shared team') in the preview, before loading or dismissing

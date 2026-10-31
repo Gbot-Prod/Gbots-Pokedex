@@ -639,7 +639,12 @@ test("a shared ?team= link offers to load that team", async () => {
     await page.goto(baseUrl + "?team=25,94");
     await page.waitForSelector("#sharedTeam:not([hidden])");
     assert.match(await page.textContent("#sharedTeam"), /Pikachu, Gengar/);
-    await page.click("#sharedTeam .btn");
+    // It can be looked at as a team card before deciding.
+    await page.click("#sharedTeam .btn:has-text('View as card')");
+    await page.waitForSelector("#cardPreview[open] img");
+    await page.click("#cardPreviewCancel");
+    await page.waitForSelector("#cardPreview", { state: "detached" });
+    await page.click("#sharedTeam .btn:has-text('Load this team')");
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
     assert.doesNotMatch(page.url(), /team=/); // the offer is consumed
     assert.equal(await page.isVisible("#teamShareBtn"), true);

@@ -368,7 +368,7 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
     context.textAlign = "left";
     context.font = cardFont(900, 52, retro);
     context.fillStyle = "#ffd447";
-    context.fillText("👥 " + (team.byline ? team.byline + "'s team" : "My team"), 50, 88);
+    context.fillText("👥 " + (team.heading ?? (team.byline ? team.byline + "'s team" : "My team")), 50, 88);
 
     const capitalise = (text) => text.charAt(0).toUpperCase() + text.slice(1);
     for (let index = 0; index < 6; index++) {
