@@ -451,6 +451,7 @@ function showNextToast() {
         // ...leaving a trail of little footprints along the edge behind it.
         const footprints = document.createElement("span");
         footprints.className = "toastFootprints";
+        footprints.dataset.region = region;
         footprints.setAttribute("aria-hidden", "true");
         toast.replaceChildren(footprints, trio, text, toastShowMe(toast, showRegion));
     } else if (opensCard) {

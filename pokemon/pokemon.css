@@ -5962,3 +5962,33 @@ img.animatedSmall {
     outline: 3px solid #ffd447;
     outline-offset: 4px;
 }
+
+/* Regional footprints: paw prints in Kanto, ripples in Hoenn, snowflakes in Sinnoh (the rest
+   leave the default dots) */
+.toastFootprints[data-region="1"],
+.toastFootprints[data-region="3"],
+.toastFootprints[data-region="4"] {
+    top: 0.15rem;
+    height: 0.7rem;
+    font-size: 0.55rem;
+    line-height: 0.7rem;
+    letter-spacing: 0.55rem;
+    white-space: nowrap;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.65);
+    background: none;
+}
+
+.toastFootprints[data-region="1"]::before {
+    content: "🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾";
+    filter: grayscale(1) brightness(3);
+    opacity: 0.6;
+}
+
+.toastFootprints[data-region="3"]::before {
+    content: "〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰";
+}
+
+.toastFootprints[data-region="4"]::before {
+    content: "❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄";
+}
