@@ -166,6 +166,19 @@ async function renderCoverage() {
     if (requestId !== coverageRequest) {
         return;
     }
+    // The MVP gets a gold ★ badge on its slot (and its name says so to screen readers).
+    const mvp = teamMvp(memberMultipliers);
+    [...slotsElement.querySelectorAll(".teamSlot")].forEach((slot, index) => {
+        slot.classList.toggle("mvp", index === mvp);
+        slot.querySelector(".mvpBadge")?.remove();
+        if (index === mvp) {
+            const badge = document.createElement("span");
+            badge.className = "mvpBadge";
+            badge.textContent = "★ MVP";
+            badge.title = "Resists the most of the types your team is weak to";
+            slot.querySelector(".teamMember").append(badge);
+        }
+    });
 
     const table = document.createElement("table");
     table.className = "coverageTable";

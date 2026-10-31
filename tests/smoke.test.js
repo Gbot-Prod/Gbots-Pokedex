@@ -613,6 +613,8 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     // Ground hits both Pikachu (2×) and Gengar (2×).
     const groundWeak = await page.$eval(".coverageTable tbody tr:nth-child(9) td.weak", (cell) => cell.textContent);
     assert.equal(groundWeak, "2");
+    // Both are weak to Ground and neither resists it: no MVP to crown.
+    assert.equal(await page.locator(".teamSlot.mvp").count(), 0);
     // The team as a share card, through the same preview.
     await page.evaluate(() => delete Navigator.prototype.canShare);
     const download = page.waitForEvent("download");
