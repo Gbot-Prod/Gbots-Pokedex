@@ -5965,11 +5965,10 @@ img.animatedSmall {
     outline-offset: 4px;
 }
 
-/* Regional footprints: paw prints in Kanto, ripples in Hoenn, snowflakes in Sinnoh (the rest
-   leave the default dots) */
-.toastFootprints[data-region="1"],
-.toastFootprints[data-region="3"],
-.toastFootprints[data-region="4"] {
+/* Regional footprints: paw prints in Kanto, leaves in Johto, ripples in Hoenn, snowflakes in
+   Sinnoh, sparks in Unova, sparkles in Kalos, sand in Alola, boot prints in Galar and stars in
+   Paldea */
+.toastFootprints[data-region] {
     top: 0.15rem;
     height: 0.7rem;
     font-size: 0.55rem;
@@ -5999,4 +5998,28 @@ img.animatedSmall {
     font-size: 0.7rem;
     font-weight: 700;
     opacity: 0.75;
+}
+
+.toastFootprints[data-region="2"]::before {
+    content: "❦❦❦❦❦❦❦❦❦❦❦❦❦❦❦❦❦❦❦❦";
+}
+
+.toastFootprints[data-region="5"]::before {
+    content: "ϟϟϟϟϟϟϟϟϟϟϟϟϟϟϟϟϟϟϟϟ";
+}
+
+.toastFootprints[data-region="6"]::before {
+    content: "✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦";
+}
+
+.toastFootprints[data-region="7"]::before {
+    content: "∴∴∴∴∴∴∴∴∴∴∴∴∴∴∴∴∴∴∴∴";
+}
+
+.toastFootprints[data-region="8"]::before {
+    content: "▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰";
+}
+
+.toastFootprints[data-region="9"]::before {
+    content: "★★★★★★★★★★★★★★★★★★★★";
 }

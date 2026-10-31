@@ -26,7 +26,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Parade step 7: the wave button cycles through moods — jump wave, then a spin wave, then a "bow" (everyone dips) on the third press
-- [ ] Regional footprints step 2: Johto leaves leaves 🍃, Unova lightning zig-zags, Kalos sparkles ✦, Alola sand dots, Galar boot prints, Paldea stars
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
 - [ ] Finale screen: a small "Share" button that copies "I completed the National Pokédex! 🏆" plus the date to the clipboard
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -376,3 +375,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Toast footprints step 2: footprint shape per region (paw prints for Kanto, wave ripples for Hoenn, snowflakes for Sinnoh) (2026-10-31) — footprints by region (data-region on the trail): paw prints in Kanto, ripples (〰) in Hoenn, snowflakes in Sinnoh, dots elsewhere; same reveal and fade
 - [x] Parade bubbles step 2: the bubble also shows the region in small print ("Reshiram · Unova") (2026-10-31) — bubbles add the home region in small print ('Reshiram! · Unova'), and are nudged back inside the parade strip (--nudge) so ones at a row's or the screen's edge aren't cut off
 - [x] Reduced-motion parade: instead of no jump, tapped marchers get a brief gold outline so the tap still visibly lands (2026-10-31) — under reduced motion a tapped (or waved) marcher gets a brief gold outline instead of the leap; the jump class is now cleared after 700 ms in both modes
+- [x] Regional footprints step 2: Johto leaves leaves 🍃, Unova lightning zig-zags, Kalos sparkles ✦, Alola sand dots, Galar boot prints, Paldea stars (2026-10-31) — every region now has its own trail: leaves ❦ (Johto), sparks ϟ (Unova), sparkles ✦ (Kalos), sand ∴ (Alola), boot prints ▰ (Galar), stars ★ (Paldea), alongside Kanto paws, Hoenn ripples and Sinnoh snowflakes
