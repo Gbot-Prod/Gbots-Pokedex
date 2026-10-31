@@ -5153,3 +5153,29 @@ img.animatedSmall {
         display: none;
     }
 }
+
+/* Who's at that number: a pixelated, LCD-green sprite and name under the digits */
+#gotoPreview {
+    display: grid;
+    place-items: center;
+    min-height: 5.6rem;
+    margin-top: 0.3rem;
+}
+
+#gotoPreview img {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;
+    /* monochrome green, like an old handheld screen */
+    filter: grayscale(1) sepia(1) hue-rotate(60deg) saturate(2.2) brightness(1.15)
+        drop-shadow(0 0 6px rgba(160, 255, 150, 0.6));
+}
+
+#gotoPreview span {
+    min-height: 1.2em;
+    font-family: "Courier New", monospace;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-shadow: 0 0 6px rgba(160, 255, 150, 0.7);
+}

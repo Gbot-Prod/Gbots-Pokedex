@@ -10,6 +10,7 @@ import {
     getMoveSummary,
     getSpeciesSlugs,
     setSmallSprite,
+    setSprite,
 } from "./api.js";
 import { attachCombobox } from "./combobox.js";
 import { initCompare, refreshComparison } from "./compare.js";
@@ -1316,10 +1317,34 @@ const gotoInput = document.getElementById("gotoInput");
 function openGoto() {
     shortcutsDialog.close();
     gotoInput.value = "";
+    gotoInput.dispatchEvent(new Event("input")); // clear the preview
     gotoInput.max = String(MAX_DEX_NUMBER);
     gotoDialog.showModal();
     gotoInput.focus();
 }
+// As you type, the LCD shows who's at that number: a green-tinted sprite and the name.
+const gotoPreviewImage = document.querySelector("#gotoPreview img");
+const gotoPreviewName = document.querySelector("#gotoPreview span");
+gotoInput.addEventListener("input", async () => {
+    const number = Number(gotoInput.value);
+    const valid = Number.isInteger(number) && number >= 1 && number <= MAX_DEX_NUMBER;
+    gotoPreviewImage.hidden = !valid;
+    gotoPreviewName.textContent = "";
+    if (!valid) {
+        gotoPreviewImage.removeAttribute("src");
+        return;
+    }
+    setSprite(gotoPreviewImage, number);
+    try {
+        const entry = (await getAllPokemonEntries()).find((candidate) => candidate.id === number);
+        if (entry && Number(gotoInput.value) === number) {
+            gotoPreviewName.textContent = formatName(entry.name);
+        }
+    } catch {
+        // no name list (offline): the sprite alone will do
+    }
+});
+
 gotoDialog.addEventListener("close", () => {
     if (gotoDialog.returnValue === "go") {
         goToDexNumber(Number(gotoInput.value));

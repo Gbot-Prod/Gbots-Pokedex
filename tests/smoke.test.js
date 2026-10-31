@@ -201,6 +201,8 @@ test("G opens the go-to-number prompt and Enter jumps there", async () => {
     await page.waitForSelector("#gotoDialog[open]");
     assert.equal(await page.inputValue("#gotoInput"), ""); // the "g" itself isn't typed
     await page.keyboard.type("94");
+    await page.waitForSelector('#gotoPreview img:not([hidden])[src$="/94.png"]');
+    await page.waitForFunction(() => document.querySelector("#gotoPreview span").textContent === "Gengar");
     await page.keyboard.press("Enter");
     await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
     assert.equal(await page.locator("#gotoDialog[open]").count(), 0);
