@@ -19,6 +19,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
 - [ ] Go-to step 5: a quiet "beep" on each keystroke and a two-tone chime on Enter when sound effects are on (Web Audio, LCD theme)
 - [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
+- [ ] LCD power-on: the ? screen and G prompt flicker on (a 150 ms scanline wipe + brightness blip) when opened; instant under reduced motion
+- [ ] Odometer step 2: the trainer card's stat tiles reuse the hunt counter's rolling digits instead of the plain count-up
+- [ ] Quiz timer step 3: a short "tick" sound per second in the last 5 s and a buzzer at 0 when sound effects are on
+- [ ] Hunt LCD step 3: the readout flashes gold (SHINY! in segment letters) for 2 s when a shiny appears
+- [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
