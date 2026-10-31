@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Toast "Show me" for region completions too: open the browse grid filtered to that region with its banner glowing gold
 - [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -325,3 +324,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Keyboard help overlay: "?" opens a small dialog listing every shortcut (/, ←/→, S, C, N) instead of the one-line tip (2026-10-31) — ? (or the new 'all shortcuts' link in the tip line) opens a red Pokédex-frame dialog with a green LCD screen and chunky key caps listing all 7 shortcuts; smoke test + axe in light/dark
 - [x] Now browsing chip step 2: tapping the chip scrolls back up to the region strip (make it a button while visible) (2026-10-31) — the chip is a button while visible (↑ hint); tapping it scrolls the region strip into view; smoke test checks the strip ends up on screen
 - [x] Count-up polish: the stat tiles (shinies, encounters, quiz streak…) roll up too, staggered by 80 ms each (2026-10-31) — countUpSeen generalised to countUp(element, target, format, delay); the six stat tiles roll up 80 ms apart after the seen line, tabular digits, final values for screen readers, instant under reduced motion
+- [x] Toast "Show me" for region completions too: open the browse grid filtered to that region with its banner glowing gold (2026-10-31) — region-complete toasts carry the same gold Show me pill; it fires a pokedex:show-region event (no import cycle) that lists.js answers by selecting the region, bringing the strip into view and pulsing its banner

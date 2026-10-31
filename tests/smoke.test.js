@@ -1018,7 +1018,7 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     await page.reload();
     await search("pikachu");
     await page.waitForSelector("#dexToast.visible");
-    assert.equal(await page.textContent("#dexToast"), "🏅 Kanto Pokédex complete!");
+    assert.equal(await page.textContent("#dexToast > span"), "🏅 Kanto Pokédex complete!");
     assert.equal(await page.locator('.regionBanner.regionComplete[data-generation="1"]').count(), 1);
     assert.equal(await page.textContent("#regionTier"), "🗺️ Region master badge: 1 / 3 regions for silver");
     await page.click("#regionTier");
@@ -1028,6 +1028,22 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     await page.waitForFunction(() => document.getElementById("dexToast").textContent.includes("Region master"), null, {
         timeout: 6000,
     });
+});
+
+test("a region toast's Show me opens that region in the browse grid", async () => {
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:seen:v1",
+            JSON.stringify(Array.from({ length: 151 }, (_, index) => index + 1).filter((id) => id !== 25)),
+        ),
+    );
+    await page.reload();
+    await search("pikachu");
+    await page.click("#dexToast.visible.withAction .toastShowMe");
+    assert.equal(await page.inputValue("#generationFilter"), "1");
+    await page.waitForSelector('.regionBanner.regionPulse[data-generation="1"]');
+    await page.waitForFunction(() => document.querySelectorAll("#browseGrid .browseTile").length > 0);
+    assert.equal(await page.isVisible("#dexToast.visible"), false);
 });
 
 test("the shiny hunt counts encounters and collects shinies", async () => {

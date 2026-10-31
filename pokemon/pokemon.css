@@ -2374,6 +2374,13 @@ img.placeholderSprite {
     cursor: pointer;
 }
 
+#dexToast.withAction {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-right: 0.6rem;
+}
+
 #dexToast.withIcon {
     display: flex;
     align-items: center;

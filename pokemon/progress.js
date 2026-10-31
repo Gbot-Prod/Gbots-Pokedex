@@ -197,7 +197,11 @@ export function completionMessage(seenIds, dexNumber) {
 function celebrateIfComplete(dexNumber) {
     const message = completionMessage(seen, dexNumber);
     if (message) {
-        celebrate(message, 90);
+        // A region's toast offers "Show me" to that region in the browse grid.
+        const generation = message.startsWith("🏅")
+            ? GENERATIONS.find((gen) => dexNumber >= gen.first && dexNumber <= gen.last)
+            : null;
+        celebrate(message, 90, "", "", generation?.number ?? 0);
     }
 }
 
@@ -219,9 +223,9 @@ export function enqueueToast(queue, toast) {
 
 let droppedToasts = 0; // over the cap; summed up in one last toast
 
-function celebrate(message, confettiCount, icon = "", badgeLabel = "") {
+function celebrate(message, confettiCount, icon = "", badgeLabel = "", region = 0) {
     const duplicate = toastQueue.some((queued) => queued.message === message);
-    if (enqueueToast(toastQueue, { message, confettiCount, icon, badgeLabel })) {
+    if (enqueueToast(toastQueue, { message, confettiCount, icon, badgeLabel, region })) {
         if (toastQueue.length === 1) {
             showNextToast();
         }
@@ -279,9 +283,21 @@ if (toastElement?.addEventListener) {
     toastElement.addEventListener("focusout", () => setTimeout(resumeToastTimer));
 }
 
+function toastShowMe(toast, onClick) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "toastShowMe";
+    button.textContent = "Show me";
+    button.addEventListener("click", () => {
+        toast.classList.remove("visible");
+        onClick();
+    });
+    return button;
+}
+
 function showNextToast() {
     const toast = document.getElementById("dexToast");
-    const { message, confettiCount, icon, opensCard, badgeLabel } = toastQueue[0];
+    const { message, confettiCount, icon, opensCard, badgeLabel, region } = toastQueue[0];
     // Badge toasts lead with the badge itself, large, like an achievement pop-up, and offer
     // a "Show me" button to that badge on the trainer card.
     toast.classList.toggle("withIcon", Boolean(icon));
@@ -291,15 +307,18 @@ function showNextToast() {
         badge.textContent = icon;
         const text = document.createElement("span");
         text.textContent = message;
-        const showMe = document.createElement("button");
-        showMe.type = "button";
-        showMe.className = "toastShowMe";
-        showMe.textContent = "Show me";
-        showMe.addEventListener("click", () => {
-            toast.classList.remove("visible");
-            showBadgeOnCard(badgeLabel);
-        });
-        toast.replaceChildren(badge, " ", text, showMe);
+        toast.replaceChildren(
+            badge,
+            " ",
+            text,
+            toastShowMe(toast, () => showBadgeOnCard(badgeLabel)),
+        );
+    } else if (region) {
+        // The browse grid (lists.js) listens for this and opens the region with its banner pulsing.
+        const text = document.createElement("span");
+        text.textContent = message;
+        const showRegion = () => window.dispatchEvent(new CustomEvent("pokedex:show-region", { detail: region }));
+        toast.replaceChildren(text, toastShowMe(toast, showRegion));
     } else if (opensCard) {
         // The "+N more" summary is a button straight to the badge shelf.
         const button = document.createElement("button");
@@ -314,7 +333,8 @@ function showNextToast() {
     } else {
         toast.textContent = message;
     }
-    toast.classList.toggle("clickable", Boolean(opensCard || icon));
+    toast.classList.toggle("withAction", Boolean(region) && !icon);
+    toast.classList.toggle("clickable", Boolean(opensCard || icon || region));
     toast.classList.add("visible");
     if (confettiCount && !reducedMotion.matches) {
         const burst = makeConfetti(confettiCount, "confetti fullscreen");

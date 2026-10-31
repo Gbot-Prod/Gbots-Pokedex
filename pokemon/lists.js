@@ -253,6 +253,13 @@ nextMissingButton.addEventListener("click", async () => {
     openFirstUnseen();
 });
 unseenCountButton.addEventListener("click", openFirstUnseen);
+// A region-complete toast's "Show me": that region in the grid, its banner pulsing in view.
+window.addEventListener("pokedex:show-region", async (event) => {
+    generationFilterElement.value = String(event.detail);
+    document.getElementById("regionStrip").scrollIntoView({ block: "center" });
+    pulseRegionBanner(event.detail);
+    await applyBrowseFilters();
+});
 window.addEventListener("pokedex:seen", updateUnseenCount);
 
 async function applyBrowseFilters() {
