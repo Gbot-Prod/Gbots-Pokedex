@@ -220,6 +220,22 @@ test("the go-to prompt also finds a Pokémon by the start of its name", async ()
     await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("83"));
 });
 
+test("arrow keys cycle through every name matching the go-to prefix", async () => {
+    await page.locator("#shortcutHint").click({ position: { x: 1, y: 1 } });
+    await page.keyboard.press("g");
+    await page.waitForSelector("#gotoDialog[open]");
+    await page.keyboard.type("charm");
+    await page.waitForFunction(() => document.querySelector("#gotoPreview span").textContent === "Charmander · 1/2");
+    await page.keyboard.press("ArrowDown");
+    assert.equal(await page.textContent("#gotoPreview span"), "Charmeleon · 2/2");
+    await page.keyboard.press("ArrowDown"); // wraps around
+    assert.equal(await page.textContent("#gotoPreview span"), "Charmander · 1/2");
+    await page.keyboard.press("ArrowUp");
+    const charmeleon = page.waitForRequest((request) => /\/pokemon\/5$/.test(request.url()));
+    await page.keyboard.press("Enter");
+    await charmeleon;
+});
+
 test("the cry button requests the Pokémon's cry", async () => {
     await search("pikachu");
     await page.waitForSelector("#cryBtn:not([hidden])");

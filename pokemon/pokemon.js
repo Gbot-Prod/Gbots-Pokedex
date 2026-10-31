@@ -1321,18 +1321,21 @@ function openGoto() {
     gotoDialog.showModal();
     gotoInput.focus();
 }
-// As you type, the LCD shows who you'd land on: a number, or the first name starting with
-// what's typed ("gen" → Gengar), as a green-tinted sprite and the name.
+// As you type, the LCD shows who you'd land on: a number, or the names starting with what's
+// typed ("char" → Charmander, Charmeleon, Charizard; ↑/↓ cycles), as a green-tinted sprite
+// and the name.
 const gotoPreviewImage = document.querySelector("#gotoPreview img");
 const gotoPreviewName = document.querySelector("#gotoPreview span");
-async function findGotoTarget(rawQuery) {
+let gotoMatches = { query: "", targets: [], index: 0 };
+
+async function findGotoTargets(rawQuery) {
     const query = normalizeQuery(rawQuery);
     if (!query) {
-        return null;
+        return [];
     }
     const number = /^\d+$/.test(query) ? Number(query) : null;
     if (number !== null && (number < 1 || number > MAX_DEX_NUMBER)) {
-        return null;
+        return [];
     }
     let entries = [];
     let speciesSlugs = null;
@@ -1341,36 +1344,63 @@ async function findGotoTarget(rawQuery) {
     } catch {
         // no name list (offline): numbers still work, names can't be matched
     }
-    const entry =
-        number !== null
-            ? entries.find((candidate) => candidate.id === number)
-            : entries.find((candidate) => candidate.id <= MAX_DEX_NUMBER && candidate.name.startsWith(query));
     // Proper names on the LCD: "farfetchd" → "Farfetch’d", "mr-mime" → "Mr. Mime".
-    const label = entry ? entryDisplayName(entry, speciesSlugs) : "";
+    const target = (entry) => ({ id: entry.id, label: entryDisplayName(entry, speciesSlugs) });
     if (number !== null) {
-        return { id: number, label };
+        const entry = entries.find((candidate) => candidate.id === number);
+        return [entry ? target(entry) : { id: number, label: "" }];
     }
-    return entry ? { id: entry.id, label } : null;
+    return entries
+        .filter((candidate) => candidate.id <= MAX_DEX_NUMBER && candidate.name.startsWith(query))
+        .map(target);
 }
 
-gotoInput.addEventListener("input", async () => {
-    const typed = gotoInput.value;
-    const target = await findGotoTarget(typed);
-    if (gotoInput.value !== typed) {
-        return; // a newer keystroke is already being looked up
-    }
+function renderGotoPreview() {
+    const { query, targets, index } = gotoMatches;
+    const target = targets[index];
     gotoPreviewImage.hidden = !target;
-    gotoPreviewName.textContent = target ? target.label || "#" + target.id : typed.trim() ? "No match" : "";
+    gotoPreviewName.textContent = target
+        ? (target.label || "#" + target.id) + (targets.length > 1 ? " · " + (index + 1) + "/" + targets.length : "")
+        : query.trim()
+          ? "No match"
+          : "";
     if (target) {
         setSprite(gotoPreviewImage, target.id);
     } else {
         gotoPreviewImage.removeAttribute("src");
     }
+}
+
+gotoInput.addEventListener("input", async () => {
+    const typed = gotoInput.value;
+    const targets = await findGotoTargets(typed);
+    if (gotoInput.value !== typed) {
+        return; // a newer keystroke is already being looked up
+    }
+    gotoMatches = { query: typed, targets, index: 0 };
+    renderGotoPreview();
+});
+
+gotoInput.addEventListener("keydown", (event) => {
+    const count = gotoMatches.targets.length;
+    if ((event.key === "ArrowDown" || event.key === "ArrowUp") && count > 1) {
+        event.preventDefault();
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        gotoMatches.index = (gotoMatches.index + step + count) % count;
+        renderGotoPreview();
+    }
 });
 
 gotoDialog.addEventListener("close", async () => {
-    // Looked up afresh, so an Enter pressed before the preview caught up still lands right.
-    const target = gotoDialog.returnValue === "go" ? await findGotoTarget(gotoInput.value) : null;
+    // The previewed match if it's up to date; otherwise looked up afresh, so an Enter pressed
+    // before the preview caught up still lands right.
+    let target = null;
+    if (gotoDialog.returnValue === "go") {
+        target =
+            gotoMatches.query === gotoInput.value
+                ? gotoMatches.targets[gotoMatches.index]
+                : (await findGotoTargets(gotoInput.value))[0];
+    }
     if (target) {
         goToDexNumber(target.id);
         window.scrollTo({ top: 0, behavior: "smooth" });
