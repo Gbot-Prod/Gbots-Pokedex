@@ -5406,6 +5406,7 @@ img.animatedSmall {
 
 /* National Dex finale: a full-screen night sky with every region's starters marching across */
 #finaleParade {
+    box-sizing: border-box; /* 100vh including its padding, so the button is never off-screen */
     width: 100vw;
     max-width: none;
     height: 100vh;
@@ -5447,6 +5448,7 @@ img.animatedSmall {
 }
 
 .paradeTrack {
+    flex: none; /* never squashed by the dialog's column, or the still lineup gets cut off */
     width: 100%;
     overflow: hidden;
 }
@@ -5455,7 +5457,7 @@ img.animatedSmall {
     display: flex;
     gap: 0.6rem;
     width: max-content;
-    animation: paradeMarch 14s linear infinite;
+    animation: paradeMarch 24s linear infinite;
 }
 
 .paradeLine img {
@@ -5529,4 +5531,23 @@ img.animatedSmall {
 
 #replayParadeBtn[hidden] {
     display: none;
+}
+
+/* The legendaries close the parade: bigger, slower hops, a golden aura */
+.paradeLine {
+    align-items: flex-end;
+}
+
+.paradeLine img.paradeLegend {
+    width: 148px;
+    height: 148px;
+    filter: drop-shadow(0 0 14px rgba(255, 212, 71, 0.75));
+    animation-duration: 0.9s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .paradeLine img.paradeLegend {
+        width: 76px;
+        height: 76px;
+    }
 }

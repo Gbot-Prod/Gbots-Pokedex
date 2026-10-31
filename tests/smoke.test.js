@@ -1081,7 +1081,8 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     await search("pikachu");
     // The once-only parade: all nine starter trios under "Pokédex complete!".
     await page.waitForSelector("#finaleParade[open]");
-    assert.equal(await page.locator("#finaleParade .paradeLine img").count(), 27);
+    assert.equal(await page.locator("#finaleParade .paradeLine img").count(), 27 + 9);
+    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeLegend").count(), 9);
     await page.click("#finaleClose");
     await page.waitForSelector("#finaleParade", { state: "detached" });
     assert.equal(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), "1");

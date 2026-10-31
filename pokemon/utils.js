@@ -440,6 +440,19 @@ export const REGION_STARTERS = {
     9: [906, 909, 912],
 };
 
+// Each region's box-art legendary, by generation number (the finale parade's closing act).
+export const REGION_MASCOTS = {
+    1: 150, // Mewtwo
+    2: 250, // Ho-Oh
+    3: 384, // Rayquaza
+    4: 483, // Dialga
+    5: 643, // Reshiram
+    6: 716, // Xerneas
+    7: 791, // Solgaleo
+    8: 888, // Zacian
+    9: 1007, // Koraidon
+};
+
 export const GENERATIONS = [
     { number: 1, region: "Kanto", first: 1, last: 151 },
     { number: 2, region: "Johto", first: 152, last: 251 },

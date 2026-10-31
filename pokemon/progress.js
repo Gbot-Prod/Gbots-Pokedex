@@ -7,6 +7,7 @@ import { isStoredEntry, isTeamMember } from "./storage.js";
 import {
     GENERATIONS,
     MAX_DEX_NUMBER,
+    REGION_MASCOTS,
     REGION_STARTERS,
     damageMultipliers,
     formatDexNumber,
@@ -220,11 +221,19 @@ function showFinaleParade({ replay = false } = {}) {
         '<div class="paradeTrack" aria-hidden="true"><div class="paradeLine"></div></div>' +
         '<form method="dialog"><button class="btn" id="finaleClose">Hooray!</button></form>';
     const line = dialog.querySelector(".paradeLine");
-    for (const id of Object.values(REGION_STARTERS).flat()) {
+    // The starters march first; each region's legendary follows, bigger, as the grand finale.
+    const marchers = [
+        ...Object.values(REGION_STARTERS)
+            .flat()
+            .map((id) => [id, false]),
+        ...Object.values(REGION_MASCOTS).map((id) => [id, true]),
+    ];
+    for (const [id, legendary] of marchers) {
         const sprite = document.createElement("img");
         sprite.alt = "";
-        sprite.width = 104;
-        sprite.height = 104;
+        sprite.width = legendary ? 148 : 104;
+        sprite.height = legendary ? 148 : 104;
+        sprite.classList.toggle("paradeLegend", legendary);
         setSprite(sprite, id);
         line.append(sprite);
     }
