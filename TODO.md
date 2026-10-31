@@ -16,6 +16,11 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
+- [ ] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused
+- [ ] Next region step 2: when every region is complete, the button becomes "🏆 National Dex complete!" and opens the trainer card
+- [ ] Region switch flourish: when "on to Johto?" switches regions, the Johto banner pulses in the region strip so the change is visible
+- [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
+- [ ] Smoke test for the "+N more" summary toast (seed several badges at once and click through to the card)
 - [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
 - [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
