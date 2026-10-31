@@ -408,6 +408,7 @@ function showNextToast() {
         badge.className = "toastIcon";
         badge.textContent = icon;
         const text = document.createElement("span");
+        text.className = "toastMessage";
         text.textContent = message;
         toast.replaceChildren(
             badge,
@@ -418,6 +419,7 @@ function showNextToast() {
     } else if (region) {
         // The browse grid (lists.js) listens for this and opens the region with its banner pulsing.
         const text = document.createElement("span");
+        text.className = "toastMessage";
         text.textContent = message;
         const showRegion = () => window.dispatchEvent(new CustomEvent("pokedex:show-region", { detail: region }));
         // The region's starter trio walks across the top of the toast (stands still under

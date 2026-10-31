@@ -851,6 +851,7 @@ test("earning a new badge announces it with the toast", async () => {
     await page.waitForFunction(() => document.getElementById("dexToast").textContent.includes("Collector"));
     assert.match(await page.textContent("#dexToast"), /^📚 Badge earned! Collector/);
     assert.equal(await page.textContent("#dexToast .toastIcon"), "📚");
+    assert.match(await page.textContent("#dexToast .toastMessage"), /^Badge earned! Collector/);
     assert.equal(await page.evaluate(() => document.getElementById("dexProgress").classList.contains("hasNews")), true);
     assert.match(await page.getAttribute("#dexProgress", "aria-label"), / · new badge!$/);
     await page.click("#dexProgress"); // seeing the card clears the dot
@@ -1161,10 +1162,7 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     await page.reload();
     await search("pikachu");
     await page.waitForSelector("#dexToast.visible");
-    assert.equal(
-        await page.textContent("#dexToast > span:not(.toastParade, .toastFootprints)"),
-        "🏅 Kanto Pokédex complete!",
-    );
+    assert.equal(await page.textContent("#dexToast .toastMessage"), "🏅 Kanto Pokédex complete!");
     // Kanto's starter trio walks along the top of the toast.
     assert.equal(await page.locator("#dexToast .toastParade img").count(), 3);
     assert.equal(await page.locator("#dexToast .toastFootprints").count(), 1); // the trail it leaves

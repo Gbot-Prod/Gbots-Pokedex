@@ -28,7 +28,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region toasts step 3: Kanto's trio (the default hop) gets a signature walk too — a classic Game Boy two-frame shuffle (steps(2) bob)
 - [ ] Parade step 6: tapping the "Pokédex complete!" title makes every marcher jump at once in a wave from left to right
 - [ ] Toast footprints step 2: footprint shape per region (paw prints for Kanto, wave ripples for Hoenn, snowflakes for Sinnoh)
-- [ ] Test robustness: toast tests should read the message from a dedicated .toastMessage span instead of "the span that isn't X" (broke when footprints were added)
 - [ ] Parade bubbles step 2: the bubble also shows the region in small print ("Reshiram · Unova")
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -371,3 +370,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Parade step 5: a tapped marcher's name pops up in a little speech bubble above it for a second ("Bulbasaur!") (2026-10-31) — a tapped marcher's name ('Reshiram!') pops up in a white speech bubble above it for 1.4 s (species list loaded with the parade; dex number until then); marchers now sit in their own slots
 - [x] Region walk styles step 2: give Johto, Unova, Kalos and Alola their own walks too (Johto trots, Unova zig-zags, Kalos twirls, Alola surfs) (2026-10-31) — Johto trots in quick light steps, Unova zig-zags, Kalos twirls one by one (rotateY), Alola surfs a staggered swell; all still under reduced motion
 - [x] Region toast: the trio leaves footprints (tiny fading dots) along the top edge of the toast as it walks (2026-10-31) — staggered pairs of white prints along the toast's top edge, revealed by a clip-path in step with the walk and fading after; hidden under reduced motion (no walk, no trail)
+- [x] Test robustness: toast tests should read the message from a dedicated .toastMessage span instead of "the span that isn't X" (broke when footprints were added) (2026-10-31) — badge and region toasts wrap their text in .toastMessage; tests read that instead of 'the span that isn't the trio or footprints'
