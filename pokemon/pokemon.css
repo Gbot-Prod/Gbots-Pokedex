@@ -5656,3 +5656,79 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* Each region's trio walks its own way along the toast: Kanto and the rest hop (default),
+   Hoenn swims in a wave, Sinnoh skates on the ice, Galar marches stiffly in step and
+   Paldea bounds in long leaps */
+.toastParade[data-region="3"] img {
+    animation: trioSwim 0.9s ease-in-out infinite;
+}
+
+.toastParade[data-region="3"] img:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.toastParade[data-region="3"] img:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes trioSwim {
+    0%,
+    100% {
+        transform: translateY(0) rotate(-6deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(6deg);
+    }
+}
+
+.toastParade[data-region="4"] img {
+    animation: trioSkate 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes trioSkate {
+    from {
+        transform: skewX(-10deg) translateX(-4px);
+    }
+    to {
+        transform: skewX(10deg) translateX(4px);
+    }
+}
+
+.toastParade[data-region="8"] img {
+    animation: trioMarch 0.5s steps(2) infinite;
+}
+
+.toastParade[data-region="8"] img:nth-child(2) {
+    animation-delay: 0s; /* in step, all together */
+}
+
+@keyframes trioMarch {
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.toastParade[data-region="9"] img {
+    animation: trioBound 0.8s cubic-bezier(0.3, 1.6, 0.5, 1) infinite;
+}
+
+.toastParade[data-region="9"] img:nth-child(2) {
+    animation-delay: 0.27s;
+}
+
+.toastParade[data-region="9"] img:nth-child(3) {
+    animation-delay: 0.54s;
+}
+
+@keyframes trioBound {
+    40% {
+        transform: translateY(-18px) rotate(-4deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toastParade[data-region] img {
+        animation: none;
+    }
+}

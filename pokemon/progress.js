@@ -400,6 +400,7 @@ function showNextToast() {
         // reduced motion).
         const trio = document.createElement("span");
         trio.className = "toastParade";
+        trio.dataset.region = region; // each region's trio has its own walk (see the CSS)
         trio.setAttribute("aria-hidden", "true");
         for (const id of REGION_STARTERS[region]) {
             const sprite = document.createElement("img");
