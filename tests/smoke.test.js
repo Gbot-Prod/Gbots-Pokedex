@@ -1088,6 +1088,14 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     const bulbasaurCry = page.waitForRequest((request) => request.url().endsWith("/latest/1.ogg"));
     await page.locator("#finaleParade .paradeLine img").first().dispatchEvent("click");
     await bulbasaurCry;
+    // checked straight away: the jump class is cleared after 700 ms
+    assert.equal(
+        await page
+            .locator("#finaleParade .paradeLine img")
+            .first()
+            .evaluate((sprite) => sprite.classList.contains("paradeJump")),
+        true,
+    );
     assert.match(await page.textContent("#finaleParade .paradeBubble"), /^(Bulbasaur|#0001)! · Kanto$/);
     assert.equal(await page.evaluate(() => document.activeElement.id), "finaleClose"); // focus on the way out
     await page.click("#finaleParade .finaleWave"); // the title: everyone jumps in a wave
@@ -1117,13 +1125,6 @@ test("seeing every Pokémon turns the region button into the National Dex finale
         await page.locator("#finaleParade .paradeLine img").nth(index).dispatchEvent("click");
     }
     assert.equal(await page.evaluate(() => window.criesMade), 3);
-    assert.equal(
-        await page
-            .locator("#finaleParade .paradeLine img")
-            .first()
-            .evaluate((sprite) => sprite.classList.contains("paradeJump")),
-        true,
-    );
     await page.click("#finaleClose");
     await page.waitForSelector("#finaleParade", { state: "detached" });
     assert.match(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), /^\d{4}-\d{2}-\d{2}$/);
@@ -1182,6 +1183,8 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     // Kanto's starter trio walks along the top of the toast.
     assert.equal(await page.locator("#dexToast .toastParade img").count(), 3);
     assert.equal(await page.locator("#dexToast .toastFootprints").count(), 1); // the trail it leaves
+    // In Kanto's banner colours, then back to red for the badge toast that follows.
+    assert.match(await page.evaluate(() => document.getElementById("dexToast").style.background), /gradient/);
     assert.equal(await page.getAttribute("#dexToast .toastParade", "data-region"), "1"); // picks its walk style
     assert.equal(await page.locator('.regionBanner.regionComplete[data-generation="1"]').count(), 1);
     assert.equal(

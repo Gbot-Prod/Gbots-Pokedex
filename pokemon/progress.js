@@ -504,6 +504,9 @@ function showNextToast() {
         footprints.dataset.region = region;
         footprints.setAttribute("aria-hidden", "true");
         toast.replaceChildren(footprints, trio, text, toastShowMe(toast, showRegion));
+        // In the region's own colours: the banner's gradient (white text, as on the banners).
+        const banner = document.querySelector('.regionBanner[data-generation="' + region + '"]');
+        toast.style.background = banner ? getComputedStyle(banner).backgroundImage : "";
     } else if (opensCard) {
         // The "+N more" summary is a button straight to the badge shelf.
         const button = document.createElement("button");
@@ -517,6 +520,9 @@ function showNextToast() {
         toast.replaceChildren(button);
     } else {
         toast.textContent = message;
+    }
+    if (!region) {
+        toast.style.background = ""; // back to the usual red for everything else
     }
     toast.classList.toggle("withAction", Boolean(region) && !icon);
     toast.classList.toggle("clickable", Boolean(opensCard || icon || region));
