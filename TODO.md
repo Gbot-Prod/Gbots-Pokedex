@@ -31,7 +31,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Card preview step 2: a style switcher in the preview (classic / holo / retro chips) that redraws the card live before saving
 - [ ] Card preview step 3: a "Copy image" button using the async Clipboard API (ClipboardItem) where it's supported
 - [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
-- [ ] Shiny wave step 3: the parade's background flashes to a deep purple "shiny night" for the length of the shiny wave
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -401,3 +400,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Holo cards step 2: the foil band sweeps diagonally (light streak) instead of a flat overlay, like the holo trainer card's sheen (2026-10-31) — holo share cards get a diagonal white light streak (screen blend) across the rainbow foil, echoing the holo trainer card's sheen
 - [x] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line (2026-10-31) — as each marcher turns shiny, three ✨ rise and spin off it (staggered, 0.9 s), so the sparkle runs along the line with the wave; none under reduced motion
 - [x] Region rows: a tiny ✓ badge on completed regions in the browse strip's banners matching the trainer card's 🖼️ rows (2026-10-31) — not needed: completed banners already carry the '★ COMPLETE' ribbon (checked today)
+- [x] Shiny wave step 3: the parade's background flashes to a deep purple "shiny night" for the length of the shiny wave (2026-10-31) — during the shiny wave the parade's sky fades to a deep purple 'shiny night' (a fixed ::before layer, 0.5 s fade, instant under reduced motion) and back when the sprites change back

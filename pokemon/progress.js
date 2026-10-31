@@ -325,6 +325,8 @@ function showFinaleParade({ replay = false } = {}) {
         const mood = moods[moodIndex];
         moodIndex = (moodIndex + 1) % moods.length;
         const sprites = [...line.querySelectorAll("img")];
+        // the sky turns to a deep "shiny night" while the shiny wave runs
+        dialog.classList.toggle("shinyNight", mood === "paradeShiny");
         sprites.forEach((sprite, index) => {
             sprite.classList.remove(...moods);
             void sprite.offsetWidth;
@@ -350,6 +352,7 @@ function showFinaleParade({ replay = false } = {}) {
                         sprite.src = sprite.dataset.normalSrc;
                         delete sprite.dataset.normalSrc;
                     }
+                    dialog.classList.remove("shinyNight");
                 }),
             sprites.length * 45 + (mood === "paradeShiny" ? 2200 : 900),
         );

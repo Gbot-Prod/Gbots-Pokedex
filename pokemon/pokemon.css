@@ -6286,3 +6286,26 @@ img.animatedSmall {
         opacity: 0;
     }
 }
+
+/* The shiny wave's "shiny night": the sky behind the parade turns deep purple for a moment */
+#finaleParade::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 50% 60%, rgba(255, 220, 255, 0.25), transparent 60%),
+        linear-gradient(180deg, #2a0b40, #5b1a7a);
+    opacity: 0;
+    transition: opacity 0.5s;
+    content: "";
+}
+
+#finaleParade.shinyNight::before {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #finaleParade::before {
+        transition: none;
+    }
+}
