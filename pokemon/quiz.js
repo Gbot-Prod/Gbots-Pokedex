@@ -144,6 +144,7 @@ function startTimedRun() {
         const left = Math.max(0, Math.ceil((timedRun.endsAt - Date.now()) / 1000));
         timerElement.textContent = "⏱ " + left + "s · " + timedRun.correct + " correct";
         timerElement.classList.toggle("urgent", left <= 10);
+        timerElement.style.setProperty("--time-left", String(left / TIMED_SECONDS)); // the LCD's segment bar
         if (left === 0) {
             stopTimedRun(true);
         }

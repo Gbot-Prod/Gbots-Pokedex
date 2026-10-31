@@ -657,6 +657,11 @@ test("the 60-second quiz challenge counts down, accepts number keys and ends wit
     await page.click("#quizTimedBtn");
     await page.waitForSelector(".quizChoice:not(:disabled)");
     assert.match(await page.textContent("#quizTimer"), /^⏱ \d+s · 0 correct$/);
+    // The LCD's segment bar starts full.
+    assert.equal(
+        await page.evaluate(() => document.getElementById("quizTimer").style.getPropertyValue("--time-left")),
+        "1",
+    );
 
     await page.keyboard.press("1"); // answers with the first (focused-area) choice
     assert.equal(await page.locator(".quizChoice:disabled").count(), 4);

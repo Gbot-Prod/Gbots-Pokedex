@@ -5303,3 +5303,33 @@ img.animatedSmall {
         inset 0 2px 8px rgba(0, 0, 0, 0.5),
         var(--lcd-halo);
 }
+
+/* The quiz timer's LCD has a segmented bar along its bottom edge that empties with the clock */
+#quizTimer {
+    position: relative;
+    padding-bottom: 0.65rem;
+}
+
+#quizTimer::after {
+    position: absolute;
+    bottom: 0.25rem;
+    left: 0.6rem;
+    width: calc((100% - 1.2rem) * var(--time-left, 1));
+    height: 0.25rem;
+    background: repeating-linear-gradient(90deg, currentColor 0 6px, transparent 6px 8px);
+    box-shadow: 0 0 4px currentColor;
+    transition: width 0.25s linear;
+    content: "";
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #quizTimer::after {
+        transition: none;
+    }
+}
+
+:root.darkTheme #quizTimer.urgent {
+    box-shadow:
+        inset 0 2px 8px rgba(0, 0, 0, 0.5),
+        0 0 18px 2px rgba(255, 110, 90, 0.3);
+}
