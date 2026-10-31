@@ -219,10 +219,10 @@ function showFinaleParade({ replay = false } = {}) {
     dialog.id = "finaleParade";
     dialog.setAttribute("aria-labelledby", "finaleHeading");
     dialog.innerHTML =
-        '<h2 id="finaleHeading">🏆 Pokédex complete!</h2>' +
+        '<h2 id="finaleHeading"><button type="button" class="finaleWave">🏆 Pokédex complete!</button></h2>' +
         "<p>All 1,025 Pokémon seen. Every region's partners came to celebrate.</p>" +
         '<div class="paradeTrack" aria-hidden="true"><div class="paradeLine"></div></div>' +
-        '<form method="dialog"><button class="btn" id="finaleClose">Hooray!</button></form>';
+        '<form method="dialog"><button class="btn" id="finaleClose" autofocus>Hooray!</button></form>';
     const line = dialog.querySelector(".paradeLine");
     // The starters march first; each region's legendary follows, bigger, as the grand finale.
     const marchers = [
@@ -255,6 +255,7 @@ function showFinaleParade({ replay = false } = {}) {
         if (!sprite) {
             return;
         }
+        sprite.style.animationDelay = ""; // in case a wave left one behind
         sprite.classList.remove("paradeJump");
         void sprite.offsetWidth; // restart the jump
         sprite.classList.add("paradeJump");
@@ -276,6 +277,17 @@ function showFinaleParade({ replay = false } = {}) {
         cry.addEventListener("ended", done);
         cry.addEventListener("error", done);
         cry.play().catch(done); // blocked or offline: the jump alone will do
+    });
+    // The title is a button too: everyone jumps at once, in a wave from left to right.
+    dialog.querySelector(".finaleWave").addEventListener("click", () => {
+        const sprites = [...line.querySelectorAll("img")];
+        sprites.forEach((sprite, index) => {
+            sprite.classList.remove("paradeJump");
+            void sprite.offsetWidth;
+            sprite.style.animationDelay = index * 45 + "ms";
+            sprite.classList.add("paradeJump");
+        });
+        setTimeout(() => sprites.forEach((sprite) => (sprite.style.animationDelay = "")), sprites.length * 45 + 700);
     });
     dialog.addEventListener("close", () => dialog.remove());
     document.body.append(dialog);

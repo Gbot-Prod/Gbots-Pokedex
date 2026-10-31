@@ -1089,6 +1089,9 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     await page.locator("#finaleParade .paradeLine img").first().dispatchEvent("click");
     await bulbasaurCry;
     assert.match(await page.textContent("#finaleParade .paradeBubble"), /^(Bulbasaur|#0001)!$/);
+    assert.equal(await page.evaluate(() => document.activeElement.id), "finaleClose"); // focus on the way out
+    await page.click("#finaleParade .finaleWave"); // the title: everyone jumps in a wave
+    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeJump").count(), 36);
     // Cries are capped at three at once: with cries that never finish, six taps make three.
     await page.evaluate(() => {
         window.criesMade = 0;

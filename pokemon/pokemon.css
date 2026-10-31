@@ -5923,3 +5923,24 @@ img.animatedSmall {
         display: none; /* the trio stands still, so there's no trail */
     }
 }
+
+/* The finale title is a button: press it and the whole parade jumps in a wave */
+.finaleWave {
+    padding: 0.1rem 0.6rem;
+    border: none;
+    border-radius: 14px;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-shadow: inherit;
+    cursor: pointer;
+}
+
+.finaleWave:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.finaleWave:focus-visible {
+    outline: 3px solid #ffd447;
+    outline-offset: 4px;
+}
