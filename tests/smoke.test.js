@@ -734,6 +734,10 @@ test("the Pokémon of the day shows on the landing page and hides once a Pokémo
 
 test("region banners filter the browse grid by generation and toggle off again", async () => {
     await page.waitForSelector("#browseGrid .browseTile");
+    assert.match(
+        await page.getAttribute('.regionBanner[data-generation="8"]', "title"),
+        /^Show only Galar · complete it to see its starters leave boot prints$/,
+    );
     assert.equal(await page.locator(".regionBanner").count(), 9);
     await page.click('.regionBanner[data-generation="2"]');
     assert.equal(await page.inputValue("#generationFilter"), "2");

@@ -535,6 +535,19 @@ document.getElementById("surpriseBtn").addEventListener("click", () => {
 // --- Region showcase ---------------------------------------------------------------------
 // One banner per region with its starter trio; clicking filters the grid to that generation.
 
+// What each region's trio leaves behind on its "complete!" toast (matches the CSS trails).
+const REGION_TRAILS = {
+    1: "paw prints",
+    2: "a trail of leaves",
+    3: "ripples",
+    4: "snowflakes",
+    5: "sparks",
+    6: "sparkles",
+    7: "footprints in the sand",
+    8: "boot prints",
+    9: "stars",
+};
+
 function renderRegionStrip() {
     const strip = document.getElementById("regionStrip");
     strip.replaceChildren(
@@ -545,6 +558,12 @@ function renderRegionStrip() {
             button.className = "regionBanner region" + generation.number;
             button.setAttribute("aria-pressed", "false");
             button.dataset.generation = generation.number;
+            // A hint at the walk its starters do across the toast when the region is completed.
+            button.title =
+                "Show only " +
+                generation.region +
+                " · complete it to see its starters leave " +
+                REGION_TRAILS[generation.number];
 
             const name = document.createElement("span");
             name.className = "regionName";
