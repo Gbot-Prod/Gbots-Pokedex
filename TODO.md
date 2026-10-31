@@ -18,6 +18,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
+- [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
+- [ ] Region pulse step 2: if the region strip is off-screen when the region switches, show a small "Now browsing Hoenn" chip near the card instead of an unseen pulse
+- [ ] National Dex finale step 2: a one-time full-screen "Pokédex complete" celebration (all 9 starter trios parading across) the first time all 1,025 are seen
+- [ ] Trainer card: a "Regions" row of mini banners that light up as each is completed (mirrors the browse strip)
+- [ ] Next missing: a keyboard shortcut (N) for "Next missing" while a region filter is active
 - [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
 - [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
