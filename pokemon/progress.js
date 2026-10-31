@@ -239,8 +239,15 @@ function showFinaleParade({ replay = false } = {}) {
         sprite.classList.toggle("paradeLegend", legendary);
         sprite.dataset.id = id;
         setSprite(sprite, id);
-        line.append(sprite);
+        // Each marcher stands in its own slot, so a name bubble can pop up above it.
+        const marcher = document.createElement("span");
+        marcher.className = "paradeMarcher";
+        marcher.append(sprite);
+        line.append(marcher);
     }
+    getSpeciesSlugs()
+        .then((slugs) => (knownSlugs = slugs))
+        .catch(() => {}); // names for the bubbles; numbers until (or unless) they load
     // A little toy while it's open: tap a marcher and it jumps and calls out its cry. (Pointer
     // only, since the parade is decorative; the dialog's button stays the keyboard path.)
     line.addEventListener("click", (event) => {
@@ -251,6 +258,13 @@ function showFinaleParade({ replay = false } = {}) {
         sprite.classList.remove("paradeJump");
         void sprite.offsetWidth; // restart the jump
         sprite.classList.add("paradeJump");
+        // "Bulbasaur!" in a speech bubble above it for a moment.
+        sprite.parentElement.querySelector(".paradeBubble")?.remove();
+        const bubble = document.createElement("span");
+        bubble.className = "paradeBubble";
+        bubble.textContent = partnerLabel(Number(sprite.dataset.id)) + "!";
+        sprite.parentElement.append(bubble);
+        setTimeout(() => bubble.remove(), 1400);
         // At most three cries at once, so frantic tapping doesn't build a wall of sound.
         if (playingCries.size >= MAX_PARADE_CRIES) {
             return;

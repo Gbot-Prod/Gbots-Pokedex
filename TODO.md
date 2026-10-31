@@ -24,7 +24,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
-- [ ] Parade step 5: a tapped marcher's name pops up in a little speech bubble above it for a second ("Bulbasaur!")
 - [ ] Region walk styles step 2: give Johto, Unova, Kalos and Alola their own walks too (Johto trots, Unova zig-zags, Kalos twirls, Alola surfs)
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Region toast: the trio leaves footprints (tiny fading dots) along the top edge of the toast as it walks
@@ -366,3 +365,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region toast step 2: each region's trio walks in its own style — Kanto hops, Hoenn swims (wave bob), Galar marches in step (2026-10-31) — each region's trio walks its own way along the toast (data-region): default hop, Hoenn swims in a staggered wave, Sinnoh skates (skew sway), Galar marches stiffly in step, Paldea bounds in long staggered leaps; all still under reduced motion
 - [x] Toast trio polish: the trio waves (a quick tilt) as it reaches the right edge before the toast hides (2026-10-31) — the trio now walks in from the left and stops just inside the toast's right end (it used to end half off the toast, off-screen on phones), then waves goodbye with four quick tilts on the independent rotate property
 - [x] Parade cries polish: cap simultaneous cries at 3 so frantic tapping doesn't stack a wall of sound (2026-10-31) — at most three parade cries play at once (a Set of playing Audio, freed on ended/error/blocked play); taps beyond that still jump silently; smoke test stubs Audio with never-ending cries and counts three
+- [x] Parade step 5: a tapped marcher's name pops up in a little speech bubble above it for a second ("Bulbasaur!") (2026-10-31) — a tapped marcher's name ('Reshiram!') pops up in a white speech bubble above it for 1.4 s (species list loaded with the parade; dex number until then); marchers now sit in their own slots

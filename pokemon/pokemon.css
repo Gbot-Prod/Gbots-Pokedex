@@ -5470,7 +5470,7 @@ img.animatedSmall {
     animation: paradeHop 0.5s ease-in-out infinite alternate;
 }
 
-.paradeLine img:nth-child(odd) {
+.paradeLine > :nth-child(odd) img {
     animation-delay: 0.25s;
 }
 
@@ -5744,6 +5744,64 @@ img.animatedSmall {
 
 @media (prefers-reduced-motion: reduce) {
     .toastParade[data-region] img {
+        animation: none;
+    }
+}
+
+/* Tapped marcher: its name pops up in a speech bubble above it */
+.paradeMarcher {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-items: flex-end;
+}
+
+.paradeBubble {
+    position: absolute;
+    bottom: calc(100% - 0.6rem);
+    left: 50%;
+    padding: 0.2rem 0.6rem;
+    border: 2px solid #1d2340;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #1d2340;
+    font-size: 0.85rem;
+    font-weight: 900;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    animation: bubblePop 1.4s ease-out forwards;
+    pointer-events: none;
+}
+
+/* the bubble's tail */
+.paradeBubble::after {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 6px solid transparent;
+    border-top-color: #1d2340;
+    transform: translateX(-50%);
+    content: "";
+}
+
+@keyframes bubblePop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 6px) scale(0.6);
+    }
+    15%,
+    80% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -6px) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .paradeBubble {
         animation: none;
     }
 }

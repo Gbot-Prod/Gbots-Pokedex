@@ -1087,6 +1087,7 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     const bulbasaurCry = page.waitForRequest((request) => request.url().endsWith("/latest/1.ogg"));
     await page.locator("#finaleParade .paradeLine img").first().dispatchEvent("click");
     await bulbasaurCry;
+    assert.match(await page.textContent("#finaleParade .paradeBubble"), /^(Bulbasaur|#0001)!$/);
     // Cries are capped at three at once: with cries that never finish, six taps make three.
     await page.evaluate(() => {
         window.criesMade = 0;
