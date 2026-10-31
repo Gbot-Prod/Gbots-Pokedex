@@ -1,7 +1,9 @@
 // Team builder: up to six Pokémon, saved locally, with a type-coverage chart showing how
 // many team members are weak to / resist each attacking type.
-import { ANIMATED_CHANGE_EVENT, API_BASE, fetchJson, fetchPokemon, setSmallSprite } from "./api.js";
-import { TYPE_ICONS, damageMultipliers, formatName, pokemonDisplayName } from "./utils.js";
+import { ANIMATED_CHANGE_EVENT, API_BASE, fetchJson, fetchPokemon, setSmallSprite, spriteUrl } from "./api.js";
+import { drawTeamCard, loadCanvasImage, styleShareCard } from "./cardimage.js";
+import { cardFontsReady, shareOrDownload } from "./progress.js";
+import { TYPE_COLORS, TYPE_ICONS, damageMultipliers, formatName, pokemonDisplayName } from "./utils.js";
 import { isTeamMember } from "./storage.js";
 
 const TEAM_KEY = "pokedex:team:v1";
@@ -13,6 +15,7 @@ const coverageElement = document.getElementById("teamCoverage");
 const teamButton = document.getElementById("teamAddBtn");
 const statusElement = document.getElementById("teamStatus");
 const shareTeamButton = document.getElementById("teamShareBtn");
+const teamCardButton = document.getElementById("teamCardBtn");
 const sharedTeamElement = document.getElementById("sharedTeam");
 
 let team = []; // [{ id, name, label, types: ["fire", "flying"] }]
@@ -196,6 +199,7 @@ async function renderCoverage() {
 function renderTeam() {
     section.hidden = false;
     shareTeamButton.hidden = team.length === 0;
+    teamCardButton.hidden = team.length === 0;
     renderSlots();
     renderCoverage();
     updateTeamButton();
@@ -233,6 +237,51 @@ async function shareTeam() {
     } catch {
         // share sheet dismissed or clipboard blocked
     }
+}
+
+// The team as a share card (through the same preview as the other cards): the six members,
+// the types that hit the most of them with nobody resisting, and the types they hit hardest.
+async function saveTeamCard() {
+    let summary = { weakTo: [], hits: [] };
+    try {
+        const memberTypeData = await Promise.all(
+            team.map((member) => Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
+        );
+        const coverage = teamCoverage(memberTypeData.map(damageMultipliers), memberTypeData.map(superEffectiveTargets));
+        summary = {
+            weakTo: coverage
+                .filter(({ weak, resist }) => weak >= 2 && weak > resist)
+                .sort((a, b) => b.weak - a.weak)
+                .slice(0, 4)
+                .map(({ type, weak }) => [type, weak]),
+            hits: coverage
+                .filter(({ hits }) => hits >= 2)
+                .sort((a, b) => b.hits - a.hits)
+                .slice(0, 5)
+                .map(({ type }) => type),
+        };
+    } catch {
+        // no type data (offline): the card shows the members alone
+    }
+    const sprites = await Promise.all(team.map((member) => loadCanvasImage(spriteUrl(member.id))));
+    let byline = "";
+    try {
+        byline = (JSON.parse(localStorage.getItem("pokedex:trainer:v1"))?.name ?? "").trim();
+    } catch {
+        // no trainer name
+    }
+    const typeColors = Object.fromEntries(Object.entries(TYPE_COLORS).map(([type, colours]) => [type, colours[0]]));
+    await cardFontsReady();
+    await shareOrDownload(
+        (style) => {
+            const canvas = document.createElement("canvas");
+            drawTeamCard(canvas, { members: team, ...summary, byline, retro: style === "retro" }, sprites, typeColors);
+            styleShareCard(canvas, style);
+            return canvas;
+        },
+        "my-team.png",
+        "My Pokémon team",
+    );
 }
 
 async function offerSharedTeam() {
@@ -289,6 +338,7 @@ export function initTeam(options) {
     loadTeam();
     teamButton.addEventListener("click", toggleCurrent);
     shareTeamButton.addEventListener("click", shareTeam);
+    teamCardButton.addEventListener("click", saveTeamCard);
     window.addEventListener(ANIMATED_CHANGE_EVENT, renderSlots);
     renderTeam();
     offerSharedTeam();

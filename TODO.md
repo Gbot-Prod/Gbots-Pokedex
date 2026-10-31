@@ -31,7 +31,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
-- [ ] Share cards step: a "Team card" — the six team members on a card with their types and the coverage summary
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -406,3 +405,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Card preview keyboard: ←/→ switch styles while the preview is open; C copies, S saves (2026-10-31) — ←/→ anywhere in the preview step through Classic / Holo / Retro (wrapping) and focus the chosen chip; the chip group's label says so (C/S shortcuts left out: they'd clash with typing names elsewhere)
 - [x] Preview polish: a short crossfade between styles when a chip is pressed (instant under reduced motion) (2026-10-31) — each restyle fades the new card in from a light blur (0.3 s), none under reduced motion
 - [x] Trainer card PNG: route "Save image" on the trainer card through the same preview (style chips, copy, share) for consistency (2026-10-31) — the trainer card's Save image now opens the shared preview (style chips redraw the card in classic/holo/retro, Save, Copy, Share); the preview caps tall images to the viewport so the portrait card's buttons stay on screen
+- [x] Share cards step: a "Team card" — the six team members on a card with their types and the coverage summary (2026-10-31) — a '🖼️ Team card' button in the team section opens a 1200×630 card through the shared preview: '<name>'s team', six panels with sprite, name and type-coloured pills, 'Watch out for: Rock ×3…' and 'Hits hard: …' from the coverage data; solid panels so the retro style still reads

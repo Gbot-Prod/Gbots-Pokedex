@@ -421,7 +421,7 @@ async function saveFinaleImage(status) {
 }
 
 // Both card fonts, so a redraw in any style (retro uses the pixel font) is instant.
-async function cardFontsReady() {
+export async function cardFontsReady() {
     await document.fonts?.ready;
     await document.fonts?.load('20px "Press Start 2P"');
 }
@@ -431,7 +431,7 @@ const canvasBlob = (canvas) => new Promise((resolve) => canvas.toBlob(resolve, "
 // Shows a card in a preview first: style chips (classic / holo / retro, starting from the
 // trainer card's style) redraw it live, then Save (download), Share (the share sheet, where
 // files can be shared) or Cancel. render(style) draws the card. Resolves true when downloaded.
-async function shareOrDownload(render, filename, title) {
+export async function shareOrDownload(render, filename, title) {
     let style = CARD_STYLES.includes(readStored(TRAINER_KEY, {}).style) ? readStored(TRAINER_KEY, {}).style : "classic";
     let blob = await canvasBlob(render(style));
     let url = URL.createObjectURL(blob);

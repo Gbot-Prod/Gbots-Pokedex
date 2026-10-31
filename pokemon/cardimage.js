@@ -351,3 +351,61 @@ export function styleShareCard(canvas, style) {
         context.strokeRect(15.5, 15.5, width - 31, height - 31);
     }
 }
+
+// The team card: six slots with each member's sprite, name and types (type-coloured pills),
+// and a line on what to watch out for and what the team hits hardest.
+// team: { members: [{ label, types }], weakTo: [[type, count]], hits: [type], byline, retro },
+// sprites: loaded images (or nulls) in member order, typeColors: { type: "#hex" }.
+export function drawTeamCard(canvas, team, sprites, typeColors) {
+    canvas.width = FINALE_WIDTH;
+    canvas.height = FINALE_HEIGHT;
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
+    const { retro } = team;
+    context.fillStyle = gradient(context, 0, 0, 0, FINALE_HEIGHT, ["#162058", "#0b1030"]);
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+
+    context.textAlign = "left";
+    context.font = cardFont(900, 52, retro);
+    context.fillStyle = "#ffd447";
+    context.fillText("👥 " + (team.byline ? team.byline + "'s team" : "My team"), 50, 88);
+
+    const capitalise = (text) => text.charAt(0).toUpperCase() + text.slice(1);
+    for (let index = 0; index < 6; index++) {
+        const member = team.members[index];
+        const x = 40 + (index % 3) * 380;
+        const y = 120 + Math.floor(index / 3) * 190;
+        // solid panels: they also survive the retro four-shade conversion
+        roundRect(context, x, y, 360, 170, 18, member ? "#3a4a8f" : "#222c66");
+        if (!member) {
+            continue;
+        }
+        if (sprites[index]) {
+            context.drawImage(sprites[index], x + 6, y + 15, 140, 140);
+        }
+        context.fillStyle = "#ffffff";
+        context.font = cardFont(800, 28, retro);
+        context.fillText(member.label, x + 150, y + 62, 200);
+        member.types.forEach((type, typeIndex) => {
+            const pillX = x + 150 + typeIndex * 100;
+            roundRect(context, pillX, y + 82, 92, 32, 16, typeColors[type] ?? "#888888");
+            context.fillStyle = "#ffffff";
+            context.font = cardFont(800, 17, retro);
+            context.textAlign = "center";
+            context.fillText(capitalise(type), pillX + 46, y + 105, 86);
+            context.textAlign = "left";
+        });
+    }
+
+    context.font = cardFont(700, 22, retro);
+    context.fillStyle = "#ffb4a8";
+    const watch = team.weakTo.map(([type, count]) => capitalise(type) + " ×" + count).join(", ");
+    context.fillText("Watch out for: " + (watch || "nothing — nicely balanced!"), 50, 530, FINALE_WIDTH - 100);
+    context.fillStyle = "#b9f5c0";
+    context.fillText("Hits hard: " + (team.hits.map(capitalise).join(", ") || "—"), 50, 565, FINALE_WIDTH - 100);
+
+    context.textAlign = "center";
+    context.font = cardFont(600, 18, retro);
+    context.fillStyle = "rgba(255, 255, 255, 0.7)";
+    context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 30);
+}
