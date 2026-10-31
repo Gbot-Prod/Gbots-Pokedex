@@ -636,9 +636,9 @@ test("the type chart opens on demand and highlights the hovered row and column",
 });
 
 test("a shared ?team= link offers to load that team", async () => {
-    await page.goto(baseUrl + "?team=25,94");
+    await page.goto(baseUrl + "?team=25,94&by=Misty");
     await page.waitForSelector("#sharedTeam:not([hidden])");
-    assert.match(await page.textContent("#sharedTeam"), /Pikachu, Gengar/);
+    assert.match(await page.textContent("#sharedTeam"), /^Misty shared a team: Pikachu, Gengar/);
     // It can be looked at as a team card before deciding.
     await page.click("#sharedTeam .btn:has-text('View as card')");
     await page.waitForSelector("#cardPreview[open] img");
@@ -646,7 +646,16 @@ test("a shared ?team= link offers to load that team", async () => {
     await page.waitForSelector("#cardPreview", { state: "detached" });
     await page.click("#sharedTeam .btn:has-text('Load this team')");
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
-    assert.doesNotMatch(page.url(), /team=/); // the offer is consumed
+    assert.doesNotMatch(page.url(), /team=|by=/); // the offer is consumed
+    // Sharing it back signs the link with this trainer's name.
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:trainer:v1", JSON.stringify({ name: "Ash" }));
+        delete Navigator.prototype.share;
+        navigator.clipboard.writeText = async (text) => (window.copiedText = text);
+    });
+    await page.click("#teamShareBtn");
+    await page.waitForFunction(() => window.copiedText);
+    assert.match(await page.evaluate(() => window.copiedText), /[?&]team=25(,|%2C)94&by=Ash$/);
     assert.equal(await page.isVisible("#teamShareBtn"), true);
 });
 

@@ -222,9 +222,24 @@ export function parseTeamParam(value) {
         .slice(0, TEAM_SIZE);
 }
 
+function trainerName() {
+    try {
+        return String(JSON.parse(localStorage.getItem("pokedex:trainer:v1"))?.name ?? "").trim();
+    } catch {
+        return ""; // no trainer name
+    }
+}
+
 async function shareTeam() {
     const url = new URL(window.location.href);
     url.searchParams.set("team", team.map((member) => member.id).join(","));
+    // ...signed with the trainer's name, if they've set one, so the link says who shared it.
+    const name = trainerName();
+    if (name) {
+        url.searchParams.set("by", name);
+    } else {
+        url.searchParams.delete("by");
+    }
     try {
         if (navigator.share) {
             await navigator.share({ title: "My Pokémon team", url: url.href });
@@ -271,11 +286,7 @@ async function saveTeamCard(members = team, byline = null, heading = undefined) 
     }
     const sprites = await Promise.all(members.map((member) => loadCanvasImage(spriteUrl(member.id))));
     if (byline === null) {
-        try {
-            byline = (JSON.parse(localStorage.getItem("pokedex:trainer:v1"))?.name ?? "").trim();
-        } catch {
-            byline = ""; // no trainer name
-        }
+        byline = trainerName();
     }
     const typeColors = Object.fromEntries(Object.entries(TYPE_COLORS).map(([type, colours]) => [type, colours[0]]));
     await cardFontsReady();
@@ -315,7 +326,10 @@ async function offerSharedTeam() {
     }
 
     const text = document.createElement("span");
-    text.textContent = "Someone shared a team: " + members.map((member) => member.label).join(", ") + ". ";
+    // "Ash shared a team" when the link is signed (trimmed to a sensible length), else "Someone".
+    const sharer = (new URLSearchParams(window.location.search).get("by") ?? "").trim().slice(0, 24);
+    text.textContent =
+        (sharer || "Someone") + " shared a team: " + members.map((member) => member.label).join(", ") + ". ";
     const load = Object.assign(document.createElement("button"), {
         type: "button",
         className: "btn",
@@ -329,6 +343,7 @@ async function offerSharedTeam() {
     const clearParam = () => {
         const url = new URL(window.location.href);
         url.searchParams.delete("team");
+        url.searchParams.delete("by");
         history.replaceState(history.state, "", url);
         sharedTeamElement.hidden = true;
     };
@@ -345,7 +360,7 @@ async function offerSharedTeam() {
         className: "btn",
         textContent: "🖼️ View as card",
     });
-    viewCard.addEventListener("click", () => saveTeamCard(members, "", "A shared team"));
+    viewCard.addEventListener("click", () => saveTeamCard(members, "", sharer ? sharer + "'s team" : "A shared team"));
     dismiss.addEventListener("click", clearParam);
     sharedTeamElement.replaceChildren(text, load, viewCard, dismiss);
     sharedTeamElement.hidden = false;
