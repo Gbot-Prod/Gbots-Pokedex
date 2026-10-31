@@ -1083,6 +1083,17 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     await page.waitForSelector("#finaleParade[open]");
     assert.equal(await page.locator("#finaleParade .paradeLine img").count(), 27 + 9);
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeLegend").count(), 9);
+    // Tapping a marcher makes it jump and call out its cry (dispatched: it's moving).
+    const bulbasaurCry = page.waitForRequest((request) => request.url().endsWith("/latest/1.ogg"));
+    await page.locator("#finaleParade .paradeLine img").first().dispatchEvent("click");
+    await bulbasaurCry;
+    assert.equal(
+        await page
+            .locator("#finaleParade .paradeLine img")
+            .first()
+            .evaluate((sprite) => sprite.classList.contains("paradeJump")),
+        true,
+    );
     await page.click("#finaleClose");
     await page.waitForSelector("#finaleParade", { state: "detached" });
     assert.equal(await page.evaluate(() => localStorage.getItem("pokedex:finale-shown:v1")), "1");

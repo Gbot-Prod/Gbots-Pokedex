@@ -200,6 +200,7 @@ export function completionMessage(seenIds, dexNumber) {
 // The first time all 1,025 are seen: a full-screen parade of every region's starter trio
 // marching across under "Pokédex complete!" (a still lineup under reduced motion). Once only.
 const FINALE_KEY = "pokedex:finale-shown:v1";
+const CRY_BASE = "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/";
 
 function showFinaleParade({ replay = false } = {}) {
     if (!replay) {
@@ -234,9 +235,24 @@ function showFinaleParade({ replay = false } = {}) {
         sprite.width = legendary ? 148 : 104;
         sprite.height = legendary ? 148 : 104;
         sprite.classList.toggle("paradeLegend", legendary);
+        sprite.dataset.id = id;
         setSprite(sprite, id);
         line.append(sprite);
     }
+    // A little toy while it's open: tap a marcher and it jumps and calls out its cry. (Pointer
+    // only, since the parade is decorative; the dialog's button stays the keyboard path.)
+    line.addEventListener("click", (event) => {
+        const sprite = event.target.closest("img");
+        if (!sprite) {
+            return;
+        }
+        sprite.classList.remove("paradeJump");
+        void sprite.offsetWidth; // restart the jump
+        sprite.classList.add("paradeJump");
+        const cry = new Audio(CRY_BASE + sprite.dataset.id + ".ogg");
+        cry.volume = 0.5;
+        cry.play().catch(() => {}); // blocked or offline: the jump alone will do
+    });
     dialog.addEventListener("close", () => dialog.remove());
     document.body.append(dialog);
     dialog.showModal();

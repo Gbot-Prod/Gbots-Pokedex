@@ -5450,6 +5450,9 @@ img.animatedSmall {
 .paradeTrack {
     flex: none; /* never squashed by the dialog's column, or the still lineup gets cut off */
     width: 100%;
+    /* headroom for tapped marchers' jumps, without moving the layout */
+    margin-top: -3.5rem;
+    padding-top: 3.5rem;
     overflow: hidden;
 }
 
@@ -5630,5 +5633,26 @@ img.animatedSmall {
 
     .lcdCell b {
         font-size: 1.3rem;
+    }
+}
+
+/* Tapped parade marchers jump (and call out their cry) */
+.paradeLine img {
+    cursor: pointer;
+}
+
+.paradeLine img.paradeJump {
+    animation: paradeJump 0.6s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes paradeJump {
+    40% {
+        transform: translateY(-46px) rotate(-8deg) scale(1.12);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .paradeLine img.paradeJump {
+        animation: none;
     }
 }
