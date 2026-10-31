@@ -19,7 +19,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
 - [ ] Go-to step 5: a quiet "beep" on each keystroke and a two-tone chime on Enter when sound effects are on (Web Audio, LCD theme)
 - [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
-- [ ] Shared LCD component: move the green-screen styles (scanlines, bezel, glow, ghost "8"s) into one .lcd class used by the ? screen, G prompt, hunt counter and quiz timer
 - [ ] Hunt counter step 2: digits "roll" like an odometer when an encounter ticks the count up (instant under reduced motion)
 - [ ] Quiz timer step 2: a segmented bar of 60 LCD dots that blink off one per second under the readout
 - [ ] LCD night glow: in dark mode the LCD screens cast a faint green glow onto the surrounding panel (box-shadow), brighter at night
@@ -346,3 +345,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Go-to step 4: ↑/↓ on the LCD cycles through every name matching the prefix ("char" → Charmander, Charmeleon, Charizard…) (2026-10-31) — ↑/↓ cycles every name matching the prefix with an 'N/M' counter on the LCD (wraps); Enter goes to the shown one; hint line mentions ↑↓
 - [x] LCD theme everywhere: reuse the green-screen look for the quiz timer and the shiny-hunt encounter counter (2026-10-31) — step 1: the shiny-hunt counter is now a green handheld LCD with Encounters / Shinies / Odds readouts, zero-padded glowing digits over faint unlit '8' segments; screen readers get the plain sentence (quiz timer still to do)
 - [x] Go-to step 6: Tab on the LCD autocompletes the input to the shown match's name (2026-10-31) — Tab fills the input with the shown match's proper name (focus stays; with nothing to complete Tab moves focus as usual); input widened to 12ch so long names fit; hint line mentions Tab
+- [x] Shared LCD component: move the green-screen styles (scanlines, bezel, glow, ghost "8"s) into one .lcd class used by the ? screen, G prompt, hunt counter and quiz timer (2026-10-31) — --lcd-screen / --lcd-ink / --lcd-bezel / --lcd-glow tokens on :root replace four copies of the screen styles (? screen, G prompt, hunt counter, quiz timer); screenshots unchanged
