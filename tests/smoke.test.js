@@ -154,6 +154,19 @@ test("arrow keys step through the Pokédex when not typing", async () => {
     assert.equal(await page.getAttribute("#shinyToggleBtn", "aria-pressed"), "true");
 });
 
+test("? opens the keyboard shortcut list and Esc closes it", async () => {
+    await page.locator("#shortcutHint").click({ position: { x: 1, y: 1 } });
+    await page.keyboard.press("?");
+    await page.waitForSelector("#shortcutsDialog[open]");
+    assert.equal(await page.locator("#shortcutsDialog dt").count(), 7);
+    await page.keyboard.press("Escape");
+    await page.waitForSelector("#shortcutsDialog[open]", { state: "detached" });
+    await page.click("#shortcutsBtn");
+    await page.waitForSelector("#shortcutsDialog[open]");
+    await page.click("#shortcutsClose");
+    await page.waitForSelector("#shortcutsDialog[open]", { state: "detached" });
+});
+
 test("the cry button requests the Pokémon's cry", async () => {
     await search("pikachu");
     await page.waitForSelector("#cryBtn:not([hidden])");

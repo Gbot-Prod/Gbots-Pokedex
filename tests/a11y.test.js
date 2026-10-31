@@ -83,3 +83,17 @@ for (const colorScheme of ["light", "dark"]) {
         assert.deepEqual([...new Set(problems)], []);
     });
 }
+
+for (const colorScheme of ["light", "dark"]) {
+    test("the keyboard shortcut list passes axe (" + colorScheme + " mode)", async () => {
+        await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+        await page.click("#shortcutsBtn");
+        await page.waitForSelector("#shortcutsDialog[open]");
+        await page.hover("#shortcutsClose");
+        const results = await new AxeBuilder({ page }).include("#shortcutsDialog").analyze();
+        const serious = results.violations
+            .filter((violation) => ["serious", "critical"].includes(violation.impact))
+            .map((violation) => violation.id + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));
+        assert.deepEqual(serious, []);
+    });
+}

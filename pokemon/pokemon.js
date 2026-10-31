@@ -1300,11 +1300,14 @@ shareButton.addEventListener("click", async () => {
 
 // --- Keyboard shortcuts -------------------------------------------------------
 // ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny, "c" plays the cry,
-// "n" follows the "Next missing" button while a region filter is active.
+// "n" follows the "Next missing" button while a region filter is active, "?" lists them all.
 
 function isTypingTarget(element) {
     return element.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(element.tagName);
 }
+
+const shortcutsDialog = document.getElementById("shortcutsDialog");
+document.getElementById("shortcutsBtn").addEventListener("click", () => shortcutsDialog.showModal());
 
 document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isTypingTarget(event.target)) {
@@ -1324,6 +1327,8 @@ document.addEventListener("keydown", (event) => {
         shinyButton.click();
     } else if (event.key.toLowerCase() === "c" && cardVisible && !cryButton.hidden) {
         playCry();
+    } else if (event.key === "?") {
+        shortcutsDialog.showModal();
     } else if (event.key.toLowerCase() === "n") {
         const nextMissing = document.getElementById("nextMissingBtn");
         if (!nextMissing.hidden) {

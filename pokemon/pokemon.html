@@ -246,7 +246,8 @@
 
             <p id="shortcutHint">
                 Tip: <kbd>/</kbd> search · <kbd>←</kbd> <kbd>→</kbd> previous/next · <kbd>S</kbd> shiny ·
-                <kbd>C</kbd> cry · <kbd>N</kbd> next missing
+                <kbd>C</kbd> cry · <kbd>N</kbd> next missing ·
+                <button type="button" id="shortcutsBtn" aria-keyshortcuts="?"><kbd>?</kbd> all shortcuts</button>
             </p>
 
             <section id="teamSection" class="tileSection" aria-labelledby="teamHeading" hidden>
@@ -403,6 +404,43 @@
                 </nav>
             </section>
         </main>
+        <dialog id="shortcutsDialog" aria-labelledby="shortcutsHeading">
+            <div class="shortcutsScreen">
+                <h2 id="shortcutsHeading">Keyboard shortcuts</h2>
+                <dl>
+                    <div>
+                        <dt><kbd>/</kbd></dt>
+                        <dd>Search for a Pokémon</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>←</kbd> <kbd>→</kbd></dt>
+                        <dd>Previous / next Pokémon</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>S</kbd></dt>
+                        <dd>Toggle shiny</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>C</kbd></dt>
+                        <dd>Play the cry</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>N</kbd></dt>
+                        <dd>Next missing in the selected region</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>?</kbd></dt>
+                        <dd>Show this list</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>Esc</kbd></dt>
+                        <dd>Close a dialog</dd>
+                    </div>
+                </dl>
+            </div>
+            <form method="dialog"><button class="btn" id="shortcutsClose">Got it</button></form>
+        </dialog>
+
         <p id="dexToast" role="status"></p>
         <dialog id="trainerCard" aria-labelledby="trainerCardHeading">
             <div class="trainerCardTop">

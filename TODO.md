@@ -16,7 +16,6 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Toast "Show me" for region completions too: open the browse grid filtered to that region with its banner glowing gold
 - [ ] Now browsing chip step 2: tapping the chip scrolls back up to the region strip (make it a button while visible)
-- [ ] Keyboard help overlay: "?" opens a small dialog listing every shortcut (/, ←/→, S, C, N) instead of the one-line tip
 - [ ] Count-up polish: the stat tiles (shinies, encounters, quiz streak…) roll up too, staggered by 80 ms each
 - [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -325,3 +324,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Toasts: a "Show me" button on badge toasts that opens the trainer card scrolled to the badge (2026-10-31) — merged into badge toast step 2 (same day)
 - [x] Region pulse step 2: if the region strip is off-screen when the region switches, show a small "Now browsing Hoenn" chip near the card instead of an unseen pulse (2026-10-31) — a 'Now browsing Johto' chip in the banner's own gradient drops in at the top for 2.6 s when the strip is off-screen (role=status, no transition under reduced motion); smoke test branches on the strip's position
 - [x] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion) (2026-10-31) — rolls up from 0 over 0.9 s with an ease-out (rAF), screen readers get the final line in a visually hidden span, tabular digits; instant under reduced motion
+- [x] Keyboard help overlay: "?" opens a small dialog listing every shortcut (/, ←/→, S, C, N) instead of the one-line tip (2026-10-31) — ? (or the new 'all shortcuts' link in the tip line) opens a red Pokédex-frame dialog with a green LCD screen and chunky key caps listing all 7 shortcuts; smoke test + axe in light/dark
