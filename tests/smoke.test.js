@@ -849,6 +849,9 @@ test("the completion ring opens a trainer card", async () => {
         /^[1-9]\d* of 1025 Pokémon seen \(\d+%\)$/.test(document.getElementById("trainerCardSeen").textContent),
     );
     assert.equal(await page.locator("#trainerCardRegions li").count(), 9);
+    await page.waitForFunction(() =>
+        /^[1-9]\d*\/151$/.test(document.querySelector("#trainerCardRegions .trainerRegionCount").textContent),
+    );
     assert.match(await page.textContent("#trainerCardVisits"), /^Member since .+ · 🔥 \d+-day streak \(best \d+\)$/);
     assert.equal(await page.locator("#trainerCardStats li").count(), 6);
     await page.waitForFunction(() =>

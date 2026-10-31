@@ -1124,15 +1124,16 @@ function renderTrainerCard() {
         }),
     );
     document.getElementById("trainerCardRegions").replaceChildren(
-        ...stats.generations.map(({ number, seen: count, total }) => {
+        ...stats.generations.map(({ number, seen: count, total }, index) => {
             const generation = GENERATIONS.find((gen) => gen.number === number);
             const item = document.createElement("li");
             item.className = "region" + number + (count === total ? " complete" : "");
+            item.style.setProperty("--fill-order", index); // the bars fill one after another
             item.innerHTML =
                 '<span class="trainerRegionName"></span><span class="regionProgressBar"><span></span></span><span class="trainerRegionCount"></span>';
             item.children[0].textContent = generation.region;
             item.querySelector(".regionProgressBar span").style.width = (100 * count) / total + "%";
-            item.children[2].textContent = count + "/" + total;
+            countUp(item.children[2], count, (shown) => shown + "/" + total, 300 + 70 * index);
             return item;
         }),
     );

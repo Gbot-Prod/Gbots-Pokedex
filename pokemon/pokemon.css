@@ -5097,3 +5097,25 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* As the trainer card opens, each region bar fills from empty, one after another */
+#trainerCardRegions .regionProgressBar span {
+    animation: regionBarFill 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
+    animation-delay: calc(300ms + var(--fill-order, 0) * 70ms);
+}
+
+#trainerCardRegions .trainerRegionCount {
+    font-variant-numeric: tabular-nums;
+}
+
+@keyframes regionBarFill {
+    from {
+        width: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #trainerCardRegions .regionProgressBar span {
+        animation: none;
+    }
+}
