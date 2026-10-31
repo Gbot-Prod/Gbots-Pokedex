@@ -22,6 +22,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Odometer step 2: the trainer card's stat tiles reuse the hunt counter's rolling digits instead of the plain count-up
 - [ ] Quiz timer step 3: a short "tick" sound per second in the last 5 s and a buzzer at 0 when sound effects are on
 - [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
+- [ ] Parade step 2: a "Replay the parade" button on the trainer card once the National Dex is complete (the finale is once-only otherwise)
+- [ ] Parade step 3: the marching starters are followed by each region's legendary mascot, bigger, as the grand finale of the line
+- [ ] Hunt LCD step 4: a tiny "best streak" (fewest encounters to a shiny) readout that blinks when beaten
+- [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
+- [ ] Region complete step: a smaller per-region parade (just that region's trio crossing the toast) when a region is completed
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
