@@ -25,6 +25,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
+- [ ] Parade step 7: the wave button cycles through moods — jump wave, then a spin wave, then a "bow" (everyone dips) on the third press
+- [ ] Regional footprints step 2: Johto leaves leaves 🍃, Unova lightning zig-zags, Kalos sparkles ✦, Alola sand dots, Galar boot prints, Paldea stars
+- [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
+- [ ] Reduced-motion parade: instead of no jump, tapped marchers get a brief gold outline so the tap still visibly lands
+- [ ] Finale screen: a small "Share" button that copies "I completed the National Pokédex! 🏆" plus the date to the clipboard
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
