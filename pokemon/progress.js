@@ -1,7 +1,7 @@
 // Pokédex completion: every species you open is remembered (localStorage) and shown as a
 // ring in the device header and a progress bar on each region banner.
 import { API_BASE, fetchJson, fetchPokemon, getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
-import { drawFinaleCard, drawRegionCard, drawTrainerCard, loadCanvasImage } from "./cardimage.js";
+import { drawFinaleCard, drawRegionCard, drawTrainerCard, loadCanvasImage, styleShareCard } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
 import { isStoredEntry, isTeamMember } from "./storage.js";
 import {
@@ -392,6 +392,7 @@ async function saveFinaleImage(status) {
     const partner = currentPartner();
     const byline = [trainerName, partner ? partnerLabel(partner) : ""].filter(Boolean).join(" & ");
     drawFinaleCard(canvas, { dateText, byline }, starters, legends);
+    styleShareCard(canvas, readStored(TRAINER_KEY, {}).style); // matches the trainer card's style
     const saved = await shareOrDownload(canvas, "pokedex-complete.png", "Pokédex complete!");
     status.textContent = saved ? "Image saved!" : "";
 }
@@ -442,6 +443,7 @@ async function saveRegionCard(number) {
         trio,
         legend,
     );
+    styleShareCard(canvas, readStored(TRAINER_KEY, {}).style);
     await shareOrDownload(canvas, generation.region.toLowerCase() + "-complete.png", generation.region + " complete!");
 }
 

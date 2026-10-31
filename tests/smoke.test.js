@@ -1190,6 +1190,25 @@ test("the finale can be shared as text or saved as an image", async () => {
     await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent === "Image saved!");
 });
 
+test("share cards take the trainer card's style (retro becomes Game Boy green)", async () => {
+    const pixels = await page.evaluate(async () => {
+        const { styleShareCard } = await import("./cardimage.js");
+        const sample = (style) => {
+            const canvas = document.createElement("canvas");
+            canvas.width = 40;
+            canvas.height = 40;
+            const context = canvas.getContext("2d");
+            context.fillStyle = "#ffffff";
+            context.fillRect(0, 0, 40, 40);
+            styleShareCard(canvas, style);
+            return [...context.getImageData(20, 21, 1, 1).data.slice(0, 3)];
+        };
+        return { classic: sample("classic"), retro: sample("retro") };
+    });
+    assert.deepEqual(pixels.classic, [255, 255, 255]); // left as drawn
+    assert.deepEqual(pixels.retro, [155, 188, 15]); // white maps to the lightest Game Boy green
+});
+
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
     await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
     await page.reload();

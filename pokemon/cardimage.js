@@ -279,3 +279,48 @@ export function drawRegionCard(canvas, { number, region, total, byline }, trio, 
     context.fillStyle = "rgba(255, 255, 255, 0.85)";
     context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
 }
+
+// Gives a finished share card the trainer card's style: "holo" lays a rainbow foil sheen and a
+// gradient frame over it, "retro" turns it into a four-shade Game Boy screen with scanlines,
+// "classic" (or anything else) leaves it as drawn.
+export function styleShareCard(canvas, style) {
+    const context = canvas.getContext("2d");
+    const { width, height } = canvas;
+    if (style === "holo") {
+        context.save();
+        context.globalCompositeOperation = "overlay";
+        const foil = context.createLinearGradient(0, 0, width, height);
+        ["#ff6b9d", "#ffd447", "#6bffb8", "#6bc5ff", "#b36bff", "#ff6b9d"].forEach((colour, index, all) =>
+            foil.addColorStop(index / (all.length - 1), colour),
+        );
+        context.globalAlpha = 0.45;
+        context.fillStyle = foil;
+        context.fillRect(0, 0, width, height);
+        context.restore();
+        context.lineWidth = 12;
+        context.strokeStyle = gradient(context, 0, 0, width, height, ["#ff6b9d", "#6bc5ff"]);
+        context.strokeRect(6, 6, width - 12, height - 12);
+    } else if (style === "retro") {
+        // map every pixel's brightness onto the Game Boy's four greens
+        const pixels = context.getImageData(0, 0, width, height);
+        const shades = [
+            [15, 56, 15],
+            [48, 98, 48],
+            [139, 172, 15],
+            [155, 188, 15],
+        ];
+        for (let index = 0; index < pixels.data.length; index += 4) {
+            const [red, green, blue] = pixels.data.slice(index, index + 3);
+            const level = Math.min(3, Math.floor(((red * 0.3 + green * 0.59 + blue * 0.11) / 256) * 4));
+            pixels.data.set(shades[level], index);
+        }
+        context.putImageData(pixels, 0, 0);
+        context.fillStyle = "rgba(15, 56, 15, 0.12)";
+        for (let y = 0; y < height; y += 4) {
+            context.fillRect(0, y, width, 1);
+        }
+        context.lineWidth = 12;
+        context.strokeStyle = "#0f380f";
+        context.strokeRect(6, 6, width - 12, height - 12);
+    }
+}
