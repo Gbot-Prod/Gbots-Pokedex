@@ -158,7 +158,7 @@ test("? opens the keyboard shortcut list and Esc closes it", async () => {
     await page.locator("#shortcutHint").click({ position: { x: 1, y: 1 } });
     await page.keyboard.press("?");
     await page.waitForSelector("#shortcutsDialog[open]");
-    assert.equal(await page.locator("#shortcutsDialog dt").count(), 7);
+    assert.equal(await page.locator("#shortcutsDialog dt").count(), 8);
     await page.keyboard.press("Escape");
     await page.waitForSelector("#shortcutsDialog[open]", { state: "detached" });
     await page.click("#shortcutsBtn");
@@ -178,6 +178,17 @@ test("malformed saved favourites and history are skipped instead of breaking the
     assert.equal(await page.locator("#favoritesList .browseTile").count(), 1);
     assert.match(await page.innerText("#favoritesList"), /Pikachu/);
     assert.equal(await page.locator("#recentList .browseTile").count(), 1); // just Gengar
+});
+
+test("G opens the go-to-number prompt and Enter jumps there", async () => {
+    await page.locator("#shortcutHint").click({ position: { x: 1, y: 1 } });
+    await page.keyboard.press("g");
+    await page.waitForSelector("#gotoDialog[open]");
+    assert.equal(await page.inputValue("#gotoInput"), ""); // the "g" itself isn't typed
+    await page.keyboard.type("94");
+    await page.keyboard.press("Enter");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Gengar");
+    assert.equal(await page.locator("#gotoDialog[open]").count(), 0);
 });
 
 test("the cry button requests the Pokémon's cry", async () => {

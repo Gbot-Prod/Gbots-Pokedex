@@ -429,6 +429,10 @@
                         <dd>Next missing in the selected region</dd>
                     </div>
                     <div>
+                        <dt><kbd>G</kbd></dt>
+                        <dd>Go to a Pokédex number</dd>
+                    </div>
+                    <div>
                         <dt><kbd>?</kbd></dt>
                         <dd>Show this list</dd>
                     </div>
@@ -439,6 +443,30 @@
                 </dl>
             </div>
             <form method="dialog"><button class="btn" id="shortcutsClose">Got it</button></form>
+        </dialog>
+
+        <dialog id="gotoDialog" aria-labelledby="gotoHeading">
+            <form method="dialog" id="gotoForm">
+                <div class="shortcutsScreen">
+                    <h2 id="gotoHeading">Go to number</h2>
+                    <label for="gotoInput" class="gotoRow">
+                        <span aria-hidden="true">#</span>
+                        <span class="visuallyHidden">Pokédex number</span>
+                        <input
+                            id="gotoInput"
+                            type="number"
+                            inputmode="numeric"
+                            min="1"
+                            max="1025"
+                            required
+                            placeholder="25"
+                            aria-describedby="gotoHint"
+                        />
+                    </label>
+                    <p id="gotoHint">1 – 1025, then Enter</p>
+                </div>
+                <button class="btn" id="gotoSubmit" value="go">Go!</button>
+            </form>
         </dialog>
 
         <p id="dexToast" role="status"></p>

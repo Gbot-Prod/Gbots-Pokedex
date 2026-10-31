@@ -85,12 +85,18 @@ for (const colorScheme of ["light", "dark"]) {
 }
 
 for (const colorScheme of ["light", "dark"]) {
-    test("the keyboard shortcut list passes axe (" + colorScheme + " mode)", async () => {
+    test("the keyboard shortcut list and go-to prompt pass axe (" + colorScheme + " mode)", async () => {
         await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
         await page.click("#shortcutsBtn");
         await page.waitForSelector("#shortcutsDialog[open]");
         await page.hover("#shortcutsClose");
         const results = await new AxeBuilder({ page }).include("#shortcutsDialog").analyze();
+        await page.keyboard.press("Escape");
+        await page.keyboard.press("g");
+        await page.waitForSelector("#gotoDialog[open]");
+        await page.keyboard.type("25");
+        const gotoResults = await new AxeBuilder({ page }).include("#gotoDialog").analyze();
+        results.violations.push(...gotoResults.violations);
         const serious = results.violations
             .filter((violation) => ["serious", "critical"].includes(violation.impact))
             .map((violation) => violation.id + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));

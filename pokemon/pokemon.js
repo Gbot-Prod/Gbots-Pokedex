@@ -1300,7 +1300,8 @@ shareButton.addEventListener("click", async () => {
 
 // --- Keyboard shortcuts -------------------------------------------------------
 // ←/→ previous/next Pokémon, "/" focuses the search box, "s" toggles shiny, "c" plays the cry,
-// "n" follows the "Next missing" button while a region filter is active, "?" lists them all.
+// "n" follows the "Next missing" button while a region filter is active, "g" jumps to a number,
+// "?" lists them all.
 
 function isTypingTarget(element) {
     return element.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(element.tagName);
@@ -1308,6 +1309,24 @@ function isTypingTarget(element) {
 
 const shortcutsDialog = document.getElementById("shortcutsDialog");
 document.getElementById("shortcutsBtn").addEventListener("click", () => shortcutsDialog.showModal());
+
+// "g": a little LCD prompt that jumps straight to a Pokédex number.
+const gotoDialog = document.getElementById("gotoDialog");
+const gotoInput = document.getElementById("gotoInput");
+function openGoto() {
+    shortcutsDialog.close();
+    gotoInput.value = "";
+    gotoInput.max = String(MAX_DEX_NUMBER);
+    gotoDialog.showModal();
+    gotoInput.focus();
+}
+gotoDialog.addEventListener("close", () => {
+    if (gotoDialog.returnValue === "go") {
+        goToDexNumber(Number(gotoInput.value));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    gotoDialog.returnValue = "";
+});
 
 document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isTypingTarget(event.target)) {
@@ -1327,6 +1346,9 @@ document.addEventListener("keydown", (event) => {
         shinyButton.click();
     } else if (event.key.toLowerCase() === "c" && cardVisible && !cryButton.hidden) {
         playCry();
+    } else if (event.key.toLowerCase() === "g") {
+        event.preventDefault(); // don't type the "g" into the prompt
+        openGoto();
     } else if (event.key === "?") {
         shortcutsDialog.showModal();
     } else if (event.key.toLowerCase() === "n") {
