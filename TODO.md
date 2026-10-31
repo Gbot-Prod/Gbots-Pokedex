@@ -34,6 +34,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Card preview step 5: a "Download all" on the trainer card that zips every card you can make (finale, regions, team, trainer)
 - [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
+- [ ] Team MVP step 2: hovering the ★ MVP badge lists the weaknesses it covers ("Resists Rock and Electric")
+- [ ] Team builder: a "weakest link" outline on the member that adds the most new weaknesses to the team (orange ring), next to the MVP's gold
+- [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
+- [ ] Team suggestions: "Try adding…" — three Pokémon you've seen whose types would cover the team's top weakness
+- [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
