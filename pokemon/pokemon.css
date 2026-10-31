@@ -6265,3 +6265,24 @@ img.animatedSmall {
 #cardPreviewShare[hidden] {
     display: none;
 }
+
+/* ✨ rising off a marcher as the shiny wave reaches it */
+.paradeSparkle {
+    position: absolute;
+    bottom: 30%;
+    font-size: 1.7rem;
+    filter: drop-shadow(0 0 6px #ffffff);
+    pointer-events: none;
+    animation: sparkleRise 0.9s ease-out backwards;
+}
+
+@keyframes sparkleRise {
+    from {
+        transform: translateY(0) scale(0.4);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-60px) scale(1.2) rotate(40deg);
+        opacity: 0;
+    }
+}

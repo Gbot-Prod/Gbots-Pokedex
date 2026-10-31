@@ -27,7 +27,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
-- [ ] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line
 - [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
 - [ ] Region rows: a tiny ✓ badge on completed regions in the browse strip's banners matching the trainer card's 🖼️ rows
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -396,3 +395,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Card frames: classic cards get the red/gold Pokédex border used on the trainer card PNG, so every style has a frame (2026-10-31) — classic share cards now get the Pokédex's red frame with a thin gold inner line, so every style (classic, holo, retro) is framed
 - [x] Share card preview: show the drawn card in a small dialog first ("Save" / "Share" / "Cancel") instead of downloading straight away (2026-10-31) — finale and region share cards open a preview dialog first: the drawn card, then 💾 Save (download), 📤 Share (only where files can be shared) and Cancel; axe checked on top of the finale
 - [x] Holo cards step 2: the foil band sweeps diagonally (light streak) instead of a flat overlay, like the holo trainer card's sheen (2026-10-31) — holo share cards get a diagonal white light streak (screen blend) across the rainbow foil, echoing the holo trainer card's sheen
+- [x] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line (2026-10-31) — as each marcher turns shiny, three ✨ rise and spin off it (staggered, 0.9 s), so the sparkle runs along the line with the wave; none under reduced motion

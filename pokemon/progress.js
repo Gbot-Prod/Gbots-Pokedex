@@ -205,6 +205,20 @@ function readStoredText(key) {
     }
 }
 
+// A little burst of ✨ rising off a marcher as it turns shiny.
+function sparkleOver(sprite) {
+    for (let index = 0; index < 3; index++) {
+        const spark = document.createElement("span");
+        spark.className = "paradeSparkle";
+        spark.setAttribute("aria-hidden", "true");
+        spark.textContent = "✨";
+        spark.style.left = 15 + Math.random() * 70 + "%";
+        spark.style.animationDelay = index * 120 + "ms";
+        sprite.parentElement.append(spark);
+        setTimeout(() => spark.remove(), 1200);
+    }
+}
+
 // The first time all 1,025 are seen: a full-screen parade of every region's starter trio
 // marching across under "Pokédex complete!" (a still lineup under reduced motion). Once only.
 const FINALE_KEY = "pokedex:finale-shown:v1";
@@ -321,6 +335,9 @@ function showFinaleParade({ replay = false } = {}) {
                 setTimeout(() => {
                     sprite.dataset.normalSrc = sprite.src;
                     sprite.src = sprite.src.replace(/\/(\d+\.png)$/, "/shiny/$1");
+                    if (!reducedMotion.matches) {
+                        sparkleOver(sprite);
+                    }
                 }, index * 45);
             }
         });
