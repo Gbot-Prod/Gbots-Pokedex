@@ -34,7 +34,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Card preview step 5: a "Download all" on the trainer card that zips every card you can make (finale, regions, team, trainer)
 - [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
-- [ ] Team MVP step 2: hovering the ★ MVP badge lists the weaknesses it covers ("Resists Rock and Electric")
 - [ ] Team builder: a "weakest link" outline on the member that adds the most new weaknesses to the team (orange ring), next to the MVP's gold
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
 - [ ] Team suggestions: "Try adding…" — three Pokémon you've seen whose types would cover the team's top weakness
@@ -423,3 +422,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Shared team card: show the sharer's name when the link carries one (?team=…&by=Ash, added by "Share team" when a trainer name is set) (2026-10-31) — Share team adds &by=<trainer name> when one is set; the recipient sees 'Misty shared a team: …' and the card is headed 'Misty's team' (name trimmed to 24 characters, by= cleared with team=)
 - [x] Team card: highlight the team's MVP (the member resisting the most of the team's weaknesses) with a small ★ on its panel (2026-10-31) — teamMvp (unit-tested) picks the member resisting the most types that 2+ teammates are weak to; its panel on the team card gets a gold outline and '★ MVP' (none when nothing is shared or nobody covers it)
 - [x] Card preview: pinch/scroll to zoom into the card image (it's tiny on phones), with a "fit" button to reset (2026-10-31) — a '🔍 Zoom' toggle (aria-pressed) under the style chips shows the card at its full drawn size in a scrollable frame, and back to fit; the landscape layout positions the frame
+- [x] Team MVP step 2: hovering the ★ MVP badge lists the weaknesses it covers ("Resists Rock and Electric") (2026-10-31) — the ★ MVP badge's tooltip (and hidden text for screen readers) names what it covers: 'Resists Electric, which the rest of your team is weak to'; sharedWeaknesses() split out and unit-tested

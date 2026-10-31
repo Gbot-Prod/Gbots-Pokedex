@@ -58,8 +58,7 @@ export function teamCoverage(memberMultipliers, memberHits = []) {
 // The team's MVP: the member who resists (or is immune to) the most of the types the team as
 // a whole is weak to. Returns its index, or -1 when there's no shared weakness to cover.
 export function teamMvp(memberMultipliers) {
-    const coverage = teamCoverage(memberMultipliers);
-    const teamWeaknesses = coverage.filter(({ weak, resist }) => weak >= 2 && weak > resist).map(({ type }) => type);
+    const teamWeaknesses = sharedWeaknesses(memberMultipliers);
     if (!teamWeaknesses.length || memberMultipliers.length < 2) {
         return -1;
     }
@@ -68,6 +67,13 @@ export function teamMvp(memberMultipliers) {
     );
     const best = Math.max(...covered);
     return best > 0 ? covered.indexOf(best) : -1;
+}
+
+// Types two or more members are weak to, with fewer members resisting them.
+export function sharedWeaknesses(memberMultipliers) {
+    return teamCoverage(memberMultipliers)
+        .filter(({ weak, resist }) => weak >= 2 && weak > resist)
+        .map(({ type }) => type);
 }
 
 function updateTeamButton() {
@@ -175,7 +181,14 @@ async function renderCoverage() {
             const badge = document.createElement("span");
             badge.className = "mvpBadge";
             badge.textContent = "★ MVP";
-            badge.title = "Resists the most of the types your team is weak to";
+            const covers = sharedWeaknesses(memberMultipliers)
+                .filter((type) => memberMultipliers[mvp][type] < 1)
+                .map(formatName);
+            badge.title = "Resists " + covers.join(" and ") + ", which the rest of your team is weak to";
+            const spoken = document.createElement("span");
+            spoken.className = "visuallyHidden";
+            spoken.textContent = ": " + badge.title.toLowerCase();
+            badge.append(spoken);
             slot.querySelector(".teamMember").append(badge);
         }
     });
