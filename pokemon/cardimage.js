@@ -179,13 +179,20 @@ export function loadCanvasImage(src) {
     });
 }
 
+// Share-card text: Inter, or the Game Boy pixel font (smaller, it runs wide) for retro cards.
+function cardFont(weight, size, retro) {
+    return retro
+        ? Math.round(size * 0.55) + 'px "Press Start 2P", monospace'
+        : weight + " " + size + "px inter, arial, sans-serif";
+}
+
 export const FINALE_WIDTH = 1200;
 export const FINALE_HEIGHT = 630;
 
 // The "Pokédex complete" share image: a night sky, the title in gold, the starters lined up in
 // three rows and the region legendaries in front. starters/legends: loaded images or nulls.
 // byline: who did it ("Red & Pikachu"), or "" to leave it off.
-export function drawFinaleCard(canvas, { dateText, byline }, starters, legends) {
+export function drawFinaleCard(canvas, { dateText, byline, retro }, starters, legends) {
     canvas.width = FINALE_WIDTH;
     canvas.height = FINALE_HEIGHT;
     const context = canvas.getContext("2d");
@@ -204,7 +211,7 @@ export function drawFinaleCard(canvas, { dateText, byline }, starters, legends) 
     }
 
     context.textAlign = "center";
-    context.font = "900 64px inter, arial, sans-serif";
+    context.font = cardFont(900, 64, retro);
     context.fillStyle = "#b11f1f";
     context.fillText("🏆 Pokédex complete!", FINALE_WIDTH / 2, 98);
     context.shadowColor = "rgba(255, 212, 71, 0.8)";
@@ -212,7 +219,7 @@ export function drawFinaleCard(canvas, { dateText, byline }, starters, legends) 
     context.fillStyle = "#ffd447";
     context.fillText("🏆 Pokédex complete!", FINALE_WIDTH / 2, 92);
     context.shadowBlur = 0;
-    context.font = "700 26px inter, arial, sans-serif";
+    context.font = cardFont(700, 26, retro);
     context.fillStyle = "#ffffff";
     context.fillText(
         (byline ? byline + " · " : "") + "1,025 / 1,025 Pokémon seen" + (dateText ? " · " + dateText : ""),
@@ -235,14 +242,14 @@ export function drawFinaleCard(canvas, { dateText, byline }, starters, legends) 
         }
     });
 
-    context.font = "600 20px inter, arial, sans-serif";
+    context.font = cardFont(600, 20, retro);
     context.fillStyle = "rgba(255, 255, 255, 0.85)";
     context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
 }
 
 // One region's "complete!" share card, in its banner colour: the trio, the region's
 // legendary and the count. trio: three loaded images (or nulls), legend: one (or null).
-export function drawRegionCard(canvas, { number, region, total, byline }, trio, legend) {
+export function drawRegionCard(canvas, { number, region, total, byline, retro }, trio, legend) {
     canvas.width = FINALE_WIDTH;
     canvas.height = FINALE_HEIGHT;
     const context = canvas.getContext("2d");
@@ -258,12 +265,12 @@ export function drawRegionCard(canvas, { number, region, total, byline }, trio, 
     context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
 
     context.textAlign = "left";
-    context.font = "900 58px inter, arial, sans-serif";
+    context.font = cardFont(900, 58, retro);
     context.fillStyle = "rgba(0, 0, 0, 0.35)";
     context.fillText("🏅 " + region + " complete!", 64, 112);
     context.fillStyle = "#ffffff";
     context.fillText("🏅 " + region + " complete!", 60, 106);
-    context.font = "700 26px inter, arial, sans-serif";
+    context.font = cardFont(700, 26, retro);
     context.fillStyle = "#ffd447";
     context.fillText((byline ? byline + " · " : "") + total + " / " + total + " Pokémon seen · Gen " + number, 62, 152);
     trio.forEach((image, index) => {
@@ -275,7 +282,7 @@ export function drawRegionCard(canvas, { number, region, total, byline }, trio, 
         context.drawImage(legend, 760, 150, 360, 360);
     }
     context.textAlign = "center";
-    context.font = "600 20px inter, arial, sans-serif";
+    context.font = cardFont(600, 20, retro);
     context.fillStyle = "rgba(255, 255, 255, 0.85)";
     context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
 }

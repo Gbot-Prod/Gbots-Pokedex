@@ -391,8 +391,12 @@ async function saveFinaleImage(status) {
     const trainerName = (readStored(TRAINER_KEY, {}).name ?? "").trim();
     const partner = currentPartner();
     const byline = [trainerName, partner ? partnerLabel(partner) : ""].filter(Boolean).join(" & ");
-    drawFinaleCard(canvas, { dateText, byline }, starters, legends);
-    styleShareCard(canvas, readStored(TRAINER_KEY, {}).style); // matches the trainer card's style
+    const style = readStored(TRAINER_KEY, {}).style; // the card matches the trainer card's style
+    if (style === "retro") {
+        await document.fonts?.load('20px "Press Start 2P"');
+    }
+    drawFinaleCard(canvas, { dateText, byline, retro: style === "retro" }, starters, legends);
+    styleShareCard(canvas, style);
     const saved = await shareOrDownload(canvas, "pokedex-complete.png", "Pokédex complete!");
     status.textContent = saved ? "Image saved!" : "";
 }
@@ -430,8 +434,12 @@ async function saveRegionCard(number) {
         Promise.all([loadCanvasImage(spriteUrl(REGION_MASCOTS[number]))]),
     ]);
     const trainerName = (readStored(TRAINER_KEY, {}).name ?? "").trim();
+    const style = readStored(TRAINER_KEY, {}).style;
     const canvas = document.createElement("canvas");
     await document.fonts?.ready;
+    if (style === "retro") {
+        await document.fonts?.load('20px "Press Start 2P"');
+    }
     drawRegionCard(
         canvas,
         {
@@ -439,11 +447,12 @@ async function saveRegionCard(number) {
             region: generation.region,
             total: generation.last - generation.first + 1,
             byline: trainerName,
+            retro: style === "retro",
         },
         trio,
         legend,
     );
-    styleShareCard(canvas, readStored(TRAINER_KEY, {}).style);
+    styleShareCard(canvas, style);
     await shareOrDownload(canvas, generation.region.toLowerCase() + "-complete.png", generation.region + " complete!");
 }
 
