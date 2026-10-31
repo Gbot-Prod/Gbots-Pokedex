@@ -142,6 +142,7 @@ async function getTypeMemberIds(type) {
 // "(12 left in Kanto)" beside "Unseen only" while a region is selected; clicking it opens the
 // first Pokémon of that region you haven't seen yet.
 const unseenCountButton = document.getElementById("unseenCount");
+const nextMissingButton = document.getElementById("nextMissingBtn");
 let firstUnseenId = null;
 
 function updateUnseenCount() {
@@ -152,6 +153,9 @@ function updateUnseenCount() {
           )
         : [];
     firstUnseenId = missing[0]?.id ?? null;
+    // On the card: keep walking through the selected region's gaps.
+    nextMissingButton.hidden = !firstUnseenId;
+    nextMissingButton.textContent = "Next missing in " + (generation?.region ?? "") + " →";
     unseenCountButton.hidden = !generation;
     unseenCountButton.disabled = !firstUnseenId;
     unseenCountButton.textContent = missing.length
@@ -160,12 +164,15 @@ function updateUnseenCount() {
     unseenCountButton.title = firstUnseenId ? "Open the first one you haven't seen" : "";
 }
 
-unseenCountButton.addEventListener("click", () => {
+function openFirstUnseen() {
     if (firstUnseenId) {
         showPokemon(firstUnseenId);
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
-});
+}
+
+unseenCountButton.addEventListener("click", openFirstUnseen);
+nextMissingButton.addEventListener("click", openFirstUnseen);
 window.addEventListener("pokedex:seen", updateUnseenCount);
 
 async function applyBrowseFilters() {

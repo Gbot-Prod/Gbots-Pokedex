@@ -685,6 +685,7 @@ test("viewing a Pokémon fills the completion ring and its region's progress bar
     assert.equal(await page.inputValue("#generationFilter"), "1");
     assert.equal(await page.isChecked("#unseenFilter"), true);
     assert.match(await page.textContent("#unseenCount"), /^\d+ left in Kanto →$/);
+    assert.equal(await page.textContent("#nextMissingBtn"), "Next missing in Kanto →");
     await page.waitForFunction(() => !document.querySelector('#browseGrid .browseTile[data-id="25"]'));
     assert.ok((await page.locator('.browseTile[data-dex="25"] .tileSeen').count()) >= 1);
     assert.equal(await page.locator('#browseGrid .browseTile[data-dex="1"] .tileSeen').count(), 0);

@@ -14,7 +14,6 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
-- [ ] Unseen count step 2: after opening one, a "Next missing →" button on the card walks through the rest of the region's unseen Pokémon
 - [ ] Combo step 2: a combo meter under the challenge timer that fills with each answer in a row and shakes on a miss
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live check: run `npm run check:live` (both browser files) in a nightly CI job so API changes are caught even when nobody pushes
@@ -300,3 +299,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Test suite time is up to ~117 s (the hover-contrast pass adds ~27 s): run the axe/hover tests in a separate parallel file so the core suite stays fast (2026-10-30) — moved the shared server/browser/mocking setup into tests/harness.js and the axe + hover-contrast tests into tests/a11y.test.js, which node:test runs in parallel: same 125 tests, ~117 s → ~83 s; check:live covers both files
 - [x] Quiz combo: in the 60-second challenge, 3 correct in a row shows "Combo ×3!" and doubles the next point (2026-10-30) — from 3 correct in a row the challenge's floating bubble becomes an orange "Combo ×N!" (resets on a miss). Kept it visual only: doubling points would change what "Best 60s run" (Pokémon named) means; verified live with 3 real correct answers
 - [x] Unseen count: make "(10 left in Kanto)" a button that opens the first missing Pokémon (2026-10-30) — the count is now its own link-style button ("11 left in Kanto →", next to the Unseen only label) that opens the region's first unseen Pokémon; disabled "All seen! 🎉" once the region is complete
+- [x] Unseen count step 2: after opening one, a "Next missing →" button on the card walks through the rest of the region's unseen Pokémon (2026-10-31) — a purple "Next missing in Kanto →" button under the card's name opens the selected region's next unseen Pokémon; it hides once the region is complete (live walk: #0132 → #0144 → #0145 → #0146)

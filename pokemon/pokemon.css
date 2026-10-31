@@ -498,6 +498,18 @@ body {
     transform-origin: bottom;
 }
 
+#nextMissingBtn {
+    display: block;
+    margin: 0.5rem auto 0;
+    padding: 0.4rem 1rem;
+    background: linear-gradient(160deg, #7a3cff, #5a22d6);
+    font-size: 0.95rem;
+}
+
+#nextMissingBtn[hidden] {
+    display: none;
+}
+
 /* "Make it your partner?" offer after five views */
 #partnerOffer {
     display: flex;
