@@ -23,7 +23,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Jump menu: also offer "Top 5" and "Calendar" pills when the card is tall enough to need them (desktop shows all sections anyway)
 - [ ] Chip celebration: when the last missing Pokémon of the chip's region is seen, the chip bursts into sparkles before the region-complete toast
 - [ ] Test robustness: smoke tests that click animated elements should wait for animationend instead of relying on finite animation length
-- [ ] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s
 - [ ] Hearts: a partner "favourite snack" — opening the partner on its own type's day (e.g. Fire on Sundays) counts as two views
 - [ ] Partner nicknames: let trainers give their partner a nickname shown on the trainer card and in the cameo matchup line
 - [ ] Settings panel: one place for theme, units, animated sprites, sound and "reset my progress" (with confirmation)
@@ -300,3 +299,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Unseen count step 2: after opening one, a "Next missing →" button on the card walks through the rest of the region's unseen Pokémon (2026-10-31) — a purple "Next missing in Kanto →" button under the card's name opens the selected region's next unseen Pokémon; it hides once the region is complete (live walk: #0132 → #0144 → #0145 → #0146)
 - [x] Combo step 2: a combo meter under the challenge timer that fills with each answer in a row and shakes on a miss (2026-10-31) — five pips under the challenge timer light orange per answer in a row, glow gold from 5, and the meter shakes when a miss breaks the chain (no shake under reduced motion); decorative, aria-hidden
 - [x] Quiz challenge: a "best combo" stat alongside "Best 60s run" (2026-10-31) — the longest challenge combo is saved with the quiz score and shown as " · Best combo ×N" once it reaches 3
+- [x] Toast queue: dedupe identical messages and cap the queue at 3 so a burst of unlocks doesn't keep toasts on screen for 20 s (2026-10-31) — enqueueToast() skips a message that's already queued and drops new ones once 3 are waiting, so a burst of badge unlocks can't keep toasts up for 20 s (the currently shown toast counts as the first)

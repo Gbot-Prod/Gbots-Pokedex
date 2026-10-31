@@ -205,9 +205,20 @@ function celebrateIfComplete(dexNumber) {
 // Toasts queue up so a region completion and the badge it earns are both shown, one after another.
 const toastQueue = [];
 
+// Adds a toast unless it's already queued; at most TOAST_QUEUE_LIMIT wait, so a burst of
+// unlocks doesn't keep toasts on screen for ages (the extra ones are dropped).
+const TOAST_QUEUE_LIMIT = 3;
+
+export function enqueueToast(queue, toast) {
+    if (queue.some((queued) => queued.message === toast.message) || queue.length >= TOAST_QUEUE_LIMIT) {
+        return false;
+    }
+    queue.push(toast);
+    return true;
+}
+
 function celebrate(message, confettiCount) {
-    toastQueue.push({ message, confettiCount });
-    if (toastQueue.length === 1) {
+    if (enqueueToast(toastQueue, { message, confettiCount }) && toastQueue.length === 1) {
         showNextToast();
     }
 }

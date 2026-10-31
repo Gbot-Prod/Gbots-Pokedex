@@ -325,3 +325,17 @@ test("closestRegion picks the started region with the fewest left", async () => 
     assert.equal(closestRegion(gens).number, 3);
     assert.equal(closestRegion([{ number: 1, seen: 0, total: 151 }]), null);
 });
+
+test("enqueueToast skips duplicates and caps the queue at three", async () => {
+    const { enqueueToast } = await import("../pokemon/progress.js");
+    const queue = [];
+    assert.equal(enqueueToast(queue, { message: "A" }), true);
+    assert.equal(enqueueToast(queue, { message: "A" }), false);
+    enqueueToast(queue, { message: "B" });
+    enqueueToast(queue, { message: "C" });
+    assert.equal(enqueueToast(queue, { message: "D" }), false);
+    assert.deepEqual(
+        queue.map((toast) => toast.message),
+        ["A", "B", "C"],
+    );
+});
