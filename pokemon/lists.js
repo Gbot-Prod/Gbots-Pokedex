@@ -200,10 +200,18 @@ function showNowBrowsing(banner) {
         chip = document.createElement("p");
         chip.id = "nowBrowsingChip";
         chip.setAttribute("role", "status");
+        // Tapping it goes back up to the strip, where the banner is pulsing.
+        const button = document.createElement("button");
+        button.type = "button";
+        button.addEventListener("click", () => {
+            chip.classList.remove("visible");
+            document.getElementById("regionStrip").scrollIntoView({ block: "center" });
+        });
+        chip.append(button);
         document.body.append(chip);
     }
     const generation = GENERATIONS.find((gen) => String(gen.number) === banner.dataset.generation);
-    chip.textContent = "🧭 Now browsing " + generation.region;
+    chip.firstChild.textContent = "🧭 Now browsing " + generation.region + " ↑";
     chip.style.background = getComputedStyle(banner).backgroundImage; // the banner's own gradient
     chip.classList.remove("visible");
     void chip.offsetWidth; // restart the pop-in

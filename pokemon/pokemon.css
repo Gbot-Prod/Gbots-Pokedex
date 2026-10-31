@@ -4862,6 +4862,21 @@ img.animatedSmall {
     transform: translate(-50%, 0);
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
+}
+
+#nowBrowsingChip button {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-shadow: inherit;
+    cursor: pointer;
+}
+
+#nowBrowsingChip:hover {
+    filter: brightness(1.15);
 }
 
 @media (prefers-reduced-motion: reduce) {

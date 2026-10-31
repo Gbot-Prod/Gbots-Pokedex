@@ -951,7 +951,12 @@ test("finishing a region with Next missing offers the next unfinished region", a
     );
     // With the strip out of view, a chip says where the walk moved on to.
     if (stripOffScreen) {
-        assert.equal(await page.textContent("#nowBrowsingChip.visible"), "🧭 Now browsing Johto");
+        assert.equal(await page.textContent("#nowBrowsingChip.visible"), "🧭 Now browsing Johto ↑");
+        await page.click("#nowBrowsingChip button");
+        await page.waitForFunction(() => {
+            const box = document.getElementById("regionStrip").getBoundingClientRect();
+            return box.top >= 0 && box.bottom <= window.innerHeight;
+        });
     } else {
         assert.equal(await page.locator("#nowBrowsingChip").count(), 0);
     }
