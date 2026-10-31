@@ -3453,6 +3453,26 @@ img.animatedSmall {
     }
 }
 
+.regionBanner.regionPulse {
+    animation: regionPulse 0.9s ease-out 2;
+}
+
+@keyframes regionPulse {
+    40% {
+        transform: scale(1.08);
+        box-shadow:
+            0 0 0 4px #ffd447,
+            0 0 24px 6px rgba(255, 212, 71, 0.8);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .regionBanner.regionPulse {
+        animation: none;
+        outline: 3px solid #ffd447;
+    }
+}
+
 /* Gold ribbon on regions whose Pokédex is complete */
 .regionBanner.regionComplete {
     position: relative;

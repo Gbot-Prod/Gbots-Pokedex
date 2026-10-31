@@ -882,6 +882,12 @@ test("finishing a region with Next missing offers the next unfinished region", a
     await page.click("#nextMissingBtn");
     await nextRequest;
     assert.equal(await page.inputValue("#generationFilter"), "2");
+    assert.equal(
+        await page.evaluate(() =>
+            document.querySelector('.regionBanner[data-generation="2"]').classList.contains("regionPulse"),
+        ),
+        true,
+    );
 });
 
 test("seeing every Pokémon turns the region button into the National Dex finale", async () => {

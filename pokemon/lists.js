@@ -192,6 +192,22 @@ function openFirstUnseen() {
     }
 }
 
+// Makes a region switch visible: the strip slides sideways to the banner, which pulses
+// (the page itself doesn't scroll).
+function pulseRegionBanner(number) {
+    const banner = document.querySelector('.regionBanner[data-generation="' + number + '"]');
+    if (!banner) {
+        return;
+    }
+    const strip = document.getElementById("regionStrip");
+    strip.scrollTo({ left: banner.parentElement.offsetLeft - strip.offsetLeft - 8, behavior: "smooth" });
+    banner.classList.remove("regionPulse");
+    void banner.offsetWidth; // restart the animation
+    banner.classList.add("regionPulse");
+    // A timer rather than animationend, which never fires under reduced motion (no animation).
+    setTimeout(() => banner.classList.remove("regionPulse"), 2000);
+}
+
 nextMissingButton.addEventListener("click", async () => {
     if (nationalDexDone) {
         openTrainerCard();
@@ -199,6 +215,7 @@ nextMissingButton.addEventListener("click", async () => {
     }
     if (!firstUnseenId && nextRegion) {
         generationFilterElement.value = String(nextRegion.number);
+        pulseRegionBanner(nextRegion.number);
         await applyBrowseFilters(); // also refreshes firstUnseenId for the new region
     }
     openFirstUnseen();
