@@ -4295,6 +4295,7 @@ img.animatedSmall {
 }
 
 #trainerCardSeen {
+    font-variant-numeric: tabular-nums; /* the count-up doesn't jitter */
     margin: 0.9rem 1rem 0.5rem;
     font-size: 1.1rem;
     font-weight: 900;

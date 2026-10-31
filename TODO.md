@@ -14,6 +14,11 @@ Rules for each run:
 
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
+- [ ] Toast "Show me" for region completions too: open the browse grid filtered to that region with its banner glowing gold
+- [ ] Now browsing chip step 2: tapping the chip scrolls back up to the region strip (make it a button while visible)
+- [ ] Keyboard help overlay: "?" opens a small dialog listing every shortcut (/, ←/→, S, C, N) instead of the one-line tip
+- [ ] Count-up polish: the stat tiles (shinies, encounters, quiz streak…) roll up too, staggered by 80 ms each
+- [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
