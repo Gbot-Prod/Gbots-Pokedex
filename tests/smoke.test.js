@@ -215,7 +215,7 @@ test("the go-to prompt also finds a Pokémon by the start of its name", async ()
     await page.keyboard.type("zzz");
     await page.waitForFunction(() => document.querySelector("#gotoPreview span").textContent === "No match");
     await page.fill("#gotoInput", "farf");
-    await page.waitForFunction(() => document.querySelector("#gotoPreview span").textContent === "Farfetchd");
+    await page.waitForFunction(() => /^Farfetch’?d$/.test(document.querySelector("#gotoPreview span").textContent)); // ’ needs the species list
     await page.keyboard.press("Enter");
     await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("83"));
 });

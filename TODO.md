@@ -17,7 +17,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
 - [ ] Shortcuts on phones: a small ⌨️ button only shown when a hardware keyboard is detected (first keydown), since the tip line is hidden on touch
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
-- [ ] Go-to names: show proper display names on the LCD ("Farfetch’d", "Mr. Mime") by reusing pokemonDisplayName-style rules instead of formatName on the slug
 - [ ] Go-to step 4: ↑/↓ on the LCD cycles through every name matching the prefix ("char" → Charmander, Charmeleon, Charizard…)
 - [ ] Go-to step 5: a quiet "beep" on each keystroke and a two-tone chime on Enter when sound effects are on (Web Audio, LCD theme)
 - [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
@@ -340,3 +339,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Robust storage step 2: the trainer card's Favorites/Team counts read raw storage — count only valid entries (share isStoredEntry via a tiny storage.js module both can import) (2026-10-31) — new storage.js (isStoredEntry, isTeamMember) shared by lists, team and progress; trainer card/badge counts and the team loader skip junk; unit test that every page script is in the service worker's offline shell
 - [x] Go-to prompt step 3: a tiny sprite preview of the typed number on the LCD (pixelated, green-tinted) before Enter (2026-10-31) — typing a number shows that Pokémon's sprite on the LCD, pixelated and tinted handheld-green, with its name in glowing caps (aria-live); smoke test checks sprite + name for #94
 - [x] Go-to prompt step 2: type a name too ("gen" → Gengar) with the first match shown live on the LCD under the digits (2026-10-31) — the G prompt takes a name prefix too ('gen' → Gengar, 'No match' otherwise); Enter re-resolves the final text so a fast Enter can't land on a stale preview; numbers still work offline
+- [x] Go-to names: show proper display names on the LCD ("Farfetch’d", "Mr. Mime") by reusing pokemonDisplayName-style rules instead of formatName on the slug (2026-10-31) — the LCD label uses entryDisplayName with the species list (live: farf → Farfetch’d, mr-m → Mr. Mime); falls back to the plain slug name when the species list is unavailable

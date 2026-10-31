@@ -1335,8 +1335,9 @@ async function findGotoTarget(rawQuery) {
         return null;
     }
     let entries = [];
+    let speciesSlugs = null;
     try {
-        entries = await getAllPokemonEntries();
+        [entries, speciesSlugs] = await Promise.all([getAllPokemonEntries(), getSpeciesSlugs().catch(() => null)]);
     } catch {
         // no name list (offline): numbers still work, names can't be matched
     }
@@ -1344,10 +1345,12 @@ async function findGotoTarget(rawQuery) {
         number !== null
             ? entries.find((candidate) => candidate.id === number)
             : entries.find((candidate) => candidate.id <= MAX_DEX_NUMBER && candidate.name.startsWith(query));
+    // Proper names on the LCD: "farfetchd" → "Farfetch’d", "mr-mime" → "Mr. Mime".
+    const label = entry ? entryDisplayName(entry, speciesSlugs) : "";
     if (number !== null) {
-        return { id: number, label: entry ? formatName(entry.name) : "" };
+        return { id: number, label };
     }
-    return entry ? { id: entry.id, label: formatName(entry.name) } : null;
+    return entry ? { id: entry.id, label } : null;
 }
 
 gotoInput.addEventListener("input", async () => {
