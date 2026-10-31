@@ -217,10 +217,21 @@ export function enqueueToast(queue, toast) {
     return true;
 }
 
+let droppedToasts = 0; // over the cap; summed up in one last toast
+
 function celebrate(message, confettiCount) {
-    if (enqueueToast(toastQueue, { message, confettiCount }) && toastQueue.length === 1) {
-        showNextToast();
+    const duplicate = toastQueue.some((queued) => queued.message === message);
+    if (enqueueToast(toastQueue, { message, confettiCount })) {
+        if (toastQueue.length === 1) {
+            showNextToast();
+        }
+    } else if (!duplicate) {
+        droppedToasts++;
     }
+}
+
+export function droppedSummary(count) {
+    return "✨ +" + count + " more achievement" + (count === 1 ? "" : "s") + " — see your trainer card";
 }
 
 function showNextToast() {
@@ -228,13 +239,17 @@ function showNextToast() {
     const { message, confettiCount } = toastQueue[0];
     toast.textContent = message;
     toast.classList.add("visible");
-    if (!reducedMotion.matches) {
+    if (confettiCount && !reducedMotion.matches) {
         const burst = makeConfetti(confettiCount, "confetti fullscreen");
         document.body.append(burst);
         setTimeout(() => burst.remove(), 3000);
     }
     setTimeout(() => {
         toastQueue.shift();
+        if (!toastQueue.length && droppedToasts) {
+            toastQueue.push({ message: droppedSummary(droppedToasts), confettiCount: 0 });
+            droppedToasts = 0;
+        }
         if (toastQueue.length) {
             showNextToast();
         } else {
@@ -268,8 +283,11 @@ function checkBadges() {
     } catch {
         return; // can't remember badges, so don't announce them over and over
     }
-    if (known && fresh.length) {
-        celebrate(fresh[0].icon + " Badge earned! " + fresh[0].label, 50);
+    if (known) {
+        // Each new badge gets its toast; past the queue cap they're summed up in one.
+        for (const badge of fresh) {
+            celebrate(badge.icon + " Badge earned! " + badge.label, 50);
+        }
     }
     updateNewsDot();
 }

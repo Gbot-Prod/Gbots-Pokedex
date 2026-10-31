@@ -339,3 +339,9 @@ test("enqueueToast skips duplicates and caps the queue at three", async () => {
         ["A", "B", "C"],
     );
 });
+
+test("droppedSummary sums up toasts that didn't fit in the queue", async () => {
+    const { droppedSummary } = await import("../pokemon/progress.js");
+    assert.equal(droppedSummary(1), "✨ +1 more achievement — see your trainer card");
+    assert.equal(droppedSummary(3), "✨ +3 more achievements — see your trainer card");
+});
