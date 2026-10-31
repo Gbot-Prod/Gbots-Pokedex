@@ -2436,6 +2436,58 @@ img.placeholderSprite {
     font-variant-numeric: tabular-nums;
 }
 
+#quizCombo {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: -0.2rem 0 0.6rem;
+}
+
+#quizCombo[hidden] {
+    display: none;
+}
+
+#quizCombo span {
+    width: 1.6rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: rgba(127, 127, 127, 0.3);
+    transition:
+        background-color 0.2s,
+        box-shadow 0.2s;
+}
+
+#quizCombo span.lit {
+    background: #fb923c;
+    box-shadow: 0 0 6px rgba(251, 146, 60, 0.8);
+}
+
+#quizCombo.maxed span {
+    background: linear-gradient(90deg, #ffd447, #fb923c);
+    box-shadow: 0 0 10px rgba(255, 212, 71, 0.9);
+}
+
+#quizCombo.broken {
+    animation: comboShake 0.4s ease-in-out;
+}
+
+@keyframes comboShake {
+    20%,
+    60% {
+        transform: translateX(-6px);
+    }
+    40%,
+    80% {
+        transform: translateX(6px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #quizCombo.broken {
+        animation: none;
+    }
+}
+
 #quizTimer.urgent {
     color: var(--danger-ink, #b3261e);
     animation: timerPulse 0.5s ease-in-out infinite alternate;

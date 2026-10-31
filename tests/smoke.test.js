@@ -592,6 +592,7 @@ test("the 60-second challenge counts correct answers and records the best run", 
             (count) => document.getElementById("quizTimer").textContent.endsWith(count + " correct"),
             round,
         );
+        assert.equal(await page.locator("#quizCombo span.lit").count(), round);
         assert.equal(
             await page.textContent(".quizChoice.correct .quizPlusOne"),
             round >= 3 ? "Combo ×" + round + "!" : "+1",

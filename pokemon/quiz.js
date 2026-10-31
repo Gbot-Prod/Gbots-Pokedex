@@ -18,6 +18,7 @@ const scoreElement = document.getElementById("quizScore");
 const generationSelect = document.getElementById("quizGeneration");
 const timedButton = document.getElementById("quizTimedBtn");
 const timerElement = document.getElementById("quizTimer");
+const comboElement = document.getElementById("quizCombo");
 const TIMED_SECONDS = 60;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -148,6 +149,8 @@ function startTimedRun() {
     };
     timedRun.interval = setInterval(tick, 250);
     timerElement.hidden = false;
+    comboElement.hidden = false;
+    renderCombo(0, false);
     tick();
     nextRound();
 }
@@ -161,6 +164,7 @@ function stopTimedRun(showResult) {
     timedRun = null;
     timedButton.disabled = false;
     timerElement.hidden = true;
+    comboElement.hidden = true;
     if (!showResult) {
         return;
     }
@@ -178,6 +182,18 @@ function stopTimedRun(showResult) {
     }
     nextButton.hidden = false;
     nextButton.focus({ preventScroll: true });
+}
+
+// The combo meter under the challenge timer: one pip per answer in a row (up to 5, then it
+// glows), and a shake when a miss breaks the chain.
+function renderCombo(combo, broken) {
+    [...comboElement.children].forEach((pip, index) => pip.classList.toggle("lit", index < combo));
+    comboElement.classList.toggle("maxed", combo >= 5);
+    comboElement.classList.remove("broken");
+    if (broken) {
+        void comboElement.offsetWidth; // restart the shake
+        comboElement.classList.add("broken");
+    }
 }
 
 // A "+1" (or "Combo ×N!" from 3 in a row) that floats up out of a correct answer in the
@@ -202,7 +218,9 @@ function answerRound(choice, answer, chosenButton) {
             timedRun.correct++;
         }
         // Answers in a row: from 3 on, each one flashes "Combo ×N!".
+        const broken = !correct && timedRun.combo > 0;
         timedRun.combo = correct ? timedRun.combo + 1 : 0;
+        renderCombo(timedRun.combo, broken);
         revealAnswer(answer, chosenButton, correct);
         if (correct) {
             floatPlusOne(chosenButton, timedRun.combo); // after the reveal, which matches buttons by their text
