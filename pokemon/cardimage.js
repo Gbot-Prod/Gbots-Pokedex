@@ -304,6 +304,18 @@ export function styleShareCard(canvas, style) {
         context.fillStyle = foil;
         context.fillRect(0, 0, width, height);
         context.restore();
+        // a diagonal light streak across the foil, like the holo card's sheen
+        context.save();
+        context.globalCompositeOperation = "screen";
+        const streak = context.createLinearGradient(width * 0.2, 0, width * 0.55, height);
+        streak.addColorStop(0, "rgba(255, 255, 255, 0)");
+        streak.addColorStop(0.45, "rgba(255, 255, 255, 0)");
+        streak.addColorStop(0.5, "rgba(255, 255, 255, 0.35)");
+        streak.addColorStop(0.55, "rgba(255, 255, 255, 0)");
+        streak.addColorStop(1, "rgba(255, 255, 255, 0)");
+        context.fillStyle = streak;
+        context.fillRect(0, 0, width, height);
+        context.restore();
         context.lineWidth = 12;
         context.strokeStyle = gradient(context, 0, 0, width, height, ["#ff6b9d", "#6bc5ff"]);
         context.strokeRect(6, 6, width - 12, height - 12);
