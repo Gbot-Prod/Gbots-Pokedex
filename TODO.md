@@ -27,6 +27,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Parade step 7: the wave button cycles through moods — jump wave, then a spin wave, then a "bow" (everyone dips) on the third press
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
+- [ ] Finale share step 2: share an image — a canvas card with the parade line-up and "1,025 / 1,025" in gold, like the trainer card PNG
+- [ ] Regional footprints step 3: a short legend in the region banner tooltip ("Galar leaves boot prints") so the trails are discoverable
+- [ ] Region toast colours: tint each region's toast with its banner gradient instead of the shared red
+- [ ] Completion date: remember when the National Dex was completed and show "Completed Oct 31, 2026" under the trainer card's hall of fame
+- [ ] Finale replay polish: the replay skips the confetti delay and starts the march already on screen, so it's instantly fun the second time
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
