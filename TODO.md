@@ -16,7 +16,6 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
-- [ ] Toast summary step 2: make the "+N more" toast a button that opens the trainer card at the badge shelf
 - [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
 - [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
@@ -310,3 +309,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Next missing step 2: also offer it from the region chip's "Only N to go!" flow, and show "3 left" on the button itself (2026-10-31) — the button now says how many are left ("Next missing in Kanto (3 left) →"); the chip flow (region + unseen) already brings it up, verified live chip → tile → button
 - [x] Region complete step 2: when "Next missing" finishes a region, swap the button for "🎉 Kanto complete — on to Johto?" that selects the next unfinished region (2026-10-31) — when the selected region has no gaps left, the card button turns gold: "🎉 Kanto complete — on to Johto? →" selects the next unfinished region (wrapping) and opens its first missing Pokémon; live: Kanto → #0152, then "Next missing in Johto (99 left)"
 - [x] Badge toasts: show the badge icon large on the left of the toast (like an achievement pop-up) instead of inline in the text (2026-10-31) — badge toasts now lead with the badge in a gold-ringed orange disc that spins in (none under reduced motion), with the text beside it; other toasts are unchanged
+- [x] Toast summary step 2: make the "+N more" toast a button that opens the trainer card at the badge shelf (2026-10-31) — the "+N more achievements" toast is now an underlined button (toast made clickable only for it) that hides the toast and opens the trainer card at the badge shelf

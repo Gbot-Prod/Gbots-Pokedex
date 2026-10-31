@@ -236,7 +236,7 @@ export function droppedSummary(count) {
 
 function showNextToast() {
     const toast = document.getElementById("dexToast");
-    const { message, confettiCount, icon } = toastQueue[0];
+    const { message, confettiCount, icon, opensCard } = toastQueue[0];
     // Badge toasts lead with the badge itself, large, like an achievement pop-up.
     toast.classList.toggle("withIcon", Boolean(icon));
     if (icon) {
@@ -244,9 +244,22 @@ function showNextToast() {
         badge.className = "toastIcon";
         badge.textContent = icon;
         toast.replaceChildren(badge, " " + message);
+    } else if (opensCard) {
+        // The "+N more" summary is a button straight to the badge shelf.
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "toastButton";
+        button.textContent = message;
+        button.addEventListener("click", () => {
+            toast.classList.remove("visible");
+            openTrainerCard();
+            document.getElementById("trainerCardBadges").scrollIntoView({ block: "center" });
+        });
+        toast.replaceChildren(button);
     } else {
         toast.textContent = message;
     }
+    toast.classList.toggle("clickable", Boolean(opensCard));
     toast.classList.add("visible");
     if (confettiCount && !reducedMotion.matches) {
         const burst = makeConfetti(confettiCount, "confetti fullscreen");
@@ -256,7 +269,7 @@ function showNextToast() {
     setTimeout(() => {
         toastQueue.shift();
         if (!toastQueue.length && droppedToasts) {
-            toastQueue.push({ message: droppedSummary(droppedToasts), confettiCount: 0 });
+            toastQueue.push({ message: droppedSummary(droppedToasts), confettiCount: 0, opensCard: true });
             droppedToasts = 0;
         }
         if (toastQueue.length) {

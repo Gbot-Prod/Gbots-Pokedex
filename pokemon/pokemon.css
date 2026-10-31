@@ -2357,6 +2357,20 @@ img.placeholderSprite {
     pointer-events: none;
 }
 
+#dexToast.clickable {
+    pointer-events: auto;
+}
+
+.toastButton {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 #dexToast.withIcon {
     display: flex;
     align-items: center;
