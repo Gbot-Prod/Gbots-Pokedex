@@ -1075,7 +1075,7 @@ async function shareTrainerCard() {
 
 let openPokemon = () => {};
 
-function openTrainerCard() {
+export function openTrainerCard() {
     renderTrainerCard();
     trainerCard.showModal();
 }

@@ -884,6 +884,24 @@ test("finishing a region with Next missing offers the next unfinished region", a
     assert.equal(await page.inputValue("#generationFilter"), "2");
 });
 
+test("seeing every Pokémon turns the region button into the National Dex finale", async () => {
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:seen:v1",
+            JSON.stringify(Array.from({ length: 1025 }, (_, index) => index + 1).filter((id) => id !== 25)),
+        ),
+    );
+    await page.reload();
+    await page.waitForSelector("#browseGrid .browseTile");
+    await page.selectOption("#generationFilter", "1");
+    await search("pikachu");
+    await page.waitForFunction(() =>
+        document.getElementById("nextMissingBtn").textContent.startsWith("🏆 National Dex complete!"),
+    );
+    await page.click("#nextMissingBtn");
+    await page.waitForSelector("#trainerCard[open]");
+});
+
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
     await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
     await page.reload();

@@ -1,6 +1,6 @@
 // Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
 import { API_BASE, fetchJson, fetchPokemon, getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
-import { hasSeen, seenMark } from "./progress.js";
+import { hasSeen, openTrainerCard, seenMark } from "./progress.js";
 import {
     GENERATIONS,
     MAX_DEX_NUMBER,
@@ -152,6 +152,7 @@ function missingIn(generation) {
 }
 
 let nextRegion = null; // the following unfinished region, once the selected one is complete
+let nationalDexDone = false;
 
 function updateUnseenCount() {
     const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
@@ -164,14 +165,18 @@ function updateUnseenCount() {
                   .concat(GENERATIONS.slice(0, GENERATIONS.indexOf(generation)))
                   .find((gen) => missingIn(gen).length) ?? null)
             : null;
+    // Every region done: the grand finale.
+    nationalDexDone = Boolean(generation) && !missing.length && !nextRegion && nationalDexEntries.length > 0;
     // On the card: keep walking through the selected region's gaps, then on to the next region.
-    nextMissingButton.hidden = !firstUnseenId && !nextRegion;
-    nextMissingButton.classList.toggle("regionDone", Boolean(nextRegion));
+    nextMissingButton.hidden = !firstUnseenId && !nextRegion && !nationalDexDone;
+    nextMissingButton.classList.toggle("regionDone", Boolean(nextRegion) || nationalDexDone);
     nextMissingButton.textContent = firstUnseenId
         ? "Next missing in " + generation.region + " (" + missing.length + " left) →"
         : nextRegion
           ? "🎉 " + generation.region + " complete — on to " + nextRegion.region + "? →"
-          : "";
+          : nationalDexDone
+            ? "🏆 National Dex complete! See your trainer card →"
+            : "";
     unseenCountButton.hidden = !generation;
     unseenCountButton.disabled = !firstUnseenId;
     unseenCountButton.textContent = missing.length
@@ -188,6 +193,10 @@ function openFirstUnseen() {
 }
 
 nextMissingButton.addEventListener("click", async () => {
+    if (nationalDexDone) {
+        openTrainerCard();
+        return;
+    }
     if (!firstUnseenId && nextRegion) {
         generationFilterElement.value = String(nextRegion.number);
         await applyBrowseFilters(); // also refreshes firstUnseenId for the new region

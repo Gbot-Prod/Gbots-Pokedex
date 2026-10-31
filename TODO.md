@@ -17,7 +17,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused
-- [ ] Next region step 2: when every region is complete, the button becomes "🏆 National Dex complete!" and opens the trainer card
 - [ ] Region switch flourish: when "on to Johto?" switches regions, the Johto banner pulses in the region strip so the change is visible
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
 - [ ] Smoke test for the "+N more" summary toast (seed several badges at once and click through to the card)
@@ -315,3 +314,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region complete step 2: when "Next missing" finishes a region, swap the button for "🎉 Kanto complete — on to Johto?" that selects the next unfinished region (2026-10-31) — when the selected region has no gaps left, the card button turns gold: "🎉 Kanto complete — on to Johto? →" selects the next unfinished region (wrapping) and opens its first missing Pokémon; live: Kanto → #0152, then "Next missing in Johto (99 left)"
 - [x] Badge toasts: show the badge icon large on the left of the toast (like an achievement pop-up) instead of inline in the text (2026-10-31) — badge toasts now lead with the badge in a gold-ringed orange disc that spins in (none under reduced motion), with the text beside it; other toasts are unchanged
 - [x] Toast summary step 2: make the "+N more" toast a button that opens the trainer card at the badge shelf (2026-10-31) — the "+N more achievements" toast is now an underlined button (toast made clickable only for it) that hides the toast and opens the trainer card at the badge shelf
+- [x] Next region step 2: when every region is complete, the button becomes "🏆 National Dex complete!" and opens the trainer card (2026-10-31) — with every region complete the gold button reads "🏆 National Dex complete! See your trainer card →" and opens the trainer card (openTrainerCard exported from progress.js)
