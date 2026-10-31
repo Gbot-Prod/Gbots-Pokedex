@@ -155,7 +155,8 @@ function updateUnseenCount() {
     firstUnseenId = missing[0]?.id ?? null;
     // On the card: keep walking through the selected region's gaps.
     nextMissingButton.hidden = !firstUnseenId;
-    nextMissingButton.textContent = "Next missing in " + (generation?.region ?? "") + " →";
+    nextMissingButton.textContent =
+        "Next missing in " + (generation?.region ?? "") + " (" + missing.length + " left) →";
     unseenCountButton.hidden = !generation;
     unseenCountButton.disabled = !firstUnseenId;
     unseenCountButton.textContent = missing.length
