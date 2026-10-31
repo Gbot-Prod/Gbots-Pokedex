@@ -762,6 +762,23 @@ test("earning a new badge announces it with the toast", async () => {
     assert.equal(await page.isVisible("#dexToast.visible"), true);
 });
 
+test("badges beyond the toast queue are summed up in one clickable toast", async () => {
+    await page.clock.install();
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:badges-earned:v1", "[]");
+        localStorage.setItem("pokedex:seen:v1", JSON.stringify(Array.from({ length: 1025 }, (_, index) => index + 1)));
+        localStorage.setItem("pokedex:quiz:v1", JSON.stringify({ best: 50 }));
+        localStorage.setItem("pokedex:views:v1", JSON.stringify({ 6: 60 }));
+    });
+    await page.reload();
+    await page.waitForSelector("#dexToast.visible");
+    await page.clock.runFor(3 * 4000); // three queued toasts of 4 s each
+    await page.waitForSelector(".toastButton");
+    assert.match(await page.textContent(".toastButton"), /^✨ \+\d+ more achievements? — see your trainer card$/);
+    await page.click(".toastButton");
+    await page.waitForSelector("#trainerCard[open]");
+});
+
 test("the completion ring opens a trainer card", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");

@@ -18,7 +18,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
-- [ ] Smoke test for the "+N more" summary toast (seed several badges at once and click through to the card)
 - [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
 - [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
@@ -315,3 +314,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Toast summary step 2: make the "+N more" toast a button that opens the trainer card at the badge shelf (2026-10-31) — the "+N more achievements" toast is now an underlined button (toast made clickable only for it) that hides the toast and opens the trainer card at the badge shelf
 - [x] Next region step 2: when every region is complete, the button becomes "🏆 National Dex complete!" and opens the trainer card (2026-10-31) — with every region complete the gold button reads "🏆 National Dex complete! See your trainer card →" and opens the trainer card (openTrainerCard exported from progress.js)
 - [x] Region switch flourish: when "on to Johto?" switches regions, the Johto banner pulses in the region strip so the change is visible (2026-10-31) — "on to Hoenn?" now slides the region strip sideways to the new banner and pulses it gold twice (outline only under reduced motion), without scrolling the page
+- [x] Smoke test for the "+N more" summary toast (seed several badges at once and click through to the card) (2026-10-31) — seeds several badges at once, fast-forwards the three queued 4 s toasts with page.clock, checks the "✨ +N more achievements" button and that it opens the trainer card
