@@ -5885,3 +5885,41 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* The trio's footprints: pairs of dots along the toast's top edge, revealed in step with the
+   walk and fading once it's done */
+.toastFootprints {
+    position: absolute;
+    top: 0.3rem;
+    left: 1.2rem;
+    right: 1.2rem;
+    height: 0.35rem;
+    background:
+        radial-gradient(ellipse 3px 2px, rgba(255, 255, 255, 0.6) 90%, transparent) 0 0 / 26px 6px repeat-x,
+        radial-gradient(ellipse 3px 2px, rgba(255, 255, 255, 0.6) 90%, transparent) 13px 3px / 26px 6px repeat-x;
+    pointer-events: none;
+    animation:
+        footprintTrail 3.4s linear forwards,
+        footprintFade 1s ease-in 3.6s forwards;
+}
+
+@keyframes footprintTrail {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes footprintFade {
+    to {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toastFootprints {
+        display: none; /* the trio stands still, so there's no trail */
+    }
+}

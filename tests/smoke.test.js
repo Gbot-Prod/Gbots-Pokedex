@@ -1161,9 +1161,13 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     await page.reload();
     await search("pikachu");
     await page.waitForSelector("#dexToast.visible");
-    assert.equal(await page.textContent("#dexToast > span:not(.toastParade)"), "🏅 Kanto Pokédex complete!");
+    assert.equal(
+        await page.textContent("#dexToast > span:not(.toastParade, .toastFootprints)"),
+        "🏅 Kanto Pokédex complete!",
+    );
     // Kanto's starter trio walks along the top of the toast.
     assert.equal(await page.locator("#dexToast .toastParade img").count(), 3);
+    assert.equal(await page.locator("#dexToast .toastFootprints").count(), 1); // the trail it leaves
     assert.equal(await page.getAttribute("#dexToast .toastParade", "data-region"), "1"); // picks its walk style
     assert.equal(await page.locator('.regionBanner.regionComplete[data-generation="1"]').count(), 1);
     assert.equal(

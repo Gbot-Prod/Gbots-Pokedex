@@ -434,7 +434,11 @@ function showNextToast() {
             setSprite(sprite, id);
             trio.append(sprite);
         }
-        toast.replaceChildren(trio, text, toastShowMe(toast, showRegion));
+        // ...leaving a trail of little footprints along the edge behind it.
+        const footprints = document.createElement("span");
+        footprints.className = "toastFootprints";
+        footprints.setAttribute("aria-hidden", "true");
+        toast.replaceChildren(footprints, trio, text, toastShowMe(toast, showRegion));
     } else if (opensCard) {
         // The "+N more" summary is a button straight to the badge shelf.
         const button = document.createElement("button");
