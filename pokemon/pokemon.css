@@ -6391,14 +6391,17 @@ img.animatedSmall {
     #cardPreview[open] {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
-        grid-template-rows: auto auto 1fr;
+        grid-template-rows: auto auto auto 1fr;
         column-gap: 1rem;
         align-items: start;
         width: min(52rem, calc(100vw - 2rem));
     }
 
+    .cardPreviewFrame {
+        grid-row: 1 / span 4;
+    }
+
     #cardPreview img {
-        grid-row: 1 / span 3;
         max-height: calc(100vh - 4rem);
     }
 
@@ -6430,4 +6433,27 @@ img.animatedSmall {
     color: #5a3a00;
     font-size: 0.7rem;
     font-weight: 900;
+}
+
+/* 🔍 Zoom in the card preview: the card at its full drawn size, scrollable in its frame */
+.cardPreviewFrame {
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.cardPreviewFrame.zoomed {
+    max-height: calc(100vh - 16rem);
+    overflow: auto;
+}
+
+#cardPreview .cardPreviewFrame.zoomed img {
+    width: auto;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+}
+
+.cardZoom {
+    display: block;
+    margin: 0.5rem auto 0;
 }

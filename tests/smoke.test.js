@@ -1223,6 +1223,9 @@ test("the finale can be shared as text or saved as an image", async () => {
     await page.click('.cardStyleChip[data-style="retro"]');
     await page.waitForFunction((src) => document.querySelector("#cardPreview img").src !== src, before);
     assert.equal(await page.getAttribute('.cardStyleChip[data-style="retro"]', "aria-pressed"), "true");
+    await page.click(".cardZoom"); // full size in a scrollable frame
+    assert.equal(await page.getAttribute(".cardZoom", "aria-pressed"), "true");
+    assert.equal(await page.evaluate(() => document.querySelector("#cardPreview img").clientWidth), 1200);
     await page.keyboard.press("ArrowRight"); // wraps round to classic
     assert.equal(await page.getAttribute('.cardStyleChip[data-style="classic"]', "aria-pressed"), "true");
     await page.keyboard.press("ArrowLeft"); // and back to retro

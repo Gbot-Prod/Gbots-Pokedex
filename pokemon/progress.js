@@ -439,7 +439,7 @@ export async function shareOrDownload(render, filename, title) {
     preview.id = "cardPreview";
     preview.setAttribute("aria-label", title + " card preview");
     preview.innerHTML =
-        '<img alt="" width="600" height="315" />' +
+        '<div class="cardPreviewFrame"><img alt="" width="600" height="315" /></div>' +
         '<div class="cardStyleChips" role="group" aria-label="Card style (left and right arrow keys switch)"></div>' +
         '<form method="dialog" class="cardPreviewActions">' +
         '<button class="btn" id="cardPreviewSave" value="save" autofocus>💾 Save</button>' +
@@ -451,6 +451,17 @@ export async function shareOrDownload(render, filename, title) {
     image.src = url;
     image.alt = "Preview of the " + title + " card";
     const chips = preview.querySelector(".cardStyleChips");
+    // 🔍 Zoom: the card at full size in a scrollable frame (it's tiny on phones).
+    const frame = preview.querySelector(".cardPreviewFrame");
+    const zoom = document.createElement("button");
+    zoom.type = "button";
+    zoom.className = "cardStyleChip cardZoom";
+    zoom.textContent = "🔍 Zoom";
+    zoom.setAttribute("aria-pressed", "false");
+    zoom.addEventListener("click", () => {
+        const zoomed = frame.classList.toggle("zoomed");
+        zoom.setAttribute("aria-pressed", String(zoomed));
+    });
     for (const option of CARD_STYLES) {
         const chip = document.createElement("button");
         chip.type = "button";
@@ -473,6 +484,7 @@ export async function shareOrDownload(render, filename, title) {
         });
         chips.append(chip);
     }
+    chips.after(zoom);
     const canShareFiles = (candidate) => navigator.canShare?.({ files: [candidate] });
     preview.querySelector("#cardPreviewShare").hidden = !canShareFiles(
         new File([blob], filename, { type: "image/png" }),
