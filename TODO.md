@@ -24,7 +24,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
-- [ ] Region walk styles step 2: give Johto, Unova, Kalos and Alola their own walks too (Johto trots, Unova zig-zags, Kalos twirls, Alola surfs)
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Region toast: the trio leaves footprints (tiny fading dots) along the top edge of the toast as it walks
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -366,3 +365,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Toast trio polish: the trio waves (a quick tilt) as it reaches the right edge before the toast hides (2026-10-31) — the trio now walks in from the left and stops just inside the toast's right end (it used to end half off the toast, off-screen on phones), then waves goodbye with four quick tilts on the independent rotate property
 - [x] Parade cries polish: cap simultaneous cries at 3 so frantic tapping doesn't stack a wall of sound (2026-10-31) — at most three parade cries play at once (a Set of playing Audio, freed on ended/error/blocked play); taps beyond that still jump silently; smoke test stubs Audio with never-ending cries and counts three
 - [x] Parade step 5: a tapped marcher's name pops up in a little speech bubble above it for a second ("Bulbasaur!") (2026-10-31) — a tapped marcher's name ('Reshiram!') pops up in a white speech bubble above it for 1.4 s (species list loaded with the parade; dex number until then); marchers now sit in their own slots
+- [x] Region walk styles step 2: give Johto, Unova, Kalos and Alola their own walks too (Johto trots, Unova zig-zags, Kalos twirls, Alola surfs) (2026-10-31) — Johto trots in quick light steps, Unova zig-zags, Kalos twirls one by one (rotateY), Alola surfs a staggered swell; all still under reduced motion
