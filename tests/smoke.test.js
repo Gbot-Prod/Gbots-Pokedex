@@ -1168,3 +1168,14 @@ test("the shiny hunt counts encounters and collects shinies", async () => {
     assert.match(await page.textContent("#huntCounter"), /Encounters: 2 · Shinies found: 1/);
     assert.equal(await page.textContent("#huntTier"), "✨ Shiny hunter badge: 1 / 5 for bronze");
 });
+
+test("LCD screens glow green in dark mode only", async () => {
+    const halo = () =>
+        page.evaluate(() => window.getComputedStyle(document.querySelector("#huntCounter .lcdScreen")).boxShadow);
+    await page.waitForSelector("#huntCounter .lcdScreen");
+    assert.doesNotMatch(await halo(), /rgba\(130, 255, 120/);
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.reload();
+    await page.waitForSelector("#huntCounter .lcdScreen");
+    assert.match(await halo(), /rgba\(130, 255, 120/);
+});

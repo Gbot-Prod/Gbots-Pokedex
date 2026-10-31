@@ -5285,3 +5285,21 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* In dark mode (html.darkTheme, system or chosen) the LCD screens light up the panel around
+   them, a little more at night */
+:root.darkTheme {
+    --lcd-halo: 0 0 18px 2px rgba(130, 255, 120, 0.22);
+}
+
+:root.darkTheme.night {
+    --lcd-halo: 0 0 26px 4px rgba(130, 255, 120, 0.32);
+}
+
+:root.darkTheme .shortcutsScreen,
+:root.darkTheme .lcdScreen,
+:root.darkTheme #quizTimer {
+    box-shadow:
+        inset 0 2px 8px rgba(0, 0, 0, 0.5),
+        var(--lcd-halo);
+}
