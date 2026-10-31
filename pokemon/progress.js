@@ -467,6 +467,9 @@ async function shareOrDownload(render, filename, title) {
             URL.revokeObjectURL(url);
             url = URL.createObjectURL(blob);
             image.src = url;
+            image.classList.remove("restyled");
+            void image.offsetWidth; // restart the fade-in
+            image.classList.add("restyled");
         });
         chips.append(chip);
     }

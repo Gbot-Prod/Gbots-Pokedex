@@ -6362,3 +6362,21 @@ img.animatedSmall {
     color: #ffd447;
     font-size: 0.9rem;
 }
+
+/* a quick fade-in each time a style chip redraws the card */
+#cardPreview img.restyled {
+    animation: cardRestyle 0.3s ease-out;
+}
+
+@keyframes cardRestyle {
+    from {
+        opacity: 0.2;
+        filter: blur(3px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #cardPreview img.restyled {
+        animation: none;
+    }
+}

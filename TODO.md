@@ -33,7 +33,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
 - [ ] Trainer card PNG: route "Save image" on the trainer card through the same preview (style chips, copy, share) for consistency
 - [ ] Share cards step: a "Team card" — the six team members on a card with their types and the coverage summary
-- [ ] Preview polish: a short crossfade between styles when a chip is pressed (instant under reduced motion)
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -406,3 +405,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Card preview step 2: a style switcher in the preview (classic / holo / retro chips) that redraws the card live before saving (2026-10-31) — the preview has Classic / ✨ Holo / 👾 Retro chips (aria-pressed) that redraw the card live, starting from the trainer card's style; Save/Share use the shown version; both card fonts load up front so redraws are instant
 - [x] Card preview step 3: a "Copy image" button using the async Clipboard API (ClipboardItem) where it's supported (2026-10-31) — '📋 Copy image' in the preview writes the shown card to the clipboard as a PNG (ClipboardItem), with a status line; hidden where the clipboard can't take images
 - [x] Card preview keyboard: ←/→ switch styles while the preview is open; C copies, S saves (2026-10-31) — ←/→ anywhere in the preview step through Classic / Holo / Retro (wrapping) and focus the chosen chip; the chip group's label says so (C/S shortcuts left out: they'd clash with typing names elsewhere)
+- [x] Preview polish: a short crossfade between styles when a chip is pressed (instant under reduced motion) (2026-10-31) — each restyle fades the new card in from a light blur (0.3 s), none under reduced motion
