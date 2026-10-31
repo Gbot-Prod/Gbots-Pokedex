@@ -184,7 +184,8 @@ export const FINALE_HEIGHT = 630;
 
 // The "Pokédex complete" share image: a night sky, the title in gold, the starters lined up in
 // three rows and the region legendaries in front. starters/legends: loaded images or nulls.
-export function drawFinaleCard(canvas, { dateText }, starters, legends) {
+// byline: who did it ("Red & Pikachu"), or "" to leave it off.
+export function drawFinaleCard(canvas, { dateText, byline }, starters, legends) {
     canvas.width = FINALE_WIDTH;
     canvas.height = FINALE_HEIGHT;
     const context = canvas.getContext("2d");
@@ -213,7 +214,11 @@ export function drawFinaleCard(canvas, { dateText }, starters, legends) {
     context.shadowBlur = 0;
     context.font = "700 26px inter, arial, sans-serif";
     context.fillStyle = "#ffffff";
-    context.fillText("1,025 / 1,025 Pokémon seen" + (dateText ? " · " + dateText : ""), FINALE_WIDTH / 2, 138);
+    context.fillText(
+        (byline ? byline + " · " : "") + "1,025 / 1,025 Pokémon seen" + (dateText ? " · " + dateText : ""),
+        FINALE_WIDTH / 2,
+        138,
+    );
 
     // 27 starters: three rows of nine, one column per region
     starters.forEach((image, index) => {

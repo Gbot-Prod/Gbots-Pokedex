@@ -26,7 +26,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
-- [ ] Finale image step 2: put the trainer's name and partner on the share image ("Red & Pikachu completed the National Pokédex")
 - [ ] Region complete image: a smaller share card when a single region is completed (its banner colours, trio and seen count), offered from the region toast
 - [ ] Wave moods step 2: a fourth secret mood after the bow — everyone turns shiny for a moment (swap to shiny sprites for one wave)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
@@ -386,3 +385,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Finale share step 2: share an image — a canvas card with the parade line-up and "1,025 / 1,025" in gold, like the trainer card PNG (2026-10-31) — '🖼️ Save image' on the finale draws a 1200×630 PNG (drawFinaleCard in cardimage.js): night sky, gold title, '1,025 / 1,025 Pokémon seen · date', the 27 starters by region and the 9 legendaries in front; shared as a file on phones, downloaded as pokedex-complete.png elsewhere
 - [x] Regional footprints step 3: a short legend in the region banner tooltip ("Galar leaves boot prints") so the trails are discoverable (2026-10-31) — each region banner's tooltip now reads 'Show only Galar · complete it to see its starters leave boot prints' (REGION_TRAILS in lists.js, matching the CSS trails)
 - [x] Parade step 7: the wave button cycles through moods — jump wave, then a spin wave, then a "bow" (everyone dips) on the third press (2026-10-31) — the title button cycles three wave moods: jump, spin (rotateY) and bow (a tilted dip), each staggered left to right; gold outline for all of them under reduced motion
+- [x] Finale image step 2: put the trainer's name and partner on the share image ("Red & Pikachu completed the National Pokédex") (2026-10-31) — the share image's subtitle now leads with the trainer and partner ('Ash & Pikachu · 1,025 / 1,025 Pokémon seen · Oct 31, 2026'); either part is left out if unset

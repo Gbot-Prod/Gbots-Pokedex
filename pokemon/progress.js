@@ -375,7 +375,11 @@ async function saveFinaleImage(status) {
         : "";
     const canvas = document.createElement("canvas");
     await document.fonts?.ready;
-    drawFinaleCard(canvas, { dateText }, starters, legends);
+    // "Red & Pikachu": the trainer's name and partner, if they've set them.
+    const trainerName = (readStored(TRAINER_KEY, {}).name ?? "").trim();
+    const partner = currentPartner();
+    const byline = [trainerName, partner ? partnerLabel(partner) : ""].filter(Boolean).join(" & ");
+    drawFinaleCard(canvas, { dateText, byline }, starters, legends);
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     const file = new File([blob], "pokedex-complete.png", { type: "image/png" });
     if (navigator.canShare?.({ files: [file] })) {
