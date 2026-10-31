@@ -448,17 +448,15 @@
         <dialog id="gotoDialog" aria-labelledby="gotoHeading">
             <form method="dialog" id="gotoForm">
                 <div class="shortcutsScreen">
-                    <h2 id="gotoHeading">Go to number</h2>
+                    <h2 id="gotoHeading">Go to…</h2>
                     <label for="gotoInput" class="gotoRow">
                         <span aria-hidden="true">#</span>
-                        <span class="visuallyHidden">Pokédex number</span>
+                        <span class="visuallyHidden">Pokédex number or name</span>
                         <input
                             id="gotoInput"
-                            type="number"
-                            inputmode="numeric"
-                            min="1"
-                            max="1025"
-                            required
+                            type="text"
+                            autocomplete="off"
+                            spellcheck="false"
                             placeholder="25"
                             aria-describedby="gotoHint"
                         />
@@ -467,7 +465,7 @@
                         <img alt="" width="64" height="64" hidden />
                         <span aria-live="polite"></span>
                     </div>
-                    <p id="gotoHint">1 – 1025, then Enter</p>
+                    <p id="gotoHint">A number (1 – 1025) or a name, then Enter</p>
                 </div>
                 <button class="btn" id="gotoSubmit" value="go">Go!</button>
             </form>

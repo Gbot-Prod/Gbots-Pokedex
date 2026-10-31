@@ -1318,36 +1318,58 @@ function openGoto() {
     shortcutsDialog.close();
     gotoInput.value = "";
     gotoInput.dispatchEvent(new Event("input")); // clear the preview
-    gotoInput.max = String(MAX_DEX_NUMBER);
     gotoDialog.showModal();
     gotoInput.focus();
 }
-// As you type, the LCD shows who's at that number: a green-tinted sprite and the name.
+// As you type, the LCD shows who you'd land on: a number, or the first name starting with
+// what's typed ("gen" → Gengar), as a green-tinted sprite and the name.
 const gotoPreviewImage = document.querySelector("#gotoPreview img");
 const gotoPreviewName = document.querySelector("#gotoPreview span");
-gotoInput.addEventListener("input", async () => {
-    const number = Number(gotoInput.value);
-    const valid = Number.isInteger(number) && number >= 1 && number <= MAX_DEX_NUMBER;
-    gotoPreviewImage.hidden = !valid;
-    gotoPreviewName.textContent = "";
-    if (!valid) {
-        gotoPreviewImage.removeAttribute("src");
-        return;
+async function findGotoTarget(rawQuery) {
+    const query = normalizeQuery(rawQuery);
+    if (!query) {
+        return null;
     }
-    setSprite(gotoPreviewImage, number);
+    const number = /^\d+$/.test(query) ? Number(query) : null;
+    if (number !== null && (number < 1 || number > MAX_DEX_NUMBER)) {
+        return null;
+    }
+    let entries = [];
     try {
-        const entry = (await getAllPokemonEntries()).find((candidate) => candidate.id === number);
-        if (entry && Number(gotoInput.value) === number) {
-            gotoPreviewName.textContent = formatName(entry.name);
-        }
+        entries = await getAllPokemonEntries();
     } catch {
-        // no name list (offline): the sprite alone will do
+        // no name list (offline): numbers still work, names can't be matched
+    }
+    const entry =
+        number !== null
+            ? entries.find((candidate) => candidate.id === number)
+            : entries.find((candidate) => candidate.id <= MAX_DEX_NUMBER && candidate.name.startsWith(query));
+    if (number !== null) {
+        return { id: number, label: entry ? formatName(entry.name) : "" };
+    }
+    return entry ? { id: entry.id, label: formatName(entry.name) } : null;
+}
+
+gotoInput.addEventListener("input", async () => {
+    const typed = gotoInput.value;
+    const target = await findGotoTarget(typed);
+    if (gotoInput.value !== typed) {
+        return; // a newer keystroke is already being looked up
+    }
+    gotoPreviewImage.hidden = !target;
+    gotoPreviewName.textContent = target ? target.label || "#" + target.id : typed.trim() ? "No match" : "";
+    if (target) {
+        setSprite(gotoPreviewImage, target.id);
+    } else {
+        gotoPreviewImage.removeAttribute("src");
     }
 });
 
-gotoDialog.addEventListener("close", () => {
-    if (gotoDialog.returnValue === "go") {
-        goToDexNumber(Number(gotoInput.value));
+gotoDialog.addEventListener("close", async () => {
+    // Looked up afresh, so an Enter pressed before the preview caught up still lands right.
+    const target = gotoDialog.returnValue === "go" ? await findGotoTarget(gotoInput.value) : null;
+    if (target) {
+        goToDexNumber(target.id);
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
     gotoDialog.returnValue = "";

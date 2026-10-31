@@ -208,6 +208,18 @@ test("G opens the go-to-number prompt and Enter jumps there", async () => {
     assert.equal(await page.locator("#gotoDialog[open]").count(), 0);
 });
 
+test("the go-to prompt also finds a Pokémon by the start of its name", async () => {
+    await page.locator("#shortcutHint").click({ position: { x: 1, y: 1 } });
+    await page.keyboard.press("g");
+    await page.waitForSelector("#gotoDialog[open]");
+    await page.keyboard.type("zzz");
+    await page.waitForFunction(() => document.querySelector("#gotoPreview span").textContent === "No match");
+    await page.fill("#gotoInput", "farf");
+    await page.waitForFunction(() => document.querySelector("#gotoPreview span").textContent === "Farfetchd");
+    await page.keyboard.press("Enter");
+    await page.waitForFunction(() => document.getElementById("pokemonNumber").textContent.includes("83"));
+});
+
 test("the cry button requests the Pokémon's cry", async () => {
     await search("pikachu");
     await page.waitForSelector("#cryBtn:not([hidden])");

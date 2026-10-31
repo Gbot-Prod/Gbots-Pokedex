@@ -16,7 +16,6 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
 - [ ] Shortcuts on phones: a small ⌨️ button only shown when a hardware keyboard is detected (first keydown), since the tip line is hidden on touch
-- [ ] Go-to prompt step 2: type a name too ("gen" → Gengar) with the first match shown live on the LCD under the digits
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -335,3 +334,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region bars step 2: a completed region's bar does one gold shimmer sweep after it fills, on the trainer card and the browse strip (2026-10-31) — completed regions' bars get one white-gold shimmer sweep after filling (trainer card, staggered after the fill; browse strip banners); hidden under reduced motion
 - [x] Robust storage step 2: the trainer card's Favorites/Team counts read raw storage — count only valid entries (share isStoredEntry via a tiny storage.js module both can import) (2026-10-31) — new storage.js (isStoredEntry, isTeamMember) shared by lists, team and progress; trainer card/badge counts and the team loader skip junk; unit test that every page script is in the service worker's offline shell
 - [x] Go-to prompt step 3: a tiny sprite preview of the typed number on the LCD (pixelated, green-tinted) before Enter (2026-10-31) — typing a number shows that Pokémon's sprite on the LCD, pixelated and tinted handheld-green, with its name in glowing caps (aria-live); smoke test checks sprite + name for #94
+- [x] Go-to prompt step 2: type a name too ("gen" → Gengar) with the first match shown live on the LCD under the digits (2026-10-31) — the G prompt takes a name prefix too ('gen' → Gengar, 'No match' otherwise); Enter re-resolves the final text so a fast Enter can't land on a stale preview; numbers still work offline
