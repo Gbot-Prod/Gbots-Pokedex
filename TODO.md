@@ -27,6 +27,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
+- [ ] Region cards step 2: offer each completed region's card from the trainer card's region rows too (the toast is gone after a few seconds)
+- [ ] Phone toast layout: on narrow screens put "Show me" and 🖼️ on their own row under the message so it stays on one line
+- [ ] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line
+- [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
+- [ ] Share cards: mark the canvas text with the user's chosen card style colours (holo/retro) so the cards match the trainer card
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
