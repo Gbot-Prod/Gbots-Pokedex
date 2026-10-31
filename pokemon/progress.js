@@ -1,7 +1,7 @@
 // Pokédex completion: every species you open is remembered (localStorage) and shown as a
 // ring in the device header and a progress bar on each region banner.
 import { API_BASE, fetchJson, fetchPokemon, getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
-import { drawFinaleCard, drawTrainerCard, loadCanvasImage } from "./cardimage.js";
+import { drawFinaleCard, drawRegionCard, drawTrainerCard, loadCanvasImage } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
 import { isStoredEntry, isTeamMember } from "./storage.js";
 import {
@@ -392,26 +392,57 @@ async function saveFinaleImage(status) {
     const partner = currentPartner();
     const byline = [trainerName, partner ? partnerLabel(partner) : ""].filter(Boolean).join(" & ");
     drawFinaleCard(canvas, { dateText, byline }, starters, legends);
+    const saved = await shareOrDownload(canvas, "pokedex-complete.png", "Pokédex complete!");
+    status.textContent = saved ? "Image saved!" : "";
+}
+
+// Hands a drawn canvas to another app on phones (share sheet) or downloads it as a PNG.
+// Resolves true when it was downloaded, false when shared or the sheet was dismissed.
+async function shareOrDownload(canvas, filename, title) {
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-    const file = new File([blob], "pokedex-complete.png", { type: "image/png" });
+    const file = new File([blob], filename, { type: "image/png" });
     if (navigator.canShare?.({ files: [file] })) {
         try {
-            await navigator.share({ files: [file], title: "Pokédex complete!" });
-            status.textContent = "";
-            return;
+            await navigator.share({ files: [file], title });
+            return false;
         } catch (error) {
             if (error.name === "AbortError") {
-                status.textContent = "";
-                return; // share sheet dismissed
+                return false; // share sheet dismissed
             }
         }
     }
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "pokedex-complete.png";
+    link.download = filename;
     link.click();
     setTimeout(() => URL.revokeObjectURL(link.href), 10000);
-    status.textContent = "Image saved!";
+    return true;
+}
+
+const REGION_NAME = (number) => GENERATIONS.find((gen) => gen.number === number)?.region ?? "";
+
+// A region's own share card, offered on its "complete!" toast.
+async function saveRegionCard(number) {
+    const generation = GENERATIONS.find((gen) => gen.number === number);
+    const [trio, [legend]] = await Promise.all([
+        Promise.all(REGION_STARTERS[number].map((id) => loadCanvasImage(spriteUrl(id)))),
+        Promise.all([loadCanvasImage(spriteUrl(REGION_MASCOTS[number]))]),
+    ]);
+    const trainerName = (readStored(TRAINER_KEY, {}).name ?? "").trim();
+    const canvas = document.createElement("canvas");
+    await document.fonts?.ready;
+    drawRegionCard(
+        canvas,
+        {
+            number,
+            region: generation.region,
+            total: generation.last - generation.first + 1,
+            byline: trainerName,
+        },
+        trio,
+        legend,
+    );
+    await shareOrDownload(canvas, generation.region.toLowerCase() + "-complete.png", generation.region + " complete!");
 }
 
 function celebrateIfComplete(dexNumber) {
@@ -570,7 +601,14 @@ function showNextToast() {
         footprints.className = "toastFootprints";
         footprints.dataset.region = region;
         footprints.setAttribute("aria-hidden", "true");
-        toast.replaceChildren(footprints, trio, text, toastShowMe(toast, showRegion));
+        const cardButton = document.createElement("button");
+        cardButton.type = "button";
+        cardButton.className = "toastCard";
+        cardButton.textContent = "🖼️";
+        cardButton.title = "Save a " + REGION_NAME(region) + " share card";
+        cardButton.setAttribute("aria-label", cardButton.title);
+        cardButton.addEventListener("click", () => saveRegionCard(region));
+        toast.replaceChildren(footprints, trio, text, toastShowMe(toast, showRegion), cardButton);
         // In the region's own colours: the banner's gradient (white text, as on the banners).
         const banner = document.querySelector('.regionBanner[data-generation="' + region + '"]');
         toast.style.background = banner ? getComputedStyle(banner).backgroundImage : "";

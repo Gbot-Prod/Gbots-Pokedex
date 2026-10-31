@@ -6137,3 +6137,22 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* "🖼️" on a region toast: save that region's share card */
+.toastCard {
+    flex: none;
+    padding: 0.3rem 0.55rem;
+    border: 2px solid #ffd447;
+    border-radius: 999px;
+    background: transparent;
+    font: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.toastCard:hover,
+.toastCard:focus-visible {
+    background: rgba(255, 255, 255, 0.2);
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}

@@ -239,3 +239,43 @@ export function drawFinaleCard(canvas, { dateText, byline }, starters, legends) 
     context.fillStyle = "rgba(255, 255, 255, 0.85)";
     context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
 }
+
+// One region's "complete!" share card, in its banner colour: the trio, the region's
+// legendary and the count. trio: three loaded images (or nulls), legend: one (or null).
+export function drawRegionCard(canvas, { number, region, total, byline }, trio, legend) {
+    canvas.width = FINALE_WIDTH;
+    canvas.height = FINALE_HEIGHT;
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
+    const colour = REGION_COLORS[number - 1] ?? "#b8322b";
+    context.fillStyle = gradient(context, 0, 0, FINALE_WIDTH, FINALE_HEIGHT, [colour, "#0b1030"]);
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+    // a soft spotlight behind the legendary
+    const glow = context.createRadialGradient(930, 360, 20, 930, 360, 300);
+    glow.addColorStop(0, "rgba(255, 255, 255, 0.35)");
+    glow.addColorStop(1, "rgba(255, 255, 255, 0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+
+    context.textAlign = "left";
+    context.font = "900 58px inter, arial, sans-serif";
+    context.fillStyle = "rgba(0, 0, 0, 0.35)";
+    context.fillText("🏅 " + region + " complete!", 64, 112);
+    context.fillStyle = "#ffffff";
+    context.fillText("🏅 " + region + " complete!", 60, 106);
+    context.font = "700 26px inter, arial, sans-serif";
+    context.fillStyle = "#ffd447";
+    context.fillText((byline ? byline + " · " : "") + total + " / " + total + " Pokémon seen · Gen " + number, 62, 152);
+    trio.forEach((image, index) => {
+        if (image) {
+            context.drawImage(image, 50 + index * 200, 250, 210, 210);
+        }
+    });
+    if (legend) {
+        context.drawImage(legend, 760, 150, 360, 360);
+    }
+    context.textAlign = "center";
+    context.font = "600 20px inter, arial, sans-serif";
+    context.fillStyle = "rgba(255, 255, 255, 0.85)";
+    context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
+}

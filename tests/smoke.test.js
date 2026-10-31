@@ -1269,6 +1269,21 @@ test("a region toast's Show me opens that region in the browse grid", async () =
     assert.equal(await page.isVisible("#dexToast.visible"), false);
 });
 
+test("a region toast's picture button saves that region's share card", async () => {
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:seen:v1",
+            JSON.stringify(Array.from({ length: 151 }, (_, index) => index + 1).filter((id) => id !== 25)),
+        ),
+    );
+    await page.reload();
+    await page.evaluate(() => delete Navigator.prototype.canShare);
+    await search("pikachu");
+    const download = page.waitForEvent("download");
+    await page.click("#dexToast.visible .toastCard");
+    assert.equal((await download).suggestedFilename(), "kanto-complete.png");
+});
+
 test("the shiny hunt counts encounters and collects shinies", async () => {
     await page.evaluate(() => (Math.random = () => 0.5)); // the first encounter must not be shiny (1 in 50)
     await page.click("#huntEncounterBtn");
