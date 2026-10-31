@@ -506,6 +506,11 @@ body {
     font-size: 0.95rem;
 }
 
+#nextMissingBtn.regionDone {
+    background: linear-gradient(160deg, #8a6200, #5c4100);
+    box-shadow: 0 0 12px rgba(255, 212, 71, 0.7);
+}
+
 #nextMissingBtn[hidden] {
     display: none;
 }

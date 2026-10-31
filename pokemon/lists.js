@@ -145,18 +145,33 @@ const unseenCountButton = document.getElementById("unseenCount");
 const nextMissingButton = document.getElementById("nextMissingBtn");
 let firstUnseenId = null;
 
+function missingIn(generation) {
+    return nationalDexEntries.filter(
+        (entry) => entry.id >= generation.first && entry.id <= generation.last && !hasSeen(entry.id),
+    );
+}
+
+let nextRegion = null; // the following unfinished region, once the selected one is complete
+
 function updateUnseenCount() {
     const generation = GENERATIONS.find((gen) => String(gen.number) === generationFilterElement.value);
-    const missing = generation
-        ? nationalDexEntries.filter(
-              (entry) => entry.id >= generation.first && entry.id <= generation.last && !hasSeen(entry.id),
-          )
-        : [];
+    const missing = generation ? missingIn(generation) : [];
     firstUnseenId = missing[0]?.id ?? null;
-    // On the card: keep walking through the selected region's gaps.
-    nextMissingButton.hidden = !firstUnseenId;
-    nextMissingButton.textContent =
-        "Next missing in " + (generation?.region ?? "") + " (" + missing.length + " left) →";
+    // Once the region is done, point at the next one that still has gaps (wrapping around).
+    nextRegion =
+        generation && !missing.length && nationalDexEntries.length
+            ? (GENERATIONS.slice(GENERATIONS.indexOf(generation) + 1)
+                  .concat(GENERATIONS.slice(0, GENERATIONS.indexOf(generation)))
+                  .find((gen) => missingIn(gen).length) ?? null)
+            : null;
+    // On the card: keep walking through the selected region's gaps, then on to the next region.
+    nextMissingButton.hidden = !firstUnseenId && !nextRegion;
+    nextMissingButton.classList.toggle("regionDone", Boolean(nextRegion));
+    nextMissingButton.textContent = firstUnseenId
+        ? "Next missing in " + generation.region + " (" + missing.length + " left) →"
+        : nextRegion
+          ? "🎉 " + generation.region + " complete — on to " + nextRegion.region + "? →"
+          : "";
     unseenCountButton.hidden = !generation;
     unseenCountButton.disabled = !firstUnseenId;
     unseenCountButton.textContent = missing.length
@@ -172,8 +187,14 @@ function openFirstUnseen() {
     }
 }
 
+nextMissingButton.addEventListener("click", async () => {
+    if (!firstUnseenId && nextRegion) {
+        generationFilterElement.value = String(nextRegion.number);
+        await applyBrowseFilters(); // also refreshes firstUnseenId for the new region
+    }
+    openFirstUnseen();
+});
 unseenCountButton.addEventListener("click", openFirstUnseen);
-nextMissingButton.addEventListener("click", openFirstUnseen);
 window.addEventListener("pokedex:seen", updateUnseenCount);
 
 async function applyBrowseFilters() {

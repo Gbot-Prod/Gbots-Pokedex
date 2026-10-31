@@ -864,6 +864,25 @@ test("a partner at full affection glows and cameos on other Pokémon's art", asy
     assert.equal(await page.isHidden("#partnerCameoBtn"), true);
 });
 
+test("finishing a region with Next missing offers the next unfinished region", async () => {
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:seen:v1",
+            JSON.stringify(Array.from({ length: 151 }, (_, index) => index + 1).filter((id) => id !== 25)),
+        ),
+    );
+    await page.reload();
+    await page.waitForSelector("#browseGrid .browseTile");
+    await page.selectOption("#generationFilter", "1");
+    await search("pikachu"); // the last one missing from Kanto
+    await page.waitForSelector("#nextMissingBtn.regionDone");
+    assert.equal(await page.textContent("#nextMissingBtn"), "🎉 Kanto complete — on to Johto? →");
+    const nextRequest = page.waitForRequest((request) => /\/pokemon\/152$/.test(request.url()));
+    await page.click("#nextMissingBtn");
+    await nextRequest;
+    assert.equal(await page.inputValue("#generationFilter"), "2");
+});
+
 test("the unseen-only filter hides Pokémon you've already opened", async () => {
     await page.evaluate(() => localStorage.setItem("pokedex:seen:v1", "[1, 2, 4]"));
     await page.reload();
