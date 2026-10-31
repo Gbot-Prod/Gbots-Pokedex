@@ -5059,7 +5059,10 @@ img.animatedSmall {
 }
 
 #gotoInput {
-    width: 9ch;
+    /* room for the longest names ("Crabominable") once Tab completes them */
+    width: 12ch;
+    max-width: calc(100% - 1.5rem);
+    min-width: 0;
     padding: 0;
     border: none;
     border-bottom: 3px dashed #c8f7c5;

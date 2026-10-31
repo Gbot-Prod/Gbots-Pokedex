@@ -1383,6 +1383,14 @@ gotoInput.addEventListener("input", async () => {
 
 gotoInput.addEventListener("keydown", (event) => {
     const count = gotoMatches.targets.length;
+    // Tab completes the shown name once; with nothing left to complete it moves focus as usual.
+    const shown = gotoMatches.targets[gotoMatches.index];
+    if (event.key === "Tab" && !event.shiftKey && shown?.label && gotoInput.value !== shown.label) {
+        event.preventDefault();
+        gotoInput.value = shown.label;
+        gotoMatches.query = shown.label; // still the same match, so Enter goes there
+        return;
+    }
     if ((event.key === "ArrowDown" || event.key === "ArrowUp") && count > 1) {
         event.preventDefault();
         const step = event.key === "ArrowDown" ? 1 : -1;

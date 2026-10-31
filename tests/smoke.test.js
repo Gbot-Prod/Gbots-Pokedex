@@ -231,6 +231,9 @@ test("arrow keys cycle through every name matching the go-to prefix", async () =
     await page.keyboard.press("ArrowDown"); // wraps around
     assert.equal(await page.textContent("#gotoPreview span"), "Charmander · 1/2");
     await page.keyboard.press("ArrowUp");
+    await page.keyboard.press("Tab"); // completes the shown name, focus stays
+    assert.equal(await page.inputValue("#gotoInput"), "Charmeleon");
+    assert.equal(await page.evaluate(() => document.activeElement.id), "gotoInput");
     const charmeleon = page.waitForRequest((request) => /\/pokemon\/5$/.test(request.url()));
     await page.keyboard.press("Enter");
     await charmeleon;

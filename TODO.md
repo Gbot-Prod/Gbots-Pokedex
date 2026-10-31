@@ -22,7 +22,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Shared LCD component: move the green-screen styles (scanlines, bezel, glow, ghost "8"s) into one .lcd class used by the ? screen, G prompt, hunt counter and quiz timer
 - [ ] Hunt counter step 2: digits "roll" like an odometer when an encounter ticks the count up (instant under reduced motion)
 - [ ] Quiz timer step 2: a segmented bar of 60 LCD dots that blink off one per second under the readout
-- [ ] Go-to step 6: Tab on the LCD autocompletes the input to the shown match's name
 - [ ] LCD night glow: in dark mode the LCD screens cast a faint green glow onto the surrounding panel (box-shadow), brighter at night
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -346,3 +345,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Go-to names: show proper display names on the LCD ("Farfetch’d", "Mr. Mime") by reusing pokemonDisplayName-style rules instead of formatName on the slug (2026-10-31) — the LCD label uses entryDisplayName with the species list (live: farf → Farfetch’d, mr-m → Mr. Mime); falls back to the plain slug name when the species list is unavailable
 - [x] Go-to step 4: ↑/↓ on the LCD cycles through every name matching the prefix ("char" → Charmander, Charmeleon, Charizard…) (2026-10-31) — ↑/↓ cycles every name matching the prefix with an 'N/M' counter on the LCD (wraps); Enter goes to the shown one; hint line mentions ↑↓
 - [x] LCD theme everywhere: reuse the green-screen look for the quiz timer and the shiny-hunt encounter counter (2026-10-31) — step 1: the shiny-hunt counter is now a green handheld LCD with Encounters / Shinies / Odds readouts, zero-padded glowing digits over faint unlit '8' segments; screen readers get the plain sentence (quiz timer still to do)
+- [x] Go-to step 6: Tab on the LCD autocompletes the input to the shown match's name (2026-10-31) — Tab fills the input with the shown match's proper name (focus stays; with nothing to complete Tab moves focus as usual); input widened to 12ch so long names fit; hint line mentions Tab
