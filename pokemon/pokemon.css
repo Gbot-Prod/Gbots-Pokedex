@@ -5362,3 +5362,44 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* A shiny turns the hunt LCD gold for two seconds, "SHINY!" blinking across the readouts */
+.lcdScreen {
+    position: relative;
+}
+
+.lcdScreen.shinyFlash {
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.08) 0 1px, transparent 1px 3px),
+        radial-gradient(circle at 30% 20%, #6b5a1c, #2e2508);
+}
+
+.lcdScreen.shinyFlash .lcdCell {
+    visibility: hidden;
+}
+
+.lcdShiny {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #ffe680;
+    font-family: "Courier New", monospace;
+    font-size: 1.9rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 10px rgba(255, 215, 80, 0.9);
+    animation: lcdBlink 0.5s steps(1) 4;
+}
+
+@keyframes lcdBlink {
+    50% {
+        opacity: 0.25;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lcdShiny {
+        animation: none;
+    }
+}

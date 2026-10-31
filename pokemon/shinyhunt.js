@@ -167,6 +167,24 @@ function encounter() {
     }
     save();
     renderCounter();
+    if (shiny) {
+        flashShinyOnLcd();
+    }
+}
+
+// A shiny takes over the counter's LCD for two seconds: the screen goes gold with "SHINY!" in
+// glowing segment letters (the result line below already announces it to screen readers).
+function flashShinyOnLcd() {
+    const screen = counterElement.querySelector(".lcdScreen");
+    const banner = document.createElement("span");
+    banner.className = "lcdShiny";
+    banner.textContent = "✦ SHINY! ✦";
+    screen.append(banner);
+    screen.classList.add("shinyFlash");
+    setTimeout(() => {
+        screen.classList.remove("shinyFlash");
+        banner.remove();
+    }, 2000);
 }
 
 export function initShinyHunt(options) {

@@ -21,7 +21,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
 - [ ] Odometer step 2: the trainer card's stat tiles reuse the hunt counter's rolling digits instead of the plain count-up
 - [ ] Quiz timer step 3: a short "tick" sound per second in the last 5 s and a buzzer at 0 when sound effects are on
-- [ ] Hunt LCD step 3: the readout flashes gold (SHINY! in segment letters) for 2 s when a shiny appears
 - [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -351,3 +350,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] LCD night glow: in dark mode the LCD screens cast a faint green glow onto the surrounding panel (box-shadow), brighter at night (2026-10-31) — in dark mode (html.darkTheme, system or chosen) the ? screen, hunt counter and quiz timer cast a soft green halo via --lcd-halo, wider and brighter at night; smoke test checks it's dark-only
 - [x] Quiz timer step 2: a segmented bar of 60 LCD dots that blink off one per second under the readout (2026-10-31) — instead of a separate dot row (which would crowd the combo pips), the timer's LCD got a segmented bar along its bottom edge that empties with the clock via --time-left, red with the screen in the last 10 s (red halo in dark mode)
 - [x] LCD power-on: the ? screen and G prompt flicker on (a 150 ms scanline wipe + brightness blip) when opened; instant under reduced motion (2026-10-31) — the ? screen and G prompt's LCD wipes open from a centre scanline with a brightness blip (0.32 s, after the dialog's pop-in); off under reduced motion
+- [x] Hunt LCD step 3: the readout flashes gold (SHINY! in segment letters) for 2 s when a shiny appears (2026-10-31) — a shiny turns the hunt counter's LCD gold for 2 s with '✦ SHINY! ✦' blinking in segment-style letters over the hidden readouts (steady under reduced motion; the result line still announces it)
