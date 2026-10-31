@@ -30,6 +30,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
 - [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
+- [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
+- [ ] Trainer card PNG: route "Save image" on the trainer card through the same preview (style chips, copy, share) for consistency
+- [ ] Card preview keyboard: ←/→ switch styles while the preview is open; C copies, S saves
+- [ ] Share cards step: a "Team card" — the six team members on a card with their types and the coverage summary
+- [ ] Preview polish: a short crossfade between styles when a chip is pressed (instant under reduced motion)
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
