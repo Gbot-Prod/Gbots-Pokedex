@@ -1064,6 +1064,16 @@ test("seeing the last Pokémon of a region celebrates with a toast", async () =>
     await page.waitForSelector("#dexToast.visible");
     assert.equal(await page.textContent("#dexToast > span"), "🏅 Kanto Pokédex complete!");
     assert.equal(await page.locator('.regionBanner.regionComplete[data-generation="1"]').count(), 1);
+    assert.equal(
+        await page.evaluate(
+            () =>
+                window.getComputedStyle(
+                    document.querySelector('.regionBanner[data-generation="1"] .regionProgressBar span'),
+                    "::after",
+                ).animationName,
+        ),
+        "barShimmer",
+    );
     assert.equal(await page.textContent("#regionTier"), "🗺️ Region master badge: 1 / 3 regions for silver");
     await page.click("#regionTier");
     await page.waitForSelector("#trainerCard[open]");
