@@ -952,25 +952,25 @@ function seenText(stats) {
     return stats.seen + " of " + stats.total + " Pokémon seen (" + Math.floor((100 * stats.seen) / stats.total) + "%)";
 }
 
-// The seen count rolls up from 0 as the card opens (instant under reduced motion); screen
-// readers get the final line straight away.
-function countUpSeen(element, stats) {
-    const final = seenText(stats);
-    if (reducedMotion.matches || !stats.seen) {
+// Numbers on the card roll up from 0 as it opens (instant under reduced motion); screen readers
+// get the final text straight away. `format` turns a number into the line to show.
+function countUp(element, target, format, delay = 0) {
+    const final = format(target);
+    if (reducedMotion.matches || !target) {
         element.textContent = final;
         return;
     }
     const shown = document.createElement("span");
     shown.setAttribute("aria-hidden", "true");
-    shown.textContent = seenText({ ...stats, seen: 0 });
+    shown.textContent = format(0);
     const spoken = document.createElement("span");
     spoken.className = "visuallyHidden";
     spoken.textContent = final;
     element.replaceChildren(shown, spoken);
-    const start = performance.now();
+    const start = performance.now() + delay;
     const step = (now) => {
-        const progress = Math.min(1, (now - start) / 900);
-        shown.textContent = seenText({ ...stats, seen: Math.round(stats.seen * (1 - (1 - progress) ** 3)) });
+        const progress = Math.max(0, Math.min(1, (now - start) / 900));
+        shown.textContent = format(Math.round(target * (1 - (1 - progress) ** 3)));
         if (progress < 1) {
             requestAnimationFrame(step);
         } else {
@@ -1043,7 +1043,7 @@ function renderTrainerCard() {
     checkBadges();
     document.getElementById("trainerShareStatus").textContent = "";
     const stats = completionStats(seen);
-    countUpSeen(document.getElementById("trainerCardSeen"), stats);
+    countUp(document.getElementById("trainerCardSeen"), stats.seen, (seen) => seenText({ ...stats, seen }));
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
     const shelf = badgeShelf(badgeProgress(stats));
@@ -1093,11 +1093,12 @@ function renderTrainerCard() {
         ? "Next badge: " + next.hint
         : "Every badge earned — legendary!";
     document.getElementById("trainerCardStats").replaceChildren(
-        ...trainerFacts(stats).map(([icon, label, value]) => {
+        ...trainerFacts(stats).map(([icon, label, value], index) => {
             const item = document.createElement("li");
             item.innerHTML = '<span aria-hidden="true"></span><strong></strong><small></small>';
             item.children[0].textContent = icon;
-            item.children[1].textContent = value;
+            // The tiles roll up one after another, 80 ms apart, after the seen count starts.
+            countUp(item.children[1], value, String, 150 + 80 * index);
             item.children[2].textContent = label;
             return item;
         }),

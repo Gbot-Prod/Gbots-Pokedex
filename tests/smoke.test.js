@@ -827,6 +827,9 @@ test("the completion ring opens a trainer card", async () => {
     assert.equal(await page.locator("#trainerCardRegions li").count(), 9);
     assert.match(await page.textContent("#trainerCardVisits"), /^Member since .+ · 🔥 \d+-day streak \(best \d+\)$/);
     assert.equal(await page.locator("#trainerCardStats li").count(), 6);
+    await page.waitForFunction(() =>
+        [...document.querySelectorAll("#trainerCardStats strong")].every((value) => /^\d+$/.test(value.textContent)),
+    );
     await page.click(".trainerJump button[data-target=trainerRegionsHeading]");
     await page.waitForFunction(() => document.getElementById("trainerCard").scrollTop > 0);
     await page.waitForSelector(".trainerJump button[data-target=trainerRegionsHeading][aria-current=true]");

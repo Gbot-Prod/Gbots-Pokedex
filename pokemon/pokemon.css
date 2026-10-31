@@ -4493,6 +4493,7 @@ img.animatedSmall {
 }
 
 #trainerCardStats strong {
+    font-variant-numeric: tabular-nums;
     font-size: 1.3rem;
 }
 
