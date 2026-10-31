@@ -404,12 +404,28 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
         });
     }
 
+    // the 18-type strip: red where the team is weak, green where it hits super-effectively
+    const square = (FINALE_WIDTH - 100) / 18;
+    (team.strip ?? []).forEach(([type, state], index) => {
+        const x = 50 + index * square;
+        roundRect(context, x + 2, 490, square - 4, 22, 4, typeColors[type] ?? "#888888");
+        context.fillStyle = "#ffffff";
+        context.font = cardFont(800, 13, retro);
+        context.textAlign = "center";
+        context.fillText(type.slice(0, 3).toUpperCase(), x + square / 2, 506);
+        context.textAlign = "left";
+        if (state) {
+            context.fillStyle = state === "weak" ? "#ff5a4a" : "#5ee07a";
+            context.fillRect(x + 2, 512, square - 4, 5);
+        }
+    });
+
     context.font = cardFont(700, 22, retro);
     context.fillStyle = "#ffb4a8";
     const watch = team.weakTo.map(([type, count]) => capitalise(type) + " ×" + count).join(", ");
-    context.fillText("Watch out for: " + (watch || "nothing — nicely balanced!"), 50, 530, FINALE_WIDTH - 100);
+    context.fillText("Watch out for: " + (watch || "nothing — nicely balanced!"), 50, 545, FINALE_WIDTH - 100);
     context.fillStyle = "#b9f5c0";
-    context.fillText("Hits hard: " + (team.hits.map(capitalise).join(", ") || "—"), 50, 565, FINALE_WIDTH - 100);
+    context.fillText("Hits hard: " + (team.hits.map(capitalise).join(", ") || "—"), 50, 575, FINALE_WIDTH - 100);
 
     context.textAlign = "center";
     context.font = cardFont(600, 18, retro);
