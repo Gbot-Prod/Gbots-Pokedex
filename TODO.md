@@ -29,6 +29,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
 - [ ] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line
 - [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
+- [ ] Retro cards step 2: draw the retro card text in "Press Start 2P" (already used by the retro trainer card) so the whole picture looks like a Game Boy screen
+- [ ] Share card preview: show the drawn card in a small dialog first ("Save" / "Share" / "Cancel") instead of downloading straight away
+- [ ] Holo cards step 2: the foil band sweeps diagonally (light streak) instead of a flat overlay, like the holo trainer card's sheen
+- [ ] Card frames: classic cards get the red/gold Pokédex border used on the trainer card PNG, so every style has a frame
+- [ ] Region rows: a tiny ✓ badge on completed regions in the browse strip's banners matching the trainer card's 🖼️ rows
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
