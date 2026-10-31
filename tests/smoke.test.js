@@ -1191,6 +1191,7 @@ test("the shiny hunt counts encounters and collects shinies", async () => {
     assert.equal(await page.textContent("#huntCounter .lcdScreen.shinyFlash .lcdShiny"), "✦ SHINY! ✦");
     // A "Best" readout appears with the first shiny: found on encounter 2.
     assert.equal(await page.textContent("#huntCounter .lcdCell:nth-child(4) b"), "2");
+    assert.equal(await page.textContent("#huntCounter .lcdCell:nth-child(5) b"), "0"); // since the last shiny
     await page.reload();
     assert.match(await page.textContent("#huntCounter"), /Encounters: 2 · Shinies found: 1/);
     assert.equal(await page.textContent("#huntTier"), "✨ Shiny hunter badge: 1 / 5 for bronze");

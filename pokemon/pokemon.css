@@ -5609,3 +5609,26 @@ img.animatedSmall {
         text-decoration: underline;
     }
 }
+
+/* "Since" has outlasted the best: the readout turns amber */
+.lcdCell.overdue b {
+    color: #ffc95c;
+    text-shadow: 0 0 6px rgba(255, 190, 80, 0.8);
+}
+
+/* Narrow phones: tighter readouts so all five stay on one row */
+@media (max-width: 420px) {
+    .lcdScreen {
+        gap: 0.3rem 0.65rem;
+        padding: 0.5rem 0.7rem 0.55rem;
+    }
+
+    .lcdCell small {
+        font-size: 0.55rem;
+        letter-spacing: 0.04em;
+    }
+
+    .lcdCell b {
+        font-size: 1.3rem;
+    }
+}

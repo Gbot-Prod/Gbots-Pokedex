@@ -25,7 +25,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
 - [ ] Parade step 4: tapping a marching Pokémon makes it jump and play its cry (the parade becomes a little toy while it's open)
 - [ ] Region toast step 2: each region's trio walks in its own style — Kanto hops, Hoenn swims (wave bob), Galar marches in step
-- [ ] Hunt LCD step 5: a "Since" readout (encounters since the last shiny) that turns amber once it passes the Best
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
 - [ ] Toast trio polish: the trio waves (a quick tilt) as it reaches the right edge before the toast hides
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -361,3 +360,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region complete step: a smaller per-region parade (just that region's trio crossing the toast) when a region is completed (2026-10-31) — a region-complete toast carries that region's starter trio (60 px, drop shadow) hopping along its top edge from left to right over 4 s; centred and still under reduced motion; smoke test counts the trio
 - [x] Toast icons for region completions too (the region's starter trio as a mini sprite strip) (2026-10-31) — covered by the walking starter trio on region toasts (same day)
 - [x] Hunt LCD step 4: a tiny "best streak" (fewest encounters to a shiny) readout that blinks when beaten (2026-10-31) — a fourth 'Best' readout (fewest encounters from one shiny to the next, bestShinyGap with a unit test) appears after the first shiny and blinks after the SHINY! flash when a new shiny beats it (underlined under reduced motion); also in the screen-reader sentence
+- [x] Hunt LCD step 5: a "Since" readout (encounters since the last shiny) that turns amber once it passes the Best (2026-10-31) — a 'Since' readout (encounters since the last shiny) next to Best turns amber once the dry spell outlasts the best; narrow phones get tighter readouts so all five fit on one row; in the screen-reader sentence too

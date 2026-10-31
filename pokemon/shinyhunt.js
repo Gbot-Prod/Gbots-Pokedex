@@ -117,7 +117,14 @@ function renderCounter({ newBest = false } = {}) {
         " (odds 1 in " +
         odds +
         ")" +
-        (best === null ? "" : " · Best: a shiny in " + best + (best === 1 ? " encounter" : " encounters"));
+        (best === null
+            ? ""
+            : " · Best: a shiny in " +
+              best +
+              (best === 1 ? " encounter" : " encounters") +
+              " · " +
+              (state.encounters - Math.max(...state.shinies.map((shiny) => shiny.encounter))) +
+              " since the last shiny");
     const screen = document.createElement("span");
     screen.className = "lcdScreen";
     screen.setAttribute("aria-hidden", "true");
@@ -130,7 +137,11 @@ function renderCounter({ newBest = false } = {}) {
         // The quickest shiny so far; it blinks when a new shiny beats it.
         const bestCell = lcdCell("Best", best, 1);
         bestCell.classList.toggle("newBest", newBest);
-        screen.append(bestCell);
+        // Encounters since the last shiny; amber once this dry spell is longer than the best.
+        const since = state.encounters - Math.max(...state.shinies.map((shiny) => shiny.encounter));
+        const sinceCell = lcdCell("Since", since, 1);
+        sinceCell.classList.toggle("overdue", since > best);
+        screen.append(bestCell, sinceCell);
     }
     counterElement.replaceChildren(spoken, screen);
     const charmed = state.encounters >= CHARM_ENCOUNTERS;
