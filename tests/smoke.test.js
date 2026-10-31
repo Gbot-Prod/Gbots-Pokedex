@@ -602,7 +602,7 @@ test("the 60-second challenge counts correct answers and records the best run", 
     await page.clock.runFor(61_000);
     await page.waitForFunction(() => document.getElementById("quizResult").textContent.startsWith("Time's up!"));
     assert.match(await page.textContent("#quizResult"), /^Time's up! .*\b3\b/);
-    assert.match(await page.textContent("#quizScore"), /Best 60s run 3\b/);
+    assert.match(await page.textContent("#quizScore"), /Best 60s run 3 · Best combo ×3$/);
 });
 
 test("the theme button cycles light → dark → retro and remembers the choice", async () => {

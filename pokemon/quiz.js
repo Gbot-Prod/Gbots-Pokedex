@@ -23,7 +23,7 @@ const TIMED_SECONDS = 60;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let candidates = null; // National Dex entries with display names
-let score = { correct: 0, played: 0, streak: 0, best: 0, bestTimed: 0 };
+let score = { correct: 0, played: 0, streak: 0, best: 0, bestTimed: 0, bestCombo: 0 };
 // The 60-second challenge: { endsAt, correct, interval } while running, otherwise null.
 let timedRun = null;
 let showPokemon = () => {};
@@ -55,7 +55,8 @@ function renderScore() {
         " · Best " +
         score.best +
         " · Best 60s run " +
-        score.bestTimed;
+        score.bestTimed +
+        (score.bestCombo >= 3 ? " · Best combo ×" + score.bestCombo : "");
     const tier = tierProgress(score.best, QUIZ_TIERS);
     document.getElementById("quizTier").textContent =
         "🧠 Quiz whiz badge: " + (tier ? "best streak " + tier : "gold — quiz legend!");
@@ -221,6 +222,11 @@ function answerRound(choice, answer, chosenButton) {
         const broken = !correct && timedRun.combo > 0;
         timedRun.combo = correct ? timedRun.combo + 1 : 0;
         renderCombo(timedRun.combo, broken);
+        if (timedRun.combo > score.bestCombo) {
+            score.bestCombo = timedRun.combo;
+            saveScore();
+            renderScore();
+        }
         revealAnswer(answer, chosenButton, correct);
         if (correct) {
             floatPlusOne(chosenButton, timedRun.combo); // after the reveal, which matches buttons by their text

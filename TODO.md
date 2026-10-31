@@ -16,7 +16,6 @@ Rules for each run:
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live check: run `npm run check:live` (both browser files) in a nightly CI job so API changes are caught even when nobody pushes
-- [ ] Quiz challenge: a "best combo" stat alongside "Best 60s run"
 - [ ] pokedex:seen event step 2: let other parts listen too (shiny hunt, quiz region filter) instead of each reading storage on render
 - [ ] Hover-contrast test step 2: run the same hover pass over the browse filters, region strip and team builder buttons
 - [ ] Unseen list: after the chip filter, offer a "Start a quiz with these" button that runs the quiz using only the missing Pokémon
@@ -300,3 +299,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Unseen count: make "(10 left in Kanto)" a button that opens the first missing Pokémon (2026-10-30) — the count is now its own link-style button ("11 left in Kanto →", next to the Unseen only label) that opens the region's first unseen Pokémon; disabled "All seen! 🎉" once the region is complete
 - [x] Unseen count step 2: after opening one, a "Next missing →" button on the card walks through the rest of the region's unseen Pokémon (2026-10-31) — a purple "Next missing in Kanto →" button under the card's name opens the selected region's next unseen Pokémon; it hides once the region is complete (live walk: #0132 → #0144 → #0145 → #0146)
 - [x] Combo step 2: a combo meter under the challenge timer that fills with each answer in a row and shakes on a miss (2026-10-31) — five pips under the challenge timer light orange per answer in a row, glow gold from 5, and the meter shakes when a miss breaks the chain (no shake under reduced motion); decorative, aria-hidden
+- [x] Quiz challenge: a "best combo" stat alongside "Best 60s run" (2026-10-31) — the longest challenge combo is saved with the quiz score and shown as " · Best combo ×N" once it reaches 3
