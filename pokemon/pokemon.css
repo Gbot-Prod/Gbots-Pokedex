@@ -5563,7 +5563,21 @@ img.animatedSmall {
     display: flex;
     gap: 0.2rem;
     pointer-events: none;
-    animation: toastParadeWalk 4s linear forwards;
+    transform-origin: bottom center;
+    /* walk across, then wave goodbye at the right edge (a tilt on the independent rotate
+       property, so it doesn't fight the walk's transform) */
+    animation:
+        toastParadeWalk 3.4s linear forwards,
+        trioWave 0.3s ease-in-out 3.4s 4 alternate;
+}
+
+@keyframes trioWave {
+    from {
+        rotate: -8deg;
+    }
+    to {
+        rotate: 8deg;
+    }
 }
 
 .toastParade img {
@@ -5578,14 +5592,15 @@ img.animatedSmall {
     animation-delay: 0.17s;
 }
 
+/* in from the left edge, stopping just inside the right end of the toast (never off-screen) */
 @keyframes toastParadeWalk {
     from {
         left: 0;
-        transform: translateX(-50%);
+        transform: translateX(-30%);
     }
     to {
-        left: 100%;
-        transform: translateX(-50%);
+        left: calc(100% - 1rem);
+        transform: translateX(-100%);
     }
 }
 
