@@ -259,6 +259,9 @@ function showFinaleParade({ replay = false } = {}) {
         sprite.classList.remove("paradeJump");
         void sprite.offsetWidth; // restart the jump
         sprite.classList.add("paradeJump");
+        // Cleared once the jump is over (under reduced motion the class is a brief gold outline).
+        clearTimeout(sprite.jumpTimer);
+        sprite.jumpTimer = setTimeout(() => sprite.classList.remove("paradeJump"), 700);
         // "Bulbasaur!" in a speech bubble above it for a moment.
         sprite.parentElement.querySelector(".paradeBubble")?.remove();
         const bubble = document.createElement("span");
@@ -296,7 +299,14 @@ function showFinaleParade({ replay = false } = {}) {
             sprite.style.animationDelay = index * 45 + "ms";
             sprite.classList.add("paradeJump");
         });
-        setTimeout(() => sprites.forEach((sprite) => (sprite.style.animationDelay = "")), sprites.length * 45 + 700);
+        setTimeout(
+            () =>
+                sprites.forEach((sprite) => {
+                    sprite.style.animationDelay = "";
+                    sprite.classList.remove("paradeJump");
+                }),
+            sprites.length * 45 + 700,
+        );
     });
     dialog.addEventListener("close", () => dialog.remove());
     document.body.append(dialog);

@@ -28,7 +28,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Parade step 7: the wave button cycles through moods — jump wave, then a spin wave, then a "bow" (everyone dips) on the third press
 - [ ] Regional footprints step 2: Johto leaves leaves 🍃, Unova lightning zig-zags, Kalos sparkles ✦, Alola sand dots, Galar boot prints, Paldea stars
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
-- [ ] Reduced-motion parade: instead of no jump, tapped marchers get a brief gold outline so the tap still visibly lands
 - [ ] Finale screen: a small "Share" button that copies "I completed the National Pokédex! 🏆" plus the date to the clipboard
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -376,3 +375,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Region toasts step 3: Kanto's trio (the default hop) gets a signature walk too — a classic Game Boy two-frame shuffle (steps(2) bob) (2026-10-31) — Kanto's trio now shuffles like a Game Boy overworld sprite: two hard frames (steps(1)) of a tiny bob and lean, alternating between neighbours
 - [x] Toast footprints step 2: footprint shape per region (paw prints for Kanto, wave ripples for Hoenn, snowflakes for Sinnoh) (2026-10-31) — footprints by region (data-region on the trail): paw prints in Kanto, ripples (〰) in Hoenn, snowflakes in Sinnoh, dots elsewhere; same reveal and fade
 - [x] Parade bubbles step 2: the bubble also shows the region in small print ("Reshiram · Unova") (2026-10-31) — bubbles add the home region in small print ('Reshiram! · Unova'), and are nudged back inside the parade strip (--nudge) so ones at a row's or the screen's edge aren't cut off
+- [x] Reduced-motion parade: instead of no jump, tapped marchers get a brief gold outline so the tap still visibly lands (2026-10-31) — under reduced motion a tapped (or waved) marcher gets a brief gold outline instead of the leap; the jump class is now cleared after 700 ms in both modes

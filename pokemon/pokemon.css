@@ -5667,8 +5667,10 @@ img.animatedSmall {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    /* no leap: the tap lands as a brief gold outline instead */
     .paradeLine img.paradeJump {
         animation: none;
+        filter: drop-shadow(0 0 0 #ffd447) drop-shadow(0 0 6px #ffd447);
     }
 }
 
