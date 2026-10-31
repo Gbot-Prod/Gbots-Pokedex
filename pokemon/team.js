@@ -2,6 +2,7 @@
 // many team members are weak to / resist each attacking type.
 import { ANIMATED_CHANGE_EVENT, API_BASE, fetchJson, fetchPokemon, setSmallSprite } from "./api.js";
 import { TYPE_ICONS, damageMultipliers, formatName, pokemonDisplayName } from "./utils.js";
+import { isTeamMember } from "./storage.js";
 
 const TEAM_KEY = "pokedex:team:v1";
 export const TEAM_SIZE = 6;
@@ -21,7 +22,7 @@ let showPokemon = () => {};
 function loadTeam() {
     try {
         const stored = JSON.parse(localStorage.getItem(TEAM_KEY));
-        team = Array.isArray(stored) ? stored.slice(0, TEAM_SIZE) : [];
+        team = Array.isArray(stored) ? stored.filter(isTeamMember).slice(0, TEAM_SIZE) : [];
     } catch {
         team = [];
     }

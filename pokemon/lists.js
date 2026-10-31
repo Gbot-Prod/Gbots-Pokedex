@@ -1,6 +1,7 @@
 // Pokémon tile lists: the browse grid (with filters), favorites and recently viewed.
 import { API_BASE, fetchJson, fetchPokemon, getAllPokemonEntries, getSpeciesSlugs, setSprite } from "./api.js";
 import { hasSeen, openTrainerCard, seenMark } from "./progress.js";
+import { isStoredEntry } from "./storage.js";
 import {
     GENERATIONS,
     MAX_DEX_NUMBER,
@@ -625,12 +626,6 @@ const FAVORITES_KEY = "pokedex:favorites:v1";
 const favoriteButton = document.getElementById("favoriteBtn");
 const favoritesSection = document.getElementById("favoritesSection");
 const favoritesListElement = document.getElementById("favoritesList");
-
-// Each saved entry is a { id, name, ... } summary; anything else (hand-edited or from an old
-// version) is dropped rather than crashing the tiles that render it.
-export function isStoredEntry(entry) {
-    return Boolean(entry) && Number.isInteger(entry.id) && typeof entry.name === "string";
-}
 
 function loadStoredList(key) {
     try {

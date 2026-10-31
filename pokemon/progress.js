@@ -3,6 +3,7 @@
 import { API_BASE, fetchJson, fetchPokemon, getSpeciesSlugs, setSprite, spriteUrl } from "./api.js";
 import { drawTrainerCard, loadCanvasImage } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
+import { isStoredEntry, isTeamMember } from "./storage.js";
 import {
     GENERATIONS,
     MAX_DEX_NUMBER,
@@ -587,6 +588,12 @@ export function allTiersGold(shelf) {
     return tiered.length > 0 && tiered.every((badge) => badge.tier === 3);
 }
 
+// How many valid entries a saved list holds (junk entries don't count).
+function storedCount(key, isValid) {
+    const list = readStored(key, []);
+    return Array.isArray(list) ? list.filter(isValid).length : 0;
+}
+
 // Everything the badges are measured on, from what this browser has saved.
 function badgeProgress(stats) {
     return {
@@ -595,7 +602,7 @@ function badgeProgress(stats) {
         regions: stats.generations.filter((gen) => gen.seen === gen.total).length,
         shinies: readStored("pokedex:shiny-hunt:v1", {}).shinies?.length ?? 0,
         quiz: readStored("pokedex:quiz:v1", {}).best ?? 0,
-        team: readStored("pokedex:team:v1", []).filter(Boolean).length,
+        team: storedCount("pokedex:team:v1", isTeamMember),
     };
 }
 
@@ -1015,8 +1022,8 @@ function trainerFacts(stats) {
         ["✨", "Shinies caught", hunt.shinies?.length ?? 0],
         ["🌿", "Wild encounters", hunt.encounters ?? 0],
         ["❓", "Quiz best streak", readStored("pokedex:quiz:v1", {}).best ?? 0],
-        ["⭐", "Favorites", readStored("pokedex:favorites:v1", []).length],
-        ["👥", "Team members", readStored("pokedex:team:v1", []).filter(Boolean).length],
+        ["⭐", "Favorites", storedCount("pokedex:favorites:v1", isStoredEntry)],
+        ["👥", "Team members", storedCount("pokedex:team:v1", isTeamMember)],
         ["🏅", "Regions complete", stats.generations.filter((gen) => gen.seen === gen.total).length],
     ];
 }

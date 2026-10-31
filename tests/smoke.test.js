@@ -171,6 +171,7 @@ test("malformed saved favourites and history are skipped instead of breaking the
     await page.evaluate(() => {
         localStorage.setItem("pokedex:favorites:v1", JSON.stringify([1, null, "x", { id: 25, name: "pikachu" }]));
         localStorage.setItem("pokedex:recent:v1", JSON.stringify([{ id: "7" }, 4]));
+        localStorage.setItem("pokedex:team:v1", JSON.stringify([null, 6, { id: 1, label: "Bulbasaur" }]));
     });
     await page.reload();
     await search("gengar");
@@ -178,6 +179,20 @@ test("malformed saved favourites and history are skipped instead of breaking the
     assert.equal(await page.locator("#favoritesList .browseTile").count(), 1);
     assert.match(await page.innerText("#favoritesList"), /Pikachu/);
     assert.equal(await page.locator("#recentList .browseTile").count(), 1); // just Gengar
+    // The trainer card counts only the valid ones.
+    await page.click("#dexProgress");
+    await page.waitForSelector("#trainerCard[open]");
+    await page.waitForFunction(() => !document.querySelector("#trainerCardStats strong span")); // counted up
+    const counts = await page.evaluate(() =>
+        Object.fromEntries(
+            [...document.querySelectorAll("#trainerCardStats li")].map((item) => [
+                item.querySelector("small").textContent,
+                item.querySelector("strong").textContent,
+            ]),
+        ),
+    );
+    assert.equal(counts.Favorites, "1");
+    assert.equal(counts["Team members"], "0");
 });
 
 test("G opens the go-to-number prompt and Enter jumps there", async () => {

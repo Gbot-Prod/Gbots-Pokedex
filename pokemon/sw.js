@@ -18,6 +18,7 @@ const SHELL_FILES = [
     "progress.js",
     "quiz.js",
     "shinyhunt.js",
+    "storage.js",
     "team.js",
     "typechart.js",
     "utils.js",

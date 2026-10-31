@@ -345,3 +345,23 @@ test("droppedSummary sums up toasts that didn't fit in the queue", async () => {
     assert.equal(droppedSummary(1), "✨ +1 more achievement — see your trainer card");
     assert.equal(droppedSummary(3), "✨ +3 more achievements — see your trainer card");
 });
+
+test("every page script is in the service worker's offline shell", async () => {
+    const { readdir, readFile } = await import("node:fs/promises");
+    const worker = await readFile(new URL("../pokemon/sw.js", import.meta.url), "utf8");
+    const scripts = (await readdir(new URL("../pokemon/", import.meta.url))).filter(
+        (file) => file.endsWith(".js") && file !== "sw.js",
+    );
+    assert.deepEqual(
+        scripts.filter((file) => !worker.includes('"' + file + '"')),
+        [],
+    );
+});
+
+test("stored list entries are validated by shape", async () => {
+    const { isStoredEntry, isTeamMember } = await import("../pokemon/storage.js");
+    assert.equal(isStoredEntry({ id: 25, name: "pikachu" }), true);
+    assert.deepEqual([1, null, "x", { id: "7", name: "a" }].map(isStoredEntry), [false, false, false, false]);
+    assert.equal(isTeamMember({ id: 94, label: "Gengar", types: ["ghost", "poison"] }), true);
+    assert.equal(isTeamMember({ id: 94, label: "Gengar" }), false);
+});
