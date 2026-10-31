@@ -28,7 +28,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
 - [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
-- [ ] Region rows: a tiny ✓ badge on completed regions in the browse strip's banners matching the trainer card's 🖼️ rows
+- [ ] Card preview step 2: a style switcher in the preview (classic / holo / retro chips) that redraws the card live before saving
+- [ ] Card preview step 3: a "Copy image" button using the async Clipboard API (ClipboardItem) where it's supported
+- [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
+- [ ] Shiny wave step 3: the parade's background flashes to a deep purple "shiny night" for the length of the shiny wave
+- [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -396,3 +400,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Share card preview: show the drawn card in a small dialog first ("Save" / "Share" / "Cancel") instead of downloading straight away (2026-10-31) — finale and region share cards open a preview dialog first: the drawn card, then 💾 Save (download), 📤 Share (only where files can be shared) and Cancel; axe checked on top of the finale
 - [x] Holo cards step 2: the foil band sweeps diagonally (light streak) instead of a flat overlay, like the holo trainer card's sheen (2026-10-31) — holo share cards get a diagonal white light streak (screen blend) across the rainbow foil, echoing the holo trainer card's sheen
 - [x] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line (2026-10-31) — as each marcher turns shiny, three ✨ rise and spin off it (staggered, 0.9 s), so the sparkle runs along the line with the wave; none under reduced motion
+- [x] Region rows: a tiny ✓ badge on completed regions in the browse strip's banners matching the trainer card's 🖼️ rows (2026-10-31) — not needed: completed banners already carry the '★ COMPLETE' ribbon (checked today)
