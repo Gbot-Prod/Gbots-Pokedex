@@ -24,6 +24,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
+- [ ] Parade step 5: a tapped marcher's name pops up in a little speech bubble above it for a second ("Bulbasaur!")
+- [ ] Region walk styles step 2: give Johto, Unova, Kalos and Alola their own walks too (Johto trots, Unova zig-zags, Kalos twirls, Alola surfs)
+- [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
+- [ ] Parade cries polish: cap simultaneous cries at 3 so frantic tapping doesn't stack a wall of sound
+- [ ] Region toast: the trio leaves footprints (tiny fading dots) along the top edge of the toast as it walks
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
