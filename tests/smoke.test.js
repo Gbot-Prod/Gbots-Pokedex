@@ -838,6 +838,23 @@ test("badges beyond the toast queue are summed up in one clickable toast", async
     await page.waitForSelector("#trainerCard[open]");
 });
 
+test("after Show me, the rest of the toast queue is folded into one summary", async () => {
+    await page.clock.install();
+    await page.evaluate(() => {
+        localStorage.setItem("pokedex:badges-earned:v1", "[]");
+        localStorage.setItem("pokedex:seen:v1", JSON.stringify(Array.from({ length: 1025 }, (_, index) => index + 1)));
+        localStorage.setItem("pokedex:quiz:v1", JSON.stringify({ best: 50 }));
+        localStorage.setItem("pokedex:views:v1", JSON.stringify({ 6: 60 }));
+    });
+    await page.reload();
+    await page.click("#dexToast.visible .toastShowMe");
+    await page.waitForSelector("#trainerCard[open]");
+    await page.keyboard.press("Escape");
+    await page.clock.runFor(2000);
+    await page.waitForSelector("#dexToast.visible .toastButton");
+    assert.match(await page.textContent(".toastButton"), /^✨ \+\d+ more achievements? — see your trainer card$/);
+});
+
 test("the completion ring opens a trainer card", async () => {
     await search("pikachu");
     await page.waitForSelector("#pokemonCardContainer:not(.hidden)");

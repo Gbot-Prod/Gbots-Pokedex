@@ -290,6 +290,14 @@ function toastShowMe(toast, onClick) {
     button.textContent = "Show me";
     button.addEventListener("click", () => {
         toast.classList.remove("visible");
+        // Whatever was still queued becomes one "+N more" toast shortly after, rather than a
+        // string of toasts over the page you were just sent to. Restarting the timer here also
+        // undoes the hover pause, which no pointerleave would end once the toast is hidden.
+        droppedToasts += toastQueue.length - 1;
+        toastQueue.splice(1);
+        clearTimeout(toastTimer);
+        toastRemaining = 1500;
+        startToastTimer();
         onClick();
     });
     return button;
