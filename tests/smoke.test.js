@@ -1147,7 +1147,7 @@ test("tapped parade marchers jump, cry and say their name (three cries at most)"
     assert.equal(await page.evaluate(() => window.criesMade), 3);
 });
 
-test("the finale title sets off a jump, then a spin, then a bow wave", async () => {
+test("the finale title sets off a jump, then a spin, then a bow wave, then a shiny one", async () => {
     await openFinale();
     await page.click("#finaleParade .finaleWave");
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeJump").count(), 36);
@@ -1155,6 +1155,21 @@ test("the finale title sets off a jump, then a spin, then a bow wave", async () 
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeSpin").count(), 36);
     await page.click("#finaleParade .finaleWave");
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeBow").count(), 36);
+    // The secret fourth: everyone turns shiny for a moment, then back.
+    await page.click("#finaleParade .finaleWave");
+    await page.waitForFunction(() =>
+        [...document.querySelectorAll("#finaleParade .paradeLine img")].every((sprite) =>
+            sprite.src.includes("/shiny/"),
+        ),
+    );
+    await page.waitForFunction(
+        () =>
+            ![...document.querySelectorAll("#finaleParade .paradeLine img")].some((sprite) =>
+                sprite.src.includes("/shiny/"),
+            ),
+        null,
+        { timeout: 6000 },
+    );
 });
 
 test("the finale can be shared as text or saved as an image", async () => {

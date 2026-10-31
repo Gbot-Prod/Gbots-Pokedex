@@ -27,7 +27,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
 - [ ] Region complete image: a smaller share card when a single region is completed (its banner colours, trio and seen count), offered from the region toast
-- [ ] Wave moods step 2: a fourth secret mood after the bow — everyone turns shiny for a moment (swap to shiny sprites for one wave)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -386,3 +385,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Parade step 7: the wave button cycles through moods — jump wave, then a spin wave, then a "bow" (everyone dips) on the third press (2026-10-31) — the title button cycles three wave moods: jump, spin (rotateY) and bow (a tilted dip), each staggered left to right; gold outline for all of them under reduced motion
 - [x] Finale image step 2: put the trainer's name and partner on the share image ("Red & Pikachu completed the National Pokédex") (2026-10-31) — the share image's subtitle now leads with the trainer and partner ('Ash & Pikachu · 1,025 / 1,025 Pokémon seen · Oct 31, 2026'); either part is left out if unset
 - [x] Test tidy: split the long National Dex finale smoke test into finale / parade toys / share & image tests so a failure points at one feature (2026-10-31) — one test became four (finale + replay, tapping toys + cry cap, wave moods, share & image) sharing an openFinale() helper; same assertions
+- [x] Wave moods step 2: a fourth secret mood after the bow — everyone turns shiny for a moment (swap to shiny sprites for one wave) (2026-10-31) — a secret fourth press after the bow: every marcher swaps to its shiny sprite in the left-to-right wave with a sparkle pop, then changes back after about 2 s (no pop under reduced motion)

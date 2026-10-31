@@ -268,7 +268,7 @@ function showFinaleParade({ replay = false } = {}) {
             return;
         }
         sprite.style.animationDelay = ""; // in case a wave left one behind
-        sprite.classList.remove("paradeJump", "paradeSpin", "paradeBow");
+        sprite.classList.remove("paradeJump", "paradeSpin", "paradeBow", "paradeShiny");
         void sprite.offsetWidth; // restart the jump
         sprite.classList.add("paradeJump");
         // Cleared once the jump is over (under reduced motion the class is a brief gold outline).
@@ -303,8 +303,9 @@ function showFinaleParade({ replay = false } = {}) {
         cry.play().catch(done); // blocked or offline: the jump alone will do
     });
     // The title is a button too: everyone moves at once, in a wave from left to right. Each
-    // press picks the next mood: a jump, then a spin, then a bow.
-    const moods = ["paradeJump", "paradeSpin", "paradeBow"];
+    // press picks the next mood: a jump, then a spin, then a bow, then (the secret one)
+    // everyone turns shiny for a moment.
+    const moods = ["paradeJump", "paradeSpin", "paradeBow", "paradeShiny"];
     let moodIndex = 0;
     dialog.querySelector(".finaleWave").addEventListener("click", () => {
         const mood = moods[moodIndex];
@@ -315,14 +316,25 @@ function showFinaleParade({ replay = false } = {}) {
             void sprite.offsetWidth;
             sprite.style.animationDelay = index * 45 + "ms";
             sprite.classList.add(mood);
+            if (mood === "paradeShiny") {
+                // the shiny sprite sits beside the normal one: .../sprites/pokemon/shiny/25.png
+                setTimeout(() => {
+                    sprite.dataset.normalSrc = sprite.src;
+                    sprite.src = sprite.src.replace(/\/(\d+\.png)$/, "/shiny/$1");
+                }, index * 45);
+            }
         });
         setTimeout(
             () =>
                 sprites.forEach((sprite) => {
                     sprite.style.animationDelay = "";
                     sprite.classList.remove(...moods);
+                    if (sprite.dataset.normalSrc) {
+                        sprite.src = sprite.dataset.normalSrc;
+                        delete sprite.dataset.normalSrc;
+                    }
                 }),
-            sprites.length * 45 + 900,
+            sprites.length * 45 + (mood === "paradeShiny" ? 2200 : 900),
         );
     });
     if (replay) {

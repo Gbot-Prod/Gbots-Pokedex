@@ -6118,3 +6118,22 @@ img.animatedSmall {
         filter: drop-shadow(0 0 0 #ffd447) drop-shadow(0 0 6px #ffd447);
     }
 }
+
+/* The secret fourth wave: everyone turns shiny, with a sparkle pop */
+.paradeLine img.paradeShiny {
+    animation: paradeShinyPop 0.6s ease-out;
+    filter: drop-shadow(0 0 10px rgba(255, 245, 160, 0.9));
+}
+
+@keyframes paradeShinyPop {
+    30% {
+        transform: scale(1.18);
+        filter: brightness(2.2) drop-shadow(0 0 16px #ffffff);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .paradeLine img.paradeShiny {
+        animation: none;
+    }
+}
