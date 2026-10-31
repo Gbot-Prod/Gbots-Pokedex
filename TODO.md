@@ -15,6 +15,11 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
+- [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
+- [ ] Toast summary step 2: make the "+N more" toast a button that opens the trainer card at the badge shelf
+- [ ] Region complete step 2: when "Next missing" finishes a region, swap the button for "🎉 Kanto complete — on to Johto?" that selects the next unfinished region
+- [ ] Badge toasts: show the badge icon large on the left of the toast (like an achievement pop-up) instead of inline in the text
+- [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
 - [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
 - [ ] Harness: let useMockedPages take per-file options (initial URL, storage seed applied with addInitScript before the first load)
