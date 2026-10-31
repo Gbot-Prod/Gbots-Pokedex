@@ -1426,49 +1426,33 @@ function trainerFacts(stats) {
     ];
 }
 
-// Draws the card as it is now and downloads it as trainer-card.png.
+// Draws the card as it is now and opens it in the share-card preview (style chips, Save,
+// Copy, Share), like the finale and region cards.
 async function saveTrainerCardImage() {
     const stats = completionStats(seen);
     const trainer = readStored(TRAINER_KEY, {});
     const partner = currentPartner();
     const partnerSelect = document.getElementById("trainerPartner");
-    const canvas = document.createElement("canvas");
-    await document.fonts?.ready;
-    drawTrainerCard(
-        canvas,
-        {
-            name: trainer.name,
-            partnerName: partner ? partnerSelect.selectedOptions[0]?.textContent.replace(/^#\d+\s*/, "") : "",
-            seenText: seenText(stats),
-            facts: trainerFacts(stats),
-            regions: stats.generations.map(({ number, seen: count, total }) => ({
-                name: GENERATIONS.find((gen) => gen.number === number).region,
-                seen: count,
-                total,
-            })),
-            style: trainerCard.dataset.style,
-        },
-        await loadCanvasImage(partner ? spriteUrl(partner) : null),
-    );
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-    // Phones can hand the image straight to another app; everywhere else it downloads.
-    const file = new File([blob], "trainer-card.png", { type: "image/png" });
-    if (navigator.canShare?.({ files: [file] })) {
-        try {
-            await navigator.share({ files: [file], title: "My trainer card" });
-            return;
-        } catch (error) {
-            if (error.name === "AbortError") {
-                return; // share sheet dismissed
-            }
-        }
-    }
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "trainer-card.png";
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
-    document.getElementById("trainerShareStatus").textContent = "Image saved!";
+    const sprite = await loadCanvasImage(partner ? spriteUrl(partner) : null);
+    await cardFontsReady();
+    const card = {
+        name: trainer.name,
+        partnerName: partner ? partnerSelect.selectedOptions[0]?.textContent.replace(/^#\d+\s*/, "") : "",
+        seenText: seenText(stats),
+        facts: trainerFacts(stats),
+        regions: stats.generations.map(({ number, seen: count, total }) => ({
+            name: GENERATIONS.find((gen) => gen.number === number).region,
+            seen: count,
+            total,
+        })),
+    };
+    const render = (style) => {
+        const canvas = document.createElement("canvas");
+        drawTrainerCard(canvas, { ...card, style }, sprite);
+        return canvas;
+    };
+    const saved = await shareOrDownload(render, "trainer-card.png", "My trainer card");
+    document.getElementById("trainerShareStatus").textContent = saved ? "Image saved!" : "";
 }
 
 function renderTrainerCard() {

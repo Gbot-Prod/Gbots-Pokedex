@@ -6214,8 +6214,12 @@ img.animatedSmall {
 
 #cardPreview img {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
     height: auto;
+    /* tall cards (the trainer card) shrink so the buttons stay on screen */
+    max-height: calc(100vh - 14rem);
+    margin: 0 auto;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }

@@ -945,15 +945,20 @@ test("the completion ring opens a trainer card", async () => {
     assert.equal(await page.inputValue("#trainerPartner"), "25");
     assert.equal(await page.isVisible("#dexPartner"), true);
     assert.equal(await page.isVisible("#trainerAvatar"), true);
+    // The image opens in the share-card preview (portrait here), starting in the card's style.
     const download = page.waitForEvent("download");
     await page.click("#trainerImageBtn");
+    await page.waitForSelector("#cardPreview[open] img");
+    assert.equal(await page.getAttribute('.cardStyleChip[data-style="classic"]', "aria-pressed"), "true");
+    await page.click("#cardPreviewSave");
     assert.equal((await download).suggestedFilename(), "trainer-card.png");
-    // Where files can be shared (phones), the image goes to the share sheet instead.
+    // Where files can be shared (phones), the preview's Share hands it to the share sheet.
     await page.evaluate(() => {
         navigator.canShare = () => true;
         navigator.share = async (data) => (window.sharedFiles = data.files.map((file) => file.name));
     });
     await page.click("#trainerImageBtn");
+    await page.click("#cardPreviewShare");
     await page.waitForFunction(() => window.sharedFiles);
     assert.deepEqual(await page.evaluate(() => window.sharedFiles), ["trainer-card.png"]);
     await page.evaluate(() => {
