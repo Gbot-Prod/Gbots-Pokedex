@@ -17,6 +17,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
 - [ ] Shortcuts on phones: a small ⌨️ button only shown when a hardware keyboard is detected (first keydown), since the tip line is hidden on touch
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
+- [ ] Go-to names: show proper display names on the LCD ("Farfetch’d", "Mr. Mime") by reusing pokemonDisplayName-style rules instead of formatName on the slug
+- [ ] Go-to step 4: ↑/↓ on the LCD cycles through every name matching the prefix ("char" → Charmander, Charmeleon, Charizard…)
+- [ ] Go-to step 5: a quiet "beep" on each keystroke and a two-tone chime on Enter when sound effects are on (Web Audio, LCD theme)
+- [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
+- [ ] LCD theme everywhere: reuse the green-screen look for the quiz timer and the shiny-hunt encounter counter
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
