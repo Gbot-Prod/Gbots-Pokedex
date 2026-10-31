@@ -31,6 +31,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share cards: a trainer-card style "badge row" along the bottom of the finale card showing the earned badges' icons
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
+- [ ] Team card step 2: retro type pills — draw them as outlined boxes in retro so they stay visible after the four-shade conversion
+- [ ] Team card step 3: a mini 18-type coverage strip along the bottom (green/red squares per type) instead of the text lines
+- [ ] Shared team links: the "Share team" link opens with the team card preview ready for the recipient too ("Ash shared a team")
+- [ ] Card preview step 5: a "Download all" on the trainer card that zips every card you can make (finale, regions, team, trainer)
+- [ ] Preview layout: on short landscape phones put the style chips and buttons beside the image instead of under it
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
