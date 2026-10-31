@@ -23,6 +23,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Quiz timer step 3: a short "tick" sound per second in the last 5 s and a buzzer at 0 when sound effects are on
 - [ ] Visual regression: a tiny screenshot test of the four LCD screens with animations paused, compared against stored PNGs with a tolerance, so token refactors are checked automatically
 - [ ] CI step 2: also upload the failure screenshots (Playwright page.screenshot on test failure via the harness) next to the test log
+- [ ] Parade step 4: tapping a marching Pokémon makes it jump and play its cry (the parade becomes a little toy while it's open)
+- [ ] Region toast step 2: each region's trio walks in its own style — Kanto hops, Hoenn swims (wave bob), Galar marches in step
+- [ ] Hunt LCD step 5: a "Since" readout (encounters since the last shiny) that turns amber once it passes the Best
+- [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
+- [ ] Toast trio polish: the trio waves (a quick tilt) as it reaches the right edge before the toast hides
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
