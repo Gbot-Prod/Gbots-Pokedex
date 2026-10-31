@@ -383,6 +383,19 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
         if (sprites[index]) {
             context.drawImage(sprites[index], x + 6, y + 15, 140, 140);
         }
+        if (index === team.mvp) {
+            // the MVP: covers the most of the team's weaknesses
+            context.lineWidth = 4;
+            context.strokeStyle = "#ffd447";
+            context.beginPath();
+            context.roundRect(x + 2, y + 2, 356, 166, 16);
+            context.stroke();
+            context.fillStyle = "#ffd447";
+            context.font = cardFont(900, 18, retro);
+            context.textAlign = "right";
+            context.fillText("★ MVP", x + 346, y + 28);
+            context.textAlign = "left";
+        }
         context.fillStyle = "#ffffff";
         context.font = cardFont(800, 28, retro);
         context.fillText(member.label, x + 150, y + 62, 200);

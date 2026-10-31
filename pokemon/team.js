@@ -55,6 +55,21 @@ export function teamCoverage(memberMultipliers, memberHits = []) {
     }));
 }
 
+// The team's MVP: the member who resists (or is immune to) the most of the types the team as
+// a whole is weak to. Returns its index, or -1 when there's no shared weakness to cover.
+export function teamMvp(memberMultipliers) {
+    const coverage = teamCoverage(memberMultipliers);
+    const teamWeaknesses = coverage.filter(({ weak, resist }) => weak >= 2 && weak > resist).map(({ type }) => type);
+    if (!teamWeaknesses.length || memberMultipliers.length < 2) {
+        return -1;
+    }
+    const covered = memberMultipliers.map(
+        (multipliers) => teamWeaknesses.filter((type) => multipliers[type] < 1).length,
+    );
+    const best = Math.max(...covered);
+    return best > 0 ? covered.indexOf(best) : -1;
+}
+
 function updateTeamButton() {
     const current = getCurrentPokemon();
     const inTeam = current && team.some((member) => member.id === current.id);
@@ -257,13 +272,14 @@ async function shareTeam() {
 // The team as a share card (through the same preview as the other cards): the six members,
 // the types that hit the most of them with nobody resisting, and the types they hit hardest.
 async function saveTeamCard(members = team, byline = null, heading = undefined) {
-    let summary = { weakTo: [], hits: [], strip: [] };
+    let summary = { weakTo: [], hits: [], strip: [], mvp: -1 };
     try {
         const memberTypeData = await Promise.all(
             members.map((member) => Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
         );
         const coverage = teamCoverage(memberTypeData.map(damageMultipliers), memberTypeData.map(superEffectiveTargets));
         summary = {
+            mvp: teamMvp(memberTypeData.map(damageMultipliers)),
             // one square per type: "weak" (more of the team weak than resisting), "hit" (someone
             // hits it super-effectively) or neither
             strip: coverage.map(({ type, weak, resist, hits }) => [

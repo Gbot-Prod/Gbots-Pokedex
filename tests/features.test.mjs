@@ -379,3 +379,12 @@ test("the best shiny gap is the fewest encounters between shinies", async () => 
         12,
     );
 });
+
+test("the team MVP covers the most of the team's shared weaknesses", async () => {
+    const { teamMvp } = await import("../pokemon/team.js");
+    // Two members weak to rock; the third resists it.
+    const weakToRock = { rock: 2 };
+    assert.equal(teamMvp([weakToRock, weakToRock, { rock: 0.5 }]), 2);
+    assert.equal(teamMvp([{ rock: 2 }, { fire: 2 }]), -1); // no weakness shared by two
+    assert.equal(teamMvp([weakToRock]), -1);
+});

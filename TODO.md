@@ -32,7 +32,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region banner ribbon: clicking the "★ COMPLETE" ribbon on a browse banner opens that region's card preview directly
 - [ ] Card preview step 4: remember the last style picked in the preview (separate from the trainer card style) for the next card
 - [ ] Card preview step 5: a "Download all" on the trainer card that zips every card you can make (finale, regions, team, trainer)
-- [ ] Team card: highlight the team's MVP (the member resisting the most of the team's weaknesses) with a small ★ on its panel
 - [ ] Card preview: pinch/scroll to zoom into the card image (it's tiny on phones), with a "fit" button to reset
 - [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
@@ -417,3 +416,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Shared team links: the "Share team" link opens with the team card preview ready for the recipient too ("Ash shared a team") (2026-10-31) — the shared-team offer gains a '🖼️ View as card' button that opens the team card for the shared members (headed 'A shared team') in the preview, before loading or dismissing
 - [x] Preview layout: on short landscape phones put the style chips and buttons beside the image instead of under it (2026-10-31) — on landscape screens up to 500px tall the preview becomes a grid: the card on the left (capped to the screen height), the style chips and Save/Copy/Cancel stacked on the right
 - [x] Shared team card: show the sharer's name when the link carries one (?team=…&by=Ash, added by "Share team" when a trainer name is set) (2026-10-31) — Share team adds &by=<trainer name> when one is set; the recipient sees 'Misty shared a team: …' and the card is headed 'Misty's team' (name trimmed to 24 characters, by= cleared with team=)
+- [x] Team card: highlight the team's MVP (the member resisting the most of the team's weaknesses) with a small ★ on its panel (2026-10-31) — teamMvp (unit-tested) picks the member resisting the most types that 2+ teammates are weak to; its panel on the team card gets a gold outline and '★ MVP' (none when nothing is shared or nobody covers it)
