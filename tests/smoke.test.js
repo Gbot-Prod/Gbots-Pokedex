@@ -1189,6 +1189,12 @@ test("the finale can be shared as text or saved as an image", async () => {
     // A preview first: the card itself, Save, and (with no file sharing here) no Share button.
     await page.waitForSelector("#cardPreview[open] img");
     assert.equal(await page.isHidden("#cardPreviewShare"), true);
+    // Style chips redraw it: classic to start (no style chosen), then retro.
+    assert.equal(await page.getAttribute('.cardStyleChip[data-style="classic"]', "aria-pressed"), "true");
+    const before = await page.getAttribute("#cardPreview img", "src");
+    await page.click('.cardStyleChip[data-style="retro"]');
+    await page.waitForFunction((src) => document.querySelector("#cardPreview img").src !== src, before);
+    assert.equal(await page.getAttribute('.cardStyleChip[data-style="retro"]', "aria-pressed"), "true");
     await page.click("#cardPreviewSave");
     assert.equal((await download).suggestedFilename(), "pokedex-complete.png");
     await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent === "Image saved!");

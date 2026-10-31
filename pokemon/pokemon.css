@@ -6197,6 +6197,7 @@ img.animatedSmall {
 /* Share card preview: the drawn card, then Save / Share / Cancel */
 #cardPreview {
     width: min(40rem, calc(100vw - 2rem));
+    font-family: inter, arial, sans-serif;
     padding: 1rem;
     border: 3px solid #ffd447;
     border-radius: 18px;
@@ -6308,4 +6309,36 @@ img.animatedSmall {
     #finaleParade::before {
         transition: none;
     }
+}
+
+/* Style chips in the card preview: redraw the card as classic, holo or retro */
+.cardStyleChips {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.cardStyleChip {
+    padding: 0.3rem 0.9rem;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 999px;
+    background: transparent;
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cardStyleChip[aria-pressed="true"] {
+    border-color: #ffd447;
+    background: #ffd447;
+    color: #7a1010;
+}
+
+.cardStyleChip:hover,
+.cardStyleChip:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
 }

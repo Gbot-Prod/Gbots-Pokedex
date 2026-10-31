@@ -405,33 +405,42 @@ async function saveFinaleImage(status) {
               day: "numeric",
           })
         : "";
-    const canvas = document.createElement("canvas");
-    await document.fonts?.ready;
     // "Red & Pikachu": the trainer's name and partner, if they've set them.
     const trainerName = (readStored(TRAINER_KEY, {}).name ?? "").trim();
     const partner = currentPartner();
     const byline = [trainerName, partner ? partnerLabel(partner) : ""].filter(Boolean).join(" & ");
-    const style = readStored(TRAINER_KEY, {}).style; // the card matches the trainer card's style
-    if (style === "retro") {
-        await document.fonts?.load('20px "Press Start 2P"');
-    }
-    drawFinaleCard(canvas, { dateText, byline, retro: style === "retro" }, starters, legends);
-    styleShareCard(canvas, style);
-    const saved = await shareOrDownload(canvas, "pokedex-complete.png", "Pokédex complete!");
+    await cardFontsReady();
+    const render = (style) => {
+        const canvas = document.createElement("canvas");
+        drawFinaleCard(canvas, { dateText, byline, retro: style === "retro" }, starters, legends);
+        styleShareCard(canvas, style);
+        return canvas;
+    };
+    const saved = await shareOrDownload(render, "pokedex-complete.png", "Pokédex complete!");
     status.textContent = saved ? "Image saved!" : "";
 }
 
-// Shows a drawn card in a preview first, with Save (download), Share (the share sheet, where
-// files can be shared) and Cancel. Resolves true when it was downloaded, false otherwise.
-async function shareOrDownload(canvas, filename, title) {
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-    const file = new File([blob], filename, { type: "image/png" });
-    const url = URL.createObjectURL(blob);
+// Both card fonts, so a redraw in any style (retro uses the pixel font) is instant.
+async function cardFontsReady() {
+    await document.fonts?.ready;
+    await document.fonts?.load('20px "Press Start 2P"');
+}
+
+const canvasBlob = (canvas) => new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+
+// Shows a card in a preview first: style chips (classic / holo / retro, starting from the
+// trainer card's style) redraw it live, then Save (download), Share (the share sheet, where
+// files can be shared) or Cancel. render(style) draws the card. Resolves true when downloaded.
+async function shareOrDownload(render, filename, title) {
+    let style = CARD_STYLES.includes(readStored(TRAINER_KEY, {}).style) ? readStored(TRAINER_KEY, {}).style : "classic";
+    let blob = await canvasBlob(render(style));
+    let url = URL.createObjectURL(blob);
     const preview = document.createElement("dialog");
     preview.id = "cardPreview";
     preview.setAttribute("aria-label", title + " card preview");
     preview.innerHTML =
         '<img alt="" width="600" height="315" />' +
+        '<div class="cardStyleChips" role="group" aria-label="Card style"></div>' +
         '<form method="dialog" class="cardPreviewActions">' +
         '<button class="btn" id="cardPreviewSave" value="save" autofocus>💾 Save</button>' +
         '<button class="btn" id="cardPreviewShare" value="share" hidden>📤 Share</button>' +
@@ -439,7 +448,30 @@ async function shareOrDownload(canvas, filename, title) {
     const image = preview.querySelector("img");
     image.src = url;
     image.alt = "Preview of the " + title + " card";
-    preview.querySelector("#cardPreviewShare").hidden = !navigator.canShare?.({ files: [file] });
+    const chips = preview.querySelector(".cardStyleChips");
+    for (const option of CARD_STYLES) {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "cardStyleChip";
+        chip.dataset.style = option;
+        chip.textContent = { classic: "Classic", holo: "✨ Holo", retro: "👾 Retro" }[option];
+        chip.setAttribute("aria-pressed", String(option === style));
+        chip.addEventListener("click", async () => {
+            style = option;
+            for (const other of chips.children) {
+                other.setAttribute("aria-pressed", String(other === chip));
+            }
+            blob = await canvasBlob(render(style));
+            URL.revokeObjectURL(url);
+            url = URL.createObjectURL(blob);
+            image.src = url;
+        });
+        chips.append(chip);
+    }
+    const canShareFiles = (candidate) => navigator.canShare?.({ files: [candidate] });
+    preview.querySelector("#cardPreviewShare").hidden = !canShareFiles(
+        new File([blob], filename, { type: "image/png" }),
+    );
     document.body.append(preview);
     preview.showModal();
     const choice = await new Promise((resolve) =>
@@ -449,7 +481,7 @@ async function shareOrDownload(canvas, filename, title) {
     let saved = false;
     if (choice === "share") {
         try {
-            await navigator.share({ files: [file], title });
+            await navigator.share({ files: [new File([blob], filename, { type: "image/png" })], title });
         } catch {
             // share sheet dismissed or failed: nothing more to do
         }
@@ -474,26 +506,25 @@ async function saveRegionCard(number) {
         Promise.all([loadCanvasImage(spriteUrl(REGION_MASCOTS[number]))]),
     ]);
     const trainerName = (readStored(TRAINER_KEY, {}).name ?? "").trim();
-    const style = readStored(TRAINER_KEY, {}).style;
-    const canvas = document.createElement("canvas");
-    await document.fonts?.ready;
-    if (style === "retro") {
-        await document.fonts?.load('20px "Press Start 2P"');
-    }
-    drawRegionCard(
-        canvas,
-        {
-            number,
-            region: generation.region,
-            total: generation.last - generation.first + 1,
-            byline: trainerName,
-            retro: style === "retro",
-        },
-        trio,
-        legend,
-    );
-    styleShareCard(canvas, style);
-    await shareOrDownload(canvas, generation.region.toLowerCase() + "-complete.png", generation.region + " complete!");
+    await cardFontsReady();
+    const render = (style) => {
+        const canvas = document.createElement("canvas");
+        drawRegionCard(
+            canvas,
+            {
+                number,
+                region: generation.region,
+                total: generation.last - generation.first + 1,
+                byline: trainerName,
+                retro: style === "retro",
+            },
+            trio,
+            legend,
+        );
+        styleShareCard(canvas, style);
+        return canvas;
+    };
+    await shareOrDownload(render, generation.region.toLowerCase() + "-complete.png", generation.region + " complete!");
 }
 
 function celebrateIfComplete(dexNumber) {
