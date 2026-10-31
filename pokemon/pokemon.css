@@ -5672,7 +5672,7 @@ img.animatedSmall {
     }
 }
 
-/* Each region's trio walks its own way along the toast: Kanto hops (the default), Hoenn
+/* Each region's trio walks its own way along the toast: Kanto shuffles Game Boy style, Hoenn
    swims in a wave, Sinnoh skates on the ice, Galar marches stiffly in step and Paldea
    bounds in long leaps (Johto, Unova, Kalos and Alola below) */
 .toastParade[data-region="3"] img {
@@ -5739,6 +5739,24 @@ img.animatedSmall {
 @keyframes trioBound {
     40% {
         transform: translateY(-18px) rotate(-4deg);
+    }
+}
+
+/* Kanto shuffles like an old Game Boy overworld sprite: two hard frames, no easing */
+.toastParade[data-region="1"] img {
+    animation: trioShuffle 0.4s steps(1) infinite;
+}
+
+.toastParade[data-region="1"] img:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+@keyframes trioShuffle {
+    0% {
+        transform: translateY(0) skewX(0deg);
+    }
+    50% {
+        transform: translateY(-3px) skewX(7deg);
     }
 }
 
