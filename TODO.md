@@ -26,6 +26,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Finale parade: a short fanfare (Web Audio, 6 notes) when the parade opens, only if sound effects are on
 - [ ] Harness step: a per-file storage seed option in useMockedPages (addInitScript before the beforeEach goto), then convert the tests that seed + reload — needs restructuring the shared beforeEach
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
+- [ ] Finale image step 2: put the trainer's name and partner on the share image ("Red & Pikachu completed the National Pokédex")
+- [ ] Region complete image: a smaller share card when a single region is completed (its banner colours, trio and seen count), offered from the region toast
+- [ ] Wave moods step 2: a fourth secret mood after the bow — everyone turns shiny for a moment (swap to shiny sprites for one wave)
+- [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
+- [ ] Test tidy: split the long National Dex finale smoke test into finale / parade toys / share & image tests so a failure points at one feature
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
