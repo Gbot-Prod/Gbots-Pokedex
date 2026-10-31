@@ -918,6 +918,11 @@ test("finishing a region with Next missing offers the next unfinished region", a
     await page.waitForSelector("#nextMissingBtn.regionDone");
     assert.equal(await page.textContent("#nextMissingBtn"), "🎉 Kanto complete — on to Johto? →");
     const nextRequest = page.waitForRequest((request) => /\/pokemon\/152$/.test(request.url()));
+    await page.locator("#nextMissingBtn").scrollIntoViewIfNeeded();
+    const stripOffScreen = await page.evaluate(() => {
+        const box = document.getElementById("regionStrip").getBoundingClientRect();
+        return box.bottom < 0 || box.top > window.innerHeight;
+    });
     await page.click("#nextMissingBtn");
     await nextRequest;
     assert.equal(await page.inputValue("#generationFilter"), "2");
@@ -927,6 +932,12 @@ test("finishing a region with Next missing offers the next unfinished region", a
         ),
         true,
     );
+    // With the strip out of view, a chip says where the walk moved on to.
+    if (stripOffScreen) {
+        assert.equal(await page.textContent("#nowBrowsingChip.visible"), "🧭 Now browsing Johto");
+    } else {
+        assert.equal(await page.locator("#nowBrowsingChip").count(), 0);
+    }
 });
 
 test("seeing every Pokémon turns the region button into the National Dex finale", async () => {

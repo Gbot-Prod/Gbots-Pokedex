@@ -192,6 +192,26 @@ function openFirstUnseen() {
     }
 }
 
+// When the region strip is scrolled out of view, a small chip in the region's colours says
+// where the walk has moved on to.
+function showNowBrowsing(banner) {
+    let chip = document.getElementById("nowBrowsingChip");
+    if (!chip) {
+        chip = document.createElement("p");
+        chip.id = "nowBrowsingChip";
+        chip.setAttribute("role", "status");
+        document.body.append(chip);
+    }
+    const generation = GENERATIONS.find((gen) => String(gen.number) === banner.dataset.generation);
+    chip.textContent = "🧭 Now browsing " + generation.region;
+    chip.style.background = getComputedStyle(banner).backgroundImage; // the banner's own gradient
+    chip.classList.remove("visible");
+    void chip.offsetWidth; // restart the pop-in
+    chip.classList.add("visible");
+    clearTimeout(showNowBrowsing.timer);
+    showNowBrowsing.timer = setTimeout(() => chip.classList.remove("visible"), 2600);
+}
+
 // Makes a region switch visible: the strip slides sideways to the banner, which pulses
 // (the page itself doesn't scroll).
 function pulseRegionBanner(number) {
@@ -200,6 +220,10 @@ function pulseRegionBanner(number) {
         return;
     }
     const strip = document.getElementById("regionStrip");
+    const stripBox = strip.getBoundingClientRect();
+    if (stripBox.bottom < 0 || stripBox.top > window.innerHeight) {
+        showNowBrowsing(banner);
+    }
     strip.scrollTo({ left: banner.parentElement.offsetLeft - strip.offsetLeft - 8, behavior: "smooth" });
     banner.classList.remove("regionPulse");
     void banner.offsetWidth; // restart the animation

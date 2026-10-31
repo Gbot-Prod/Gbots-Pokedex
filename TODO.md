@@ -18,7 +18,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
-- [ ] Region pulse step 2: if the region strip is off-screen when the region switches, show a small "Now browsing Hoenn" chip near the card instead of an unseen pulse
 - [ ] National Dex finale step 2: a one-time full-screen "Pokédex complete" celebration (all 9 starter trios parading across) the first time all 1,025 are seen
 - [ ] Trainer card: a "Regions" row of mini banners that light up as each is completed (mirrors the browse strip)
 - [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
@@ -320,3 +319,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Next missing: a keyboard shortcut (N) for "Next missing" while a region filter is active (2026-10-31) — N follows the Next missing button whenever it's visible (gaps, next region, finale); aria-keyshortcuts + tip line; smoke test presses N to reach Bulbasaur
 - [x] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused (2026-10-31) — badge toasts carry a gold 'Show me' pill that opens the trainer card on that badge (3× spotlight pulse; static ring under reduced motion); the countdown pauses on hover/focus; hidden toasts are visibility:hidden so their buttons leave the tab order
 - [x] Toasts: a "Show me" button on badge toasts that opens the trainer card scrolled to the badge (2026-10-31) — merged into badge toast step 2 (same day)
+- [x] Region pulse step 2: if the region strip is off-screen when the region switches, show a small "Now browsing Hoenn" chip near the card instead of an unseen pulse (2026-10-31) — a 'Now browsing Johto' chip in the banner's own gradient drops in at the top for 2.6 s when the strip is off-screen (role=status, no transition under reduced motion); smoke test branches on the strip's position
