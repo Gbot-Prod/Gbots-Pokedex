@@ -38,7 +38,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Gold card PNG: the saved trainer card image uses the gold-foil frame when the card is all gold
 - [ ] Find why a missing sprite is occasionally requested twice on a first visit under full smoke-suite load (never in 8 isolated runs, even after tiles stopped re-rendering); the test tolerates 2 until then
 - [ ] Test speed: the smoke suite takes ~80 s; group read-only checks into shared pages or run test files in parallel to get it under a minute
-- [ ] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion)
 - [ ] News dot step 2: a small "NEW" ribbon on the freshly earned badge inside the card, fading after the first view
 - [ ] Shiny hunt: a progress bar under the tier line filling toward the next tier, in the tier's metal colour
 - [ ] Region banners: a mini Region master progress ("2 / 3 regions for silver") under the region strip heading
@@ -320,3 +319,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Badge toast step 2: badge toasts also get a "View" button to the shelf, and the toast pauses its countdown while hovered or focused (2026-10-31) — badge toasts carry a gold 'Show me' pill that opens the trainer card on that badge (3× spotlight pulse; static ring under reduced motion); the countdown pauses on hover/focus; hidden toasts are visibility:hidden so their buttons leave the tab order
 - [x] Toasts: a "Show me" button on badge toasts that opens the trainer card scrolled to the badge (2026-10-31) — merged into badge toast step 2 (same day)
 - [x] Region pulse step 2: if the region strip is off-screen when the region switches, show a small "Now browsing Hoenn" chip near the card instead of an unseen pulse (2026-10-31) — a 'Now browsing Johto' chip in the banner's own gradient drops in at the top for 2.6 s when the strip is off-screen (role=status, no transition under reduced motion); smoke test branches on the strip's position
+- [x] Trainer card: animate the completion number counting up from 0 when the card opens (instant under reduced motion) (2026-10-31) — rolls up from 0 over 0.9 s with an ease-out (rAF), screen readers get the final line in a visually hidden span, tabular digits; instant under reduced motion

@@ -807,6 +807,10 @@ test("the completion ring opens a trainer card", async () => {
     await page.click("#dexProgress");
     await page.waitForSelector("#trainerCard[open]");
     assert.match(await page.textContent("#trainerCardSeen"), /of 1025 Pokémon seen/);
+    // The count rolls up from 0, then settles on the plain final line.
+    await page.waitForFunction(() =>
+        /^[1-9]\d* of 1025 Pokémon seen \(\d+%\)$/.test(document.getElementById("trainerCardSeen").textContent),
+    );
     assert.equal(await page.locator("#trainerCardRegions li").count(), 9);
     assert.match(await page.textContent("#trainerCardVisits"), /^Member since .+ · 🔥 \d+-day streak \(best \d+\)$/);
     assert.equal(await page.locator("#trainerCardStats li").count(), 6);

@@ -952,6 +952,34 @@ function seenText(stats) {
     return stats.seen + " of " + stats.total + " Pokémon seen (" + Math.floor((100 * stats.seen) / stats.total) + "%)";
 }
 
+// The seen count rolls up from 0 as the card opens (instant under reduced motion); screen
+// readers get the final line straight away.
+function countUpSeen(element, stats) {
+    const final = seenText(stats);
+    if (reducedMotion.matches || !stats.seen) {
+        element.textContent = final;
+        return;
+    }
+    const shown = document.createElement("span");
+    shown.setAttribute("aria-hidden", "true");
+    shown.textContent = seenText({ ...stats, seen: 0 });
+    const spoken = document.createElement("span");
+    spoken.className = "visuallyHidden";
+    spoken.textContent = final;
+    element.replaceChildren(shown, spoken);
+    const start = performance.now();
+    const step = (now) => {
+        const progress = Math.min(1, (now - start) / 900);
+        shown.textContent = seenText({ ...stats, seen: Math.round(stats.seen * (1 - (1 - progress) ** 3)) });
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            element.textContent = final;
+        }
+    };
+    requestAnimationFrame(step);
+}
+
 // The six stat tiles: [icon, label, value].
 function trainerFacts(stats) {
     const hunt = readStored("pokedex:shiny-hunt:v1", {});
@@ -1015,7 +1043,7 @@ function renderTrainerCard() {
     checkBadges();
     document.getElementById("trainerShareStatus").textContent = "";
     const stats = completionStats(seen);
-    document.getElementById("trainerCardSeen").textContent = seenText(stats);
+    countUpSeen(document.getElementById("trainerCardSeen"), stats);
     document.getElementById("trainerCardVisits").textContent = visitsText();
     renderCalendar();
     const shelf = badgeShelf(badgeProgress(stats));
