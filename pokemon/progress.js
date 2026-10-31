@@ -268,7 +268,7 @@ function showFinaleParade({ replay = false } = {}) {
             return;
         }
         sprite.style.animationDelay = ""; // in case a wave left one behind
-        sprite.classList.remove("paradeJump");
+        sprite.classList.remove("paradeJump", "paradeSpin", "paradeBow");
         void sprite.offsetWidth; // restart the jump
         sprite.classList.add("paradeJump");
         // Cleared once the jump is over (under reduced motion the class is a brief gold outline).
@@ -302,24 +302,33 @@ function showFinaleParade({ replay = false } = {}) {
         cry.addEventListener("error", done);
         cry.play().catch(done); // blocked or offline: the jump alone will do
     });
-    // The title is a button too: everyone jumps at once, in a wave from left to right.
+    // The title is a button too: everyone moves at once, in a wave from left to right. Each
+    // press picks the next mood: a jump, then a spin, then a bow.
+    const moods = ["paradeJump", "paradeSpin", "paradeBow"];
+    let moodIndex = 0;
     dialog.querySelector(".finaleWave").addEventListener("click", () => {
+        const mood = moods[moodIndex];
+        moodIndex = (moodIndex + 1) % moods.length;
         const sprites = [...line.querySelectorAll("img")];
         sprites.forEach((sprite, index) => {
-            sprite.classList.remove("paradeJump");
+            sprite.classList.remove(...moods);
             void sprite.offsetWidth;
             sprite.style.animationDelay = index * 45 + "ms";
-            sprite.classList.add("paradeJump");
+            sprite.classList.add(mood);
         });
         setTimeout(
             () =>
                 sprites.forEach((sprite) => {
                     sprite.style.animationDelay = "";
-                    sprite.classList.remove("paradeJump");
+                    sprite.classList.remove(...moods);
                 }),
-            sprites.length * 45 + 700,
+            sprites.length * 45 + 900,
         );
     });
+    if (replay) {
+        // Seen it before: start mid-march with the line already filling the screen.
+        line.style.animationDelay = "-5s";
+    }
     // Brag a little: the share sheet where there is one, otherwise the clipboard.
     dialog.querySelector("#finaleShare").addEventListener("click", async () => {
         const status = dialog.querySelector("#finaleShareStatus");
@@ -336,10 +345,6 @@ function showFinaleParade({ replay = false } = {}) {
             status.textContent = navigator.share ? "" : "Couldn't copy — your browser blocked the clipboard.";
         }
     });
-    if (replay) {
-        // Seen it before: start mid-march with the line already filling the screen.
-        line.style.animationDelay = "-5s";
-    }
     dialog
         .querySelector("#finaleImage")
         .addEventListener("click", () => saveFinaleImage(dialog.querySelector("#finaleShareStatus")));

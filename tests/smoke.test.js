@@ -1104,6 +1104,10 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     assert.equal(await page.evaluate(() => document.activeElement.id), "finaleClose"); // focus on the way out
     await page.click("#finaleParade .finaleWave"); // the title: everyone jumps in a wave
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeJump").count(), 36);
+    await page.click("#finaleParade .finaleWave"); // next mood: a spin
+    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeSpin").count(), 36);
+    await page.click("#finaleParade .finaleWave"); // then a bow
+    assert.equal(await page.locator("#finaleParade .paradeLine img.paradeBow").count(), 36);
     // Share: without a share sheet the brag goes to the clipboard.
     await page.evaluate(() => {
         delete Navigator.prototype.share;

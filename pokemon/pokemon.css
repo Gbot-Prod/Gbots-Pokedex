@@ -6087,3 +6087,34 @@ img.animatedSmall {
 #finaleImage:focus-visible {
     background: rgba(255, 212, 71, 0.15);
 }
+
+/* The other two wave moods: a spin and a bow */
+.paradeLine img.paradeSpin {
+    animation: paradeSpin 0.8s ease-in-out;
+}
+
+@keyframes paradeSpin {
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+.paradeLine img.paradeBow {
+    transform-origin: bottom center;
+    animation: paradeBow 0.8s ease-in-out;
+}
+
+@keyframes paradeBow {
+    45%,
+    60% {
+        transform: rotate(14deg) scaleY(0.85);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .paradeLine img.paradeSpin,
+    .paradeLine img.paradeBow {
+        animation: none;
+        filter: drop-shadow(0 0 0 #ffd447) drop-shadow(0 0 6px #ffd447);
+    }
+}
