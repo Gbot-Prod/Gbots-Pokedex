@@ -219,9 +219,9 @@ export function enqueueToast(queue, toast) {
 
 let droppedToasts = 0; // over the cap; summed up in one last toast
 
-function celebrate(message, confettiCount) {
+function celebrate(message, confettiCount, icon = "") {
     const duplicate = toastQueue.some((queued) => queued.message === message);
-    if (enqueueToast(toastQueue, { message, confettiCount })) {
+    if (enqueueToast(toastQueue, { message, confettiCount, icon })) {
         if (toastQueue.length === 1) {
             showNextToast();
         }
@@ -236,8 +236,17 @@ export function droppedSummary(count) {
 
 function showNextToast() {
     const toast = document.getElementById("dexToast");
-    const { message, confettiCount } = toastQueue[0];
-    toast.textContent = message;
+    const { message, confettiCount, icon } = toastQueue[0];
+    // Badge toasts lead with the badge itself, large, like an achievement pop-up.
+    toast.classList.toggle("withIcon", Boolean(icon));
+    if (icon) {
+        const badge = document.createElement("span");
+        badge.className = "toastIcon";
+        badge.textContent = icon;
+        toast.replaceChildren(badge, " " + message);
+    } else {
+        toast.textContent = message;
+    }
     toast.classList.add("visible");
     if (confettiCount && !reducedMotion.matches) {
         const burst = makeConfetti(confettiCount, "confetti fullscreen");
@@ -286,7 +295,7 @@ function checkBadges() {
     if (known) {
         // Each new badge gets its toast; past the queue cap they're summed up in one.
         for (const badge of fresh) {
-            celebrate(badge.icon + " Badge earned! " + badge.label, 50);
+            celebrate("Badge earned! " + badge.label, 50, badge.icon);
         }
     }
     updateNewsDot();

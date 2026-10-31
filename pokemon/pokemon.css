@@ -2357,6 +2357,41 @@ img.placeholderSprite {
     pointer-events: none;
 }
 
+#dexToast.withIcon {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding-left: 0.6rem;
+    border-radius: 1.4rem;
+    text-align: left;
+}
+
+.toastIcon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 3px solid #ffd447;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff3c4, #ff9a3c 60%, #c2410c);
+    font-size: 1.4rem;
+    box-shadow: 0 0 12px rgba(255, 212, 71, 0.8);
+    animation: toastIconSpin 0.8s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+@keyframes toastIconSpin {
+    from {
+        transform: scale(0.3) rotate(-180deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toastIcon {
+        animation: none;
+    }
+}
+
 #dexToast.visible {
     transform: translate(-50%, 0);
     opacity: 1;
