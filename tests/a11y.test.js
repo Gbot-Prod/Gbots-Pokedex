@@ -124,6 +124,11 @@ test("the National Dex parade passes axe", async () => {
     await page.click("#finaleShare");
     await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent !== "");
     const results = await new AxeBuilder({ page }).include("#finaleParade").analyze();
+    // ...and the share card preview on top of it
+    await page.click("#finaleImage");
+    await page.waitForSelector("#cardPreview[open] img");
+    const preview = await new AxeBuilder({ page }).include("#cardPreview").analyze();
+    results.violations.push(...preview.violations);
     const serious = results.violations
         .filter((violation) => ["serious", "critical"].includes(violation.impact))
         .map((violation) => violation.id + ": " + violation.nodes.map((node) => node.target.join(" ")).join(", "));

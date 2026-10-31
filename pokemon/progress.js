@@ -401,27 +401,47 @@ async function saveFinaleImage(status) {
     status.textContent = saved ? "Image saved!" : "";
 }
 
-// Hands a drawn canvas to another app on phones (share sheet) or downloads it as a PNG.
-// Resolves true when it was downloaded, false when shared or the sheet was dismissed.
+// Shows a drawn card in a preview first, with Save (download), Share (the share sheet, where
+// files can be shared) and Cancel. Resolves true when it was downloaded, false otherwise.
 async function shareOrDownload(canvas, filename, title) {
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     const file = new File([blob], filename, { type: "image/png" });
-    if (navigator.canShare?.({ files: [file] })) {
+    const url = URL.createObjectURL(blob);
+    const preview = document.createElement("dialog");
+    preview.id = "cardPreview";
+    preview.setAttribute("aria-label", title + " card preview");
+    preview.innerHTML =
+        '<img alt="" width="600" height="315" />' +
+        '<form method="dialog" class="cardPreviewActions">' +
+        '<button class="btn" id="cardPreviewSave" value="save" autofocus>💾 Save</button>' +
+        '<button class="btn" id="cardPreviewShare" value="share" hidden>📤 Share</button>' +
+        '<button class="btn" id="cardPreviewCancel" value="cancel">Cancel</button></form>';
+    const image = preview.querySelector("img");
+    image.src = url;
+    image.alt = "Preview of the " + title + " card";
+    preview.querySelector("#cardPreviewShare").hidden = !navigator.canShare?.({ files: [file] });
+    document.body.append(preview);
+    preview.showModal();
+    const choice = await new Promise((resolve) =>
+        preview.addEventListener("close", () => resolve(preview.returnValue), { once: true }),
+    );
+    preview.remove();
+    let saved = false;
+    if (choice === "share") {
         try {
             await navigator.share({ files: [file], title });
-            return false;
-        } catch (error) {
-            if (error.name === "AbortError") {
-                return false; // share sheet dismissed
-            }
+        } catch {
+            // share sheet dismissed or failed: nothing more to do
         }
+    } else if (choice === "save") {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        link.click();
+        saved = true;
     }
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
-    return true;
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    return saved;
 }
 
 const REGION_NAME = (number) => GENERATIONS.find((gen) => gen.number === number)?.region ?? "";

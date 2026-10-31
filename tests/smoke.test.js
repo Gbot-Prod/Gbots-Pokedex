@@ -1186,6 +1186,10 @@ test("the finale can be shared as text or saved as an image", async () => {
     await page.evaluate(() => delete Navigator.prototype.canShare);
     const download = page.waitForEvent("download");
     await page.click("#finaleImage");
+    // A preview first: the card itself, Save, and (with no file sharing here) no Share button.
+    await page.waitForSelector("#cardPreview[open] img");
+    assert.equal(await page.isHidden("#cardPreviewShare"), true);
+    await page.click("#cardPreviewSave");
     assert.equal((await download).suggestedFilename(), "pokedex-complete.png");
     await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent === "Image saved!");
 });
@@ -1300,6 +1304,7 @@ test("a region toast's picture button saves that region's share card", async () 
     await search("pikachu");
     const download = page.waitForEvent("download");
     await page.click("#dexToast.visible .toastCard");
+    await page.click("#cardPreviewSave"); // from the preview
     assert.equal((await download).suggestedFilename(), "kanto-complete.png");
     // ...and later from the region's row on the trainer card.
     await page.click("#dexProgress");
@@ -1307,6 +1312,7 @@ test("a region toast's picture button saves that region's share card", async () 
     assert.equal(await page.locator("#trainerCardRegions .regionCardBtn").count(), 1); // only Kanto is done
     const again = page.waitForEvent("download");
     await page.click("#trainerCardRegions li.region1 .regionCardBtn");
+    await page.click("#cardPreviewSave"); // from the preview
     assert.equal((await again).suggestedFilename(), "kanto-complete.png");
 });
 

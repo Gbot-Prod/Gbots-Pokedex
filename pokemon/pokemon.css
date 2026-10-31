@@ -6193,3 +6193,75 @@ img.animatedSmall {
     outline: 2px solid #ffd447;
     outline-offset: 1px;
 }
+
+/* Share card preview: the drawn card, then Save / Share / Cancel */
+#cardPreview {
+    width: min(40rem, calc(100vw - 2rem));
+    padding: 1rem;
+    border: 3px solid #ffd447;
+    border-radius: 18px;
+    background: #161a2a;
+    color: #ffffff;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+#cardPreview::backdrop {
+    background: rgba(10, 12, 30, 0.7);
+    backdrop-filter: blur(3px);
+}
+
+#cardPreview img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.cardPreviewActions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+}
+
+#cardPreviewSave,
+#cardPreviewShare {
+    padding: 0.5rem 1.3rem;
+    border: 2px solid #ffd447;
+    border-radius: 999px;
+    background: #ffd447;
+    color: #7a1010;
+    font-weight: 900;
+}
+
+#cardPreviewCancel {
+    padding: 0.5rem 1.3rem;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    background: transparent;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+#cardPreview .btn:hover,
+#cardPreview .btn:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+}
+
+#cardPreview[open] {
+    animation: trainerCardIn 0.3s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #cardPreview[open] {
+        animation: none;
+    }
+}
+
+#cardPreviewShare[hidden] {
+    display: none;
+}

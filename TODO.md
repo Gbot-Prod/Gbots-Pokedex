@@ -29,7 +29,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
 - [ ] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line
 - [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
-- [ ] Share card preview: show the drawn card in a small dialog first ("Save" / "Share" / "Cancel") instead of downloading straight away
 - [ ] Holo cards step 2: the foil band sweeps diagonally (light streak) instead of a flat overlay, like the holo trainer card's sheen
 - [ ] Region rows: a tiny ✓ badge on completed regions in the browse strip's banners matching the trainer card's 🖼️ rows
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -396,3 +395,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Share cards: mark the canvas text with the user's chosen card style colours (holo/retro) so the cards match the trainer card (2026-10-31) — finale and region share cards follow the trainer card's style (styleShareCard): holo adds a rainbow foil overlay and gradient frame, retro remaps every pixel to the Game Boy's four greens with scanlines and a dark frame, classic stays as drawn; smoke test samples a pixel
 - [x] Retro cards step 2: draw the retro card text in "Press Start 2P" (already used by the retro trainer card) so the whole picture looks like a Game Boy screen (2026-10-31) — retro finale and region cards draw their text in Press Start 2P (cardFont, loaded explicitly before drawing), so the whole picture reads as a Game Boy screen
 - [x] Card frames: classic cards get the red/gold Pokédex border used on the trainer card PNG, so every style has a frame (2026-10-31) — classic share cards now get the Pokédex's red frame with a thin gold inner line, so every style (classic, holo, retro) is framed
+- [x] Share card preview: show the drawn card in a small dialog first ("Save" / "Share" / "Cancel") instead of downloading straight away (2026-10-31) — finale and region share cards open a preview dialog first: the drawn card, then 💾 Save (download), 📤 Share (only where files can be shared) and Cancel; axe checked on top of the finale
