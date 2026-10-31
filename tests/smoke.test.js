@@ -159,6 +159,12 @@ test("? opens the keyboard shortcut list and Esc closes it", async () => {
     await page.keyboard.press("?");
     await page.waitForSelector("#shortcutsDialog[open]");
     assert.equal(await page.locator("#shortcutsDialog dt").count(), 8);
+    assert.equal(
+        await page.evaluate(
+            () => window.getComputedStyle(document.querySelector("#shortcutsDialog .shortcutsScreen")).animationName,
+        ),
+        "lcdPowerOn",
+    );
     await page.keyboard.press("Escape");
     await page.waitForSelector("#shortcutsDialog[open]", { state: "detached" });
     await page.click("#shortcutsBtn");

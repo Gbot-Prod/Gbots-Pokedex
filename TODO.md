@@ -19,7 +19,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
 - [ ] Go-to step 5: a quiet "beep" on each keystroke and a two-tone chime on Enter when sound effects are on (Web Audio, LCD theme)
 - [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
-- [ ] LCD power-on: the ? screen and G prompt flicker on (a 150 ms scanline wipe + brightness blip) when opened; instant under reduced motion
 - [ ] Odometer step 2: the trainer card's stat tiles reuse the hunt counter's rolling digits instead of the plain count-up
 - [ ] Quiz timer step 3: a short "tick" sound per second in the last 5 s and a buzzer at 0 when sound effects are on
 - [ ] Hunt LCD step 3: the readout flashes gold (SHINY! in segment letters) for 2 s when a shiny appears
@@ -351,3 +350,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Hunt counter step 2: digits "roll" like an odometer when an encounter ticks the count up (instant under reduced motion) (2026-10-31) — each LCD digit is its own span; the ones that changed since the last render roll down into place (0.35 s springy ease, clipped by the readout, still under reduced motion); smoke test checks only the last digit of 0000→0001 rolls
 - [x] LCD night glow: in dark mode the LCD screens cast a faint green glow onto the surrounding panel (box-shadow), brighter at night (2026-10-31) — in dark mode (html.darkTheme, system or chosen) the ? screen, hunt counter and quiz timer cast a soft green halo via --lcd-halo, wider and brighter at night; smoke test checks it's dark-only
 - [x] Quiz timer step 2: a segmented bar of 60 LCD dots that blink off one per second under the readout (2026-10-31) — instead of a separate dot row (which would crowd the combo pips), the timer's LCD got a segmented bar along its bottom edge that empties with the clock via --time-left, red with the screen in the last 10 s (red halo in dark mode)
+- [x] LCD power-on: the ? screen and G prompt flicker on (a 150 ms scanline wipe + brightness blip) when opened; instant under reduced motion (2026-10-31) — the ? screen and G prompt's LCD wipes open from a centre scanline with a brightness blip (0.32 s, after the dialog's pop-in); off under reduced motion
