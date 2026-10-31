@@ -19,6 +19,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Toast pause test: prove the hover pause can't strand the queue (hover, hide via Show me, then check the next toast still arrives with no pointerleave)
 - [ ] Go-to step 5: a quiet "beep" on each keystroke and a two-tone chime on Enter when sound effects are on (Web Audio, LCD theme)
 - [ ] Storage health: a "Repair saved data" line in the planned settings panel that reports and removes junk entries found by storage.js
+- [ ] Shared LCD component: move the green-screen styles (scanlines, bezel, glow, ghost "8"s) into one .lcd class used by the ? screen, G prompt, hunt counter and quiz timer
+- [ ] Hunt counter step 2: digits "roll" like an odometer when an encounter ticks the count up (instant under reduced motion)
+- [ ] Quiz timer step 2: a segmented bar of 60 LCD dots that blink off one per second under the readout
+- [ ] Go-to step 6: Tab on the LCD autocompletes the input to the shown match's name
+- [ ] LCD night glow: in dark mode the LCD screens cast a faint green glow onto the surrounding panel (box-shadow), brighter at night
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
