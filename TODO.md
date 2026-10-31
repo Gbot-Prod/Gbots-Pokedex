@@ -28,7 +28,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Parade: a soft "pop" sound with each name bubble when sound effects are on (Web Audio blip, pitch rising along the line)
 - [ ] Region banner tooltips step 2: on touch screens (no hover) show the trail hint as a small line under the banner's progress bar for completed regions
 - [ ] Region cards step 2: offer each completed region's card from the trainer card's region rows too (the toast is gone after a few seconds)
-- [ ] Phone toast layout: on narrow screens put "Show me" and 🖼️ on their own row under the message so it stays on one line
 - [ ] Shiny wave step 2: a sparkle burst (the hunt's ✨ particles) follows the shiny wave along the line
 - [ ] Share card gallery: a "Your cards" strip on the trainer card listing every card you can make (finale, regions, trainer) with previews
 - [ ] Share cards: mark the canvas text with the user's chosen card style colours (holo/retro) so the cards match the trainer card
@@ -391,3 +390,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Test tidy: split the long National Dex finale smoke test into finale / parade toys / share & image tests so a failure points at one feature (2026-10-31) — one test became four (finale + replay, tapping toys + cry cap, wave moods, share & image) sharing an openFinale() helper; same assertions
 - [x] Wave moods step 2: a fourth secret mood after the bow — everyone turns shiny for a moment (swap to shiny sprites for one wave) (2026-10-31) — a secret fourth press after the bow: every marcher swaps to its shiny sprite in the left-to-right wave with a sparkle pop, then changes back after about 2 s (no pop under reduced motion)
 - [x] Region complete image: a smaller share card when a single region is completed (its banner colours, trio and seen count), offered from the region toast (2026-10-31) — a 🖼️ button on each region-complete toast saves a 1200×630 card in the region's banner colour (drawRegionCard): '🏅 Hoenn complete!', 'Ash · 135 / 135 Pokémon seen · Gen 3', the starter trio and a big region legendary; share/download logic now shared with the finale image (shareOrDownload)
+- [x] Phone toast layout: on narrow screens put "Show me" and 🖼️ on their own row under the message so it stays on one line (2026-10-31) — below 480px a region toast wraps: the message takes the whole first line and 'Show me' + 🖼️ sit centred underneath (rounded-rectangle shape instead of a pill)

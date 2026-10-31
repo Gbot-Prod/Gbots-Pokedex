@@ -6156,3 +6156,18 @@ img.animatedSmall {
     outline: 2px solid #ffffff;
     outline-offset: 2px;
 }
+
+/* Narrow phones: a region toast's message gets the whole first line, buttons go underneath */
+@media (max-width: 480px) {
+    #dexToast.withAction {
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: 0.4rem;
+        border-radius: 1.4rem;
+    }
+
+    #dexToast.withAction .toastMessage {
+        flex-basis: 100%;
+        text-align: center;
+    }
+}
