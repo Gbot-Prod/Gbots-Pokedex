@@ -28,7 +28,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
 - [ ] National Dex finale step 2: a one-time full-screen "Pokédex complete" celebration (all 9 starter trios parading across) the first time all 1,025 are seen
 - [ ] Trainer card: a "Regions" row of mini banners that light up as each is completed (mirrors the browse strip)
-- [ ] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub
 - [ ] Combo meter: a short rising chime per pip when sound effects are on (Web Audio), and a "fizzle" on a broken chain
 - [ ] Quiz challenge results card: after "Time's up!", a small summary card (named, best combo, accuracy) that can be shared as text
 - [ ] Harness: let useMockedPages take per-file options (initial URL, storage seed applied with addInitScript before the first load)
@@ -351,3 +350,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Quiz timer step 2: a segmented bar of 60 LCD dots that blink off one per second under the readout (2026-10-31) — instead of a separate dot row (which would crowd the combo pips), the timer's LCD got a segmented bar along its bottom edge that empties with the clock via --time-left, red with the screen in the last 10 s (red halo in dark mode)
 - [x] LCD power-on: the ? screen and G prompt flicker on (a 150 ms scanline wipe + brightness blip) when opened; instant under reduced motion (2026-10-31) — the ? screen and G prompt's LCD wipes open from a centre scanline with a brightness blip (0.32 s, after the dialog's pop-in); off under reduced motion
 - [x] Hunt LCD step 3: the readout flashes gold (SHINY! in segment letters) for 2 s when a shiny appears (2026-10-31) — a shiny turns the hunt counter's LCD gold for 2 s with '✦ SHINY! ✦' blinking in segment-style letters over the hidden readouts (steady under reduced motion; the result line still announces it)
+- [x] CI: upload the smoke-test log as an artifact on failure, so flaky failures can be diagnosed from GitHub (2026-10-31) — ci.yml tees npm test (pipefail keeps its exit code) into test-log.txt and uploads it as the test-log artifact (14 days) when the job fails; README notes it; test-log.txt ignored locally

@@ -16,7 +16,18 @@ jobs:
             - run: npm ci
             - run: npx playwright install --with-deps chromium
             - run: npm run lint
-            - run: npm test
+            # The full test log is kept as an artifact when the suite fails, so a flaky failure
+            # can be read from GitHub (pipefail keeps the test exit code through tee).
+            - name: npm test
+              shell: bash
+              run: set -o pipefail && npm test 2>&1 | tee test-log.txt
+            - name: Upload the test log
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-log
+                  path: test-log.txt
+                  retention-days: 14
             # Lighthouse budgets (see lighthouserc.json): accessibility and best practices must
             # stay high; performance and SEO only warn.
             - run: npm run lighthouse

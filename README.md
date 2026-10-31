@@ -71,6 +71,9 @@ npm test
 
 `npm run check:live` runs the same smoke tests against the real PokéAPI, to
 catch API changes the fixtures would hide.
+When `npm test` fails in CI, the full test output is attached to the run as the `test-log`
+artifact (kept for 14 days), so a flaky failure can be read without re-running it.
+
 A nightly GitHub Actions job (`.github/workflows/live-check.yml`, also runnable by hand) does
 the same, so API changes are caught even when nobody pushes.
 
