@@ -1092,6 +1092,14 @@ test("seeing every Pokémon turns the region button into the National Dex finale
     assert.equal(await page.evaluate(() => document.activeElement.id), "finaleClose"); // focus on the way out
     await page.click("#finaleParade .finaleWave"); // the title: everyone jumps in a wave
     assert.equal(await page.locator("#finaleParade .paradeLine img.paradeJump").count(), 36);
+    // Share: without a share sheet the brag goes to the clipboard.
+    await page.evaluate(() => {
+        delete Navigator.prototype.share;
+        navigator.clipboard.writeText = async (text) => (window.copiedText = text);
+    });
+    await page.click("#finaleShare");
+    await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent.startsWith("Copied!"));
+    assert.match(await page.evaluate(() => window.copiedText), /^🏆 I completed the National Pokédex — all 1,025/);
     // Cries are capped at three at once: with cries that never finish, six taps make three.
     await page.evaluate(() => {
         window.criesMade = 0;

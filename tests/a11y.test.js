@@ -116,6 +116,13 @@ test("the National Dex parade passes axe", async () => {
     await page.fill("#pokemonLookupInpt", "pikachu");
     await page.press("#pokemonLookupInpt", "Enter");
     await page.waitForSelector("#finaleParade[open]");
+    // with the share status showing too
+    await page.evaluate(() => {
+        delete Navigator.prototype.share;
+        navigator.clipboard.writeText = async () => {};
+    });
+    await page.click("#finaleShare");
+    await page.waitForFunction(() => document.getElementById("finaleShareStatus").textContent !== "");
     const results = await new AxeBuilder({ page }).include("#finaleParade").analyze();
     const serious = results.violations
         .filter((violation) => ["serious", "critical"].includes(violation.impact))

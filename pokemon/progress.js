@@ -222,7 +222,10 @@ function showFinaleParade({ replay = false } = {}) {
         '<h2 id="finaleHeading"><button type="button" class="finaleWave">🏆 Pokédex complete!</button></h2>' +
         "<p>All 1,025 Pokémon seen. Every region's partners came to celebrate.</p>" +
         '<div class="paradeTrack" aria-hidden="true"><div class="paradeLine"></div></div>' +
-        '<form method="dialog"><button class="btn" id="finaleClose" autofocus>Hooray!</button></form>';
+        '<form method="dialog" class="finaleActions">' +
+        '<button type="button" class="btn" id="finaleShare">📋 Share</button>' +
+        '<button class="btn" id="finaleClose" autofocus>Hooray!</button></form>' +
+        '<p id="finaleShareStatus" role="status"></p>';
     const line = dialog.querySelector(".paradeLine");
     // The starters march first; each region's legendary follows, bigger, as the grand finale.
     const marchers = [
@@ -307,6 +310,22 @@ function showFinaleParade({ replay = false } = {}) {
                 }),
             sprites.length * 45 + 700,
         );
+    });
+    // Brag a little: the share sheet where there is one, otherwise the clipboard.
+    dialog.querySelector("#finaleShare").addEventListener("click", async () => {
+        const status = dialog.querySelector("#finaleShareStatus");
+        const day = new Date().toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+        const text = "🏆 I completed the National Pokédex — all 1,025 Pokémon seen! (" + day + ")";
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: "Pokédex complete!", text });
+                return;
+            }
+            await navigator.clipboard.writeText(text);
+            status.textContent = "Copied! Paste it anywhere to show it off.";
+        } catch {
+            status.textContent = navigator.share ? "" : "Couldn't copy — your browser blocked the clipboard.";
+        }
     });
     dialog.addEventListener("close", () => dialog.remove());
     document.body.append(dialog);

@@ -6023,3 +6023,32 @@ img.animatedSmall {
 .toastFootprints[data-region="9"]::before {
     content: "★★★★★★★★★★★★★★★★★★★★";
 }
+
+.finaleActions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+}
+
+#finaleShare {
+    padding: 0.6rem 1.4rem;
+    border: 3px solid #ffd447;
+    border-radius: 999px;
+    background: transparent;
+    color: #ffd447;
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+#finaleShare:hover,
+#finaleShare:focus-visible {
+    background: rgba(255, 212, 71, 0.15);
+}
+
+#finaleShareStatus {
+    min-height: 1.4em;
+    margin: 0;
+    color: #ffd447;
+    font-size: 0.95rem;
+}
