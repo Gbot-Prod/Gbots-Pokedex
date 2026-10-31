@@ -15,6 +15,11 @@ Rules for each run:
 ## 0. Features & visuals (owner's priority)
 Bold, fun additions. Everything here must respect prefers-reduced-motion, dark mode, phone layout and keep the axe tests green.
 - [ ] Spotlight step 2: the badge detail (description, earned date, next tier) pops open beside the spotlighted badge after "Show me"
+- [ ] Robust storage: loadStoredList should drop malformed entries (a favourites list of bare numbers crashes the page on load) — found while seeding screenshots
+- [ ] Shortcuts screen step 2: "G" opens a "go to number" prompt on the LCD (type 1-1025, Enter jumps there)
+- [ ] Shortcuts on phones: a small ⌨️ button only shown when a hardware keyboard is detected (first keydown), since the tip line is hidden on touch
+- [ ] Count-up step 3: region progress bars on the trainer card fill from empty with the same stagger as the stat tiles
+- [ ] Toast queue polish: when "Show me" is clicked, skip the rest of the queue into a single "+N more" summary so toasts don't pop over the page you were sent to
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Toast icons for region completions too (the region's starter trio as a mini sprite strip)
