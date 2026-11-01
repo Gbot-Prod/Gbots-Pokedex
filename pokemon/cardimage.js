@@ -352,6 +352,18 @@ export function styleShareCard(canvas, style) {
     }
 }
 
+// A four-point star, like the sparkle on a shiny.
+function sparkle(context, x, y, radius) {
+    const waist = radius * 0.28;
+    context.beginPath();
+    context.moveTo(x, y - radius);
+    context.quadraticCurveTo(x + waist, y - waist, x + radius, y);
+    context.quadraticCurveTo(x + waist, y + waist, x, y + radius);
+    context.quadraticCurveTo(x - waist, y + waist, x - radius, y);
+    context.quadraticCurveTo(x - waist, y - waist, x, y - radius);
+    context.fill();
+}
+
 // The team card: six slots with each member's sprite, name and types (type-coloured pills),
 // and a line on what to watch out for and what the team hits hardest.
 // team: { members: [{ label, types }], weakTo: [[type, count]], hits: [type], byline, retro },
@@ -405,10 +417,32 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
         if (!member) {
             continue;
         }
-        if (sprites[index]) {
-            context.drawImage(sprites[index], x + 6, y + 15, 140, 140);
+        const isMvp = index === team.mvp;
+        if (isMvp && !retro) {
+            // a gold glow behind the MVP's sprite
+            const glow = context.createRadialGradient(x + 76, y + 85, 10, x + 76, y + 85, 90);
+            glow.addColorStop(0, "rgba(255, 212, 71, 0.55)");
+            glow.addColorStop(1, "rgba(255, 212, 71, 0)");
+            context.fillStyle = glow;
+            context.fillRect(x + 4, y + 4, 150, 162);
         }
-        if (index === team.mvp) {
+        if (sprites[index]) {
+            // the MVP stands a little taller than the rest
+            const size = isMvp ? 164 : 140;
+            context.drawImage(sprites[index], x + 76 - size / 2, y + 85 - size / 2, size, size);
+        }
+        if (isMvp) {
+            // three four-point sparkles around the sprite
+            context.fillStyle = retro ? "#ffffff" : "#fff3b0";
+            for (const [sparkX, sparkY, radius] of [
+                [x + 22, y + 30, 11],
+                [x + 132, y + 48, 8],
+                [x + 120, y + 148, 6],
+            ]) {
+                sparkle(context, sparkX, sparkY, radius);
+            }
+        }
+        if (isMvp) {
             // the MVP: covers the most of the team's weaknesses
             context.lineWidth = 4;
             context.strokeStyle = "#ffd447";
