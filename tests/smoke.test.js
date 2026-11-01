@@ -638,6 +638,7 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     await page.waitForSelector(".teamSuggestion");
     assert.match(await page.textContent("#teamSuggest p"), /resist Ground, which 2 of your team are weak to/);
     assert.match(await page.textContent(".teamSuggestion"), /Farfetch’?d/); // ’ needs the species list
+    assert.match(await page.textContent(".teamSuggestion .teamSuggestionScore"), /^[+−±]\d+$/); // the balance change with it
     await page.click(".teamSuggestionAdd"); // straight into the team
     await page.waitForFunction(() => document.querySelectorAll(".teamSlot:not(.empty)").length === 3);
     // The team as a share card, through the same preview.

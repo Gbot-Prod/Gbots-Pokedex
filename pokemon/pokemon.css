@@ -6632,3 +6632,15 @@ img.animatedSmall {
     width: 18px;
     height: 18px;
 }
+
+.teamSuggestionScore {
+    margin-left: 0.2rem;
+    padding: 0 0.4rem;
+    border-radius: 999px;
+    background: rgba(63, 138, 37, 0.2);
+    font-weight: 900;
+}
+
+.teamSuggestionScore.down {
+    background: rgba(200, 50, 40, 0.2);
+}

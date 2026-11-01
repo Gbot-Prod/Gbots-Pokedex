@@ -369,12 +369,12 @@ async function renderCoverage() {
         expandAll.textContent = open ? "Hide the details" : "Show who's weak to everything";
     });
     coverageElement.replaceChildren(meter, expandAll, table);
-    suggestFixes(memberMultipliers, requestId);
+    suggestFixes(memberMultipliers, memberHits, requestId);
 }
 
 // "Try adding…": up to three Pokémon you've already seen whose type resists the team's worst
 // shared weakness (the one most members are weak to), as buttons that open them.
-async function suggestFixes(memberMultipliers, requestId) {
+async function suggestFixes(memberMultipliers, memberHits, requestId) {
     const coverage = teamCoverage(memberMultipliers);
     const worst = sharedWeaknesses(memberMultipliers)
         .map((type) => coverage.find((entry) => entry.type === type))
@@ -416,12 +416,17 @@ async function suggestFixes(memberMultipliers, requestId) {
                     );
                     const added = sharedWeaknesses([...memberMultipliers, damageMultipliers(typeData)]).length - before;
                     const types = pokemon.types.map((entry) => entry.type.name);
-                    return { ...candidate, added, order, types };
+                    // the balance score the team would have with it
+                    const balance = teamBalance(
+                        [...memberMultipliers, damageMultipliers(typeData)],
+                        [...memberHits, superEffectiveTargets(typeData)],
+                    );
+                    return { ...candidate, added, order, types, balance };
                 }),
             ),
         ]);
         picks = scored
-            .sort((a, b) => a.added - b.added || a.order - b.order)
+            .sort((a, b) => b.balance - a.balance || a.added - b.added || a.order - b.order)
             .map((pick) => ({
                 ...pick,
                 label: slugs?.get(pick.id) ? speciesDisplayName(slugs.get(pick.id)) : formatName(pick.name),
@@ -452,12 +457,13 @@ async function suggestFixes(memberMultipliers, requestId) {
         suggestElement.replaceChildren(...(hint.textContent ? [hint] : []));
         return;
     }
+    const currentBalance = teamBalance(memberMultipliers, memberHits);
     const heading = document.createElement("p");
     heading.textContent =
         "Try adding — they resist " + formatName(worst.type) + ", which " + worst.weak + " of your team are weak to:";
     const list = document.createElement("ul");
     list.append(
-        ...picks.slice(0, 3).map(({ id, label, types }) => {
+        ...picks.slice(0, 3).map(({ id, label, types, balance }) => {
             const item = document.createElement("li");
             const button = document.createElement("button");
             button.type = "button";
@@ -478,7 +484,16 @@ async function suggestFixes(memberMultipliers, requestId) {
                 icon.className = "teamSuggestionType";
                 return icon;
             });
-            button.append(sprite, label, ...icons);
+            // how the balance score would change (green up, red down)
+            const change = balance - currentBalance;
+            const after = document.createElement("small");
+            after.className = "teamSuggestionScore" + (change < 0 ? " down" : "");
+            after.textContent = (change > 0 ? "+" : change < 0 ? "−" : "±") + Math.abs(change);
+            after.title = "Team balance with " + label + ": " + balance + " / 100 (now " + currentBalance + ")";
+            const spokenScore = document.createElement("span");
+            spokenScore.className = "visuallyHidden";
+            spokenScore.textContent = ", team balance would go from " + currentBalance + " to " + balance;
+            button.append(sprite, label, ...icons, after, spokenScore);
             button.addEventListener("click", () => {
                 showPokemon(id);
                 window.scrollTo({ top: 0, behavior: "smooth" });
