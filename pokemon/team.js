@@ -13,6 +13,7 @@ import { drawTeamCard, loadCanvasImage, styleShareCard } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
 import { cardFontsReady, hasSeen, noteTeamBalance, shareOrDownload } from "./progress.js";
 import {
+    GENERATIONS,
     MAX_DEX_NUMBER,
     TYPE_COLORS,
     TYPE_ICONS,
@@ -169,10 +170,11 @@ document.addEventListener?.("keydown", (event) => {
 
 // Picks the best of `tries` random line-ups of `size` from `pool` ([{ multipliers, hits }]),
 // scored by teamBalance. Returns the chosen indexes. `random` is injectable for tests.
-export function bestLineUp(pool, size, tries = 400, random = Math.random) {
+// `keep` lists indexes that must be in every line-up (the partner, when asked to keep it).
+export function bestLineUp(pool, size, tries = 400, random = Math.random, keep = []) {
     let best = { score: -1, picks: [] };
     for (let attempt = 0; attempt < tries; attempt++) {
-        const picks = [];
+        const picks = [...keep];
         while (picks.length < Math.min(size, pool.length)) {
             const index = Math.floor(random() * pool.length);
             if (!picks.includes(index)) {
@@ -210,16 +212,37 @@ async function surpriseTeam() {
                 }
             }
         }
-        const candidates = [...seenPokemon.values()].map((entry) => ({ ...entry, types: entry.types.filter(Boolean) }));
+        let candidates = [...seenPokemon.values()].map((entry) => ({ ...entry, types: entry.types.filter(Boolean) }));
+        // Options: only the region picked in the browse filter, and/or always keep the partner.
+        const region = GENERATIONS.find(
+            (gen) => String(gen.number) === document.getElementById("generationFilter").value,
+        );
+        if (document.getElementById("surpriseRegion").checked && region) {
+            candidates = candidates.filter(({ id }) => id >= region.first && id <= region.last);
+        }
+        let partnerId = null;
+        try {
+            partnerId = JSON.parse(localStorage.getItem("pokedex:trainer:v1"))?.partner ?? null;
+        } catch {
+            partnerId = null;
+        }
+        const keep =
+            document.getElementById("surprisePartner").checked && partnerId
+                ? [candidates.findIndex(({ id }) => id === partnerId)].filter((index) => index >= 0)
+                : [];
         if (candidates.length < TEAM_SIZE) {
-            showUndoless("See at least six Pokémon first — then I can build you a team!");
+            showUndoless(
+                document.getElementById("surpriseRegion").checked
+                    ? "You've seen fewer than six Pokémon there — try another region or untick it"
+                    : "See at least six Pokémon first — then I can build you a team!",
+            );
             return;
         }
         const pool = candidates.map((candidate) => {
             const data = candidate.types.map((type) => typeData[type]);
             return { multipliers: damageMultipliers(data), hits: superEffectiveTargets(data) };
         });
-        const { score, picks } = bestLineUp(pool, TEAM_SIZE);
+        const { score, picks } = bestLineUp(pool, TEAM_SIZE, 400, Math.random, keep);
         const slugs = await getSpeciesSlugs().catch(() => null);
         const members = picks.map((index) => {
             const { id, name, types } = candidates[index];

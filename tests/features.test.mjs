@@ -430,3 +430,12 @@ test("the surprise line-up keeps the best-balanced of its tries", async () => {
     assert.ok(picks.includes(2) || picks.includes(3));
     assert.equal(score, 53);
 });
+
+test("a surprise line-up can be told to keep someone", async () => {
+    const { bestLineUp } = await import("../pokemon/team.js");
+    const plain = { multipliers: {}, hits: new Set() };
+    const pool = [plain, plain, plain, plain];
+    for (let run = 0; run < 5; run++) {
+        assert.ok(bestLineUp(pool, 2, 10, Math.random, [3]).picks.includes(3));
+    }
+});

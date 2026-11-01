@@ -751,6 +751,13 @@ test("Surprise me builds a team of six from Pokémon you've seen", async () => {
         JSON.parse(localStorage.getItem("pokedex:team:v1")).map((member) => member.id),
     );
     assert.ok(ids.every((id) => id >= 1 && id <= 40));
+    // "keep my partner": Pikachu is in every surprise team.
+    await page.evaluate(() => localStorage.setItem("pokedex:trainer:v1", JSON.stringify({ partner: 25 })));
+    await page.check("#surprisePartner");
+    await page.click("#teamSurpriseBtn");
+    await page.waitForFunction(() =>
+        JSON.parse(localStorage.getItem("pokedex:team:v1")).some((member) => member.id === 25),
+    );
 });
 
 test("a shared ?team= link offers to load that team", async () => {
