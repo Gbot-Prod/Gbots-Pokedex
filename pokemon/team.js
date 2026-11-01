@@ -334,7 +334,37 @@ async function suggestFixes(memberMultipliers, requestId) {
                 showPokemon(id);
                 window.scrollTo({ top: 0, behavior: "smooth" });
             });
-            item.append(button);
+            // ＋ adds it straight to the team (the chart, badges and suggestions update).
+            const add = document.createElement("button");
+            add.type = "button";
+            add.className = "teamSuggestionAdd";
+            add.textContent = "＋";
+            add.setAttribute("aria-label", "Add " + formatName(name) + " to your team");
+            add.addEventListener("click", async () => {
+                add.disabled = true;
+                try {
+                    const pokemon = await fetchPokemon(String(id));
+                    if (team.length < TEAM_SIZE && !team.some((member) => member.id === pokemon.id)) {
+                        team = [
+                            ...team,
+                            {
+                                id: pokemon.id,
+                                name: pokemon.name,
+                                label: pokemonDisplayName(pokemon),
+                                types: pokemon.types.map((entry) => entry.type.name),
+                            },
+                        ];
+                        saveTeam();
+                        renderTeam();
+                        updateTeamButton();
+                        statusElement.textContent =
+                            pokemonDisplayName(pokemon) + " added to your team (" + team.length + "/6)";
+                    }
+                } catch {
+                    add.disabled = false; // couldn't load it: let them try again
+                }
+            });
+            item.append(button, add);
             return item;
         }),
     );

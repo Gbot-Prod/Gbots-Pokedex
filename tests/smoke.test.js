@@ -621,6 +621,8 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     await page.waitForSelector(".teamSuggestion");
     assert.match(await page.textContent("#teamSuggest p"), /resist Ground, which 2 of your team are weak to/);
     assert.match(await page.textContent(".teamSuggestion"), /Farfetchd/);
+    await page.click(".teamSuggestionAdd"); // straight into the team
+    await page.waitForFunction(() => document.querySelectorAll(".teamSlot:not(.empty)").length === 3);
     // The team as a share card, through the same preview.
     await page.evaluate(() => delete Navigator.prototype.canShare);
     const download = page.waitForEvent("download");
@@ -630,7 +632,7 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     assert.equal((await download).suggestedFilename(), "my-team.png");
 
     await page.click(".teamRemove");
-    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 1);
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
 });
 
 test("the type chart opens on demand and highlights the hovered row and column", async () => {

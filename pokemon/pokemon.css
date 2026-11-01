@@ -6519,3 +6519,33 @@ img.animatedSmall {
     background: #3f8a25;
     color: #ffffff;
 }
+
+#teamSuggest li {
+    display: flex;
+    align-items: center;
+}
+
+/* the ＋ joins the suggestion pill on its right */
+.teamSuggestion {
+    border-right: none;
+    border-radius: 999px 0 0 999px;
+}
+
+.teamSuggestionAdd {
+    align-self: stretch;
+    padding: 0 0.7rem;
+    border: 2px solid #3f8a25;
+    border-radius: 0 999px 999px 0;
+    background: #3f8a25;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.teamSuggestionAdd:hover,
+.teamSuggestionAdd:focus-visible {
+    background: #2d6619;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
