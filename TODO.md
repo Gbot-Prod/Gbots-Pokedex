@@ -39,7 +39,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Coverage sort step 2: a third mode "Most hits first" for offence planning, so the pill cycles type order → most weak → most hits
 - [ ] Coverage sort step 3: slide rows to their new places (FLIP) instead of the fade-in, still off under reduced motion
 - [ ] Balance history step 2: hover or focus a sparkline point to see that score and the member added or removed that changed it
-- [ ] Team card: colour the "Watch out for" types with their type colours (small coloured dots before each name)
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
@@ -465,3 +464,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time (2026-11-01) — a little SVG sparkline between the balance meter and its score shows the last 10 different scores (pokedex:balance-history:v1), scaled to their range, with a green dot when the latest went up and red when down; screen readers get the scores as its label
 - [x] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too (2026-11-01) — on the team card image the MVP stands taller (164px vs 140px) on a soft gold glow with three four-point sparkles; retro keeps the sparkles in its own shades and skips the glow
 - [x] Team card: the partner's slot gets the same ❤️ corner mark as the builder, so the card matches (2026-11-01) — your own team card draws a heart in your partner's slot corner (a vector heart, since the retro pixel font has no emoji); shared teams don't get one
+- [x] Team card: colour the "Watch out for" types with their type colours (small coloured dots before each name) (2026-11-01) — each type in the card's Watch out for and Hits hard lines gets a dot in its type colour (white-ringed); retro keeps plain text since the dots would all be one shade

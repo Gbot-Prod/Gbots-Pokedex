@@ -524,11 +524,51 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
     });
 
     context.font = cardFont(700, 22, retro);
-    context.fillStyle = "#ffb4a8";
-    const watch = team.weakTo.map(([type, count]) => capitalise(type) + " ×" + count).join(", ");
-    context.fillText("Watch out for: " + (watch || "nothing — nicely balanced!"), 50, 553, FINALE_WIDTH - 100);
-    context.fillStyle = "#b9f5c0";
-    context.fillText("Hits hard: " + (team.hits.map(capitalise).join(", ") || "—"), 50, 580, FINALE_WIDTH - 100);
+    // each type gets a dot in its own colour before its name (not in retro, where they'd all match)
+    const typeLine = (label, entries, empty, colour, y) => {
+        context.fillStyle = colour;
+        let x = 50;
+        context.fillText(label, x, y);
+        x += context.measureText(label).width;
+        if (!entries.length) {
+            context.fillText(empty, x, y);
+            return;
+        }
+        entries.forEach(([type, text], index) => {
+            if (index) {
+                context.fillStyle = colour;
+                context.fillText(", ", x, y);
+                x += context.measureText(", ").width;
+            }
+            if (!retro) {
+                context.fillStyle = typeColors[type] ?? "#888888";
+                context.beginPath();
+                context.arc(x + 8, y - 8, 7, 0, 2 * Math.PI);
+                context.fill();
+                context.lineWidth = 1.5;
+                context.strokeStyle = "rgba(255, 255, 255, 0.8)";
+                context.stroke();
+                x += 20;
+            }
+            context.fillStyle = colour;
+            context.fillText(text, x, y);
+            x += context.measureText(text).width;
+        });
+    };
+    typeLine(
+        "Watch out for: ",
+        team.weakTo.map(([type, count]) => [type, capitalise(type) + " ×" + count]),
+        "nothing — nicely balanced!",
+        "#ffb4a8",
+        553,
+    );
+    typeLine(
+        "Hits hard: ",
+        team.hits.map((type) => [type, capitalise(type)]),
+        "—",
+        "#b9f5c0",
+        580,
+    );
 
     context.textAlign = "center";
     context.font = cardFont(600, 18, retro);
