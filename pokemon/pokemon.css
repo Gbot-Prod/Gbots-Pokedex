@@ -6748,3 +6748,61 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* Saved teams: a folder of up to three named teams */
+#teamPresets {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 0.9rem;
+    text-align: center;
+}
+
+#teamPresets summary {
+    font-weight: 800;
+    cursor: pointer;
+}
+
+#teamPresetForm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0.6rem 0;
+}
+
+#teamPresetName {
+    width: 11rem;
+    padding: 0.35rem 0.6rem;
+    border: 2px solid var(--ink, #1d2340);
+    border-radius: 8px;
+    font: inherit;
+}
+
+#teamPresetSave,
+.teamPresetLoad {
+    margin: 0;
+    padding: 0.35rem 0.9rem;
+    background-color: #5871c1;
+    font-size: 0.95rem;
+}
+
+#teamPresetList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#teamPresetList li {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.teamPresetEmpty {
+    font-style: italic;
+}

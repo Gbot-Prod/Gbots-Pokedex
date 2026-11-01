@@ -161,6 +161,84 @@ document.addEventListener?.("keydown", (event) => {
     }
 });
 
+// --- Saved teams -------------------------------------------------------------------------
+// Up to three named teams, kept alongside the current one; loading one goes through
+// changeTeam(), so it can be undone like any other change.
+const PRESETS_KEY = "pokedex:team-presets:v1";
+const MAX_PRESETS = 3;
+
+function loadPresets() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(PRESETS_KEY));
+        return Array.isArray(stored)
+            ? stored
+                  .filter((preset) => typeof preset?.name === "string" && Array.isArray(preset.members))
+                  .map((preset) => ({ name: preset.name, members: preset.members.filter(isTeamMember) }))
+                  .slice(0, MAX_PRESETS)
+            : [];
+    } catch {
+        return [];
+    }
+}
+
+function savePresets(presets) {
+    try {
+        localStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
+    } catch {
+        // can't keep them: nothing else to do
+    }
+}
+
+function renderPresets() {
+    const presets = loadPresets();
+    const list = document.getElementById("teamPresetList");
+    list.replaceChildren(
+        ...presets.map((preset) => {
+            const item = document.createElement("li");
+            const load = document.createElement("button");
+            load.type = "button";
+            load.className = "btn teamPresetLoad";
+            load.textContent = preset.name + " (" + preset.members.length + ")";
+            load.title = preset.members.map((member) => member.label).join(", ");
+            load.addEventListener("click", () => changeTeam(preset.members, "Loaded “" + preset.name + "”"));
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "linkBtn";
+            remove.textContent = "Delete";
+            remove.setAttribute("aria-label", "Delete saved team " + preset.name);
+            remove.addEventListener("click", () => {
+                savePresets(loadPresets().filter((other) => other.name !== preset.name));
+                renderPresets();
+                statusElement.textContent = "Deleted “" + preset.name + "”";
+            });
+            item.append(load, remove);
+            return item;
+        }),
+    );
+    if (!presets.length) {
+        const empty = document.createElement("li");
+        empty.className = "teamPresetEmpty";
+        empty.textContent = "No saved teams yet — up to " + MAX_PRESETS + ".";
+        list.append(empty);
+    }
+}
+
+function saveCurrentAsPreset(event) {
+    event.preventDefault();
+    const input = document.getElementById("teamPresetName");
+    const name = input.value.trim();
+    if (!name || !team.length) {
+        statusElement.textContent = team.length ? "Give the team a name first" : "Add some Pokémon first";
+        return;
+    }
+    // Same name replaces; past the limit the oldest goes.
+    const presets = [{ name, members: team }, ...loadPresets().filter((preset) => preset.name !== name)];
+    savePresets(presets.slice(0, MAX_PRESETS));
+    input.value = "";
+    renderPresets();
+    statusElement.textContent = "Saved this team as “" + name + "”";
+}
+
 function updateTeamButton() {
     const current = getCurrentPokemon();
     const inTeam = current && team.some((member) => member.id === current.id);
@@ -768,6 +846,8 @@ export function initTeam(options) {
     teamButton.addEventListener("click", toggleCurrent);
     shareTeamButton.addEventListener("click", shareTeam);
     teamCardButton.addEventListener("click", () => saveTeamCard());
+    document.getElementById("teamPresetForm").addEventListener("submit", saveCurrentAsPreset);
+    renderPresets();
     window.addEventListener(ANIMATED_CHANGE_EVENT, renderSlots);
     renderTeam();
     offerSharedTeam();

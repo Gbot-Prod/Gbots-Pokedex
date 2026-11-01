@@ -687,6 +687,25 @@ test("with nothing seen that fits, the team builder says which types would cover
     );
 });
 
+test("teams can be saved under a name and loaded back", async () => {
+    await search("pikachu");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    await page.click("#teamAddBtn");
+    await page.click("#teamPresets summary");
+    assert.match(await page.textContent("#teamPresetList"), /No saved teams yet/);
+    await page.fill("#teamPresetName", "Sparky");
+    await page.click("#teamPresetSave");
+    assert.equal(await page.textContent(".teamPresetLoad"), "Sparky (1)");
+    await page.click(".teamRemove"); // empty the team...
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 0);
+    await page.click(".teamPresetLoad"); // ...and bring the saved one back
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 1);
+    await page.reload(); // kept across visits
+    await page.click("#teamPresets summary");
+    await page.click("#teamPresetList .linkBtn"); // delete it
+    assert.match(await page.textContent("#teamPresetList"), /No saved teams yet/);
+});
+
 test("a shared ?team= link offers to load that team", async () => {
     await page.goto(baseUrl + "?team=25,94&by=Misty");
     await page.waitForSelector("#sharedTeam:not([hidden])");

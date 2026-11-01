@@ -39,11 +39,9 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
 - [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
-- [ ] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
 - [ ] Team builder: a little confetti pop when the team reaches 6 members with a balance of 70 or more
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
-- [ ] Team presets step 1: a "Save as…" button storing the current team under a name, and a select to switch back to it
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -444,3 +442,5 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Balance meter step 2: a "+N" / "−N" floater next to the score when adding or removing a member changes it (instant under reduced motion) (2026-11-01) — when the team changes, the difference floats up from the balance score ('+6' green / '−12' red, lighter shades in dark mode) and fades over 1.4 s; hidden under reduced motion
 - [x] Team slots: a gentle "settle" bounce on the slot a new member lands in (instant under reduced motion) (2026-11-01) — a newly added member's slot drops in with a 0.55 s settle bounce (only on the render right after the change; none under reduced motion)
 - [x] Undo step 2: Ctrl/Cmd+Z while the undo bar is showing triggers it (and the bar mentions the shortcut on desktop) (2026-11-01) — Ctrl/Cmd+Z presses Undo while the undo bar is showing (ignored while typing in a field); the button carries aria-keyshortcuts and an 'Undo (Ctrl+Z)' tooltip
+- [x] Team presets step 1: a "Save as…" button storing the current team under a name, and a select to switch back to it (2026-11-01) — a '📁 Saved teams' folder in the team section: save the current team under a name (same name replaces, up to 3, oldest dropped), load one with a button (through changeTeam, so Undo works) or delete it; kept in pokedex:team-presets:v1, junk entries skipped
+- [x] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them (2026-11-01) — covered by the Saved teams folder (same day)
