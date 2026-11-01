@@ -35,7 +35,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
-- [ ] Coverage slide polish: give rows a solid background during the FLIP slide so passing rows don't show through each other mid-flight
 - [ ] Best team step 2: the 🏆 pill shows what would change ("+ Lapras, − Snorlax") as a small line under it, before you bring it back
 - [ ] Best team step 3: a mini row of the best team's sprites in a popover on hover / focus of the 🏆 pill
 - [ ] Coverage chart view toggle: a radial "type wheel" view (18 wedges, red weak / green resist / blue hits) as an alternative to the table, also drawable on the team card
@@ -471,3 +470,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Coverage sort step 2: a third mode "Most hits first" for offence planning, so the pill cycles type order → most weak → most hits (2026-11-01) — the sort pill now cycles "Sort: ↕️ type order" → "⚠️ most weak first" → "⚔️ most hits first" (most members hitting it, then fewest weak), announced in the team status line and remembered
 - [x] Coverage sort step 3: slide rows to their new places (FLIP) instead of the fade-in, still off under reduced motion (2026-11-01) — re-sorting slides each row (and open detail line) from its old place to its new one with a 0.42 s FLIP via the Web Animations API, replacing the fade-in; no animation under reduced motion (checked: 16 animations vs 0)
 - [x] Phone layout: the floating theme / controller buttons cover the right edge of content at 375px (e.g. the "61 / 100" balance score) — give the team section a right gutter there or tuck the buttons away while scrolling (2026-11-01) — fixed: on screens up to 600px the theme button now stays at the top of the page (position: absolute) instead of floating over the right edge of content like the balance score; desktop keeps it fixed
+- [x] Coverage slide polish: give rows a solid background during the FLIP slide so passing rows don't show through each other mid-flight (2026-11-01) — sliding rows get a .sliding class (solid tile fill, keeping the danger tint, a soft shadow, raised above the rest) that's removed when the slide finishes or is cancelled

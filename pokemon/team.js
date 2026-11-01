@@ -735,10 +735,15 @@ async function renderCoverage() {
             for (const row of rows) {
                 const shift = before.get(row) - row.getBoundingClientRect().top;
                 if (shift) {
-                    row.animate([{ transform: `translateY(${shift}px)` }, { transform: "none" }], {
+                    row.classList.add("sliding");
+                    const slide = row.animate([{ transform: `translateY(${shift}px)` }, { transform: "none" }], {
                         duration: 420,
                         easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
                     });
+                    slide.finished.then(
+                        () => row.classList.remove("sliding"),
+                        () => row.classList.remove("sliding"), // cancelled by a quick second click
+                    );
                 }
             }
         }

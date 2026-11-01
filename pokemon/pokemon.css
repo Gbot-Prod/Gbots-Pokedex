@@ -2206,6 +2206,18 @@ img.placeholderSprite {
     color: var(--danger-ink, #b3261e);
 }
 
+/* rows sliding to a new place get a solid fill so passing rows don't show through */
+.coverageTable tr.sliding {
+    position: relative;
+    z-index: 1;
+    background-color: var(--tile-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.coverageTable tr.danger.sliding {
+    background: linear-gradient(rgba(192, 57, 43, 0.18), rgba(192, 57, 43, 0.18)), var(--tile-bg);
+}
+
 .coverageTable tr.danger {
     background-color: rgba(192, 57, 43, 0.18);
 }
