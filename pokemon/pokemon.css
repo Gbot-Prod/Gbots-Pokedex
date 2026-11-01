@@ -6825,3 +6825,8 @@ img.animatedSmall {
     margin: 0 -3px;
     image-rendering: pixelated;
 }
+
+#trainerCardBadges li.strategist:not(.locked) {
+    background: radial-gradient(circle at 35% 30%, #f3e8ff, #c084fc 60%, #7e22ce);
+    box-shadow: 0 0 12px rgba(192, 132, 252, 0.7);
+}

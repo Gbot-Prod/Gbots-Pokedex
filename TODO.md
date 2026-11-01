@@ -42,7 +42,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
 - [ ] Saved teams step 3: rename a saved team in place (double-click / Rename link) and reorder by dragging
-- [ ] Balance badge: a "Master strategist" badge on the trainer card for building a 90+ team
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -449,3 +448,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Saved teams step 2: a mini row of the saved team's six sprites inside its load button, so presets are recognisable at a glance (2026-11-01) — each saved team's load button shows its members' sprites in a small overlapping row under the name
 - [x] Team card step 4: include the balance score as a big gauge in the top-right corner of the shareable team card (2026-11-01) — the team card shows the balance score as a half-ring gauge in the top-right corner (fill and hue follow the score, 'BALANCE' under the number; left off when type data couldn't load)
 - [x] Team ideas: a "Surprise me" button that builds a 90+ balance team from Pokémon you've seen (random search like the one used to find test teams) (2026-11-01) — '🎲 Surprise me' builds six from Pokémon you've seen: the 18 type lists give each seen Pokémon's types, bestLineUp (unit-tested) keeps the best-balanced of 400 random line-ups (live: 82–88/100), loaded through changeTeam so Undo works; with fewer than six seen it says so
+- [x] Balance badge: a "Master strategist" badge on the trainer card for building a 90+ team (2026-11-01) — a ninth badge, 🧠 Master strategist (purple), earned by building a team with balance 90+; the team builder records the best balance reached (pokedex:best-balance:v1) and re-checks badges, so the usual badge toast announces it

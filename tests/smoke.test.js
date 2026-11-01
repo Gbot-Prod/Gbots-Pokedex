@@ -728,6 +728,11 @@ test("completing a well-balanced team of six sets off confetti", async () => {
     await page.waitForFunction(() => document.querySelectorAll(".teamSlot:not(.empty)").length === 6);
     await page.waitForSelector(".confetti.fullscreen", { state: "attached" });
     assert.match(await page.textContent("#teamStatus"), /^A full, well-balanced team: \d+ \/ 100!$/);
+    // 90+ is remembered for the Master strategist badge, which is now on the shelf.
+    assert.ok(Number(await page.evaluate(() => localStorage.getItem("pokedex:best-balance:v1"))) >= 90);
+    await page.click("#dexProgress");
+    await page.waitForSelector("#trainerCard[open]");
+    assert.equal(await page.locator("#trainerCardBadges li.strategist:not(.locked)").count(), 1);
 });
 
 test("Surprise me builds a team of six from Pokémon you've seen", async () => {

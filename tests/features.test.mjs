@@ -246,11 +246,12 @@ test("collectorBadges rewards opening one Pokémon 25 and 50 times", async () =>
 test("badgeShelf marks each badge earned or locked", async () => {
     const { badgeShelf } = await import("../pokemon/progress.js");
     const shelf = badgeShelf({ streak: 8, views: { 25: 30 }, shinies: 5, team: 4 });
-    assert.equal(shelf.length, 8);
+    assert.equal(shelf.length, 9);
     assert.deepEqual(
         shelf.map((badge) => badge.earned),
-        [true, false, true, false, false, true, false, false],
+        [true, false, true, false, false, true, false, false, false],
     );
+    assert.equal(badgeShelf({ strategist: 92 }).at(-1).earned, true); // Master strategist at 90+
     assert.equal(shelf.find((badge) => !badge.earned).hint, "Visit 30 days in a row");
 });
 

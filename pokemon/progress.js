@@ -788,6 +788,20 @@ export function newlyEarned(shelf, known) {
     return shelf.filter((badge) => badge.earned && !known.includes(badge.label));
 }
 
+// The best team balance score reached (written by the team builder), for Master strategist.
+const BEST_BALANCE_KEY = "pokedex:best-balance:v1";
+
+export function noteTeamBalance(balance) {
+    if (balance > (Number(readStored(BEST_BALANCE_KEY, 0)) || 0)) {
+        try {
+            localStorage.setItem(BEST_BALANCE_KEY, JSON.stringify(balance));
+        } catch {
+            return; // can't remember it
+        }
+        checkBadges();
+    }
+}
+
 function checkBadges() {
     const shelf = badgeShelf(badgeProgress(completionStats(seen)));
     const known = readStored(EARNED_KEY, null);
@@ -966,12 +980,28 @@ const BADGES = [
         hintFor: (n) => "Get " + n + " quiz answers right in a row",
     },
     { icon: "👥", label: "Team player: a full team of six", hint: "Fill all six team slots", kind: "team", need: 6 },
+    {
+        icon: "🧠",
+        label: "Master strategist: a team balance of 90+",
+        hint: "Build a team with a balance score of 90 or more",
+        kind: "strategist",
+        need: 90,
+    },
 ];
 
 // All badges with whether each is earned, given the best streak and the view counts.
-// progress: { streak, views, regions, shinies, quiz, team } (missing values count as 0).
-export function badgeShelf({ streak = 0, views: viewCounts = {}, regions = 0, shinies = 0, quiz = 0, team = 0 }) {
-    const progress = { streak, collector: Math.max(0, ...Object.values(viewCounts)), regions, shinies, quiz, team };
+// progress: { streak, views, regions, shinies, quiz, team, strategist } (missing values count as 0).
+export function badgeShelf({
+    streak = 0,
+    views: viewCounts = {},
+    regions = 0,
+    shinies = 0,
+    quiz = 0,
+    team = 0,
+    strategist = 0,
+}) {
+    const collector = Math.max(0, ...Object.values(viewCounts));
+    const progress = { streak, collector, regions, shinies, quiz, team, strategist };
     return BADGES.map((badge) => {
         if (!badge.tiers) {
             return { ...badge, earned: progress[badge.kind] >= badge.need, tier: 0 };
@@ -1013,6 +1043,7 @@ function badgeProgress(stats) {
         shinies: readStored("pokedex:shiny-hunt:v1", {}).shinies?.length ?? 0,
         quiz: readStored("pokedex:quiz:v1", {}).best ?? 0,
         team: storedCount("pokedex:team:v1", isTeamMember),
+        strategist: Number(readStored(BEST_BALANCE_KEY, 0)) || 0,
     };
 }
 

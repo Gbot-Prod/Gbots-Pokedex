@@ -11,7 +11,7 @@ import {
 } from "./api.js";
 import { drawTeamCard, loadCanvasImage, styleShareCard } from "./cardimage.js";
 import { makeConfetti } from "./effects.js";
-import { cardFontsReady, hasSeen, shareOrDownload } from "./progress.js";
+import { cardFontsReady, hasSeen, noteTeamBalance, shareOrDownload } from "./progress.js";
 import {
     MAX_DEX_NUMBER,
     TYPE_COLORS,
@@ -595,6 +595,7 @@ async function renderCoverage() {
     }
     wasGreat = great;
     lastBalance = balance;
+    noteTeamBalance(balance); // the best so far counts toward the Master strategist badge
     meter.append(label, bar, score);
     // Open (or close) every type's who-is-weak line at once.
     const expandAll = document.createElement("button");
