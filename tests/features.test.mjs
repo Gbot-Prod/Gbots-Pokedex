@@ -452,6 +452,20 @@ test("balance history skips repeats, drops junk and keeps the last ten", async (
     assert.deepEqual(pushBalanceHistory(long, 99), [1, 2, 3, 4, 5, 6, 7, 8, 9, 99]);
 });
 
+test("hits-first sorting puts the best-hit types up, fewer weak first on ties", async () => {
+    const { sortCoverageByHits } = await import("../pokemon/team.js");
+    const rows = [
+        { type: "normal", hits: 0, weak: 0 },
+        { type: "fire", hits: 2, weak: 1 },
+        { type: "water", hits: 2, weak: 0 },
+        { type: "grass", hits: 1, weak: 0 },
+    ];
+    assert.deepEqual(
+        sortCoverageByHits(rows).map(({ type }) => type),
+        ["water", "fire", "grass", "normal"],
+    );
+});
+
 test("danger-first sorting floats the most net weaknesses up and keeps ties in type order", async () => {
     const { sortCoverageByDanger } = await import("../pokemon/team.js");
     const rows = [

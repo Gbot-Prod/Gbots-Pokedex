@@ -85,6 +85,15 @@ export function sortCoverageByDanger(rows) {
         .map(([row]) => row);
 }
 
+// The coverage rows with the types the team hits hardest first: most members hitting it,
+// then fewest weak to it, keeping type order for ties.
+export function sortCoverageByHits(rows) {
+    return rows
+        .map((row, index) => [row, index])
+        .sort(([a, i], [b, j]) => b.hits - a.hits || a.weak - b.weak || i - j)
+        .map(([row]) => row);
+}
+
 const COVERAGE_SORT_KEY = "pokedex:coverageSort:v1";
 const BALANCE_HISTORY_KEY = "pokedex:balance-history:v1";
 const BEST_TEAM_KEY = "pokedex:best-team:v1";
@@ -685,37 +694,48 @@ async function renderCoverage() {
             cell.append(bar, String(count));
         }
     }
-    // Rows go in type order, or with the danger types floated to the top (remembered).
-    const placeRows = (dangerFirst) => {
-        const order = dangerFirst ? sortCoverageByDanger(coverageRows) : coverageRows;
-        for (const { type } of order) {
+    // Rows go in type order, danger types first, or best-hit types first (remembered); the
+    // pill cycles through the three.
+    const sortModes = {
+        type: ["↕️ type order", (rows) => rows],
+        danger: ["⚠️ most weak first", sortCoverageByDanger],
+        hits: ["⚔️ most hits first", sortCoverageByHits],
+    };
+    const placeRows = (mode) => {
+        for (const { type } of sortModes[mode][1](coverageRows)) {
             const pair = rowDetails.find(([row]) => row.dataset.type === type);
             body.append(...pair);
         }
     };
-    let dangerFirst = false;
+    let sortMode = "type";
     try {
-        dangerFirst = localStorage.getItem(COVERAGE_SORT_KEY) === "danger";
+        const stored = localStorage.getItem(COVERAGE_SORT_KEY);
+        sortMode = Object.hasOwn(sortModes, stored) ? stored : "type";
     } catch {
         // storage blocked: type order
     }
-    placeRows(dangerFirst);
+    placeRows(sortMode);
     const sortToggle = document.createElement("button");
     sortToggle.type = "button";
     sortToggle.className = "linkBtn coverageSort";
-    sortToggle.textContent = "⚠️ Most weak first";
-    sortToggle.setAttribute("aria-pressed", String(dangerFirst));
+    const showMode = () => {
+        sortToggle.dataset.mode = sortMode;
+        sortToggle.textContent = "Sort: " + sortModes[sortMode][0];
+    };
+    showMode();
     sortToggle.addEventListener("click", () => {
-        dangerFirst = !dangerFirst;
-        sortToggle.setAttribute("aria-pressed", String(dangerFirst));
-        placeRows(dangerFirst);
+        const modes = Object.keys(sortModes);
+        sortMode = modes[(modes.indexOf(sortMode) + 1) % modes.length];
+        showMode();
+        placeRows(sortMode);
+        statusElement.textContent = "Coverage chart sorted by " + sortModes[sortMode][0].replace(/^\S+ /, "");
         if (!reducedMotion.matches) {
             table.classList.remove("resorted");
             void table.offsetWidth; // restart the shuffle animation
             table.classList.add("resorted");
         }
         try {
-            localStorage.setItem(COVERAGE_SORT_KEY, dangerFirst ? "danger" : "type");
+            localStorage.setItem(COVERAGE_SORT_KEY, sortMode);
         } catch {
             // storage blocked: the order just isn't remembered
         }

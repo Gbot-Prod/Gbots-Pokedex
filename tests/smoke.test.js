@@ -630,12 +630,17 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     assert.equal(await page.locator(".coverageDetails:not([hidden])").count(), 18);
     await page.click(".coverageExpandAll");
     assert.equal(await page.locator(".coverageDetails:not([hidden])").count(), 0);
-    // "Most weak first" floats Ground (both weak, nobody resists) to the top, and back again.
+    // The sort pill: "most weak first" floats Ground (both weak, nobody resists) to the top, and back again.
     const firstRow = () => page.$eval(".coverageTable tbody tr:not(.coverageDetails)", (row) => row.dataset.type);
     await page.click(".coverageSort");
-    assert.equal(await page.getAttribute(".coverageSort", "aria-pressed"), "true");
+    assert.equal(await page.textContent(".coverageSort"), "Sort: ⚠️ most weak first");
     assert.equal(await firstRow(), "ground");
     assert.equal(await page.evaluate(() => localStorage.getItem("pokedex:coverageSort:v1")), "danger");
+    // ...then "most hits first" (Pikachu's Electric hits Water, the first hit type in order)...
+    await page.click(".coverageSort");
+    assert.equal(await page.textContent(".coverageSort"), "Sort: ⚔️ most hits first");
+    assert.equal(await firstRow(), "water");
+    // ...and back to type order.
     await page.click(".coverageSort");
     assert.equal(await firstRow(), "normal");
     await page.click(groundRow + " .coverageToggle");

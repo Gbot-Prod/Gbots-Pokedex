@@ -6645,10 +6645,14 @@ img.animatedSmall {
     border: 1px solid transparent;
 }
 
-.coverageSort[aria-pressed="true"] {
+.coverageSort:not([data-mode="type"]) {
     border-color: currentColor;
     font-weight: 700;
     background: color-mix(in srgb, #e5484d 14%, transparent);
+}
+
+.coverageSort[data-mode="hits"] {
+    background: color-mix(in srgb, #3e63dd 16%, transparent);
 }
 
 .coverageTable.resorted tbody tr:not(.coverageDetails) {

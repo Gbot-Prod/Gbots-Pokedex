@@ -35,7 +35,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
-- [ ] Coverage sort step 2: a third mode "Most hits first" for offence planning, so the pill cycles type order → most weak → most hits
 - [ ] Coverage sort step 3: slide rows to their new places (FLIP) instead of the fade-in, still off under reduced motion
 - [ ] Balance history step 2: hover or focus a sparkline point to see that score and the member added or removed that changed it
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
@@ -465,3 +464,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team card: the partner's slot gets the same ❤️ corner mark as the builder, so the card matches (2026-11-01) — your own team card draws a heart in your partner's slot corner (a vector heart, since the retro pixel font has no emoji); shared teams don't get one
 - [x] Team card: colour the "Watch out for" types with their type colours (small coloured dots before each name) (2026-11-01) — each type in the card's Watch out for and Hits hard lines gets a dot in its type colour (white-ringed); retro keeps plain text since the dots would all be one shade
 - [x] Best-ever team: store the line-up that set your best balance score and offer "Bring back my best team (92)" under the meter (2026-11-01) — the line-up behind your best balance is kept (pokedex:best-team:v1, replaced only by a strictly higher score); when the current team scores lower, a gold "🏆 Bring back my best team (88)" pill under the meter restores it through the usual Undo
+- [x] Coverage sort step 2: a third mode "Most hits first" for offence planning, so the pill cycles type order → most weak → most hits (2026-11-01) — the sort pill now cycles "Sort: ↕️ type order" → "⚠️ most weak first" → "⚔️ most hits first" (most members hitting it, then fewest weak), announced in the team status line and remembered
