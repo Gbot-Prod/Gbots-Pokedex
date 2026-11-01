@@ -38,7 +38,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
-- [ ] Balance meter step 2: a "+N" / "−N" floater next to the score when adding or removing a member changes it (instant under reduced motion)
 - [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
 - [ ] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
@@ -439,3 +438,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Suggestions step 4: show each suggestion's types as tiny icons inside its pill, so the reason is visible at a glance (2026-11-01) — each suggestion pill shows its types as small type icons after the name (alt text names them, so the button reads 'Butterfree Bug Flying')
 - [x] Suggestions step 5: show the score the team would have with each suggestion ("→ 74") inside its pill (2026-11-01) — each suggestion shows how the team balance would change with it (+3 green / −7 red badge, exact before→after in the tooltip and for screen readers), and picks are ranked by the resulting balance; live this showed every Ground fix costing balance — see the new scoring idea
 - [x] Team history: undo the last add/remove with a toast button ("Gengar removed · Undo") (2026-11-01) — every team change (card button, ×, suggestion ＋, loading a shared team) goes through changeTeam(), which shows 'Gengar removed from your team · Undo' for 8 s; Undo restores the team as it was and announces it
+- [x] Balance meter step 2: a "+N" / "−N" floater next to the score when adding or removing a member changes it (instant under reduced motion) (2026-11-01) — when the team changes, the difference floats up from the balance score ('+6' green / '−12' red, lighter shades in dark mode) and fades over 1.4 s; hidden under reduced motion

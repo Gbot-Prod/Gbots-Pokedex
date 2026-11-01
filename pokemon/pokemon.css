@@ -6681,3 +6681,52 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+/* "+6" / "−4" floats up from the balance score when the team changes */
+.teamBalanceScore {
+    position: relative;
+}
+
+.balanceFloater {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    color: #2f8a3a;
+    font-weight: 900;
+    pointer-events: none;
+    animation: balanceFloat 1.4s ease-out forwards;
+}
+
+.balanceFloater.down {
+    color: #c0392b;
+}
+
+:root.darkTheme .balanceFloater {
+    color: #6fe08a;
+}
+
+:root.darkTheme .balanceFloater.down {
+    color: #ff8a7a;
+}
+
+@keyframes balanceFloat {
+    from {
+        transform: translateY(6px);
+        opacity: 0;
+    }
+    20% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-14px);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .balanceFloater {
+        animation: none;
+        opacity: 0;
+    }
+}

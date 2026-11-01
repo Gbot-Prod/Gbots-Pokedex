@@ -219,12 +219,14 @@ function renderSlots() {
 }
 
 let coverageRequest = 0;
+let lastBalance = null; // the score last shown, for the change floater
 
 async function renderCoverage() {
     const requestId = ++coverageRequest;
     if (!team.length) {
         coverageElement.replaceChildren();
         suggestElement.replaceChildren();
+        lastBalance = null;
         return;
     }
     let memberMultipliers;
@@ -383,7 +385,18 @@ async function renderCoverage() {
     fill.style.setProperty("--balance", balance);
     bar.append(fill);
     const score = document.createElement("strong");
+    score.className = "teamBalanceScore";
     score.textContent = balance + " / 100";
+    // When the team changes, the difference floats up from the score ("+6" / "−4").
+    if (lastBalance !== null && balance !== lastBalance) {
+        const change = balance - lastBalance;
+        const floater = document.createElement("span");
+        floater.className = "balanceFloater" + (change < 0 ? " down" : "");
+        floater.setAttribute("aria-hidden", "true");
+        floater.textContent = (change > 0 ? "+" : "−") + Math.abs(change);
+        score.append(floater);
+    }
+    lastBalance = balance;
     meter.append(label, bar, score);
     // Open (or close) every type's who-is-weak line at once.
     const expandAll = document.createElement("button");
