@@ -612,6 +612,8 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     assert.equal(await page.getAttribute("#teamAddBtn", "aria-pressed"), "true");
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
     await page.waitForSelector(".coverageTable");
+    // Two scores so far (one member, then two): the sparkline appears beside the meter.
+    assert.match(await page.getAttribute(".balanceSpark", "aria-label"), /^Recent balance scores: \d+, \d+$/);
     // Ground hits both Pikachu (2×) and Gengar (2×).
     const groundRow = ".coverageTable tbody tr:nth-child(9 of :not(.coverageDetails))";
     const groundWeak = await page.$eval(groundRow + " td.weak", (cell) => cell.textContent);

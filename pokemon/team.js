@@ -86,6 +86,48 @@ export function sortCoverageByDanger(rows) {
 }
 
 const COVERAGE_SORT_KEY = "pokedex:coverageSort:v1";
+const BALANCE_HISTORY_KEY = "pokedex:balance-history:v1";
+
+// The recent balance scores for the sparkline: the new score is added only when it differs
+// from the last one, keeping the latest `limit`.
+export function pushBalanceHistory(history, score, limit = 10) {
+    const clean = Array.isArray(history) ? history.filter((value) => Number.isFinite(value)) : [];
+    if (clean.at(-1) === score) {
+        return clean.slice(-limit);
+    }
+    return [...clean, score].slice(-limit);
+}
+
+// A tiny inline SVG line of the scores, scaled to their range (at least 20 points tall so
+// small wobbles stay small), with a dot on the latest.
+function balanceSparkline(history) {
+    const svgNs = "http://www.w3.org/2000/svg";
+    const width = 60;
+    const height = 22;
+    const svg = document.createElementNS(svgNs, "svg");
+    svg.setAttribute("class", "balanceSpark");
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.setAttribute("width", String(width));
+    svg.setAttribute("height", String(height));
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "Recent balance scores: " + history.join(", "));
+    const low = Math.min(...history);
+    const span = Math.max(20, Math.max(...history) - low);
+    const points = history.map((score, index) => [
+        3 + (index / (history.length - 1)) * (width - 6),
+        3 + (1 - (score - low) / span) * (height - 6),
+    ]);
+    const line = document.createElementNS(svgNs, "polyline");
+    line.setAttribute("points", points.map(([x, y]) => x.toFixed(1) + "," + y.toFixed(1)).join(" "));
+    const [lastX, lastY] = points.at(-1);
+    const dot = document.createElementNS(svgNs, "circle");
+    dot.setAttribute("cx", lastX.toFixed(1));
+    dot.setAttribute("cy", lastY.toFixed(1));
+    dot.setAttribute("r", "2.4");
+    svg.classList.toggle("up", history.at(-1) >= history.at(-2));
+    svg.append(line, dot);
+    return svg;
+}
 
 // The team's MVP: the member who resists (or is immune to) the most of the types the team as
 // a whole is weak to. Returns its index, or -1 when there's no shared weakness to cover.
@@ -703,7 +745,18 @@ async function renderCoverage() {
     wasGreat = great;
     lastBalance = balance;
     noteTeamBalance(balance); // the best so far counts toward the Master strategist badge
-    meter.append(label, bar, score);
+    let history;
+    try {
+        history = pushBalanceHistory(JSON.parse(localStorage.getItem(BALANCE_HISTORY_KEY)), balance);
+        localStorage.setItem(BALANCE_HISTORY_KEY, JSON.stringify(history));
+    } catch {
+        history = [balance];
+    }
+    meter.append(label, bar);
+    if (history.length >= 2) {
+        meter.append(balanceSparkline(history));
+    }
+    meter.append(score);
     // Open (or close) every type's who-is-weak line at once.
     const expandAll = document.createElement("button");
     expandAll.type = "button";

@@ -431,6 +431,15 @@ test("the surprise line-up keeps the best-balanced of its tries", async () => {
     assert.equal(score, 53);
 });
 
+test("balance history skips repeats, drops junk and keeps the last ten", async () => {
+    const { pushBalanceHistory } = await import("../pokemon/team.js");
+    assert.deepEqual(pushBalanceHistory(null, 40), [40]);
+    assert.deepEqual(pushBalanceHistory([40], 40), [40]);
+    assert.deepEqual(pushBalanceHistory([40, "x", null], 55), [40, 55]);
+    const long = Array.from({ length: 10 }, (_, index) => index);
+    assert.deepEqual(pushBalanceHistory(long, 99), [1, 2, 3, 4, 5, 6, 7, 8, 9, 99]);
+});
+
 test("danger-first sorting floats the most net weaknesses up and keeps ties in type order", async () => {
     const { sortCoverageByDanger } = await import("../pokemon/team.js");
     const rows = [

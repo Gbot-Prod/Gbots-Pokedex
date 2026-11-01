@@ -6584,7 +6584,7 @@ img.animatedSmall {
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 0.6rem;
-    max-width: 30rem;
+    max-width: 32rem;
     margin: 0 auto 1rem;
     font-weight: 800;
 }
@@ -6707,6 +6707,32 @@ img.animatedSmall {
     #teamUndo {
         animation: none;
     }
+}
+
+/* the last ten balance scores as a little line */
+.balanceSpark {
+    overflow: visible;
+}
+
+.balanceSpark polyline {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    opacity: 0.55;
+}
+
+.balanceSpark circle {
+    fill: #e5484d;
+}
+
+.balanceSpark.up circle {
+    fill: #30a46c;
+}
+
+.teamBalance:has(.balanceSpark) {
+    grid-template-columns: auto 1fr auto auto;
 }
 
 /* "+6" / "−4" floats up from the balance score when the team changes */
