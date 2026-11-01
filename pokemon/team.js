@@ -296,12 +296,12 @@ async function suggestFixes(memberMultipliers, requestId) {
         return;
     }
     let picks;
+    let resisting = [];
     try {
         const attacking = await fetchJson(API_BASE + "type/" + worst.type);
-        const resisting = [
-            ...attacking.damage_relations.no_damage_to,
-            ...attacking.damage_relations.half_damage_to,
-        ].map(({ name }) => name);
+        resisting = [...attacking.damage_relations.no_damage_to, ...attacking.damage_relations.half_damage_to].map(
+            ({ name }) => name,
+        );
         const lists = await Promise.all(resisting.map((type) => fetchJson(API_BASE + "type/" + type)));
         const inTeam = new Set(team.map((member) => member.id));
         const candidates = lists.flatMap((typeData) =>
@@ -344,7 +344,23 @@ async function suggestFixes(memberMultipliers, requestId) {
         return;
     }
     if (!picks.length) {
-        suggestElement.replaceChildren();
+        // Nothing seen fits yet: say which types would, so there's something to look for.
+        const hint = document.createElement("p");
+        hint.className = "teamSuggestHint";
+        hint.textContent = resisting.length
+            ? "Nothing you've seen resists " +
+              formatName(worst.type) +
+              " yet — look for " +
+              resisting
+                  .slice(0, 4)
+                  .map(formatName)
+                  .join(", ")
+                  .replace(/, ([^,]+)$/, " or $1") +
+              " types to cover " +
+              worst.weak +
+              " of your team."
+            : "";
+        suggestElement.replaceChildren(...(hint.textContent ? [hint] : []));
         return;
     }
     const heading = document.createElement("p");

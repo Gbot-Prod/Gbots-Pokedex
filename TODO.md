@@ -36,7 +36,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
 - [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
-- [ ] Suggestions when nothing seen fits: "Nothing you've seen resists Ground yet — try a Flying type" with a link to the type chart
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Coverage chart: tap a type row to see which members are weak/resist (names under the bars) — currently only counts
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -428,3 +427,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team suggestions: "Try adding…" — three Pokémon you've seen whose types would cover the team's top weakness (2026-11-01) — under the team slots (while there's room): 'Try adding — they resist Ground, which 3 of your team are weak to:' with up to three seen Pokémon whose type resists or is immune to the worst shared weakness, as sprite buttons that open them
 - [x] Suggestions step 2: a "＋" on each suggestion adds it to the team directly (the coverage chart and badges update in place) (2026-11-01) — each suggestion pill ends in a green ＋ that adds that Pokémon to the team right away (fetches it, saves, re-renders slots, chart, badges and suggestions; status line announces it)
 - [x] Suggestions step 3: prefer picks that don't add a new shared weakness, and show proper display names (Farfetch’d, Mr. Mime) instead of slug names (2026-11-01) — the first 8 fitting seen Pokémon are scored by how many new shared weaknesses they'd add to the team; the three adding fewest are offered (live: Charizard drops out for Butterfree, Pidgey, Pidgeotto), with proper species display names
+- [x] Suggestions when nothing seen fits: "Nothing you've seen resists Ground yet — try a Flying type" with a link to the type chart (2026-11-01) — when no seen Pokémon resists the worst shared weakness, the builder says so and names the types to look for: 'Nothing you've seen resists Ground yet — look for Flying, Bug or Grass types to cover 3 of your team.'

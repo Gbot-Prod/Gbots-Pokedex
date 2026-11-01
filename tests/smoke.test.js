@@ -645,6 +645,19 @@ test("the type chart opens on demand and highlights the hovered row and column",
     assert.ok((await page.locator(".typeChartTable .rowHighlight").count()) > 0);
 });
 
+test("with nothing seen that fits, the team builder says which types would cover it", async () => {
+    for (const name of ["pikachu", "gengar"]) {
+        await search(name);
+        await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+        await page.click("#teamAddBtn");
+    }
+    await page.waitForSelector(".teamSuggestHint");
+    assert.match(
+        await page.textContent(".teamSuggestHint"),
+        /^Nothing you've seen resists Ground yet — look for .*Flying.* types to cover 2 of your team\.$/,
+    );
+});
+
 test("a shared ?team= link offers to load that team", async () => {
     await page.goto(baseUrl + "?team=25,94&by=Misty");
     await page.waitForSelector("#sharedTeam:not([hidden])");

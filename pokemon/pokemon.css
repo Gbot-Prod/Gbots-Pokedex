@@ -6549,3 +6549,8 @@ img.animatedSmall {
     outline: 2px solid currentColor;
     outline-offset: 2px;
 }
+
+#teamSuggest .teamSuggestHint {
+    font-weight: 600;
+    font-style: italic;
+}
