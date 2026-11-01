@@ -370,6 +370,31 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
     context.fillStyle = "#ffd447";
     context.fillText("👥 " + (team.heading ?? (team.byline ? team.byline + "'s team" : "My team")), 50, 88);
 
+    // The balance score as a half-ring gauge in the top-right corner.
+    if (Number.isFinite(team.balance)) {
+        const centreX = FINALE_WIDTH - 110;
+        const centreY = 92;
+        context.lineCap = "round";
+        context.lineWidth = 14;
+        context.strokeStyle = "rgba(255, 255, 255, 0.18)";
+        context.beginPath();
+        context.arc(centreX, centreY, 56, Math.PI, 2 * Math.PI);
+        context.stroke();
+        context.strokeStyle = "hsl(" + team.balance * 1.2 + ", 75%, 50%)";
+        context.beginPath();
+        context.arc(centreX, centreY, 56, Math.PI, Math.PI + (Math.PI * team.balance) / 100);
+        context.stroke();
+        context.lineCap = "butt";
+        context.textAlign = "center";
+        context.fillStyle = "#ffffff";
+        context.font = cardFont(900, 34, retro);
+        context.fillText(String(team.balance), centreX, centreY - 4);
+        context.font = cardFont(700, 14, retro);
+        context.fillStyle = "rgba(255, 255, 255, 0.8)";
+        context.fillText("BALANCE", centreX, centreY + 18);
+        context.textAlign = "left";
+    }
+
     const capitalise = (text) => text.charAt(0).toUpperCase() + text.slice(1);
     for (let index = 0; index < 6; index++) {
         const member = team.members[index];

@@ -758,7 +758,7 @@ async function shareTeam() {
 // The team as a share card (through the same preview as the other cards): the six members,
 // the types that hit the most of them with nobody resisting, and the types they hit hardest.
 async function saveTeamCard(members = team, byline = null, heading = undefined) {
-    let summary = { weakTo: [], hits: [], strip: [], mvp: -1 };
+    let summary = { weakTo: [], hits: [], strip: [], mvp: -1, balance: null };
     try {
         const memberTypeData = await Promise.all(
             members.map((member) => Promise.all(member.types.map((type) => fetchJson(API_BASE + "type/" + type)))),
@@ -766,6 +766,7 @@ async function saveTeamCard(members = team, byline = null, heading = undefined) 
         const coverage = teamCoverage(memberTypeData.map(damageMultipliers), memberTypeData.map(superEffectiveTargets));
         summary = {
             mvp: teamMvp(memberTypeData.map(damageMultipliers)),
+            balance: teamBalance(memberTypeData.map(damageMultipliers), memberTypeData.map(superEffectiveTargets)),
             // one square per type: "weak" (more of the team weak than resisting), "hit" (someone
             // hits it super-effectively) or neither
             strip: coverage.map(({ type, weak, resist, hits }) => [
