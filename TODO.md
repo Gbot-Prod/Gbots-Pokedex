@@ -37,6 +37,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
 - [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
+- [ ] Coverage details step 2: the member names in the details line are links that open that Pokémon
+- [ ] Coverage chart: "Expand all" / "Collapse all" toggle above the table for a full who-covers-what view
+- [ ] Suggestions step 4: show each suggestion's types as tiny icons inside its pill, so the reason is visible at a glance
+- [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
+- [ ] Team score: a 0-100 "balance" meter above the chart (fewer shared weaknesses and more coverage = higher), animated when it changes
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
