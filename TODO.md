@@ -43,6 +43,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
 - [ ] Saved teams step 3: rename a saved team in place (double-click / Rename link) and reorder by dragging
 - [ ] Surprise me in the quiz: "Guess the balance" — show a random six, guess its score within 10 for a point
+- [ ] Surprise me step 4: remember the two option ticks between visits (localStorage), like the units toggle
+- [ ] Surprise me step 5: a "roll again" shortcut — pressing the button again within the undo window re-rolls without stacking undo history
+- [ ] Region-only teams: "Region champion" — a badge for a 90+ team made only of one region's Pokémon
+- [ ] Partner spotlight: the partner's team slot gets a little ❤️ corner mark wherever it appears in the team builder
+- [ ] Trainer card PNG: add a small "Best team" row of six mini sprites under the stats when a saved best team exists
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
