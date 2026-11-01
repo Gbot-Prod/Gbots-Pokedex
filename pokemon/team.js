@@ -69,6 +69,17 @@ export function teamMvp(memberMultipliers) {
     return best > 0 ? covered.indexOf(best) : -1;
 }
 
+// The weak link: the member weak to the most of the team's shared weaknesses (at least two),
+// i.e. the one piling onto them most. -1 when nobody stands out or it would be the MVP.
+export function teamWeakLink(memberMultipliers) {
+    const shared = sharedWeaknesses(memberMultipliers);
+    const piled = memberMultipliers.map((multipliers) => shared.filter((type) => multipliers[type] > 1).length);
+    const worst = Math.max(0, ...piled);
+    const index = piled.indexOf(worst);
+    const unique = piled.filter((count) => count === worst).length === 1;
+    return worst >= 2 && unique && index !== teamMvp(memberMultipliers) ? index : -1;
+}
+
 // Types two or more members are weak to, with fewer members resisting them.
 export function sharedWeaknesses(memberMultipliers) {
     return teamCoverage(memberMultipliers)
@@ -174,9 +185,25 @@ async function renderCoverage() {
     }
     // The MVP gets a gold ★ badge on its slot (and its name says so to screen readers).
     const mvp = teamMvp(memberMultipliers);
+    const weakLink = teamWeakLink(memberMultipliers);
+    const shared = sharedWeaknesses(memberMultipliers);
     [...slotsElement.querySelectorAll(".teamSlot")].forEach((slot, index) => {
         slot.classList.toggle("mvp", index === mvp);
-        slot.querySelector(".mvpBadge")?.remove();
+        slot.classList.toggle("weakLink", index === weakLink);
+        slot.querySelector(".mvpBadge, .weakLinkBadge")?.remove();
+        if (index === weakLink) {
+            // ...and the weak link, in orange, with what it piles onto
+            const piles = shared.filter((type) => memberMultipliers[index][type] > 1).map(formatName);
+            const badge = document.createElement("span");
+            badge.className = "weakLinkBadge";
+            badge.textContent = "⚠ Weak link";
+            badge.title = "Also weak to " + piles.join(" and ") + ", like the rest of your team";
+            const spoken = document.createElement("span");
+            spoken.className = "visuallyHidden";
+            spoken.textContent = ": " + badge.title.toLowerCase();
+            badge.append(spoken);
+            slot.querySelector(".teamMember").append(badge);
+        }
         if (index === mvp) {
             const badge = document.createElement("span");
             badge.className = "mvpBadge";

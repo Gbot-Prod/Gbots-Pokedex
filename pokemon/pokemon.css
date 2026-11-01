@@ -2083,9 +2083,9 @@ img.placeholderSprite {
 #teamSlots {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-    gap: 0.5rem;
+    gap: 1rem 0.5rem; /* row gap leaves room for the MVP / weak-link badges on the slot edges */
     margin: 0;
-    padding: 0;
+    padding: 0 0 0.8rem;
     list-style: none;
 }
 
@@ -6425,8 +6425,11 @@ img.animatedSmall {
 
 .mvpBadge {
     position: absolute;
-    top: 0.35rem;
-    left: 0.4rem;
+    /* on the slot's bottom edge, clear of the remove button */
+    bottom: -0.65rem;
+    left: 50%;
+    white-space: nowrap;
+    transform: translateX(-50%);
     padding: 0.05rem 0.45rem;
     border-radius: 999px;
     background: #ffd447;
@@ -6456,4 +6459,26 @@ img.animatedSmall {
 .cardZoom {
     display: block;
     margin: 0.5rem auto 0;
+}
+
+/* The weak link: an orange ring and badge on the member piling onto the team's weaknesses */
+.teamSlot.weakLink {
+    box-shadow:
+        0 0 0 3px #f08a24,
+        0 0 12px rgba(240, 138, 36, 0.5);
+}
+
+.weakLinkBadge {
+    position: absolute;
+    /* on the slot's bottom edge, clear of the remove button */
+    bottom: -0.65rem;
+    left: 50%;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    background: #f08a24;
+    color: #3a1a00;
+    font-size: 0.7rem;
+    font-weight: 900;
 }

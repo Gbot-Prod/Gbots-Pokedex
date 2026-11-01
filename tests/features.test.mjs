@@ -393,3 +393,10 @@ test("shared weaknesses are types two or more members are weak to", async () => 
     const { sharedWeaknesses } = await import("../pokemon/team.js");
     assert.deepEqual(sharedWeaknesses([{ rock: 2 }, { rock: 2, fire: 2 }, { rock: 0.5 }]), ["rock"]);
 });
+
+test("the weak link is the member weak to the most shared weaknesses", async () => {
+    const { teamWeakLink } = await import("../pokemon/team.js");
+    const team = [{ rock: 2, ice: 2 }, { rock: 2 }, { ice: 2 }, {}];
+    assert.equal(teamWeakLink(team), 0); // weak to both rock and ice
+    assert.equal(teamWeakLink([{ rock: 2 }, { rock: 2 }]), -1); // a tie: nobody stands out
+});
