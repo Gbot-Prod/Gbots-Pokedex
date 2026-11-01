@@ -758,6 +758,8 @@ test("Surprise me builds a team of six from Pokémon you've seen", async () => {
     await page.waitForFunction(() =>
         JSON.parse(localStorage.getItem("pokedex:team:v1")).some((member) => member.id === 25),
     );
+    await page.reload(); // the option stays ticked
+    assert.equal(await page.isChecked("#surprisePartner"), true);
 });
 
 test("a shared ?team= link offers to load that team", async () => {
