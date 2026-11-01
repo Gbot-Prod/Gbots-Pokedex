@@ -35,6 +35,12 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
+- [ ] Best-ever team: store the line-up that set your best balance score and offer "Bring back my best team (92)" under the meter
+- [ ] Coverage sort step 2: a third mode "Most hits first" for offence planning, so the pill cycles type order → most weak → most hits
+- [ ] Coverage sort step 3: slide rows to their new places (FLIP) instead of the fade-in, still off under reduced motion
+- [ ] Balance history step 2: hover or focus a sparkline point to see that score and the member added or removed that changed it
+- [ ] Team card: the partner's slot gets the same ❤️ corner mark as the builder, so the card matches
+- [ ] Team card: colour the "Watch out for" types with their type colours (small coloured dots before each name)
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
