@@ -672,6 +672,15 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     await page.keyboard.press("Control+z");
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 3);
     assert.equal(await page.isHidden("#teamUndo"), true);
+    // A better line-up seen before can be brought back from under the meter.
+    await page.evaluate(() => {
+        const [first] = JSON.parse(localStorage.getItem("pokedex:team:v1"));
+        localStorage.setItem("pokedex:best-team:v1", JSON.stringify({ balance: 100, members: [first] }));
+    });
+    await page.click(".teamRemove");
+    await page.click(".bestTeamBtn");
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 1);
+    assert.match(await page.textContent("#teamStatus"), /best team \(100 \/ 100\)/);
 });
 
 test("the type chart opens on demand and highlights the hovered row and column", async () => {

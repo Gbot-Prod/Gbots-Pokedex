@@ -431,6 +431,18 @@ test("the surprise line-up keeps the best-balanced of its tries", async () => {
     assert.equal(score, 53);
 });
 
+test("the best team is only replaced by a strictly better score", async () => {
+    const { updateBestTeam } = await import("../pokemon/team.js");
+    const a = [{ id: 25 }];
+    const b = [{ id: 94 }];
+    assert.equal(updateBestTeam(null, [], 50), null);
+    const first = updateBestTeam(null, a, 50);
+    assert.deepEqual(first, { balance: 50, members: [{ id: 25 }] });
+    assert.equal(updateBestTeam(first, b, 50), first);
+    assert.deepEqual(updateBestTeam(first, b, 51).members, [{ id: 94 }]);
+    assert.deepEqual(updateBestTeam({ balance: "x" }, b, 10).balance, 10);
+});
+
 test("balance history skips repeats, drops junk and keeps the last ten", async () => {
     const { pushBalanceHistory } = await import("../pokemon/team.js");
     assert.deepEqual(pushBalanceHistory(null, 40), [40]);

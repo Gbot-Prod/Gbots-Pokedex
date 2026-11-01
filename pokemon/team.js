@@ -87,6 +87,24 @@ export function sortCoverageByDanger(rows) {
 
 const COVERAGE_SORT_KEY = "pokedex:coverageSort:v1";
 const BALANCE_HISTORY_KEY = "pokedex:balance-history:v1";
+const BEST_TEAM_KEY = "pokedex:best-team:v1";
+
+// The line-up that set the best balance so far: replaced only by a strictly better score.
+export function updateBestTeam(stored, members, balance) {
+    const valid = stored && Number.isFinite(stored.balance) && Array.isArray(stored.members);
+    if (!members.length || (valid && balance <= stored.balance)) {
+        return valid ? stored : null;
+    }
+    return { balance, members: members.map((member) => ({ ...member })) };
+}
+
+function readBestTeam() {
+    try {
+        return JSON.parse(localStorage.getItem(BEST_TEAM_KEY));
+    } catch {
+        return null;
+    }
+}
 
 // The recent balance scores for the sparkline: the new score is added only when it differs
 // from the last one, keeping the latest `limit`.
@@ -745,6 +763,12 @@ async function renderCoverage() {
     wasGreat = great;
     lastBalance = balance;
     noteTeamBalance(balance); // the best so far counts toward the Master strategist badge
+    const bestTeam = updateBestTeam(readBestTeam(), team, balance);
+    try {
+        localStorage.setItem(BEST_TEAM_KEY, JSON.stringify(bestTeam));
+    } catch {
+        // storage blocked: no best team to bring back
+    }
     let history;
     try {
         history = pushBalanceHistory(JSON.parse(localStorage.getItem(BALANCE_HISTORY_KEY)), balance);
@@ -775,6 +799,21 @@ async function renderCoverage() {
     const tools = document.createElement("div");
     tools.className = "coverageTools";
     tools.append(expandAll, sortToggle);
+    // A way back to the best line-up so far, when the current one scores lower.
+    const sameLineUp = bestTeam && bestTeam.members.map(({ id }) => id).join() === team.map(({ id }) => id).join();
+    if (bestTeam && bestTeam.balance > balance && !sameLineUp) {
+        const restore = document.createElement("button");
+        restore.type = "button";
+        restore.className = "linkBtn bestTeamBtn";
+        restore.textContent = "🏆 Bring back my best team (" + bestTeam.balance + ")";
+        restore.addEventListener("click", () =>
+            changeTeam(
+                bestTeam.members.map((member) => ({ ...member })),
+                "Brought back your best team (" + bestTeam.balance + " / 100)",
+            ),
+        );
+        tools.append(restore);
+    }
     coverageElement.replaceChildren(meter, tools, table);
     suggestFixes(memberMultipliers, memberHits, requestId);
 }

@@ -6632,6 +6632,13 @@ img.animatedSmall {
     margin: -0.4rem auto 0.6rem;
 }
 
+.bestTeamBtn {
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    font-weight: 700;
+    background: color-mix(in srgb, #ffd447 30%, transparent);
+}
+
 .coverageSort {
     border-radius: 999px;
     padding: 0.1rem 0.6rem;
