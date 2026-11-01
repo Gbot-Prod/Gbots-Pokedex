@@ -38,7 +38,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
-- [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
 - [ ] Saved teams step 3: rename a saved team in place (double-click / Rename link) and reorder by dragging
@@ -459,3 +458,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Surprise me step 2: options — "only my region" (limit to the selected region) and "keep my partner" (always include the trainer card partner) (2026-11-01) — two options under the button: 'only the region I'm browsing' limits picks to the browse filter's region (with its own not-enough message), 'keep my partner' forces the trainer card partner into every line-up (bestLineUp keep, unit-tested)
 - [x] Surprise me step 4: remember the two option ticks between visits (localStorage), like the units toggle (2026-11-01) — the 'only the region I'm browsing' and 'keep my partner' ticks are remembered between visits (pokedex:surpriseRegion:v1 / surprisePartner:v1)
 - [x] Partner spotlight: the partner's team slot gets a little ❤️ corner mark wherever it appears in the team builder (2026-11-01) — the trainer card partner's team slot shows a small ❤️ in its corner (title 'Your partner', hidden ' (your partner)' for screen readers)
+- [x] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top (2026-11-01) — a "⚠️ Most weak first" pill (aria-pressed) floats types by net weakness (weak − resist, then weak) to the top with a short shuffle-in, remembered in pokedex:coverageSort:v1; open detail lines move with their rows

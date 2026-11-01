@@ -6624,9 +6624,35 @@ img.animatedSmall {
     font: inherit;
 }
 
-.coverageExpandAll {
-    display: block;
+.coverageTools {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.2rem;
     margin: -0.4rem auto 0.6rem;
+}
+
+.coverageSort {
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    border: 1px solid transparent;
+}
+
+.coverageSort[aria-pressed="true"] {
+    border-color: currentColor;
+    font-weight: 700;
+    background: color-mix(in srgb, #e5484d 14%, transparent);
+}
+
+.coverageTable.resorted tbody tr:not(.coverageDetails) {
+    animation: coverageShuffle 0.45s ease-out both;
+}
+
+@keyframes coverageShuffle {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
 }
 
 .teamSuggestionType {

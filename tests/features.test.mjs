@@ -431,6 +431,21 @@ test("the surprise line-up keeps the best-balanced of its tries", async () => {
     assert.equal(score, 53);
 });
 
+test("danger-first sorting floats the most net weaknesses up and keeps ties in type order", async () => {
+    const { sortCoverageByDanger } = await import("../pokemon/team.js");
+    const rows = [
+        { type: "normal", weak: 0, resist: 0 },
+        { type: "fire", weak: 2, resist: 1 },
+        { type: "water", weak: 2, resist: 0 },
+        { type: "grass", weak: 1, resist: 0 },
+    ];
+    assert.deepEqual(
+        sortCoverageByDanger(rows).map(({ type }) => type),
+        ["water", "fire", "grass", "normal"],
+    );
+    assert.equal(rows[0].type, "normal");
+});
+
 test("a surprise line-up can be told to keep someone", async () => {
     const { bestLineUp } = await import("../pokemon/team.js");
     const plain = { multipliers: {}, hits: new Set() };

@@ -76,6 +76,17 @@ export function teamCoverage(memberMultipliers, memberHits = []) {
     }));
 }
 
+// The coverage rows in "danger first" order: most net weaknesses (weak minus resist) first,
+// then most weak, keeping type order for ties. The input is left as it is.
+export function sortCoverageByDanger(rows) {
+    return rows
+        .map((row, index) => [row, index])
+        .sort(([a, i], [b, j]) => b.weak - b.resist - (a.weak - a.resist) || b.weak - a.weak || i - j)
+        .map(([row]) => row);
+}
+
+const COVERAGE_SORT_KEY = "pokedex:coverageSort:v1";
+
 // The team's MVP: the member who resists (or is immune to) the most of the types the team as
 // a whole is weak to. Returns its index, or -1 when there's no shared weakness to cover.
 export function teamMvp(memberMultipliers) {
@@ -544,7 +555,8 @@ async function renderCoverage() {
     }
     const body = table.createTBody();
     const rowDetails = [];
-    for (const { type, weak, resist, hits } of teamCoverage(memberMultipliers, memberHits)) {
+    const coverageRows = teamCoverage(memberMultipliers, memberHits);
+    for (const { type, weak, resist, hits } of coverageRows) {
         const row = body.insertRow();
         // Flag types that hit half or more of the team and that nobody resists.
         row.classList.toggle("danger", weak * 2 >= team.length && resist === 0);
@@ -597,6 +609,7 @@ async function renderCoverage() {
             details.hidden = !details.hidden;
             toggle.setAttribute("aria-expanded", String(!details.hidden));
         });
+        row.dataset.type = type;
         rowDetails.push([row, details]);
         row.classList.toggle("noHits", hits === 0);
         for (const [count, kind] of [
@@ -612,9 +625,41 @@ async function renderCoverage() {
             cell.append(bar, String(count));
         }
     }
-    for (const [row, details] of rowDetails) {
-        row.after(details);
+    // Rows go in type order, or with the danger types floated to the top (remembered).
+    const placeRows = (dangerFirst) => {
+        const order = dangerFirst ? sortCoverageByDanger(coverageRows) : coverageRows;
+        for (const { type } of order) {
+            const pair = rowDetails.find(([row]) => row.dataset.type === type);
+            body.append(...pair);
+        }
+    };
+    let dangerFirst = false;
+    try {
+        dangerFirst = localStorage.getItem(COVERAGE_SORT_KEY) === "danger";
+    } catch {
+        // storage blocked: type order
     }
+    placeRows(dangerFirst);
+    const sortToggle = document.createElement("button");
+    sortToggle.type = "button";
+    sortToggle.className = "linkBtn coverageSort";
+    sortToggle.textContent = "⚠️ Most weak first";
+    sortToggle.setAttribute("aria-pressed", String(dangerFirst));
+    sortToggle.addEventListener("click", () => {
+        dangerFirst = !dangerFirst;
+        sortToggle.setAttribute("aria-pressed", String(dangerFirst));
+        placeRows(dangerFirst);
+        if (!reducedMotion.matches) {
+            table.classList.remove("resorted");
+            void table.offsetWidth; // restart the shuffle animation
+            table.classList.add("resorted");
+        }
+        try {
+            localStorage.setItem(COVERAGE_SORT_KEY, dangerFirst ? "danger" : "type");
+        } catch {
+            // storage blocked: the order just isn't remembered
+        }
+    });
     table.append(caption);
     // The balance meter above the chart: red to gold to green as the team rounds out.
     const balance = teamBalance(memberMultipliers, memberHits);
@@ -674,7 +719,10 @@ async function renderCoverage() {
         expandAll.setAttribute("aria-expanded", String(open));
         expandAll.textContent = open ? "Hide the details" : "Show who's weak to everything";
     });
-    coverageElement.replaceChildren(meter, expandAll, table);
+    const tools = document.createElement("div");
+    tools.className = "coverageTools";
+    tools.append(expandAll, sortToggle);
+    coverageElement.replaceChildren(meter, tools, table);
     suggestFixes(memberMultipliers, memberHits, requestId);
 }
 
