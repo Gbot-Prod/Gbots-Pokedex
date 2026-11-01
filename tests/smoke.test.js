@@ -613,8 +613,16 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
     await page.waitForSelector(".coverageTable");
     // Ground hits both Pikachu (2×) and Gengar (2×).
-    const groundWeak = await page.$eval(".coverageTable tbody tr:nth-child(9) td.weak", (cell) => cell.textContent);
+    const groundRow = ".coverageTable tbody tr:nth-child(9 of :not(.coverageDetails))";
+    const groundWeak = await page.$eval(groundRow + " td.weak", (cell) => cell.textContent);
     assert.equal(groundWeak, "2");
+    // Tapping the type names who's weak to it.
+    await page.click(groundRow + " .coverageToggle");
+    assert.equal(await page.getAttribute(groundRow + " .coverageToggle", "aria-expanded"), "true");
+    assert.match(
+        await page.textContent(groundRow + " + .coverageDetails"),
+        /^Weak: Pikachu, Gengar · Resists: nobody$/,
+    );
     // Both are weak to Ground and neither resists it: no MVP to crown.
     assert.equal(await page.locator(".teamSlot.mvp").count(), 0);
     // ...so the team is offered a Pokémon already seen that resists it.

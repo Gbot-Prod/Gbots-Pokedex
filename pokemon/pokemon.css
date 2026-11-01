@@ -6554,3 +6554,25 @@ img.animatedSmall {
     font-weight: 600;
     font-style: italic;
 }
+
+/* Coverage chart: each type opens a line naming the members weak to / resisting it */
+.coverageToggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.coverageDetails td {
+    padding: 0.1rem 0.5rem 0.5rem 2rem;
+    font-size: 0.85rem;
+    font-style: italic;
+}

@@ -252,6 +252,7 @@ async function renderCoverage() {
         head.append(th);
     }
     const body = table.createTBody();
+    const rowDetails = [];
     for (const { type, weak, resist, hits } of teamCoverage(memberMultipliers, memberHits)) {
         const row = body.insertRow();
         // Flag types that hit half or more of the team and that nobody resists.
@@ -263,8 +264,31 @@ async function renderCoverage() {
         icon.alt = "";
         icon.width = 22;
         icon.height = 22;
-        typeCell.append(icon, " " + formatName(type));
+        // The type is a button: it opens a line naming who's weak to it and who resists it.
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "coverageToggle";
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.append(icon, " " + formatName(type));
+        typeCell.append(toggle);
         row.append(typeCell);
+        const names = (test) =>
+            team.filter((_, index) => test(memberMultipliers[index][type] ?? 1)).map((member) => member.label);
+        const details = document.createElement("tr");
+        details.className = "coverageDetails";
+        details.hidden = true;
+        const detailCell = document.createElement("td");
+        detailCell.colSpan = 4;
+        const weakNames = names((multiplier) => multiplier > 1);
+        const resistNames = names((multiplier) => multiplier < 1);
+        detailCell.textContent =
+            "Weak: " + (weakNames.join(", ") || "nobody") + " · Resists: " + (resistNames.join(", ") || "nobody");
+        details.append(detailCell);
+        toggle.addEventListener("click", () => {
+            details.hidden = !details.hidden;
+            toggle.setAttribute("aria-expanded", String(!details.hidden));
+        });
+        rowDetails.push([row, details]);
         row.classList.toggle("noHits", hits === 0);
         for (const [count, kind] of [
             [weak, "weak"],
@@ -278,6 +302,9 @@ async function renderCoverage() {
             bar.style.width = (count / TEAM_SIZE) * 100 + "%";
             cell.append(bar, String(count));
         }
+    }
+    for (const [row, details] of rowDetails) {
+        row.after(details);
     }
     table.append(caption);
     coverageElement.replaceChildren(table);

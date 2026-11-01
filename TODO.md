@@ -37,7 +37,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
 - [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
-- [ ] Coverage chart: tap a type row to see which members are weak/resist (names under the bars) — currently only counts
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
@@ -428,3 +427,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Suggestions step 2: a "＋" on each suggestion adds it to the team directly (the coverage chart and badges update in place) (2026-11-01) — each suggestion pill ends in a green ＋ that adds that Pokémon to the team right away (fetches it, saves, re-renders slots, chart, badges and suggestions; status line announces it)
 - [x] Suggestions step 3: prefer picks that don't add a new shared weakness, and show proper display names (Farfetch’d, Mr. Mime) instead of slug names (2026-11-01) — the first 8 fitting seen Pokémon are scored by how many new shared weaknesses they'd add to the team; the three adding fewest are offered (live: Charizard drops out for Butterfree, Pidgey, Pidgeotto), with proper species display names
 - [x] Suggestions when nothing seen fits: "Nothing you've seen resists Ground yet — try a Flying type" with a link to the type chart (2026-11-01) — when no seen Pokémon resists the worst shared weakness, the builder says so and names the types to look for: 'Nothing you've seen resists Ground yet — look for Flying, Bug or Grass types to cover 3 of your team.'
+- [x] Coverage chart: tap a type row to see which members are weak/resist (names under the bars) — currently only counts (2026-11-01) — each type in the coverage chart is a button (aria-expanded) that opens a line under its row: 'Weak: Arcanine, Pikachu, Gengar · Resists: nobody'
