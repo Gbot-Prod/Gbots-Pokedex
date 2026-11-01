@@ -400,3 +400,18 @@ test("the weak link is the member weak to the most shared weaknesses", async () 
     assert.equal(teamWeakLink(team), 0); // weak to both rock and ice
     assert.equal(teamWeakLink([{ rock: 2 }, { rock: 2 }]), -1); // a tie: nobody stands out
 });
+
+test("team balance rewards coverage and punishes shared weaknesses", async () => {
+    const { teamBalance } = await import("../pokemon/team.js");
+    const hitsAll = new Set(["normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground"]);
+    const balanced = teamBalance([{}, {}], [hitsAll, new Set()]);
+    const shaky = teamBalance(
+        [
+            { rock: 2, ice: 2 },
+            { rock: 2, ice: 2 },
+        ],
+        [hitsAll, new Set()],
+    );
+    assert.equal(balanced, 65); // 9 of 18 types hit: 35 + 30
+    assert.equal(shaky, 45); // two shared weaknesses: −20
+});

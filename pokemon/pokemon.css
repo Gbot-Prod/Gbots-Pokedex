@@ -6576,3 +6576,43 @@ img.animatedSmall {
     font-size: 0.85rem;
     font-style: italic;
 }
+
+/* Team balance: a meter that fills (and shifts from red through gold to green) with the score */
+.teamBalance {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.6rem;
+    max-width: 30rem;
+    margin: 0 auto 1rem;
+    font-weight: 800;
+}
+
+.teamBalanceBar {
+    height: 0.9rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.teamBalanceBar span {
+    display: block;
+    width: calc(var(--balance) * 1%);
+    height: 100%;
+    border-radius: inherit;
+    background: hsl(calc(var(--balance) * 1.2) 75% 45%);
+    box-shadow: 0 0 8px hsl(calc(var(--balance) * 1.2) 75% 50% / 0.7);
+    animation: balanceFill 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@keyframes balanceFill {
+    from {
+        width: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .teamBalanceBar span {
+        animation: none;
+    }
+}

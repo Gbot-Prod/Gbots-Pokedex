@@ -98,6 +98,14 @@ export function teamWeakLink(memberMultipliers) {
     return worst >= 2 && unique && index !== teamMvp(memberMultipliers) ? index : -1;
 }
 
+// A 0-100 balance score: up to 70 points for how many of the 18 types the team hits
+// super-effectively, plus 30, minus 10 for each shared weakness.
+export function teamBalance(memberMultipliers, memberHits) {
+    const covered = teamCoverage(memberMultipliers, memberHits).filter(({ hits }) => hits > 0).length;
+    const raw = (covered / Object.keys(TYPE_ICONS).length) * 70 + 30 - sharedWeaknesses(memberMultipliers).length * 10;
+    return Math.max(0, Math.min(100, Math.round(raw)));
+}
+
 // Types two or more members are weak to, with fewer members resisting them.
 export function sharedWeaknesses(memberMultipliers) {
     return teamCoverage(memberMultipliers)
@@ -307,7 +315,27 @@ async function renderCoverage() {
         row.after(details);
     }
     table.append(caption);
-    coverageElement.replaceChildren(table);
+    // The balance meter above the chart: red to gold to green as the team rounds out.
+    const balance = teamBalance(memberMultipliers, memberHits);
+    const meter = document.createElement("div");
+    meter.className = "teamBalance";
+    const label = document.createElement("span");
+    label.id = "teamBalanceLabel";
+    label.textContent = "Team balance";
+    const bar = document.createElement("span");
+    bar.className = "teamBalanceBar";
+    bar.setAttribute("role", "meter");
+    bar.setAttribute("aria-labelledby", "teamBalanceLabel");
+    bar.setAttribute("aria-valuemin", "0");
+    bar.setAttribute("aria-valuemax", "100");
+    bar.setAttribute("aria-valuenow", String(balance));
+    const fill = document.createElement("span");
+    fill.style.setProperty("--balance", balance);
+    bar.append(fill);
+    const score = document.createElement("strong");
+    score.textContent = balance + " / 100";
+    meter.append(label, bar, score);
+    coverageElement.replaceChildren(meter, table);
     suggestFixes(memberMultipliers, requestId);
 }
 
