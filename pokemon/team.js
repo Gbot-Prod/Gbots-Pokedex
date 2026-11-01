@@ -2,8 +2,16 @@
 // many team members are weak to / resist each attacking type.
 import { ANIMATED_CHANGE_EVENT, API_BASE, fetchJson, fetchPokemon, setSmallSprite, spriteUrl } from "./api.js";
 import { drawTeamCard, loadCanvasImage, styleShareCard } from "./cardimage.js";
-import { cardFontsReady, shareOrDownload } from "./progress.js";
-import { TYPE_COLORS, TYPE_ICONS, damageMultipliers, formatName, pokemonDisplayName } from "./utils.js";
+import { cardFontsReady, hasSeen, shareOrDownload } from "./progress.js";
+import {
+    MAX_DEX_NUMBER,
+    TYPE_COLORS,
+    TYPE_ICONS,
+    damageMultipliers,
+    formatName,
+    idFromUrl,
+    pokemonDisplayName,
+} from "./utils.js";
 import { isTeamMember } from "./storage.js";
 
 const TEAM_KEY = "pokedex:team:v1";
@@ -12,6 +20,7 @@ export const TEAM_SIZE = 6;
 const section = document.getElementById("teamSection");
 const slotsElement = document.getElementById("teamSlots");
 const coverageElement = document.getElementById("teamCoverage");
+const suggestElement = document.getElementById("teamSuggest");
 const teamButton = document.getElementById("teamAddBtn");
 const statusElement = document.getElementById("teamStatus");
 const shareTeamButton = document.getElementById("teamShareBtn");
@@ -166,6 +175,7 @@ async function renderCoverage() {
     const requestId = ++coverageRequest;
     if (!team.length) {
         coverageElement.replaceChildren();
+        suggestElement.replaceChildren();
         return;
     }
     let memberMultipliers;
@@ -262,6 +272,73 @@ async function renderCoverage() {
     }
     table.append(caption);
     coverageElement.replaceChildren(table);
+    suggestFixes(memberMultipliers, requestId);
+}
+
+// "Try adding…": up to three Pokémon you've already seen whose type resists the team's worst
+// shared weakness (the one most members are weak to), as buttons that open them.
+async function suggestFixes(memberMultipliers, requestId) {
+    const coverage = teamCoverage(memberMultipliers);
+    const worst = sharedWeaknesses(memberMultipliers)
+        .map((type) => coverage.find((entry) => entry.type === type))
+        .sort((a, b) => b.weak - a.weak)[0];
+    if (!worst || team.length >= TEAM_SIZE) {
+        suggestElement.replaceChildren();
+        return;
+    }
+    let picks;
+    try {
+        const attacking = await fetchJson(API_BASE + "type/" + worst.type);
+        const resisting = [
+            ...attacking.damage_relations.no_damage_to,
+            ...attacking.damage_relations.half_damage_to,
+        ].map(({ name }) => name);
+        const lists = await Promise.all(resisting.map((type) => fetchJson(API_BASE + "type/" + type)));
+        const inTeam = new Set(team.map((member) => member.id));
+        const candidates = lists.flatMap((typeData) =>
+            typeData.pokemon.map(({ pokemon }) => ({ id: idFromUrl(pokemon.url), name: pokemon.name })),
+        );
+        const seenIds = new Set();
+        picks = candidates.filter(({ id }) => {
+            const fits = id <= MAX_DEX_NUMBER && hasSeen(id) && !inTeam.has(id) && !seenIds.has(id);
+            seenIds.add(id);
+            return fits;
+        });
+    } catch {
+        picks = []; // no type data: no suggestions
+    }
+    if (requestId !== coverageRequest) {
+        return;
+    }
+    if (!picks.length) {
+        suggestElement.replaceChildren();
+        return;
+    }
+    const heading = document.createElement("p");
+    heading.textContent =
+        "Try adding — they resist " + formatName(worst.type) + ", which " + worst.weak + " of your team are weak to:";
+    const list = document.createElement("ul");
+    list.append(
+        ...picks.slice(0, 3).map(({ id, name }) => {
+            const item = document.createElement("li");
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "teamSuggestion";
+            const sprite = document.createElement("img");
+            sprite.alt = "";
+            sprite.width = 48;
+            sprite.height = 48;
+            setSmallSprite(sprite, id);
+            button.append(sprite, formatName(name));
+            button.addEventListener("click", () => {
+                showPokemon(id);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+            item.append(button);
+            return item;
+        }),
+    );
+    suggestElement.replaceChildren(heading, list);
 }
 
 function renderTeam() {

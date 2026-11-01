@@ -6482,3 +6482,40 @@ img.animatedSmall {
     font-size: 0.7rem;
     font-weight: 900;
 }
+
+/* "Try adding…": seen Pokémon that would cover the team's worst weakness */
+#teamSuggest p {
+    margin: 0.4rem 0 0.4rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+#teamSuggest ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.teamSuggestion {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.8rem 0.2rem 0.3rem;
+    border: 2px solid #3f8a25;
+    border-radius: 999px;
+    background: var(--tile-bg);
+    color: var(--ink);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.teamSuggestion:hover,
+.teamSuggestion:focus-visible {
+    background: #3f8a25;
+    color: #ffffff;
+}

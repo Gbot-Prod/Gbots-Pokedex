@@ -602,6 +602,8 @@ test("the Who's that Pokémon? quiz reveals the answer and keeps score", async (
 });
 
 test("the team builder adds Pokémon from the card and charts type coverage", async () => {
+    await search("farfetchd"); // seen, not added: a Flying type, immune to Ground
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
     for (const name of ["pikachu", "gengar"]) {
         await search(name);
         await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
@@ -615,6 +617,10 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     assert.equal(groundWeak, "2");
     // Both are weak to Ground and neither resists it: no MVP to crown.
     assert.equal(await page.locator(".teamSlot.mvp").count(), 0);
+    // ...so the team is offered a Pokémon already seen that resists it.
+    await page.waitForSelector(".teamSuggestion");
+    assert.match(await page.textContent("#teamSuggest p"), /resist Ground, which 2 of your team are weak to/);
+    assert.match(await page.textContent(".teamSuggestion"), /Farfetchd/);
     // The team as a share card, through the same preview.
     await page.evaluate(() => delete Navigator.prototype.canShare);
     const download = page.waitForEvent("download");
