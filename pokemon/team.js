@@ -727,13 +727,22 @@ async function renderCoverage() {
         const modes = Object.keys(sortModes);
         sortMode = modes[(modes.indexOf(sortMode) + 1) % modes.length];
         showMode();
+        // Slide each row from where it was to its new place (FLIP), unless motion is reduced.
+        const rows = rowDetails.flat().filter((row) => !row.hidden);
+        const before = new Map(rows.map((row) => [row, row.getBoundingClientRect().top]));
         placeRows(sortMode);
-        statusElement.textContent = "Coverage chart sorted by " + sortModes[sortMode][0].replace(/^\S+ /, "");
         if (!reducedMotion.matches) {
-            table.classList.remove("resorted");
-            void table.offsetWidth; // restart the shuffle animation
-            table.classList.add("resorted");
+            for (const row of rows) {
+                const shift = before.get(row) - row.getBoundingClientRect().top;
+                if (shift) {
+                    row.animate([{ transform: `translateY(${shift}px)` }, { transform: "none" }], {
+                        duration: 420,
+                        easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+                    });
+                }
+            }
         }
+        statusElement.textContent = "Coverage chart sorted by " + sortModes[sortMode][0].replace(/^\S+ /, "");
         try {
             localStorage.setItem(COVERAGE_SORT_KEY, sortMode);
         } catch {

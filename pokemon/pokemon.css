@@ -6655,17 +6655,6 @@ img.animatedSmall {
     background: color-mix(in srgb, #3e63dd 16%, transparent);
 }
 
-.coverageTable.resorted tbody tr:not(.coverageDetails) {
-    animation: coverageShuffle 0.45s ease-out both;
-}
-
-@keyframes coverageShuffle {
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-}
-
 .teamSuggestionType {
     width: 18px;
     height: 18px;
