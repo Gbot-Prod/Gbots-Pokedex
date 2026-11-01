@@ -1043,13 +1043,22 @@ async function saveTeamCard(members = team, byline = null, heading = undefined) 
         byline = trainerName();
     }
     const typeColors = Object.fromEntries(Object.entries(TYPE_COLORS).map(([type, colours]) => [type, colours[0]]));
+    // your own team marks your partner, as the builder does (not someone else's shared team)
+    const partnerId = members === team ? trainerPartner() : null;
     await cardFontsReady();
     await shareOrDownload(
         (style) => {
             const canvas = document.createElement("canvas");
             drawTeamCard(
                 canvas,
-                { members, ...summary, heading, byline, retro: style === "retro" },
+                {
+                    members,
+                    ...summary,
+                    heading,
+                    byline,
+                    partner: members.findIndex((member) => member.id === partnerId),
+                    retro: style === "retro",
+                },
                 sprites,
                 typeColors,
             );

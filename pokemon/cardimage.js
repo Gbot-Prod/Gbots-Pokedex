@@ -364,6 +364,17 @@ function sparkle(context, x, y, radius) {
     context.fill();
 }
 
+// A heart shape (drawn, since the retro pixel font has no emoji), centred on x, y.
+function heart(context, x, y, size, colour) {
+    const half = size / 2;
+    context.fillStyle = colour;
+    context.beginPath();
+    context.moveTo(x, y + half);
+    context.bezierCurveTo(x - size * 0.9, y - size * 0.05, x - half * 0.7, y - size * 0.75, x, y - size * 0.25);
+    context.bezierCurveTo(x + half * 0.7, y - size * 0.75, x + size * 0.9, y - size * 0.05, x, y + half);
+    context.fill();
+}
+
 // The team card: six slots with each member's sprite, name and types (type-coloured pills),
 // and a line on what to watch out for and what the team hits hardest.
 // team: { members: [{ label, types }], weakTo: [[type, count]], hits: [type], byline, retro },
@@ -435,12 +446,16 @@ export function drawTeamCard(canvas, team, sprites, typeColors) {
             // three four-point sparkles around the sprite
             context.fillStyle = retro ? "#ffffff" : "#fff3b0";
             for (const [sparkX, sparkY, radius] of [
-                [x + 22, y + 30, 11],
+                [x + 26, y + 122, 10],
                 [x + 132, y + 48, 8],
                 [x + 120, y + 148, 6],
             ]) {
                 sparkle(context, sparkX, sparkY, radius);
             }
+        }
+        if (index === team.partner) {
+            // your partner, as marked in the team builder
+            heart(context, x + 26, y + 26, 22, retro ? "#ffffff" : "#ff4d6d");
         }
         if (isMvp) {
             // the MVP: covers the most of the team's weaknesses
