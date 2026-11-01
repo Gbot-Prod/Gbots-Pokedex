@@ -353,7 +353,22 @@ async function renderCoverage() {
     const score = document.createElement("strong");
     score.textContent = balance + " / 100";
     meter.append(label, bar, score);
-    coverageElement.replaceChildren(meter, table);
+    // Open (or close) every type's who-is-weak line at once.
+    const expandAll = document.createElement("button");
+    expandAll.type = "button";
+    expandAll.className = "linkBtn coverageExpandAll";
+    expandAll.textContent = "Show who's weak to everything";
+    expandAll.setAttribute("aria-expanded", "false");
+    expandAll.addEventListener("click", () => {
+        const open = expandAll.getAttribute("aria-expanded") !== "true";
+        for (const [row, details] of rowDetails) {
+            details.hidden = !open;
+            row.querySelector(".coverageToggle").setAttribute("aria-expanded", String(open));
+        }
+        expandAll.setAttribute("aria-expanded", String(open));
+        expandAll.textContent = open ? "Hide the details" : "Show who's weak to everything";
+    });
+    coverageElement.replaceChildren(meter, expandAll, table);
     suggestFixes(memberMultipliers, requestId);
 }
 

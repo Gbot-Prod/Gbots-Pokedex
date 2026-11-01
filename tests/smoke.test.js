@@ -623,6 +623,12 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
         await page.textContent(groundRow + " + .coverageDetails"),
         /^Weak: Pikachu, Gengar · Resists: nobody$/,
     );
+    // "Show who's weak to everything" opens all 18 lines at once.
+    await page.click(".coverageExpandAll");
+    assert.equal(await page.locator(".coverageDetails:not([hidden])").count(), 18);
+    await page.click(".coverageExpandAll");
+    assert.equal(await page.locator(".coverageDetails:not([hidden])").count(), 0);
+    await page.click(groundRow + " .coverageToggle");
     // ...and each name opens that member.
     await page.click(groundRow + " + .coverageDetails .linkBtn:has-text('Pikachu')");
     await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");

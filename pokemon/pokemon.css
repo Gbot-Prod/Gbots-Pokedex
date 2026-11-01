@@ -6622,3 +6622,8 @@ img.animatedSmall {
     color: inherit;
     font: inherit;
 }
+
+.coverageExpandAll {
+    display: block;
+    margin: -0.4rem auto 0.6rem;
+}
