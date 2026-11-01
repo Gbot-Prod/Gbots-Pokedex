@@ -35,6 +35,12 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Share card QR: an optional small QR code in the corner of the team card that opens the shared team link
 - [ ] Team card in the quiz: "Who's on this team?" — guess the six from silhouettes on the card, for a shared team
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
+- [ ] Phone layout: the floating theme / controller buttons cover the right edge of content at 375px (e.g. the "61 / 100" balance score) — give the team section a right gutter there or tuck the buttons away while scrolling
+- [ ] Coverage slide polish: give rows a solid background during the FLIP slide so passing rows don't show through each other mid-flight
+- [ ] Best team step 2: the 🏆 pill shows what would change ("+ Lapras, − Snorlax") as a small line under it, before you bring it back
+- [ ] Best team step 3: a mini row of the best team's sprites in a popover on hover / focus of the 🏆 pill
+- [ ] Coverage chart view toggle: a radial "type wheel" view (18 wedges, red weak / green resist / blue hits) as an alternative to the table, also drawable on the team card
+- [ ] Team builder keys: "S" cycles the coverage sort and "B" brings back the best team while focus is in the team section (listed in the shortcuts sheet)
 - [ ] Balance history step 2: hover or focus a sparkline point to see that score and the member added or removed that changed it
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
