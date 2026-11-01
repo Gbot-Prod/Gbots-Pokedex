@@ -1637,6 +1637,14 @@ img.placeholderSprite {
     z-index: 10;
 }
 
+/* On phones the fixed button sat over the right edge of whatever scrolled under it (scores,
+   numbers), so there it stays at the top of the page instead of following you down. */
+@media (max-width: 600px) {
+    #themeToggleBtn {
+        position: absolute;
+    }
+}
+
 #offlineBanner {
     margin: 0 0 1rem;
     padding: 0.6rem 1rem;
