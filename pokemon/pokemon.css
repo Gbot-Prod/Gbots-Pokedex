@@ -6644,3 +6644,40 @@ img.animatedSmall {
 .teamSuggestionScore.down {
     background: rgba(200, 50, 40, 0.2);
 }
+
+/* "Gengar removed · Undo" — shown for a few seconds after each team change */
+#teamUndo {
+    width: fit-content;
+    margin: 0 auto 0.8rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    background: var(--tile-bg);
+    color: var(--ink);
+    font-weight: 700;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    animation: undoIn 0.25s ease-out;
+}
+
+#teamUndo[hidden] {
+    display: none;
+}
+
+#teamUndo .linkBtn {
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    font-weight: 900;
+}
+
+@keyframes undoIn {
+    from {
+        transform: translateY(-6px);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #teamUndo {
+        animation: none;
+    }
+}

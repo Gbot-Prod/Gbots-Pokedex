@@ -40,7 +40,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
 - [ ] Balance meter step 2: a "+N" / "−N" floater next to the score when adding or removing a member changes it (instant under reduced motion)
 - [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
-- [ ] Team history: undo the last add/remove with a toast button ("Gengar removed · Undo")
 - [ ] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
@@ -439,3 +438,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Coverage chart: "Expand all" / "Collapse all" toggle above the table for a full who-covers-what view (2026-11-01) — a 'Show who's weak to everything' / 'Hide the details' link under the balance meter opens or closes all 18 type lines at once (keeping each type's aria-expanded in step)
 - [x] Suggestions step 4: show each suggestion's types as tiny icons inside its pill, so the reason is visible at a glance (2026-11-01) — each suggestion pill shows its types as small type icons after the name (alt text names them, so the button reads 'Butterfree Bug Flying')
 - [x] Suggestions step 5: show the score the team would have with each suggestion ("→ 74") inside its pill (2026-11-01) — each suggestion shows how the team balance would change with it (+3 green / −7 red badge, exact before→after in the tooltip and for screen readers), and picks are ranked by the resulting balance; live this showed every Ground fix costing balance — see the new scoring idea
+- [x] Team history: undo the last add/remove with a toast button ("Gengar removed · Undo") (2026-11-01) — every team change (card button, ×, suggestion ＋, loading a shared team) goes through changeTeam(), which shows 'Gengar removed from your team · Undo' for 8 s; Undo restores the team as it was and announces it

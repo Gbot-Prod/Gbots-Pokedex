@@ -651,6 +651,11 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
 
     await page.click(".teamRemove");
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 2);
+    // ...and Undo puts it back.
+    assert.match(await page.textContent("#teamUndo"), /removed from your team · Undo$/);
+    await page.click("#teamUndo .linkBtn");
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 3);
+    assert.equal(await page.isHidden("#teamUndo"), true);
 });
 
 test("the type chart opens on demand and highlights the hovered row and column", async () => {

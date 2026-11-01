@@ -113,6 +113,39 @@ export function sharedWeaknesses(memberMultipliers) {
         .map(({ type }) => type);
 }
 
+// Every add, remove or load goes through here: it saves, re-renders, announces the change
+// and offers an Undo (back to the team as it was) for a few seconds.
+const undoElement = document.getElementById("teamUndo");
+let undoTimer = null;
+
+function changeTeam(next, message) {
+    const previous = team;
+    team = next;
+    saveTeam();
+    renderTeam();
+    updateTeamButton();
+    statusElement.textContent = message;
+    const text = document.createElement("span");
+    text.textContent = message;
+    const undo = document.createElement("button");
+    undo.type = "button";
+    undo.className = "linkBtn";
+    undo.textContent = "Undo";
+    undo.addEventListener("click", () => {
+        clearTimeout(undoTimer);
+        undoElement.hidden = true;
+        team = previous;
+        saveTeam();
+        renderTeam();
+        updateTeamButton();
+        statusElement.textContent = "Undone: " + message.charAt(0).toLowerCase() + message.slice(1);
+    });
+    undoElement.replaceChildren(text, " · ", undo);
+    undoElement.hidden = false;
+    clearTimeout(undoTimer);
+    undoTimer = setTimeout(() => (undoElement.hidden = true), 8000);
+}
+
 function updateTeamButton() {
     const current = getCurrentPokemon();
     const inTeam = current && team.some((member) => member.id === current.id);
@@ -127,17 +160,16 @@ function toggleCurrent() {
         return;
     }
     if (team.some((member) => member.id === current.id)) {
-        team = team.filter((member) => member.id !== current.id);
-        statusElement.textContent = current.label + " removed from your team";
+        changeTeam(
+            team.filter((member) => member.id !== current.id),
+            current.label + " removed from your team",
+        );
     } else if (team.length >= TEAM_SIZE) {
         statusElement.textContent = "Your team already has six Pokémon";
         return;
     } else {
-        team = [...team, current];
-        statusElement.textContent = current.label + " added to your team (" + team.length + "/6)";
+        changeTeam([...team, current], current.label + " added to your team (" + (team.length + 1) + "/6)");
     }
-    saveTeam();
-    renderTeam();
 }
 
 function renderSlots() {
@@ -172,10 +204,10 @@ function renderSlots() {
             remove.setAttribute("aria-label", "Remove " + member.label + " from team");
             remove.textContent = "×";
             remove.addEventListener("click", () => {
-                team = team.filter((other) => other.id !== member.id);
-                statusElement.textContent = member.label + " removed from your team";
-                saveTeam();
-                renderTeam();
+                changeTeam(
+                    team.filter((other) => other.id !== member.id),
+                    member.label + " removed from your team",
+                );
             });
             slot.append(open, remove);
         } else {
@@ -509,20 +541,18 @@ async function suggestFixes(memberMultipliers, memberHits, requestId) {
                 try {
                     const pokemon = await fetchPokemon(String(id));
                     if (team.length < TEAM_SIZE && !team.some((member) => member.id === pokemon.id)) {
-                        team = [
-                            ...team,
-                            {
-                                id: pokemon.id,
-                                name: pokemon.name,
-                                label: pokemonDisplayName(pokemon),
-                                types: pokemon.types.map((entry) => entry.type.name),
-                            },
-                        ];
-                        saveTeam();
-                        renderTeam();
-                        updateTeamButton();
-                        statusElement.textContent =
-                            pokemonDisplayName(pokemon) + " added to your team (" + team.length + "/6)";
+                        changeTeam(
+                            [
+                                ...team,
+                                {
+                                    id: pokemon.id,
+                                    name: pokemon.name,
+                                    label: pokemonDisplayName(pokemon),
+                                    types: pokemon.types.map((entry) => entry.type.name),
+                                },
+                            ],
+                            pokemonDisplayName(pokemon) + " added to your team (" + (team.length + 1) + "/6)",
+                        );
                     }
                 } catch {
                     add.disabled = false; // couldn't load it: let them try again
@@ -688,10 +718,7 @@ async function offerSharedTeam() {
         sharedTeamElement.hidden = true;
     };
     load.addEventListener("click", () => {
-        team = members;
-        saveTeam();
-        renderTeam();
-        statusElement.textContent = "Shared team loaded";
+        changeTeam(members, "Shared team loaded");
         clearParam();
     });
     // See it as a team card first, headed "A shared team" (it's someone else's).
