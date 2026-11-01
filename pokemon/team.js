@@ -200,7 +200,19 @@ function renderPresets() {
             const load = document.createElement("button");
             load.type = "button";
             load.className = "btn teamPresetLoad";
-            load.textContent = preset.name + " (" + preset.members.length + ")";
+            // the name, then the team's sprites in a little row
+            const sprites = document.createElement("span");
+            sprites.className = "teamPresetSprites";
+            sprites.setAttribute("aria-hidden", "true");
+            for (const member of preset.members) {
+                const sprite = document.createElement("img");
+                sprite.alt = "";
+                sprite.width = 28;
+                sprite.height = 28;
+                setSmallSprite(sprite, member.id);
+                sprites.append(sprite);
+            }
+            load.append(preset.name + " (" + preset.members.length + ")", sprites);
             load.title = preset.members.map((member) => member.label).join(", ");
             load.addEventListener("click", () => changeTeam(preset.members, "Loaded “" + preset.name + "”"));
             const remove = document.createElement("button");

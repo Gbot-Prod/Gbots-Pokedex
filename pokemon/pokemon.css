@@ -6806,3 +6806,21 @@ img.animatedSmall {
 .teamPresetEmpty {
     font-style: italic;
 }
+
+.teamPresetLoad {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.teamPresetSprites {
+    display: flex;
+}
+
+.teamPresetSprites img {
+    width: 36px;
+    height: 36px;
+    margin: 0 -3px;
+    image-rendering: pixelated;
+}

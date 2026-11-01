@@ -696,6 +696,7 @@ test("teams can be saved under a name and loaded back", async () => {
     await page.fill("#teamPresetName", "Sparky");
     await page.click("#teamPresetSave");
     assert.equal(await page.textContent(".teamPresetLoad"), "Sparky (1)");
+    assert.equal(await page.locator(".teamPresetLoad .teamPresetSprites img").count(), 1);
     await page.click(".teamRemove"); // empty the team...
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 0);
     await page.click(".teamPresetLoad"); // ...and bring the saved one back
