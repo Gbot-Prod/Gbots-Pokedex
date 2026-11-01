@@ -1463,7 +1463,8 @@ function trainerFacts(stats) {
     const hunt = readStored("pokedex:shiny-hunt:v1", {});
     return [
         ["✨", "Shinies caught", hunt.shinies?.length ?? 0],
-        ["🌿", "Wild encounters", hunt.encounters ?? 0],
+        // (wild encounters live on the shiny hunt's own counter)
+        ["♟️", "Best team balance", Number(readStored(BEST_BALANCE_KEY, 0)) || 0],
         ["❓", "Quiz best streak", readStored("pokedex:quiz:v1", {}).best ?? 0],
         ["⭐", "Favorites", storedCount("pokedex:favorites:v1", isStoredEntry)],
         ["👥", "Team members", storedCount("pokedex:team:v1", isTeamMember)],

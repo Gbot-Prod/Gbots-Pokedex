@@ -43,7 +43,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
 - [ ] Saved teams step 3: rename a saved team in place (double-click / Rename link) and reorder by dragging
 - [ ] Surprise me step 2: options — "only my region" (limit to the selected region) and "keep my partner" (always include the trainer card partner)
-- [ ] Trainer card stat: "Best team balance" as a seventh stat tile next to Team members
 - [ ] Surprise me in the quiz: "Guess the balance" — show a random six, guess its score within 10 for a point
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -454,3 +453,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Balance badge: a "Master strategist" badge on the trainer card for building a 90+ team (2026-11-01) — a ninth badge, 🧠 Master strategist (purple), earned by building a team with balance 90+; the team builder records the best balance reached (pokedex:best-balance:v1) and re-checks badges, so the usual badge toast announces it
 - [x] Surprise me step 3: show the dice rolling (a quick shuffle of sprites through the slots) before the team lands; instant under reduced motion (2026-11-01) — before the surprise team lands, all six slots flicker through random seen sprites (7 frames, 90 ms, jittering and slightly blurred) — skipped under reduced motion
 - [x] Strategist badge step 2: tiers like the other badges (bronze 80, silver 90, gold 100) (2026-11-01) — Master strategist is now tiered like the others (bronze 80, silver 90, gold 100) with its own ♟️ icon (🧠 was already Quiz whiz); 'all gold' therefore now also needs a 100-balance team
+- [x] Trainer card stat: "Best team balance" as a seventh stat tile next to Team members (2026-11-01) — the trainer card's six stat tiles (and its PNG) now show ♟️ Best team balance in place of Wild encounters, which the shiny hunt's LCD already shows; kept at six so the card image layout holds
