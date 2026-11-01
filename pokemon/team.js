@@ -10,6 +10,7 @@ import {
     spriteUrl,
 } from "./api.js";
 import { drawTeamCard, loadCanvasImage, styleShareCard } from "./cardimage.js";
+import { makeConfetti } from "./effects.js";
 import { cardFontsReady, hasSeen, shareOrDownload } from "./progress.js";
 import {
     MAX_DEX_NUMBER,
@@ -24,6 +25,7 @@ import {
 import { isTeamMember } from "./storage.js";
 
 const TEAM_KEY = "pokedex:team:v1";
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 export const TEAM_SIZE = 6;
 
 const section = document.getElementById("teamSection");
@@ -313,6 +315,7 @@ function renderSlots() {
 
 let coverageRequest = 0;
 let lastBalance = null; // the score last shown, for the change floater
+let wasGreat = false; // whether the team was already full and well balanced
 
 async function renderCoverage() {
     const requestId = ++coverageRequest;
@@ -489,6 +492,17 @@ async function renderCoverage() {
         floater.textContent = (change > 0 ? "+" : "−") + Math.abs(change);
         score.append(floater);
     }
+    // A full, well-balanced team (six members, 70+) gets a confetti pop the moment it gets there.
+    const great = team.length === TEAM_SIZE && balance >= 70;
+    if (great && !wasGreat && lastBalance !== null && !reducedMotion.matches) {
+        const burst = makeConfetti(70, "confetti fullscreen");
+        document.body.append(burst);
+        setTimeout(() => burst.remove(), 3000);
+    }
+    if (great && !wasGreat && lastBalance !== null) {
+        statusElement.textContent = "A full, well-balanced team: " + balance + " / 100!";
+    }
+    wasGreat = great;
     lastBalance = balance;
     meter.append(label, bar, score);
     // Open (or close) every type's who-is-weak line at once.

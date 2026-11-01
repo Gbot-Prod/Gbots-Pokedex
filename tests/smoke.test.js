@@ -706,6 +706,29 @@ test("teams can be saved under a name and loaded back", async () => {
     assert.match(await page.textContent("#teamPresetList"), /No saved teams yet/);
 });
 
+test("completing a well-balanced team of six sets off confetti", async () => {
+    await page.evaluate(() =>
+        localStorage.setItem(
+            "pokedex:team:v1",
+            JSON.stringify([
+                { id: 6, name: "charizard", label: "Charizard", types: ["fire", "flying"] },
+                { id: 212, name: "scizor", label: "Scizor", types: ["bug", "steel"] },
+                { id: 445, name: "garchomp", label: "Garchomp", types: ["dragon", "ground"] },
+                { id: 68, name: "machamp", label: "Machamp", types: ["fighting"] },
+                { id: 130, name: "gyarados", label: "Gyarados", types: ["water", "flying"] },
+            ]),
+        ),
+    );
+    await page.reload();
+    await page.waitForSelector(".teamBalance");
+    await search("pikachu");
+    await page.waitForSelector("#pokemonCardContainer:not(.hidden)");
+    await page.click("#teamAddBtn");
+    await page.waitForFunction(() => document.querySelectorAll(".teamSlot:not(.empty)").length === 6);
+    await page.waitForSelector(".confetti.fullscreen", { state: "attached" });
+    assert.match(await page.textContent("#teamStatus"), /^A full, well-balanced team: \d+ \/ 100!$/);
+});
+
 test("a shared ?team= link offers to load that team", async () => {
     await page.goto(baseUrl + "?team=25,94&by=Misty");
     await page.waitForSelector("#sharedTeam:not([hidden])");

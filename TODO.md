@@ -40,7 +40,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
 - [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
-- [ ] Team builder: a little confetti pop when the team reaches 6 members with a balance of 70 or more
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -444,3 +443,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Undo step 2: Ctrl/Cmd+Z while the undo bar is showing triggers it (and the bar mentions the shortcut on desktop) (2026-11-01) — Ctrl/Cmd+Z presses Undo while the undo bar is showing (ignored while typing in a field); the button carries aria-keyshortcuts and an 'Undo (Ctrl+Z)' tooltip
 - [x] Team presets step 1: a "Save as…" button storing the current team under a name, and a select to switch back to it (2026-11-01) — a '📁 Saved teams' folder in the team section: save the current team under a name (same name replaces, up to 3, oldest dropped), load one with a button (through changeTeam, so Undo works) or delete it; kept in pokedex:team-presets:v1, junk entries skipped
 - [x] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them (2026-11-01) — covered by the Saved teams folder (same day)
+- [x] Team builder: a little confetti pop when the team reaches 6 members with a balance of 70 or more (2026-11-01) — the moment the team becomes full (6) with a balance of 70+, a confetti burst fires and the status announces 'A full, well-balanced team: 96 / 100!' (once per crossing, not on page load; no confetti under reduced motion)
