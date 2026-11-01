@@ -280,17 +280,35 @@ async function renderCoverage() {
         toggle.append(icon, " " + formatName(type));
         typeCell.append(toggle);
         row.append(typeCell);
-        const names = (test) =>
-            team.filter((_, index) => test(memberMultipliers[index][type] ?? 1)).map((member) => member.label);
+        const members = (test) => team.filter((_, index) => test(memberMultipliers[index][type] ?? 1));
         const details = document.createElement("tr");
         details.className = "coverageDetails";
         details.hidden = true;
         const detailCell = document.createElement("td");
         detailCell.colSpan = 4;
-        const weakNames = names((multiplier) => multiplier > 1);
-        const resistNames = names((multiplier) => multiplier < 1);
-        detailCell.textContent =
-            "Weak: " + (weakNames.join(", ") || "nobody") + " · Resists: " + (resistNames.join(", ") || "nobody");
+        // Each name is a link-style button that opens that member.
+        const nameList = (list) => {
+            if (!list.length) {
+                return ["nobody"];
+            }
+            return list.flatMap((member, index) => {
+                const link = document.createElement("button");
+                link.type = "button";
+                link.className = "linkBtn";
+                link.textContent = member.label;
+                link.addEventListener("click", () => {
+                    showPokemon(member.id);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                });
+                return index ? [", ", link] : [link];
+            });
+        };
+        detailCell.append(
+            "Weak: ",
+            ...nameList(members((multiplier) => multiplier > 1)),
+            " · Resists: ",
+            ...nameList(members((multiplier) => multiplier < 1)),
+        );
         details.append(detailCell);
         toggle.addEventListener("click", () => {
             details.hidden = !details.hidden;

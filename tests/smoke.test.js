@@ -623,6 +623,9 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
         await page.textContent(groundRow + " + .coverageDetails"),
         /^Weak: Pikachu, Gengar · Resists: nobody$/,
     );
+    // ...and each name opens that member.
+    await page.click(groundRow + " + .coverageDetails .linkBtn:has-text('Pikachu')");
+    await page.waitForFunction(() => document.getElementById("pokemonName").textContent.trim() === "Pikachu");
     // Both are weak to Ground and neither resists it: no MVP to crown.
     assert.equal(await page.locator(".teamSlot.mvp").count(), 0);
     // ...so the team is offered a Pokémon already seen that resists it.

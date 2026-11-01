@@ -6616,3 +6616,9 @@ img.animatedSmall {
         animation: none;
     }
 }
+
+.coverageDetails .linkBtn {
+    padding: 0;
+    color: inherit;
+    font: inherit;
+}
