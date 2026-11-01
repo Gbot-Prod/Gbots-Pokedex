@@ -1,6 +1,14 @@
 // Team builder: up to six Pokémon, saved locally, with a type-coverage chart showing how
 // many team members are weak to / resist each attacking type.
-import { ANIMATED_CHANGE_EVENT, API_BASE, fetchJson, fetchPokemon, setSmallSprite, spriteUrl } from "./api.js";
+import {
+    ANIMATED_CHANGE_EVENT,
+    API_BASE,
+    fetchJson,
+    fetchPokemon,
+    getSpeciesSlugs,
+    setSmallSprite,
+    spriteUrl,
+} from "./api.js";
 import { drawTeamCard, loadCanvasImage, styleShareCard } from "./cardimage.js";
 import { cardFontsReady, hasSeen, shareOrDownload } from "./progress.js";
 import {
@@ -11,6 +19,7 @@ import {
     formatName,
     idFromUrl,
     pokemonDisplayName,
+    speciesDisplayName,
 } from "./utils.js";
 import { isTeamMember } from "./storage.js";
 
@@ -299,11 +308,35 @@ async function suggestFixes(memberMultipliers, requestId) {
             typeData.pokemon.map(({ pokemon }) => ({ id: idFromUrl(pokemon.url), name: pokemon.name })),
         );
         const seenIds = new Set();
-        picks = candidates.filter(({ id }) => {
-            const fits = id <= MAX_DEX_NUMBER && hasSeen(id) && !inTeam.has(id) && !seenIds.has(id);
-            seenIds.add(id);
-            return fits;
-        });
+        const fitting = candidates
+            .filter(({ id }) => {
+                const fits = id <= MAX_DEX_NUMBER && hasSeen(id) && !inTeam.has(id) && !seenIds.has(id);
+                seenIds.add(id);
+                return fits;
+            })
+            .slice(0, 8);
+        // Among the first few, prefer ones that don't bring a new shared weakness with them,
+        // and show their proper names ("Farfetch’d", not "farfetchd").
+        const before = sharedWeaknesses(memberMultipliers).length;
+        const [slugs, scored] = await Promise.all([
+            getSpeciesSlugs().catch(() => null),
+            Promise.all(
+                fitting.map(async (candidate, order) => {
+                    const pokemon = await fetchPokemon(String(candidate.id));
+                    const typeData = await Promise.all(
+                        pokemon.types.map((entry) => fetchJson(API_BASE + "type/" + entry.type.name)),
+                    );
+                    const added = sharedWeaknesses([...memberMultipliers, damageMultipliers(typeData)]).length - before;
+                    return { ...candidate, added, order };
+                }),
+            ),
+        ]);
+        picks = scored
+            .sort((a, b) => a.added - b.added || a.order - b.order)
+            .map((pick) => ({
+                ...pick,
+                label: slugs?.get(pick.id) ? speciesDisplayName(slugs.get(pick.id)) : formatName(pick.name),
+            }));
     } catch {
         picks = []; // no type data: no suggestions
     }
@@ -319,7 +352,7 @@ async function suggestFixes(memberMultipliers, requestId) {
         "Try adding — they resist " + formatName(worst.type) + ", which " + worst.weak + " of your team are weak to:";
     const list = document.createElement("ul");
     list.append(
-        ...picks.slice(0, 3).map(({ id, name }) => {
+        ...picks.slice(0, 3).map(({ id, label }) => {
             const item = document.createElement("li");
             const button = document.createElement("button");
             button.type = "button";
@@ -329,7 +362,7 @@ async function suggestFixes(memberMultipliers, requestId) {
             sprite.width = 48;
             sprite.height = 48;
             setSmallSprite(sprite, id);
-            button.append(sprite, formatName(name));
+            button.append(sprite, label);
             button.addEventListener("click", () => {
                 showPokemon(id);
                 window.scrollTo({ top: 0, behavior: "smooth" });
@@ -339,7 +372,7 @@ async function suggestFixes(memberMultipliers, requestId) {
             add.type = "button";
             add.className = "teamSuggestionAdd";
             add.textContent = "＋";
-            add.setAttribute("aria-label", "Add " + formatName(name) + " to your team");
+            add.setAttribute("aria-label", "Add " + label + " to your team");
             add.addEventListener("click", async () => {
                 add.disabled = true;
                 try {
