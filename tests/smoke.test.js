@@ -979,6 +979,7 @@ test("an all-gold trainer turns the header ring gold", async () => {
             "pokedex:shiny-hunt:v1",
             JSON.stringify({ encounters: 60, shinies: Array.from({ length: 50 }, (_, index) => ({ id: index + 1 })) }),
         );
+        localStorage.setItem("pokedex:best-balance:v1", "100");
     });
     await page.reload();
     assert.equal(await page.evaluate(() => document.documentElement.classList.contains("allGold")), true);

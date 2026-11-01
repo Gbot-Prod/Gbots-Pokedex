@@ -251,7 +251,9 @@ test("badgeShelf marks each badge earned or locked", async () => {
         shelf.map((badge) => badge.earned),
         [true, false, true, false, false, true, false, false, false],
     );
-    assert.equal(badgeShelf({ strategist: 92 }).at(-1).earned, true); // Master strategist at 90+
+    const strategist = badgeShelf({ strategist: 92 }).at(-1);
+    assert.equal(strategist.label, "Master strategist: a team balance of 90+ (silver)");
+    assert.equal(strategist.hint, "Build a team with a balance score of 100");
     assert.equal(shelf.find((badge) => !badge.earned).hint, "Visit 30 days in a row");
 });
 
@@ -297,8 +299,8 @@ test("shinyTierProgress counts toward the next Shiny hunter tier", async () => {
 
 test("allTiersGold needs every tiered badge at gold", async () => {
     const { allTiersGold, badgeShelf } = await import("../pokemon/progress.js");
-    assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 49 })), false);
-    assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 50 })), true);
+    assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 50, strategist: 99 })), false);
+    assert.equal(allTiersGold(badgeShelf({ regions: 9, shinies: 50, quiz: 50, strategist: 100 })), true);
 });
 
 test("heartHint says how many more partner views the next heart needs", async () => {

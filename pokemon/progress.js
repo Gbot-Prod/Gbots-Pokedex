@@ -921,6 +921,7 @@ function recordVisit() {
 export const SHINY_TIERS = [5, 15, 50];
 
 export const QUIZ_TIERS = [20, 35, 50];
+export const STRATEGIST_TIERS = [80, 90, 100];
 export const REGION_TIERS = [1, 3, 9];
 
 // "3 / 5 for bronze": progress toward a badge's next tier, or null once gold.
@@ -981,11 +982,12 @@ const BADGES = [
     },
     { icon: "👥", label: "Team player: a full team of six", hint: "Fill all six team slots", kind: "team", need: 6 },
     {
-        icon: "🧠",
-        label: "Master strategist: a team balance of 90+",
-        hint: "Build a team with a balance score of 90 or more",
+        icon: "♟️",
+        name: "Master strategist",
         kind: "strategist",
-        need: 90,
+        tiers: STRATEGIST_TIERS,
+        unit: (n) => "a team balance of " + n + (n < 100 ? "+" : ""),
+        hintFor: (n) => "Build a team with a balance score of " + n + (n < 100 ? " or more" : ""),
     },
 ];
 
