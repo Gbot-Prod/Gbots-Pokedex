@@ -410,6 +410,7 @@ function toggleCurrent() {
 
 function renderSlots() {
     const slots = [];
+    const partnerId = trainerPartner();
     for (let index = 0; index < TEAM_SIZE; index++) {
         const member = team[index];
         const slot = document.createElement("li");
@@ -429,6 +430,17 @@ function renderSlots() {
             const types = document.createElement("small");
             types.textContent = member.types.map(formatName).join(" / ");
             open.append(sprite, name, types);
+            // the trainer card partner gets a little heart in the corner
+            if (member.id === partnerId) {
+                const heart = document.createElement("span");
+                heart.className = "teamPartnerMark";
+                heart.textContent = "❤️";
+                heart.title = "Your partner";
+                const spoken = document.createElement("span");
+                spoken.className = "visuallyHidden";
+                spoken.textContent = " (your partner)";
+                open.append(heart, spoken);
+            }
             open.addEventListener("click", () => {
                 showPokemon(member.id);
                 window.scrollTo({ top: 0, behavior: "smooth" });
@@ -851,6 +863,14 @@ export function parseTeamParam(value) {
         .map((part) => Number(part))
         .filter((id) => Number.isInteger(id) && id > 0)
         .slice(0, TEAM_SIZE);
+}
+
+function trainerPartner() {
+    try {
+        return JSON.parse(localStorage.getItem("pokedex:trainer:v1"))?.partner ?? null;
+    } catch {
+        return null;
+    }
 }
 
 function trainerName() {

@@ -760,6 +760,7 @@ test("Surprise me builds a team of six from Pokémon you've seen", async () => {
     );
     await page.reload(); // the option stays ticked
     assert.equal(await page.isChecked("#surprisePartner"), true);
+    assert.equal(await page.locator(".teamSlot .teamPartnerMark").count(), 1); // the partner's ❤️
 });
 
 test("a shared ?team= link offers to load that team", async () => {

@@ -45,7 +45,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Surprise me in the quiz: "Guess the balance" — show a random six, guess its score within 10 for a point
 - [ ] Surprise me step 5: a "roll again" shortcut — pressing the button again within the undo window re-rolls without stacking undo history
 - [ ] Region-only teams: "Region champion" — a badge for a 90+ team made only of one region's Pokémon
-- [ ] Partner spotlight: the partner's team slot gets a little ❤️ corner mark wherever it appears in the team builder
 - [ ] Trainer card PNG: add a small "Best team" row of six mini sprites under the stats when a saved best team exists
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -459,3 +458,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Trainer card stat: "Best team balance" as a seventh stat tile next to Team members (2026-11-01) — the trainer card's six stat tiles (and its PNG) now show ♟️ Best team balance in place of Wild encounters, which the shiny hunt's LCD already shows; kept at six so the card image layout holds
 - [x] Surprise me step 2: options — "only my region" (limit to the selected region) and "keep my partner" (always include the trainer card partner) (2026-11-01) — two options under the button: 'only the region I'm browsing' limits picks to the browse filter's region (with its own not-enough message), 'keep my partner' forces the trainer card partner into every line-up (bestLineUp keep, unit-tested)
 - [x] Surprise me step 4: remember the two option ticks between visits (localStorage), like the units toggle (2026-11-01) — the 'only the region I'm browsing' and 'keep my partner' ticks are remembered between visits (pokedex:surpriseRegion:v1 / surprisePartner:v1)
+- [x] Partner spotlight: the partner's team slot gets a little ❤️ corner mark wherever it appears in the team builder (2026-11-01) — the trainer card partner's team slot shows a small ❤️ in its corner (title 'Your partner', hidden ' (your partner)' for screen readers)
