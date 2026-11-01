@@ -415,7 +415,8 @@ async function suggestFixes(memberMultipliers, requestId) {
                         pokemon.types.map((entry) => fetchJson(API_BASE + "type/" + entry.type.name)),
                     );
                     const added = sharedWeaknesses([...memberMultipliers, damageMultipliers(typeData)]).length - before;
-                    return { ...candidate, added, order };
+                    const types = pokemon.types.map((entry) => entry.type.name);
+                    return { ...candidate, added, order, types };
                 }),
             ),
         ]);
@@ -456,7 +457,7 @@ async function suggestFixes(memberMultipliers, requestId) {
         "Try adding — they resist " + formatName(worst.type) + ", which " + worst.weak + " of your team are weak to:";
     const list = document.createElement("ul");
     list.append(
-        ...picks.slice(0, 3).map(({ id, label }) => {
+        ...picks.slice(0, 3).map(({ id, label, types }) => {
             const item = document.createElement("li");
             const button = document.createElement("button");
             button.type = "button";
@@ -466,7 +467,18 @@ async function suggestFixes(memberMultipliers, requestId) {
             sprite.width = 48;
             sprite.height = 48;
             setSmallSprite(sprite, id);
-            button.append(sprite, label);
+            // its types as tiny icons, so the reason it's suggested shows at a glance
+            const icons = types.map((type) => {
+                const icon = document.createElement("img");
+                icon.src = "assets/" + TYPE_ICONS[type];
+                icon.alt = formatName(type);
+                icon.title = formatName(type);
+                icon.width = 18;
+                icon.height = 18;
+                icon.className = "teamSuggestionType";
+                return icon;
+            });
+            button.append(sprite, label, ...icons);
             button.addEventListener("click", () => {
                 showPokemon(id);
                 window.scrollTo({ top: 0, behavior: "smooth" });

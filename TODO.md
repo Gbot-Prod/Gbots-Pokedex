@@ -37,7 +37,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Zoom step 2: when zoomed, drag-to-pan with the pointer and double-tap to toggle zoom on touch screens
 - [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
-- [ ] Suggestions step 4: show each suggestion's types as tiny icons inside its pill, so the reason is visible at a glance
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -433,3 +432,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team score: a 0-100 "balance" meter above the chart (fewer shared weaknesses and more coverage = higher), animated when it changes (2026-11-01) — a 'Team balance 61 / 100' meter above the coverage chart (role=meter): 70 points for types hit super-effectively + 30, −10 per shared weakness (teamBalance, unit-tested); the fill slides in and its hue runs red → gold → green with the score
 - [x] Coverage details step 2: the member names in the details line are links that open that Pokémon (2026-11-01) — the member names in a type's details line are underlined link-buttons that open that Pokémon (and scroll up to it)
 - [x] Coverage chart: "Expand all" / "Collapse all" toggle above the table for a full who-covers-what view (2026-11-01) — a 'Show who's weak to everything' / 'Hide the details' link under the balance meter opens or closes all 18 type lines at once (keeping each type's aria-expanded in step)
+- [x] Suggestions step 4: show each suggestion's types as tiny icons inside its pill, so the reason is visible at a glance (2026-11-01) — each suggestion pill shows its types as small type icons after the name (alt text names them, so the button reads 'Butterfree Bug Flying')

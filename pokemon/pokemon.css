@@ -6627,3 +6627,8 @@ img.animatedSmall {
     display: block;
     margin: -0.4rem auto 0.6rem;
 }
+
+.teamSuggestionType {
+    width: 18px;
+    height: 18px;
+}
