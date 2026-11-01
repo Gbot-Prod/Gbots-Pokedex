@@ -657,6 +657,10 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     assert.match(await page.textContent("#teamUndo"), /removed from your team · Undo$/);
     await page.click("#teamUndo .linkBtn");
     assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 3);
+    // Ctrl+Z does the same while the bar is up.
+    await page.click(".teamRemove");
+    await page.keyboard.press("Control+z");
+    assert.equal(await page.locator(".teamSlot:not(.empty)").count(), 3);
     assert.equal(await page.isHidden("#teamUndo"), true);
 });
 

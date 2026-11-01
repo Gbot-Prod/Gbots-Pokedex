@@ -41,7 +41,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
 - [ ] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
-- [ ] Undo step 2: Ctrl/Cmd+Z while the undo bar is showing triggers it (and the bar mentions the shortcut on desktop)
 - [ ] Team builder: a little confetti pop when the team reaches 6 members with a balance of 70 or more
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
 - [ ] Team presets step 1: a "Save as…" button storing the current team under a name, and a select to switch back to it
@@ -444,3 +443,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team history: undo the last add/remove with a toast button ("Gengar removed · Undo") (2026-11-01) — every team change (card button, ×, suggestion ＋, loading a shared team) goes through changeTeam(), which shows 'Gengar removed from your team · Undo' for 8 s; Undo restores the team as it was and announces it
 - [x] Balance meter step 2: a "+N" / "−N" floater next to the score when adding or removing a member changes it (instant under reduced motion) (2026-11-01) — when the team changes, the difference floats up from the balance score ('+6' green / '−12' red, lighter shades in dark mode) and fades over 1.4 s; hidden under reduced motion
 - [x] Team slots: a gentle "settle" bounce on the slot a new member lands in (instant under reduced motion) (2026-11-01) — a newly added member's slot drops in with a 0.55 s settle bounce (only on the render right after the change; none under reduced motion)
+- [x] Undo step 2: Ctrl/Cmd+Z while the undo bar is showing triggers it (and the bar mentions the shortcut on desktop) (2026-11-01) — Ctrl/Cmd+Z presses Undo while the undo bar is showing (ignored while typing in a field); the button carries aria-keyshortcuts and an 'Undo (Ctrl+Z)' tooltip

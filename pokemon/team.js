@@ -144,11 +144,22 @@ function changeTeam(next, message) {
         statusElement.textContent = "Undone: " + message.charAt(0).toLowerCase() + message.slice(1);
     });
     justLanded = new Set(); // only the render right after the change bounces
+    undo.setAttribute("aria-keyshortcuts", "Control+Z Meta+Z");
+    undo.title = "Undo (Ctrl+Z)";
     undoElement.replaceChildren(text, " · ", undo);
     undoElement.hidden = false;
     clearTimeout(undoTimer);
     undoTimer = setTimeout(() => (undoElement.hidden = true), 8000);
 }
+
+// Ctrl/Cmd+Z presses the Undo while it's showing (and not while typing in a field).
+document.addEventListener?.("keydown", (event) => {
+    const typing = event.target.closest?.("input, textarea, select, [contenteditable]");
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z" && !typing && !undoElement.hidden) {
+        event.preventDefault();
+        undoElement.querySelector("button")?.click();
+    }
+});
 
 function updateTeamButton() {
     const current = getCurrentPokemon();
