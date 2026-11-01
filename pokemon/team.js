@@ -1005,6 +1005,23 @@ export function initTeam(options) {
     teamCardButton.addEventListener("click", () => saveTeamCard());
     document.getElementById("teamPresetForm").addEventListener("submit", saveCurrentAsPreset);
     document.getElementById("teamSurpriseBtn").addEventListener("click", surpriseTeam);
+    // The Surprise me options stay ticked between visits.
+    for (const id of ["surpriseRegion", "surprisePartner"]) {
+        const box = document.getElementById(id);
+        const key = "pokedex:" + id + ":v1";
+        try {
+            box.checked = localStorage.getItem(key) === "1";
+        } catch {
+            // no storage: they start unticked
+        }
+        box.addEventListener("change", () => {
+            try {
+                localStorage.setItem(key, box.checked ? "1" : "0");
+            } catch {
+                // can't remember it
+            }
+        });
+    }
     renderPresets();
     window.addEventListener(ANIMATED_CHANGE_EVENT, renderSlots);
     renderTeam();
