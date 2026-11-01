@@ -38,6 +38,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Team card: the MVP's sprite is drawn slightly bigger with a sparkle, so it stands out on the card too
 - [ ] Team builder: drag to reorder the six slots (and keyboard ←/→ with a "move" mode), saved order used on the team card
 - [ ] Team builder empty state: when the team is empty, suggest a "starter team" of your partner plus five seen Pokémon with balanced types
+- [ ] Balance meter step 2: a "+N" / "−N" floater next to the score when adding or removing a member changes it (instant under reduced motion)
+- [ ] Suggestions step 5: show the score the team would have with each suggestion ("→ 74") inside its pill
+- [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
+- [ ] Team history: undo the last add/remove with a toast button ("Gengar removed · Undo")
+- [ ] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
