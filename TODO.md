@@ -41,6 +41,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
 - [ ] Team presets: save up to three named teams (e.g. "Kanto run", "Rain team") and switch between them
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
+- [ ] Undo step 2: Ctrl/Cmd+Z while the undo bar is showing triggers it (and the bar mentions the shortcut on desktop)
+- [ ] Team builder: a little confetti pop when the team reaches 6 members with a balance of 70 or more
+- [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
+- [ ] Team slots: a gentle "settle" bounce on the slot a new member lands in (instant under reduced motion)
+- [ ] Team presets step 1: a "Save as…" button storing the current team under a name, and a select to switch back to it
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
