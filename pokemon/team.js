@@ -163,6 +163,85 @@ document.addEventListener?.("keydown", (event) => {
     }
 });
 
+// --- Surprise me ---------------------------------------------------------------------------
+// Builds a team of six from Pokémon you've seen: the 18 type lists say who has which types, then
+// a quick random search keeps the best-balanced of a few hundred line-ups.
+
+// Picks the best of `tries` random line-ups of `size` from `pool` ([{ multipliers, hits }]),
+// scored by teamBalance. Returns the chosen indexes. `random` is injectable for tests.
+export function bestLineUp(pool, size, tries = 400, random = Math.random) {
+    let best = { score: -1, picks: [] };
+    for (let attempt = 0; attempt < tries; attempt++) {
+        const picks = [];
+        while (picks.length < Math.min(size, pool.length)) {
+            const index = Math.floor(random() * pool.length);
+            if (!picks.includes(index)) {
+                picks.push(index);
+            }
+        }
+        const score = teamBalance(
+            picks.map((index) => pool[index].multipliers),
+            picks.map((index) => pool[index].hits),
+        );
+        if (score > best.score) {
+            best = { score, picks };
+        }
+    }
+    return best;
+}
+
+async function surpriseTeam() {
+    const button = document.getElementById("teamSurpriseBtn");
+    button.disabled = true;
+    try {
+        const typeNames = Object.keys(TYPE_ICONS);
+        const typeData = Object.fromEntries(
+            await Promise.all(typeNames.map(async (type) => [type, await fetchJson(API_BASE + "type/" + type)])),
+        );
+        // id → { name, types (in slot order) } for every seen National Dex Pokémon
+        const seenPokemon = new Map();
+        for (const type of typeNames) {
+            for (const { pokemon, slot } of typeData[type].pokemon) {
+                const id = idFromUrl(pokemon.url);
+                if (id <= MAX_DEX_NUMBER && hasSeen(id)) {
+                    const entry = seenPokemon.get(id) ?? { id, name: pokemon.name, types: [] };
+                    entry.types[slot - 1] = type;
+                    seenPokemon.set(id, entry);
+                }
+            }
+        }
+        const candidates = [...seenPokemon.values()].map((entry) => ({ ...entry, types: entry.types.filter(Boolean) }));
+        if (candidates.length < TEAM_SIZE) {
+            showUndoless("See at least six Pokémon first — then I can build you a team!");
+            return;
+        }
+        const pool = candidates.map((candidate) => {
+            const data = candidate.types.map((type) => typeData[type]);
+            return { multipliers: damageMultipliers(data), hits: superEffectiveTargets(data) };
+        });
+        const { score, picks } = bestLineUp(pool, TEAM_SIZE);
+        const slugs = await getSpeciesSlugs().catch(() => null);
+        const members = picks.map((index) => {
+            const { id, name, types } = candidates[index];
+            return { id, name, label: slugs?.get(id) ? speciesDisplayName(slugs.get(id)) : formatName(name), types };
+        });
+        changeTeam(members, "🎲 A surprise team, balance " + score + " / 100");
+    } catch {
+        statusElement.textContent = "Couldn't load the type data — try again when you're online";
+    } finally {
+        button.disabled = false;
+    }
+}
+
+// A message in the undo bar's place, without an Undo (nothing changed).
+function showUndoless(message) {
+    statusElement.textContent = message;
+    undoElement.replaceChildren(message);
+    undoElement.hidden = false;
+    clearTimeout(undoTimer);
+    undoTimer = setTimeout(() => (undoElement.hidden = true), 6000);
+}
+
 // --- Saved teams -------------------------------------------------------------------------
 // Up to three named teams, kept alongside the current one; loading one goes through
 // changeTeam(), so it can be undone like any other change.
@@ -874,6 +953,7 @@ export function initTeam(options) {
     shareTeamButton.addEventListener("click", shareTeam);
     teamCardButton.addEventListener("click", () => saveTeamCard());
     document.getElementById("teamPresetForm").addEventListener("submit", saveCurrentAsPreset);
+    document.getElementById("teamSurpriseBtn").addEventListener("click", surpriseTeam);
     renderPresets();
     window.addEventListener(ANIMATED_CHANGE_EVENT, renderSlots);
     renderTeam();

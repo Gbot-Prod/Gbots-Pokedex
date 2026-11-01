@@ -730,6 +730,23 @@ test("completing a well-balanced team of six sets off confetti", async () => {
     assert.match(await page.textContent("#teamStatus"), /^A full, well-balanced team: \d+ \/ 100!$/);
 });
 
+test("Surprise me builds a team of six from Pokémon you've seen", async () => {
+    await page.click("#teamSurpriseBtn"); // nothing seen yet
+    await page.waitForFunction(() => /at least six/.test(document.getElementById("teamUndo").textContent));
+    await page.evaluate(() =>
+        localStorage.setItem("pokedex:seen:v1", JSON.stringify(Array.from({ length: 40 }, (_, index) => index + 1))),
+    );
+    await page.reload();
+    await page.click("#teamSurpriseBtn");
+    await page.waitForFunction(() => document.querySelectorAll(".teamSlot:not(.empty)").length === 6);
+    assert.match(await page.textContent("#teamUndo"), /^🎲 A surprise team, balance \d+ \/ 100 · Undo$/);
+    // every member is one you've seen
+    const ids = await page.evaluate(() =>
+        JSON.parse(localStorage.getItem("pokedex:team:v1")).map((member) => member.id),
+    );
+    assert.ok(ids.every((id) => id >= 1 && id <= 40));
+});
+
 test("a shared ?team= link offers to load that team", async () => {
     await page.goto(baseUrl + "?team=25,94&by=Misty");
     await page.waitForSelector("#sharedTeam:not([hidden])");

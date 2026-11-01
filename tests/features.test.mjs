@@ -415,3 +415,15 @@ test("team balance rewards coverage and punishes shared weaknesses", async () =>
     assert.equal(balanced, 65); // 9 of 18 types hit: 35 + 30
     assert.equal(shaky, 45); // two shared weaknesses: −20
 });
+
+test("the surprise line-up keeps the best-balanced of its tries", async () => {
+    const { bestLineUp } = await import("../pokemon/team.js");
+    const weakToRock = { multipliers: { rock: 2 }, hits: new Set() };
+    const hitsMany = { multipliers: {}, hits: new Set(["fire", "water", "grass", "ice", "rock", "ground"]) };
+    const pool = [weakToRock, weakToRock, hitsMany, hitsMany];
+    const { picks, score } = bestLineUp(pool, 2, 50);
+    // never both rock-weak members (a shared weakness), always some coverage: 6 of 18 types, 23 + 30
+    assert.ok(!(picks.includes(0) && picks.includes(1)));
+    assert.ok(picks.includes(2) || picks.includes(3));
+    assert.equal(score, 53);
+});
