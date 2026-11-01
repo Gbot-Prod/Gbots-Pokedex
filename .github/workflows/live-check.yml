@@ -1,0 +1,21 @@
+name: Live API check
+
+# Runs the browser tests against the real PokéAPI every night (and on demand), so changes in
+# the API are caught even when nobody pushes. Scheduled runs only happen on the default branch.
+on:
+    schedule:
+        - cron: "17 4 * * *"
+    workflow_dispatch:
+
+jobs:
+    live:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+            - run: npm ci
+            - run: npx playwright install --with-deps chromium
+            - run: npm run check:live

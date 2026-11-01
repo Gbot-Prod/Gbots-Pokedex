@@ -1,0 +1,25 @@
+{
+    "name": "gbots-pokedex",
+    "version": "1.0.0",
+    "private": true,
+    "description": "A Pokédex website built with plain HTML, CSS and JavaScript on top of PokéAPI.",
+    "scripts": {
+        "start": "npx --yes serve pokemon",
+        "test": "node --test tests/*.test.js tests/*.test.mjs",
+        "lint": "eslint . && prettier --check .",
+        "format": "prettier --write .",
+        "fixtures": "NODE_USE_ENV_PROXY=1 node tests/build-fixtures.mjs",
+        "check:live": "LIVE_API=1 node --test tests/smoke.test.js tests/a11y.test.js",
+        "lighthouse": "lhci autorun"
+    },
+    "devDependencies": {
+        "@axe-core/playwright": "^4.14.0",
+        "@eslint/js": "^10.0.1",
+        "@lhci/cli": "^0.15.1",
+        "eslint": "^10.1.0",
+        "eslint-plugin-import-x": "^4.17.1",
+        "globals": "^17.13.0",
+        "playwright": "1.63.0",
+        "prettier": "^3.8.1"
+    }
+}

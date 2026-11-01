@@ -1,0 +1,321 @@
+// "Who's that Pokémon?": guess a Pokémon from its silhouette, with four choices.
+import { makeConfetti } from "./effects.js";
+import { QUIZ_TIERS, tierProgress } from "./progress.js";
+import { SPRITE_BASE, getAllPokemonEntries, getSpeciesSlugs } from "./api.js";
+import { GENERATIONS, MAX_DEX_NUMBER, entryDisplayName } from "./utils.js";
+
+const SCORE_KEY = "pokedex:quiz:v1";
+const ARTWORK_BASE = SPRITE_BASE + "other/official-artwork/";
+
+const section = document.getElementById("quizSection");
+const startButton = document.getElementById("quizStartBtn");
+const stage = document.getElementById("quizStage");
+const image = document.getElementById("quizImage");
+const choicesElement = document.getElementById("quizChoices");
+const resultElement = document.getElementById("quizResult");
+const nextButton = document.getElementById("quizNextBtn");
+const scoreElement = document.getElementById("quizScore");
+const generationSelect = document.getElementById("quizGeneration");
+const timedButton = document.getElementById("quizTimedBtn");
+const timerElement = document.getElementById("quizTimer");
+const comboElement = document.getElementById("quizCombo");
+const TIMED_SECONDS = 60;
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+let candidates = null; // National Dex entries with display names
+let score = { correct: 0, played: 0, streak: 0, best: 0, bestTimed: 0, bestCombo: 0 };
+// The 60-second challenge: { endsAt, correct, interval } while running, otherwise null.
+let timedRun = null;
+let showPokemon = () => {};
+
+function loadScore() {
+    try {
+        score = { ...score, ...JSON.parse(localStorage.getItem(SCORE_KEY)) };
+    } catch {
+        // keep the zeroed score
+    }
+}
+
+function saveScore() {
+    try {
+        localStorage.setItem(SCORE_KEY, JSON.stringify(score));
+    } catch {
+        // score just won't persist
+    }
+}
+
+function renderScore() {
+    scoreElement.textContent =
+        "Score " +
+        score.correct +
+        "/" +
+        score.played +
+        " · Streak " +
+        score.streak +
+        " · Best " +
+        score.best +
+        " · Best 60s run " +
+        score.bestTimed +
+        (score.bestCombo >= 3 ? " · Best combo ×" + score.bestCombo : "");
+    const tier = tierProgress(score.best, QUIZ_TIERS);
+    document.getElementById("quizTier").textContent =
+        "🧠 Quiz whiz badge: " + (tier ? "best streak " + tier : "gold — quiz legend!");
+}
+
+// n distinct random items from a list.
+export function pickRandom(list, n, random = Math.random) {
+    const pool = [...list];
+    const picked = [];
+    while (picked.length < n && pool.length) {
+        picked.push(pool.splice(Math.floor(random() * pool.length), 1)[0]);
+    }
+    return picked;
+}
+
+async function getCandidates() {
+    if (!candidates) {
+        const [entries, slugs] = await Promise.all([getAllPokemonEntries(), getSpeciesSlugs().catch(() => null)]);
+        candidates = entries
+            .filter((entry) => entry.id <= MAX_DEX_NUMBER)
+            .map((entry) => ({ ...entry, label: entryDisplayName(entry, slugs) }));
+    }
+    return candidates;
+}
+
+async function nextRound() {
+    let entries;
+    try {
+        entries = await getCandidates();
+    } catch {
+        resultElement.textContent = "Couldn't load Pokémon for the quiz. Please try again.";
+        return;
+    }
+    // Optionally limit the round to one generation (choices too, so it stays fair).
+    const generation = GENERATIONS.find((gen) => String(gen.number) === generationSelect.value);
+    const pool = generation
+        ? entries.filter((entry) => entry.id >= generation.first && entry.id <= generation.last)
+        : entries;
+    const choices = pickRandom(pool, 4);
+    const answer = choices[Math.floor(Math.random() * choices.length)];
+
+    stage.hidden = false;
+    stage.classList.remove("revealed");
+    resultElement.textContent = "";
+    nextButton.hidden = true;
+    image.alt = "Silhouette of a mystery Pokémon";
+    image.src = ARTWORK_BASE + answer.id + ".png";
+
+    choicesElement.replaceChildren(
+        ...choices.map((choice) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "quizChoice";
+            button.textContent = choice.label;
+            button.dataset.key = choices.indexOf(choice) + 1; // number keys 1–4 pick it
+            button.addEventListener("click", () => answerRound(choice, answer, button));
+            return button;
+        }),
+    );
+    choicesElement.querySelector("button").focus({ preventScroll: true });
+}
+
+function revealAnswer(answer, chosenButton, correct) {
+    stage.classList.add("revealed");
+    image.alt = answer.label + " artwork";
+    for (const button of choicesElement.querySelectorAll("button")) {
+        button.disabled = true;
+        if (button.textContent === answer.label) {
+            button.classList.add("correct");
+        }
+    }
+    if (!correct) {
+        chosenButton.classList.add("wrong");
+    }
+}
+
+// --- 60-second challenge -------------------------------------------------------------
+
+function startTimedRun() {
+    stopTimedRun(false);
+    startButton.hidden = true;
+    timedButton.disabled = true;
+    timedRun = { endsAt: Date.now() + TIMED_SECONDS * 1000, correct: 0, combo: 0, interval: null };
+    const tick = () => {
+        const left = Math.max(0, Math.ceil((timedRun.endsAt - Date.now()) / 1000));
+        timerElement.textContent = "⏱ " + left + "s · " + timedRun.correct + " correct";
+        timerElement.classList.toggle("urgent", left <= 10);
+        timerElement.style.setProperty("--time-left", String(left / TIMED_SECONDS)); // the LCD's segment bar
+        if (left === 0) {
+            stopTimedRun(true);
+        }
+    };
+    timedRun.interval = setInterval(tick, 250);
+    timerElement.hidden = false;
+    comboElement.hidden = false;
+    renderCombo(0, false);
+    tick();
+    nextRound();
+}
+
+function stopTimedRun(showResult) {
+    if (!timedRun) {
+        return;
+    }
+    clearInterval(timedRun.interval);
+    const { correct } = timedRun;
+    timedRun = null;
+    timedButton.disabled = false;
+    timerElement.hidden = true;
+    comboElement.hidden = true;
+    if (!showResult) {
+        return;
+    }
+    const newBest = correct > score.bestTimed;
+    score.bestTimed = Math.max(score.bestTimed, correct);
+    saveScore();
+    renderScore();
+    for (const button of choicesElement.querySelectorAll("button")) {
+        button.disabled = true;
+    }
+    resultElement.textContent =
+        "Time's up! You named " + correct + " Pokémon in 60 seconds" + (newBest ? " — a new best!" : ".");
+    if (newBest && correct > 0) {
+        celebrate();
+    }
+    nextButton.hidden = false;
+    nextButton.focus({ preventScroll: true });
+}
+
+// The combo meter under the challenge timer: one pip per answer in a row (up to 5, then it
+// glows), and a shake when a miss breaks the chain.
+function renderCombo(combo, broken) {
+    [...comboElement.children].forEach((pip, index) => pip.classList.toggle("lit", index < combo));
+    comboElement.classList.toggle("maxed", combo >= 5);
+    comboElement.classList.remove("broken");
+    if (broken) {
+        void comboElement.offsetWidth; // restart the shake
+        comboElement.classList.add("broken");
+    }
+}
+
+// A "+1" (or "Combo ×N!" from 3 in a row) that floats up out of a correct answer in the
+// challenge (skipped under reduced motion).
+function floatPlusOne(button, combo) {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const bubble = document.createElement("span");
+    bubble.className = "quizPlusOne" + (combo >= 3 ? " combo" : "");
+    bubble.setAttribute("aria-hidden", "true");
+    bubble.textContent = combo >= 3 ? "Combo ×" + combo + "!" : "+1";
+    button.append(bubble);
+    bubble.addEventListener("animationend", () => bubble.remove(), { once: true });
+}
+
+function answerRound(choice, answer, chosenButton) {
+    const correct = choice.id === answer.id;
+    if (timedRun) {
+        // Challenge rounds keep their own count and move straight on.
+        if (correct) {
+            timedRun.correct++;
+        }
+        // Answers in a row: from 3 on, each one flashes "Combo ×N!".
+        const broken = !correct && timedRun.combo > 0;
+        timedRun.combo = correct ? timedRun.combo + 1 : 0;
+        renderCombo(timedRun.combo, broken);
+        if (timedRun.combo > score.bestCombo) {
+            score.bestCombo = timedRun.combo;
+            saveScore();
+            renderScore();
+        }
+        revealAnswer(answer, chosenButton, correct);
+        if (correct) {
+            floatPlusOne(chosenButton, timedRun.combo); // after the reveal, which matches buttons by their text
+        }
+        resultElement.textContent = (correct ? "✓ " : "✗ ") + answer.label + " · " + timedRun.correct + " correct";
+        setTimeout(() => timedRun && nextRound(), 700);
+        return;
+    }
+    score.played++;
+    let newBest = false;
+    if (correct) {
+        score.correct++;
+        score.streak++;
+        newBest = score.streak > score.best && score.streak >= 3;
+        if (newBest) {
+            celebrate(); // new best streak
+        }
+        score.best = Math.max(score.best, score.streak);
+    } else {
+        score.streak = 0;
+    }
+    saveScore();
+    renderScore();
+    if (newBest) {
+        // A "New best!" tag flashes on the score line (gone at the next render).
+        const tag = document.createElement("span");
+        tag.className = "quizNewBest";
+        tag.textContent = " 🎉 New best!";
+        scoreElement.append(tag);
+    }
+
+    revealAnswer(answer, chosenButton, correct);
+
+    resultElement.replaceChildren(
+        (correct ? "Correct! It's " : "Not quite — it's ") + answer.label + ". ",
+        Object.assign(document.createElement("button"), {
+            type: "button",
+            className: "linkBtn",
+            textContent: "View in Pokédex",
+            onclick: () => {
+                showPokemon(answer.id);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            },
+        }),
+    );
+    nextButton.hidden = false;
+    nextButton.focus({ preventScroll: true });
+}
+
+// A short burst of confetti over the quiz art (skipped when reduced motion is preferred).
+function celebrate() {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const burst = makeConfetti();
+    stage.append(burst);
+    setTimeout(() => burst.remove(), 2200);
+}
+
+export function initQuiz(options) {
+    showPokemon = options.showPokemon;
+    loadScore();
+    renderScore();
+    startButton.addEventListener("click", () => {
+        startButton.hidden = true;
+        nextRound();
+    });
+    nextButton.addEventListener("click", nextRound);
+    timedButton.addEventListener("click", startTimedRun);
+    // Number keys 1–4 answer while a round is open.
+    stage.addEventListener("keydown", (event) => {
+        const button = choicesElement.querySelector('[data-key="' + event.key + '"]:not(:disabled)');
+        if (button) {
+            event.preventDefault();
+            button.click();
+        }
+    });
+    for (const generation of GENERATIONS) {
+        const option = document.createElement("option");
+        option.value = generation.number;
+        option.textContent = "Gen " + generation.number + " (" + generation.region + ")";
+        generationSelect.append(option);
+    }
+    // Switching generation mid-game starts a fresh round from that generation.
+    generationSelect.addEventListener("change", () => {
+        if (!stage.hidden) {
+            nextRound();
+        }
+    });
+    section.hidden = false;
+}

@@ -1,0 +1,577 @@
+// Draws the trainer card onto a canvas so it can be saved and shared as a PNG.
+
+export const CARD_WIDTH = 540;
+export const CARD_HEIGHT = 840;
+
+// First colour of each region banner's gradient (see .region1 … .region9 in pokemon.css).
+const REGION_COLORS = [
+    "#b8322b",
+    "#8a6d1c",
+    "#1e6f8f",
+    "#5a4c9c",
+    "#3a3a3a",
+    "#2f5fb3",
+    "#c0502a",
+    "#8c2c6e",
+    "#2d7a4a",
+];
+
+const STYLES = {
+    classic: {
+        band: ["#ef4b4b", "#b11f1f"],
+        body: ["#fdfbf3", "#efe7cf"],
+        border: ["#ffd447", "#ffd447"],
+        ink: "#1d2340",
+        tile: "#ffffff",
+        font: "Inter, Arial, sans-serif",
+    },
+    holo: {
+        band: ["#7a3cff", "#ff7a3c"],
+        body: ["#ffffff", "#f0ecff"],
+        border: ["#ff6b9d", "#6bc5ff"],
+        ink: "#1d2340",
+        tile: "#ffffff",
+        font: "Inter, Arial, sans-serif",
+    },
+    retro: {
+        band: ["#306230", "#306230"],
+        body: ["#9bbc0f", "#9bbc0f"],
+        border: ["#0f380f", "#0f380f"],
+        ink: "#0f380f",
+        tile: "#8bac0f",
+        font: '"Press Start 2P", monospace',
+    },
+};
+
+function roundRect(context, x, y, width, height, radius, fill) {
+    context.beginPath();
+    context.roundRect(x, y, width, height, radius);
+    context.fillStyle = fill;
+    context.fill();
+}
+
+function gradient(context, x0, y0, x1, y1, [from, to]) {
+    const result = context.createLinearGradient(x0, y0, x1, y1);
+    result.addColorStop(0, from);
+    result.addColorStop(1, to);
+    return result;
+}
+
+// card: { name, partnerName, seenText, facts: [[icon, label, value]], regions: [{ name, seen, total }], style }
+// sprite: a loaded image of the partner, or null.
+export function drawTrainerCard(canvas, card, sprite) {
+    const style = STYLES[card.style] ?? STYLES.classic;
+    const retro = card.style === "retro";
+    const context = canvas.getContext("2d");
+    canvas.width = CARD_WIDTH;
+    canvas.height = CARD_HEIGHT;
+    const font = (weight, size) => weight + " " + (retro ? Math.round(size * 0.6) : size) + "px " + style.font;
+
+    roundRect(
+        context,
+        0,
+        0,
+        CARD_WIDTH,
+        CARD_HEIGHT,
+        28,
+        gradient(context, 0, 0, CARD_WIDTH, CARD_HEIGHT, style.border),
+    );
+    roundRect(
+        context,
+        10,
+        10,
+        CARD_WIDTH - 20,
+        CARD_HEIGHT - 20,
+        20,
+        gradient(context, 0, 0, 0, CARD_HEIGHT, style.body),
+    );
+    context.save();
+    context.beginPath();
+    context.roundRect(10, 10, CARD_WIDTH - 20, 76, [20, 20, 0, 0]);
+    context.clip();
+    context.fillStyle = gradient(context, 0, 0, CARD_WIDTH, 0, style.band);
+    context.fillRect(10, 10, CARD_WIDTH - 20, 76);
+    context.restore();
+
+    context.fillStyle = "#ffffff";
+    context.textBaseline = "middle";
+    context.font = font("900", 30);
+    context.fillText("TRAINER CARD", 34, 49);
+
+    // Partner avatar
+    context.beginPath();
+    context.arc(100, 170, 64, 0, 2 * Math.PI);
+    context.fillStyle = retro ? "#8bac0f" : gradient(context, 0, 106, 0, 234, ["#ffffff", "#7f9be0"]);
+    context.fill();
+    context.lineWidth = 6;
+    context.strokeStyle = style.border[0];
+    context.stroke();
+    if (sprite) {
+        context.imageSmoothingEnabled = false;
+        context.drawImage(sprite, 36, 106, 128, 128);
+    }
+
+    context.fillStyle = style.ink;
+    context.font = font("900", 34);
+    context.fillText(card.name || "Trainer", 190, 150, CARD_WIDTH - 220);
+    context.font = font("600", 18);
+    if (card.partnerName) {
+        context.fillText("Partner: " + card.partnerName, 190, 192, CARD_WIDTH - 220);
+    }
+
+    context.textAlign = "center";
+    context.font = font("900", 22);
+    context.fillText(card.seenText, CARD_WIDTH / 2, 272, CARD_WIDTH - 60);
+
+    // Stat tiles, 3 × 2
+    const tileWidth = (CARD_WIDTH - 40 - 2 * 12) / 3;
+    card.facts.forEach(([icon, label, value], index) => {
+        const x = 20 + (index % 3) * (tileWidth + 12);
+        const y = 300 + Math.floor(index / 3) * 96;
+        roundRect(context, x, y, tileWidth, 84, 14, style.tile);
+        context.fillStyle = style.ink;
+        context.font = font("400", 20);
+        context.fillText(icon, x + tileWidth / 2, y + 18);
+        context.font = font("900", 26);
+        context.fillText(String(value), x + tileWidth / 2, y + 44);
+        context.font = font("600", 13);
+        context.fillText(label, x + tileWidth / 2, y + 68, tileWidth - 10);
+    });
+
+    // Region rows
+    context.textAlign = "left";
+    context.font = font("900", 20);
+    context.fillText("Regions", 24, 512);
+    card.regions.forEach(({ name, seen, total }, index) => {
+        const y = 532 + index * 30;
+        roundRect(context, 20, y, CARD_WIDTH - 40, 25, 7, REGION_COLORS[index] ?? "#555555");
+        context.fillStyle = "#ffffff";
+        context.font = font("700", 15);
+        context.textAlign = "left";
+        context.fillText(name, 32, y + 13);
+        roundRect(context, 130, y + 9, 290, 7, 4, "rgba(0, 0, 0, 0.35)");
+        if (seen) {
+            roundRect(context, 130, y + 9, Math.max(7, (290 * seen) / total), 7, 4, "#ffd447");
+        }
+        context.fillStyle = "#ffffff";
+        context.textAlign = "right";
+        context.fillText(seen + "/" + total, CARD_WIDTH - 32, y + 13);
+    });
+
+    context.textAlign = "center";
+    context.fillStyle = style.ink;
+    context.font = font("600", 13);
+    context.fillText("Gbot's Pokédex", CARD_WIDTH / 2, CARD_HEIGHT - 22);
+}
+
+// Resolves to the loaded image, or null if it can't be used on a canvas (missing, or no CORS).
+export function loadCanvasImage(src) {
+    return new Promise((resolve) => {
+        if (!src) {
+            resolve(null);
+            return;
+        }
+        const image = new Image();
+        image.crossOrigin = "anonymous";
+        image.onload = () => resolve(image);
+        image.onerror = () => resolve(null);
+        image.src = src;
+    });
+}
+
+// Share-card text: Inter, or the Game Boy pixel font (smaller, it runs wide) for retro cards.
+function cardFont(weight, size, retro) {
+    return retro
+        ? Math.round(size * 0.55) + 'px "Press Start 2P", monospace'
+        : weight + " " + size + "px inter, arial, sans-serif";
+}
+
+export const FINALE_WIDTH = 1200;
+export const FINALE_HEIGHT = 630;
+
+// The "Pokédex complete" share image: a night sky, the title in gold, the starters lined up in
+// three rows and the region legendaries in front. starters/legends: loaded images or nulls.
+// byline: who did it ("Red & Pikachu"), or "" to leave it off.
+export function drawFinaleCard(canvas, { dateText, byline, retro }, starters, legends) {
+    canvas.width = FINALE_WIDTH;
+    canvas.height = FINALE_HEIGHT;
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false; // crisp pixel sprites
+    context.fillStyle = gradient(context, 0, 0, 0, FINALE_HEIGHT, ["#0b1030", "#3b2a6b"]);
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+    const glow = context.createRadialGradient(600, 760, 40, 600, 760, 520);
+    glow.addColorStop(0, "rgba(255, 212, 71, 0.5)");
+    glow.addColorStop(1, "rgba(255, 212, 71, 0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+    // a scatter of stars (fixed pattern, so every image looks the same)
+    context.fillStyle = "rgba(255, 255, 255, 0.7)";
+    for (let index = 0; index < 70; index++) {
+        context.fillRect((index * 397) % FINALE_WIDTH, (index * 151) % 330, 2, 2);
+    }
+
+    context.textAlign = "center";
+    context.font = cardFont(900, 64, retro);
+    context.fillStyle = "#b11f1f";
+    context.fillText("🏆 Pokédex complete!", FINALE_WIDTH / 2, 98);
+    context.shadowColor = "rgba(255, 212, 71, 0.8)";
+    context.shadowBlur = 20;
+    context.fillStyle = "#ffd447";
+    context.fillText("🏆 Pokédex complete!", FINALE_WIDTH / 2, 92);
+    context.shadowBlur = 0;
+    context.font = cardFont(700, 26, retro);
+    context.fillStyle = "#ffffff";
+    context.fillText(
+        (byline ? byline + " · " : "") + "1,025 / 1,025 Pokémon seen" + (dateText ? " · " + dateText : ""),
+        FINALE_WIDTH / 2,
+        138,
+    );
+
+    // 27 starters: three rows of nine, one column per region
+    starters.forEach((image, index) => {
+        if (image) {
+            const column = Math.floor(index / 3);
+            const row = index % 3;
+            context.drawImage(image, 60 + column * 122, 160 + row * 74, 84, 84);
+        }
+    });
+    // the nine legendaries along the bottom, bigger
+    legends.forEach((image, index) => {
+        if (image) {
+            context.drawImage(image, 18 + index * 130, 392, 150, 150);
+        }
+    });
+
+    context.font = cardFont(600, 20, retro);
+    context.fillStyle = "rgba(255, 255, 255, 0.85)";
+    context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
+}
+
+// One region's "complete!" share card, in its banner colour: the trio, the region's
+// legendary and the count. trio: three loaded images (or nulls), legend: one (or null).
+export function drawRegionCard(canvas, { number, region, total, byline, retro }, trio, legend) {
+    canvas.width = FINALE_WIDTH;
+    canvas.height = FINALE_HEIGHT;
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
+    const colour = REGION_COLORS[number - 1] ?? "#b8322b";
+    context.fillStyle = gradient(context, 0, 0, FINALE_WIDTH, FINALE_HEIGHT, [colour, "#0b1030"]);
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+    // a soft spotlight behind the legendary
+    const glow = context.createRadialGradient(930, 360, 20, 930, 360, 300);
+    glow.addColorStop(0, "rgba(255, 255, 255, 0.35)");
+    glow.addColorStop(1, "rgba(255, 255, 255, 0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+
+    context.textAlign = "left";
+    context.font = cardFont(900, 58, retro);
+    context.fillStyle = "rgba(0, 0, 0, 0.35)";
+    context.fillText("🏅 " + region + " complete!", 64, 112);
+    context.fillStyle = "#ffffff";
+    context.fillText("🏅 " + region + " complete!", 60, 106);
+    context.font = cardFont(700, 26, retro);
+    context.fillStyle = "#ffd447";
+    context.fillText((byline ? byline + " · " : "") + total + " / " + total + " Pokémon seen · Gen " + number, 62, 152);
+    trio.forEach((image, index) => {
+        if (image) {
+            context.drawImage(image, 50 + index * 200, 250, 210, 210);
+        }
+    });
+    if (legend) {
+        context.drawImage(legend, 760, 150, 360, 360);
+    }
+    context.textAlign = "center";
+    context.font = cardFont(600, 20, retro);
+    context.fillStyle = "rgba(255, 255, 255, 0.85)";
+    context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 26);
+}
+
+// Gives a finished share card the trainer card's style: "holo" lays a rainbow foil sheen and a
+// gradient frame over it, "retro" turns it into a four-shade Game Boy screen with scanlines,
+// "classic" (or anything else) just gets the Pokédex's red-and-gold frame.
+export function styleShareCard(canvas, style) {
+    const context = canvas.getContext("2d");
+    const { width, height } = canvas;
+    if (style === "holo") {
+        context.save();
+        context.globalCompositeOperation = "overlay";
+        const foil = context.createLinearGradient(0, 0, width, height);
+        ["#ff6b9d", "#ffd447", "#6bffb8", "#6bc5ff", "#b36bff", "#ff6b9d"].forEach((colour, index, all) =>
+            foil.addColorStop(index / (all.length - 1), colour),
+        );
+        context.globalAlpha = 0.45;
+        context.fillStyle = foil;
+        context.fillRect(0, 0, width, height);
+        context.restore();
+        // a diagonal light streak across the foil, like the holo card's sheen
+        context.save();
+        context.globalCompositeOperation = "screen";
+        const streak = context.createLinearGradient(width * 0.2, 0, width * 0.55, height);
+        streak.addColorStop(0, "rgba(255, 255, 255, 0)");
+        streak.addColorStop(0.45, "rgba(255, 255, 255, 0)");
+        streak.addColorStop(0.5, "rgba(255, 255, 255, 0.35)");
+        streak.addColorStop(0.55, "rgba(255, 255, 255, 0)");
+        streak.addColorStop(1, "rgba(255, 255, 255, 0)");
+        context.fillStyle = streak;
+        context.fillRect(0, 0, width, height);
+        context.restore();
+        context.lineWidth = 12;
+        context.strokeStyle = gradient(context, 0, 0, width, height, ["#ff6b9d", "#6bc5ff"]);
+        context.strokeRect(6, 6, width - 12, height - 12);
+    } else if (style === "retro") {
+        // map every pixel's brightness onto the Game Boy's four greens
+        const pixels = context.getImageData(0, 0, width, height);
+        const shades = [
+            [15, 56, 15],
+            [48, 98, 48],
+            [139, 172, 15],
+            [155, 188, 15],
+        ];
+        for (let index = 0; index < pixels.data.length; index += 4) {
+            const [red, green, blue] = pixels.data.slice(index, index + 3);
+            const level = Math.min(3, Math.floor(((red * 0.3 + green * 0.59 + blue * 0.11) / 256) * 4));
+            pixels.data.set(shades[level], index);
+        }
+        context.putImageData(pixels, 0, 0);
+        context.fillStyle = "rgba(15, 56, 15, 0.12)";
+        for (let y = 0; y < height; y += 4) {
+            context.fillRect(0, y, width, 1);
+        }
+        context.lineWidth = 12;
+        context.strokeStyle = "#0f380f";
+        context.strokeRect(6, 6, width - 12, height - 12);
+    } else {
+        // classic: the Pokédex's red frame with a thin gold inner line
+        context.lineWidth = 14;
+        context.strokeStyle = "#b11f1f";
+        context.strokeRect(7, 7, width - 14, height - 14);
+        context.lineWidth = 3;
+        context.strokeStyle = "#ffd447";
+        context.strokeRect(15.5, 15.5, width - 31, height - 31);
+    }
+}
+
+// A four-point star, like the sparkle on a shiny.
+function sparkle(context, x, y, radius) {
+    const waist = radius * 0.28;
+    context.beginPath();
+    context.moveTo(x, y - radius);
+    context.quadraticCurveTo(x + waist, y - waist, x + radius, y);
+    context.quadraticCurveTo(x + waist, y + waist, x, y + radius);
+    context.quadraticCurveTo(x - waist, y + waist, x - radius, y);
+    context.quadraticCurveTo(x - waist, y - waist, x, y - radius);
+    context.fill();
+}
+
+// A heart shape (drawn, since the retro pixel font has no emoji), centred on x, y.
+function heart(context, x, y, size, colour) {
+    const half = size / 2;
+    context.fillStyle = colour;
+    context.beginPath();
+    context.moveTo(x, y + half);
+    context.bezierCurveTo(x - size * 0.9, y - size * 0.05, x - half * 0.7, y - size * 0.75, x, y - size * 0.25);
+    context.bezierCurveTo(x + half * 0.7, y - size * 0.75, x + size * 0.9, y - size * 0.05, x, y + half);
+    context.fill();
+}
+
+// The team card: six slots with each member's sprite, name and types (type-coloured pills),
+// and a line on what to watch out for and what the team hits hardest.
+// team: { members: [{ label, types }], weakTo: [[type, count]], hits: [type], byline, retro },
+// sprites: loaded images (or nulls) in member order, typeColors: { type: "#hex" }.
+export function drawTeamCard(canvas, team, sprites, typeColors) {
+    canvas.width = FINALE_WIDTH;
+    canvas.height = FINALE_HEIGHT;
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
+    const { retro } = team;
+    context.fillStyle = gradient(context, 0, 0, 0, FINALE_HEIGHT, ["#162058", "#0b1030"]);
+    context.fillRect(0, 0, FINALE_WIDTH, FINALE_HEIGHT);
+
+    context.textAlign = "left";
+    context.font = cardFont(900, 52, retro);
+    context.fillStyle = "#ffd447";
+    context.fillText("👥 " + (team.heading ?? (team.byline ? team.byline + "'s team" : "My team")), 50, 88);
+
+    // The balance score as a half-ring gauge in the top-right corner.
+    if (Number.isFinite(team.balance)) {
+        const centreX = FINALE_WIDTH - 110;
+        const centreY = 92;
+        context.lineCap = "round";
+        context.lineWidth = 14;
+        context.strokeStyle = "rgba(255, 255, 255, 0.18)";
+        context.beginPath();
+        context.arc(centreX, centreY, 56, Math.PI, 2 * Math.PI);
+        context.stroke();
+        context.strokeStyle = "hsl(" + team.balance * 1.2 + ", 75%, 50%)";
+        context.beginPath();
+        context.arc(centreX, centreY, 56, Math.PI, Math.PI + (Math.PI * team.balance) / 100);
+        context.stroke();
+        context.lineCap = "butt";
+        context.textAlign = "center";
+        context.fillStyle = "#ffffff";
+        context.font = cardFont(900, 34, retro);
+        context.fillText(String(team.balance), centreX, centreY - 4);
+        context.font = cardFont(700, 14, retro);
+        context.fillStyle = "rgba(255, 255, 255, 0.8)";
+        context.fillText("BALANCE", centreX, centreY + 18);
+        context.textAlign = "left";
+    }
+
+    const capitalise = (text) => text.charAt(0).toUpperCase() + text.slice(1);
+    for (let index = 0; index < 6; index++) {
+        const member = team.members[index];
+        const x = 40 + (index % 3) * 380;
+        const y = 120 + Math.floor(index / 3) * 190;
+        // solid panels: they also survive the retro four-shade conversion
+        roundRect(context, x, y, 360, 170, 18, member ? "#3a4a8f" : "#222c66");
+        if (!member) {
+            continue;
+        }
+        const isMvp = index === team.mvp;
+        if (isMvp && !retro) {
+            // a gold glow behind the MVP's sprite
+            const glow = context.createRadialGradient(x + 76, y + 85, 10, x + 76, y + 85, 90);
+            glow.addColorStop(0, "rgba(255, 212, 71, 0.55)");
+            glow.addColorStop(1, "rgba(255, 212, 71, 0)");
+            context.fillStyle = glow;
+            context.fillRect(x + 4, y + 4, 150, 162);
+        }
+        if (sprites[index]) {
+            // the MVP stands a little taller than the rest
+            const size = isMvp ? 164 : 140;
+            context.drawImage(sprites[index], x + 76 - size / 2, y + 85 - size / 2, size, size);
+        }
+        if (isMvp) {
+            // three four-point sparkles around the sprite
+            context.fillStyle = retro ? "#ffffff" : "#fff3b0";
+            for (const [sparkX, sparkY, radius] of [
+                [x + 26, y + 122, 10],
+                [x + 132, y + 48, 8],
+                [x + 120, y + 148, 6],
+            ]) {
+                sparkle(context, sparkX, sparkY, radius);
+            }
+        }
+        if (index === team.partner) {
+            // your partner, as marked in the team builder
+            heart(context, x + 26, y + 26, 22, retro ? "#ffffff" : "#ff4d6d");
+        }
+        if (isMvp) {
+            // the MVP: covers the most of the team's weaknesses
+            context.lineWidth = 4;
+            context.strokeStyle = "#ffd447";
+            context.beginPath();
+            context.roundRect(x + 2, y + 2, 356, 166, 16);
+            context.stroke();
+            context.fillStyle = "#ffd447";
+            context.font = cardFont(900, 18, retro);
+            context.textAlign = "right";
+            context.fillText("★ MVP", x + 346, y + 28);
+            context.textAlign = "left";
+        }
+        context.fillStyle = "#ffffff";
+        context.font = cardFont(800, 28, retro);
+        context.fillText(member.label, x + 150, y + 62, 200);
+        member.types.forEach((type, typeIndex) => {
+            const pillX = x + 150 + typeIndex * 100;
+            if (retro) {
+                // outlined boxes: filled pills would melt into the panel at four shades
+                context.lineWidth = 3;
+                context.strokeStyle = "#ffffff";
+                context.strokeRect(pillX + 1.5, y + 83.5, 89, 29);
+            } else {
+                roundRect(context, pillX, y + 82, 92, 32, 16, typeColors[type] ?? "#888888");
+            }
+            context.fillStyle = "#ffffff";
+            context.font = cardFont(800, 17, retro);
+            context.textAlign = "center";
+            context.fillText(capitalise(type), pillX + 46, y + 105, 86);
+            context.textAlign = "left";
+        });
+    }
+
+    // the 18-type strip: red where the team is weak, green where it hits super-effectively
+    const square = (FINALE_WIDTH - 100) / 18;
+    (team.strip ?? []).forEach(([type, state], index) => {
+        const x = 50 + index * square;
+        roundRect(context, x + 2, 490, square - 4, 22, 4, typeColors[type] ?? "#888888");
+        context.fillStyle = "#ffffff";
+        context.font = cardFont(800, 13, retro);
+        context.textAlign = "center";
+        context.fillText(type.slice(0, 3).toUpperCase(), x + square / 2, 506);
+        context.textAlign = "left";
+        if (state && retro) {
+            // red and green become one Game Boy shade, so retro marks by shape: ✕ weak, ● hits
+            const centreX = x + square / 2;
+            context.fillStyle = context.strokeStyle = "#ffffff";
+            context.lineWidth = 3;
+            context.beginPath();
+            if (state === "weak") {
+                context.moveTo(centreX - 6, 515);
+                context.lineTo(centreX + 6, 527);
+                context.moveTo(centreX + 6, 515);
+                context.lineTo(centreX - 6, 527);
+                context.stroke();
+            } else {
+                context.arc(centreX, 521, 6, 0, 2 * Math.PI);
+                context.fill();
+            }
+        } else if (state) {
+            context.fillStyle = state === "weak" ? "#ff5a4a" : "#5ee07a";
+            context.fillRect(x + 2, 512, square - 4, 5);
+        }
+    });
+
+    context.font = cardFont(700, 22, retro);
+    // each type gets a dot in its own colour before its name (not in retro, where they'd all match)
+    const typeLine = (label, entries, empty, colour, y) => {
+        context.fillStyle = colour;
+        let x = 50;
+        context.fillText(label, x, y);
+        x += context.measureText(label).width;
+        if (!entries.length) {
+            context.fillText(empty, x, y);
+            return;
+        }
+        entries.forEach(([type, text], index) => {
+            if (index) {
+                context.fillStyle = colour;
+                context.fillText(", ", x, y);
+                x += context.measureText(", ").width;
+            }
+            if (!retro) {
+                context.fillStyle = typeColors[type] ?? "#888888";
+                context.beginPath();
+                context.arc(x + 8, y - 8, 7, 0, 2 * Math.PI);
+                context.fill();
+                context.lineWidth = 1.5;
+                context.strokeStyle = "rgba(255, 255, 255, 0.8)";
+                context.stroke();
+                x += 20;
+            }
+            context.fillStyle = colour;
+            context.fillText(text, x, y);
+            x += context.measureText(text).width;
+        });
+    };
+    typeLine(
+        "Watch out for: ",
+        team.weakTo.map(([type, count]) => [type, capitalise(type) + " ×" + count]),
+        "nothing — nicely balanced!",
+        "#ffb4a8",
+        553,
+    );
+    typeLine(
+        "Hits hard: ",
+        team.hits.map((type) => [type, capitalise(type)]),
+        "—",
+        "#b9f5c0",
+        580,
+    );
+
+    context.textAlign = "center";
+    context.font = cardFont(600, 18, retro);
+    context.fillStyle = "rgba(255, 255, 255, 0.7)";
+    context.fillText("Gbot's Pokédex", FINALE_WIDTH / 2, FINALE_HEIGHT - 30);
+}

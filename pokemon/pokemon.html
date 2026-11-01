@@ -1,41 +1,547 @@
-<html>
+<!doctype html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!--font-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Press+Start+2P&display=swap"
+            rel="stylesheet"
+        />
 
-
-        <title> Pokemon Lookup </title>
-        <link rel="stylesheet" href="pokemon.css">
+        <title>Pokédex</title>
+        <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+        <link rel="manifest" href="manifest.webmanifest" />
+        <meta name="theme-color" content="#6884E3" />
+        <link rel="stylesheet" href="pokemon.css" />
+        <script>
+            // Apply a saved theme before first paint to avoid a flash of the wrong colours.
+            try {
+                const savedTheme = localStorage.getItem("pokedex:theme");
+                if (savedTheme) {
+                    document.documentElement.dataset.theme = savedTheme;
+                }
+            } catch (error) {}
+        </script>
     </head>
     <body>
-        <div class="header">
-            <input type="text" id="pokemonLookupInpt" placeholder="Enter Pokémon name">
-            <button class="btn" onclick="fetchData()" id="getPokemonBtn">Get Pokémon</button>
-            <button class="btn" onclick="clearFields()" id="clearDataBtn">Clear</button>
+        <div id="typeBackdrop" aria-hidden="true"></div>
+        <button type="button" id="themeToggleBtn" aria-label="Toggle dark mode">🌙</button>
+        <button type="button" id="installBtn" hidden>Install app</button>
+        <main class="page">
+            <p id="offlineBanner" role="status" hidden>
+                You're offline — Pokémon you've viewed before are still available.
+            </p>
+            <header class="dexDevice">
+                <div class="dexTop">
+                    <span class="dexLens" aria-hidden="true"></span>
+                    <span class="dexLed red" aria-hidden="true"></span>
+                    <span class="dexLed yellow" aria-hidden="true"></span>
+                    <span class="dexLed green" aria-hidden="true"></span>
+                    <button type="button" id="dexProgress" aria-haspopup="dialog" aria-label="Pokédex completion">
+                        <svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">
+                            <circle class="dexProgressTrack" cx="22" cy="22" r="18" />
+                            <circle class="dexProgressFill" cx="22" cy="22" r="18" />
+                        </svg>
+                        <span class="dexProgressCount" aria-hidden="true">0</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="dexPartnerWrap"
+                        id="dexPartnerBtn"
+                        aria-label="Open your partner Pokémon"
+                        hidden
+                    >
+                        <img id="dexPartner" alt="" width="48" height="48" hidden />
+                        <span id="dexPartnerBubble" aria-hidden="true"></span>
+                    </button>
+                    <span class="dexTitle" aria-hidden="true">Pokédex</span>
+                </div>
+                <form id="searchForm" role="search">
+                    <div class="comboboxWrap">
+                        <input
+                            type="text"
+                            id="pokemonLookupInpt"
+                            placeholder="Name or number, e.g. 25"
+                            aria-label="Pokémon name or Pokédex number"
+                            autocomplete="off"
+                        />
+                    </div>
+                    <button type="submit" class="btn" id="getPokemonBtn">Get Pokémon</button>
+                    <button type="button" class="btn" id="randomPokemonBtn">Random</button>
+                    <button type="button" class="btn" id="clearDataBtn">Clear</button>
+                </form>
+            </header>
+
+            <section id="potdSection" aria-labelledby="potdHeading" hidden>
+                <div id="potdCard">
+                    <img id="potdArt" alt="" width="200" height="200" />
+                    <div id="potdText">
+                        <h2 id="potdHeading">Pokémon of the day</h2>
+                        <p id="potdName"></p>
+                        <p id="potdDetail"></p>
+                        <button type="button" class="btn" id="potdSeeBtn">See it</button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="hidden" id="loadingIndicator" role="status">
+                <span class="spinner" aria-hidden="true"></span>
+                <span>Loading…</span>
+            </div>
+
+            <div class="hidden" id="errorMessage" role="alert"></div>
+            <p id="resultAnnouncer" class="visuallyHidden" aria-live="polite"></p>
 
             <div class="hidden" id="pokemonCardContainer">
                 <div class="header" id="pokemonHeader">
-                    <h1 id="headerTitle"> Pokémon Info </h1>
+                    <button type="button" class="navBtn" id="prevPokemonBtn" aria-label="Previous Pokémon">‹</button>
+                    <h1 id="headerTitle">Pokémon Info</h1>
+                    <button type="button" class="navBtn" id="nextPokemonBtn" aria-label="Next Pokémon">›</button>
                 </div>
                 <div id="pokemonDetailsContainer">
                     <div id="pokemonSpriteContainer">
-                        <img class="order3" src="" id="pokemonSprite" alt="Pokémon Image" style="display:none;" >
+                        <img class="order3" src="" id="pokemonSprite" alt="" style="display: none" />
+                        <button type="button" id="shinyToggleBtn" aria-pressed="false" title="Show shiny sprite">
+                            ✨ Shiny
+                        </button>
+                        <button type="button" id="animatedToggleBtn" aria-pressed="false" title="Show animated sprite">
+                            ▶ Animated
+                        </button>
+                        <button type="button" id="partnerCameoBtn" aria-label="Cheer with your partner" hidden>
+                            <img id="partnerCameo" alt="" width="56" height="56" />
+                        </button>
+                        <span id="cameoVs" aria-hidden="true">VS</span>
+                        <p id="cameoMatchup" role="status"></p>
                     </div>
-                    <h1 id="pokemonName"> 
-                    </h1>
-                    <h3 id="pokemonNumber">
-                    </h3>
-                    <div id="pokemonTypeContainer">
-                        <img class="typeIcon" src="" id="pokemonType1" alt="Pokémon Type" style="display:none;" width="60" height="60">
-                        <img class="typeIcon" src="" id="pokemonType2" alt="Pokémon Type" style="display:none;" width="60" height="60">
-                    </div> 
-                    <p id="pokemonAbility">  
+                    <div id="pokemonNameRow">
+                        <h1 id="pokemonName"></h1>
+                        <button type="button" id="cryBtn" title="Play cry" aria-label="Play cry">🔊</button>
+                        <button type="button" id="shareBtn" title="Share this Pokémon" aria-label="Share this Pokémon">
+                            🔗
+                        </button>
+                        <span id="shareStatus" class="visuallyHidden" role="status"></span>
+                        <button
+                            type="button"
+                            id="compareCurrentBtn"
+                            title="Compare with another Pokémon"
+                            aria-label="Compare with another Pokémon"
+                        >
+                            ⚖️
+                        </button>
+                        <button
+                            type="button"
+                            id="favoriteBtn"
+                            aria-pressed="false"
+                            aria-label="Favorite"
+                            title="Add to favorites"
+                        >
+                            ☆
+                        </button>
+                        <button
+                            type="button"
+                            id="teamAddBtn"
+                            aria-pressed="false"
+                            aria-label="Team"
+                            title="Add to team"
+                        >
+                            ＋👥
+                        </button>
+                    </div>
+                    <p id="partnerOffer" hidden>
+                        <span id="partnerOfferText"></span>
+                        <button type="button" class="btn" id="partnerOfferYes">Make partner</button>
+                        <button type="button" id="partnerOfferNo" aria-label="No thanks">✕</button>
                     </p>
+                    <button type="button" class="btn" id="nextMissingBtn" aria-keyshortcuts="N" hidden></button>
+                    <p id="pokemonNumber"></p>
+                    <p id="pokemonGenus"></p>
+                    <div id="pokemonForms" role="group" aria-label="Forms" hidden></div>
+                    <div id="pokemonTypeContainer">
+                        <img
+                            class="typeIcon"
+                            src=""
+                            id="pokemonType1"
+                            alt=""
+                            style="display: none"
+                            width="60"
+                            height="60"
+                        />
+                        <img
+                            class="typeIcon"
+                            src=""
+                            id="pokemonType2"
+                            alt=""
+                            style="display: none"
+                            width="60"
+                            height="60"
+                        />
+                    </div>
+                    <p id="pokemonFlavorText"></p>
+                    <dl id="pokemonMeasurements">
+                        <div>
+                            <dt>Height</dt>
+                            <dd id="pokemonHeight"></dd>
+                        </div>
+                        <div>
+                            <dt>Weight</dt>
+                            <dd id="pokemonWeight"></dd>
+                        </div>
+                    </dl>
+                    <button type="button" class="linkBtn" id="unitsToggleBtn">Show lbs / ft</button>
+                    <figure id="sizeComparison">
+                        <div id="sizeStage" aria-hidden="true">
+                            <div class="sizeFigure">
+                                <svg id="trainerSilhouette" viewBox="0 0 40 100" preserveAspectRatio="xMidYMax meet">
+                                    <circle cx="20" cy="11" r="9" />
+                                    <path
+                                        d="M8 26 Q20 20 32 26 L34 60 L28 60 L27 98 L21 98 L20 64 L19 98 L13 98 L12 60 L6 60 Z"
+                                    />
+                                </svg>
+                                <span id="trainerLabel"></span>
+                            </div>
+                            <div class="sizeFigure">
+                                <span id="pokemonSilhouette"></span>
+                                <span id="pokemonSizeLabel"></span>
+                            </div>
+                        </div>
+                        <figcaption id="sizeCaption"></figcaption>
+                    </figure>
+                    <p id="pokemonAbility"></p>
+                    <p id="abilityDescription" role="status" hidden></p>
+                    <section id="pokemonStats" aria-labelledby="statsHeading">
+                        <h2 id="statsHeading">Base stats</h2>
+                        <ul id="statsList"></ul>
+                    </section>
+                    <section id="pokemonMatchups" aria-labelledby="matchupsHeading" hidden>
+                        <h2 id="matchupsHeading">Type matchups</h2>
+                        <dl id="matchupsList"></dl>
+                    </section>
+                    <section id="pokemonEvolution" aria-labelledby="evolutionHeading" hidden>
+                        <h2 id="evolutionHeading">Evolution</h2>
+                        <ol id="evolutionList"></ol>
+                    </section>
+                    <details id="pokemonMoves" hidden>
+                        <summary id="movesSummary">Moves</summary>
+                        <select id="movesGame" aria-label="Game"></select>
+                        <div id="movesTabs" role="tablist" aria-label="How moves are learned"></div>
+                        <table id="movesTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Lv.</th>
+                                    <th scope="col">Move</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col"><abbr title="Category">Cat.</abbr></th>
+                                    <th scope="col"><abbr title="Power">Pwr</abbr></th>
+                                    <th scope="col"><abbr title="Accuracy">Acc.</abbr></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </details>
                 </div>
             </div>
-        </div>
-        <script src="pokemon.js"></script>
+
+            <p id="shortcutHint">
+                Tip: <kbd>/</kbd> search · <kbd>←</kbd> <kbd>→</kbd> previous/next · <kbd>S</kbd> shiny ·
+                <kbd>C</kbd> cry · <kbd>N</kbd> next missing ·
+                <button type="button" id="shortcutsBtn" aria-keyshortcuts="?"><kbd>?</kbd> all shortcuts</button>
+            </p>
+
+            <section id="teamSection" class="tileSection" aria-labelledby="teamHeading" hidden>
+                <h2 id="teamHeading">Your team</h2>
+                <p class="sectionHint">Add Pokémon with the ＋👥 button on the card.</p>
+                <div id="sharedTeam" role="region" aria-label="Shared team" hidden></div>
+                <span id="teamStatus" class="visuallyHidden" role="status"></span>
+                <button type="button" class="btn" id="teamShareBtn" hidden>Share team</button>
+                <button type="button" class="btn" id="teamCardBtn" hidden>🖼️ Team card</button>
+                <button type="button" class="btn" id="teamSurpriseBtn">🎲 Surprise me</button>
+                <span class="surpriseOptions">
+                    <label><input type="checkbox" id="surpriseRegion" /> only the region I'm browsing</label>
+                    <label><input type="checkbox" id="surprisePartner" /> keep my partner</label>
+                </span>
+                <details id="teamPresets">
+                    <summary>📁 Saved teams</summary>
+                    <form id="teamPresetForm">
+                        <label for="teamPresetName">Save this team as</label>
+                        <input id="teamPresetName" maxlength="24" placeholder="e.g. Rain team" required />
+                        <button class="btn" id="teamPresetSave">Save</button>
+                    </form>
+                    <ul id="teamPresetList"></ul>
+                </details>
+                <p id="teamUndo" hidden></p>
+                <ol id="teamSlots"></ol>
+                <div id="teamSuggest" aria-live="polite"></div>
+                <div id="teamCoverage"></div>
+            </section>
+
+            <section id="quizSection" class="tileSection" aria-labelledby="quizHeading" hidden>
+                <h2 id="quizHeading">Who's that Pokémon?</h2>
+                <p id="quizScore"></p>
+                <button type="button" class="tierLine" id="quizTier" title="Open your badges"></button>
+                <label class="quizOption"
+                    >Pokémon from
+                    <select id="quizGeneration">
+                        <option value="">All generations</option>
+                    </select>
+                </label>
+                <button type="button" class="btn" id="quizStartBtn">Play</button>
+                <button type="button" class="btn" id="quizTimedBtn">⏱ 60-second challenge</button>
+                <p id="quizTimer" role="timer" aria-live="off" hidden></p>
+                <div id="quizCombo" aria-hidden="true" hidden>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div id="quizStage" hidden>
+                    <div id="quizArt">
+                        <img id="quizImage" alt="" width="240" height="240" />
+                    </div>
+                    <div id="quizChoices" role="group" aria-label="Choices"></div>
+                    <p id="quizResult" role="status"></p>
+                    <button type="button" class="btn" id="quizNextBtn" hidden>Next Pokémon</button>
+                </div>
+            </section>
+
+            <section id="huntSection" class="tileSection" aria-labelledby="huntHeading">
+                <h2 id="huntHeading">Shiny hunt</h2>
+                <p id="huntCounter"></p>
+                <p id="huntCharm" hidden></p>
+                <button type="button" class="tierLine" id="huntTier" title="Open your badges"></button>
+                <div class="huntControls">
+                    <label for="huntGeneration">Hunt in</label>
+                    <select id="huntGeneration">
+                        <option value="">All regions</option>
+                    </select>
+                    <button type="button" class="btn" id="huntEncounterBtn">🌿 Encounter!</button>
+                </div>
+                <div id="huntStage" hidden>
+                    <img id="huntSprite" alt="" width="160" height="160" />
+                </div>
+                <p id="huntResult" role="status"></p>
+                <h3 class="visuallyHidden" id="huntCollectionHeading">Your shinies</h3>
+                <ul id="huntCollection" aria-labelledby="huntCollectionHeading"></ul>
+            </section>
+
+            <section id="typeChartSection" class="tileSection" aria-labelledby="typeChartHeading" hidden>
+                <h2 id="typeChartHeading">Type chart</h2>
+                <button type="button" class="btn" id="typeChartBtn" aria-expanded="false" aria-controls="typeChart">
+                    Show type chart
+                </button>
+                <div id="typeChart" hidden></div>
+            </section>
+
+            <section id="compareSection" class="tileSection" aria-labelledby="compareHeading">
+                <h2 id="compareHeading">Compare Pokémon</h2>
+                <form id="compareForm">
+                    <input
+                        type="text"
+                        id="compareLeftInput"
+                        class="compareInput"
+                        placeholder="First Pokémon"
+                        aria-label="First Pokémon"
+                        autocomplete="off"
+                    />
+                    <span aria-hidden="true">vs</span>
+                    <input
+                        type="text"
+                        id="compareRightInput"
+                        class="compareInput"
+                        placeholder="Second Pokémon"
+                        aria-label="Second Pokémon"
+                        autocomplete="off"
+                    />
+                    <span aria-hidden="true">vs</span>
+                    <input
+                        type="text"
+                        id="compareThirdInput"
+                        class="compareInput"
+                        placeholder="Third (optional)"
+                        aria-label="Third Pokémon (optional)"
+                        autocomplete="off"
+                    />
+                    <button type="submit" class="btn" id="compareBtn">Compare</button>
+                </form>
+                <p id="compareStatus" role="status"></p>
+                <div id="compareResult" hidden>
+                    <table id="compareTable">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                    <figure id="compareRadar"></figure>
+                </div>
+            </section>
+
+            <section id="recentSection" class="tileSection" aria-labelledby="recentHeading" hidden>
+                <div class="sectionHeader">
+                    <h2 id="recentHeading">Recently viewed</h2>
+                    <button type="button" class="linkBtn" id="clearRecentBtn">Clear history</button>
+                </div>
+                <ul id="recentList" class="tileGrid compact"></ul>
+            </section>
+
+            <section id="favoritesSection" class="tileSection" aria-labelledby="favoritesHeading" hidden>
+                <h2 id="favoritesHeading">Favorites</h2>
+                <ul id="favoritesList" class="tileGrid"></ul>
+            </section>
+
+            <section id="browseSection" class="tileSection" aria-labelledby="browseHeading">
+                <h2 id="browseHeading">Browse the Pokédex</h2>
+                <h3 id="regionHeading" class="visuallyHidden">Explore by region</h3>
+                <ul id="regionStrip" aria-labelledby="regionHeading"></ul>
+                <button type="button" class="tierLine" id="regionTier" title="Open your badges"></button>
+                <div id="browseFilters">
+                    <label for="typeFilter">Type</label>
+                    <select id="typeFilter">
+                        <option value="">All types</option>
+                    </select>
+                    <label for="generationFilter">Generation</label>
+                    <select id="generationFilter">
+                        <option value="">All generations</option>
+                    </select>
+                    <label for="sortOrder">Sort</label>
+                    <select id="sortOrder">
+                        <option value="number">Number ↑</option>
+                        <option value="number-desc">Number ↓</option>
+                        <option value="name">Name A–Z</option>
+                        <option value="name-desc">Name Z–A</option>
+                    </select>
+                    <span class="unseenToggle">
+                        <label><input type="checkbox" id="unseenFilter" /> Unseen only</label>
+                        <button type="button" class="linkBtn" id="unseenCount" hidden></button>
+                    </span>
+                    <button type="button" class="btn" id="surpriseBtn">🎲 Surprise me</button>
+                </div>
+                <p id="browseStatus" role="status"></p>
+                <ul id="browseGrid" class="tileGrid"></ul>
+                <nav id="browsePagination" aria-label="Browse pages">
+                    <button type="button" class="btn" id="browsePrevBtn">‹ Prev</button>
+                    <span id="browsePageLabel"></span>
+                    <button type="button" class="btn" id="browseNextBtn">Next ›</button>
+                </nav>
+            </section>
+        </main>
+        <dialog id="shortcutsDialog" aria-labelledby="shortcutsHeading">
+            <div class="shortcutsScreen">
+                <h2 id="shortcutsHeading">Keyboard shortcuts</h2>
+                <dl>
+                    <div>
+                        <dt><kbd>/</kbd></dt>
+                        <dd>Search for a Pokémon</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>←</kbd> <kbd>→</kbd></dt>
+                        <dd>Previous / next Pokémon</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>S</kbd></dt>
+                        <dd>Toggle shiny</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>C</kbd></dt>
+                        <dd>Play the cry</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>N</kbd></dt>
+                        <dd>Next missing in the selected region</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>G</kbd></dt>
+                        <dd>Go to a Pokédex number</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>?</kbd></dt>
+                        <dd>Show this list</dd>
+                    </div>
+                    <div>
+                        <dt><kbd>Esc</kbd></dt>
+                        <dd>Close a dialog</dd>
+                    </div>
+                </dl>
+            </div>
+            <form method="dialog"><button class="btn" id="shortcutsClose">Got it</button></form>
+        </dialog>
+
+        <dialog id="gotoDialog" aria-labelledby="gotoHeading">
+            <form method="dialog" id="gotoForm">
+                <div class="shortcutsScreen">
+                    <h2 id="gotoHeading">Go to…</h2>
+                    <label for="gotoInput" class="gotoRow">
+                        <span aria-hidden="true">#</span>
+                        <span class="visuallyHidden">Pokédex number or name</span>
+                        <input
+                            id="gotoInput"
+                            type="text"
+                            autocomplete="off"
+                            spellcheck="false"
+                            placeholder="25"
+                            aria-describedby="gotoHint"
+                        />
+                    </label>
+                    <div id="gotoPreview">
+                        <img alt="" width="64" height="64" hidden />
+                        <span aria-live="polite"></span>
+                    </div>
+                    <p id="gotoHint">A number (1 – 1025) or a name · ↑↓ pick · Tab complete · Enter</p>
+                </div>
+                <button class="btn" id="gotoSubmit" value="go">Go!</button>
+            </form>
+        </dialog>
+
+        <p id="dexToast" role="status"></p>
+        <dialog id="trainerCard" aria-labelledby="trainerCardHeading">
+            <div class="trainerCardTop">
+                <h2 id="trainerCardHeading">Trainer card</h2>
+                <button type="button" id="trainerCardClose" aria-label="Close trainer card">✕</button>
+                <nav class="trainerJump" aria-label="Jump to">
+                    <button type="button" data-target="trainerProfileSection">Profile</button>
+                    <button type="button" data-target="trainerCardBadges">Badges</button>
+                    <button type="button" data-target="trainerRegionsHeading">Regions</button>
+                </nav>
+            </div>
+            <p id="trainerHallOfFame" hidden></p>
+            <p id="trainerCompletedOn" hidden></p>
+            <button type="button" class="btn" id="replayParadeBtn" hidden>🏆 Replay the parade</button>
+            <div class="trainerProfile" id="trainerProfileSection">
+                <div class="trainerAvatarWrap">
+                    <img id="trainerAvatar" alt="" width="96" height="96" />
+                    <button
+                        type="button"
+                        id="trainerAffection"
+                        aria-expanded="false"
+                        aria-controls="trainerHeartHint"
+                    ></button>
+                </div>
+                <div class="trainerFields">
+                    <label for="trainerName">Trainer name</label>
+                    <input id="trainerName" type="text" maxlength="20" autocomplete="off" placeholder="Red" />
+                    <label for="trainerPartner">Partner Pokémon</label>
+                    <select id="trainerPartner"></select>
+                    <label for="trainerStyle">Card style</label>
+                    <select id="trainerStyle">
+                        <option value="classic">Classic red</option>
+                        <option value="holo">Holo foil</option>
+                        <option value="retro">Retro green</option>
+                    </select>
+                </div>
+            </div>
+            <p id="trainerHeartHint" hidden></p>
+            <p id="trainerCardSeen"></p>
+            <p id="trainerCardVisits"></p>
+            <div id="trainerCalendar" role="img" aria-label="Visit calendar"></div>
+            <ul id="trainerCardBadges" aria-label="Badges"></ul>
+            <p id="trainerNextBadge"></p>
+            <ul id="trainerCardStats"></ul>
+            <h3 id="trainerTopHeading">Your top 5</h3>
+            <ol id="trainerTop" aria-labelledby="trainerTopHeading"></ol>
+            <h3 id="trainerRegionsHeading">Regions</h3>
+            <ul id="trainerCardRegions"></ul>
+            <div class="trainerCardActions">
+                <button type="button" class="btn" id="trainerShareBtn">📋 Share trainer card</button>
+                <button type="button" class="btn" id="trainerImageBtn">🖼️ Save image</button>
+                <span id="trainerShareStatus" role="status"></span>
+            </div>
+        </dialog>
+        <script type="module" src="pokemon.js"></script>
     </body>
 </html>
