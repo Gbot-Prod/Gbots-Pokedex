@@ -41,6 +41,11 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Coverage chart: sort toggle (by type order / by most weak first) so the danger types float to the top
 - [ ] Balance scoring: credit resistances too (+5 for each shared weakness someone resists), so a member that covers a weakness isn't scored as a net loss just for bringing its own weak spots
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
+- [ ] Saved teams step 2: a mini row of the saved team's six sprites inside its load button, so presets are recognisable at a glance
+- [ ] Saved teams step 3: rename a saved team in place (double-click / Rename link) and reorder by dragging
+- [ ] Team ideas: a "Surprise me" button that builds a 90+ balance team from Pokémon you've seen (random search like the one used to find test teams)
+- [ ] Balance badge: a "Master strategist" badge on the trainer card for building a 90+ team
+- [ ] Team card step 4: include the balance score as a big gauge in the top-right corner of the shareable team card
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
 - [ ] Test edits: a lesson from this run — an assertion was inserted into the wrong test because the anchor text appeared twice; prefer anchoring on the test's name when editing tests by script
