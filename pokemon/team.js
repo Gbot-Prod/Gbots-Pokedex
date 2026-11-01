@@ -118,9 +118,12 @@ export function sharedWeaknesses(memberMultipliers) {
 const undoElement = document.getElementById("teamUndo");
 let undoTimer = null;
 
+let justLanded = new Set(); // members added by the last change, for the settle bounce
+
 function changeTeam(next, message) {
     const previous = team;
     team = next;
+    justLanded = new Set(next.filter((member) => !previous.some((old) => old.id === member.id)).map(({ id }) => id));
     saveTeam();
     renderTeam();
     updateTeamButton();
@@ -140,6 +143,7 @@ function changeTeam(next, message) {
         updateTeamButton();
         statusElement.textContent = "Undone: " + message.charAt(0).toLowerCase() + message.slice(1);
     });
+    justLanded = new Set(); // only the render right after the change bounces
     undoElement.replaceChildren(text, " · ", undo);
     undoElement.hidden = false;
     clearTimeout(undoTimer);
@@ -177,7 +181,7 @@ function renderSlots() {
     for (let index = 0; index < TEAM_SIZE; index++) {
         const member = team[index];
         const slot = document.createElement("li");
-        slot.className = "teamSlot" + (member ? "" : " empty");
+        slot.className = "teamSlot" + (member ? "" : " empty") + (member && justLanded.has(member.id) ? " landed" : "");
         if (member) {
             const open = document.createElement("button");
             open.type = "button";

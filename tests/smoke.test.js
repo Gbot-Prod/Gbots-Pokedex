@@ -642,6 +642,7 @@ test("the team builder adds Pokémon from the card and charts type coverage", as
     await page.click(".teamSuggestionAdd"); // straight into the team
     await page.waitForFunction(() => document.querySelectorAll(".teamSlot:not(.empty)").length === 3);
     await page.waitForSelector(".teamBalanceScore .balanceFloater"); // the score's change floats up
+    assert.equal(await page.locator(".teamSlot.landed").count(), 1); // the new member's slot bounces
     // The team as a share card, through the same preview.
     await page.evaluate(() => delete Navigator.prototype.canShare);
     const download = page.waitForEvent("download");

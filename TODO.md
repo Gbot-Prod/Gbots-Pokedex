@@ -44,7 +44,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Undo step 2: Ctrl/Cmd+Z while the undo bar is showing triggers it (and the bar mentions the shortcut on desktop)
 - [ ] Team builder: a little confetti pop when the team reaches 6 members with a balance of 70 or more
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
-- [ ] Team slots: a gentle "settle" bounce on the slot a new member lands in (instant under reduced motion)
 - [ ] Team presets step 1: a "Save as…" button storing the current team under a name, and a select to switch back to it
 - [ ] Test harness: add a helper for seeding localStorage before the first page load (addInitScript) so tests stop needing a reload after seeding
 - [ ] Live-check fixes: review which smoke tests assume fixture-only data (like the animated toggle did) and make each one branch on LIVE_API or use data both sources share
@@ -444,3 +443,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Suggestions step 5: show the score the team would have with each suggestion ("→ 74") inside its pill (2026-11-01) — each suggestion shows how the team balance would change with it (+3 green / −7 red badge, exact before→after in the tooltip and for screen readers), and picks are ranked by the resulting balance; live this showed every Ground fix costing balance — see the new scoring idea
 - [x] Team history: undo the last add/remove with a toast button ("Gengar removed · Undo") (2026-11-01) — every team change (card button, ×, suggestion ＋, loading a shared team) goes through changeTeam(), which shows 'Gengar removed from your team · Undo' for 8 s; Undo restores the team as it was and announces it
 - [x] Balance meter step 2: a "+N" / "−N" floater next to the score when adding or removing a member changes it (instant under reduced motion) (2026-11-01) — when the team changes, the difference floats up from the balance score ('+6' green / '−12' red, lighter shades in dark mode) and fades over 1.4 s; hidden under reduced motion
+- [x] Team slots: a gentle "settle" bounce on the slot a new member lands in (instant under reduced motion) (2026-11-01) — a newly added member's slot drops in with a 0.55 s settle bounce (only on the render right after the change; none under reduced motion)

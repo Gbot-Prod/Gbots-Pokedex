@@ -6730,3 +6730,21 @@ img.animatedSmall {
         opacity: 0;
     }
 }
+
+/* a new member drops into its slot with a little settle bounce */
+.teamSlot.landed {
+    animation: slotLand 0.55s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes slotLand {
+    from {
+        transform: translateY(-14px) scale(0.92);
+        opacity: 0.4;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .teamSlot.landed {
+        animation: none;
+    }
+}
