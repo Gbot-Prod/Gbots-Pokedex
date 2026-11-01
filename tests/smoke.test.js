@@ -743,7 +743,8 @@ test("Surprise me builds a team of six from Pokémon you've seen", async () => {
     );
     await page.reload();
     await page.click("#teamSurpriseBtn");
-    await page.waitForFunction(() => document.querySelectorAll(".teamSlot:not(.empty)").length === 6);
+    await page.waitForFunction(() => document.getElementById("teamUndo").textContent.startsWith("🎲")); // after the roll
+    assert.equal(await page.locator(".teamSlot:not(.empty, .rolling)").count(), 6);
     assert.match(await page.textContent("#teamUndo"), /^🎲 A surprise team, balance \d+ \/ 100 · Undo$/);
     // every member is one you've seen
     const ids = await page.evaluate(() =>

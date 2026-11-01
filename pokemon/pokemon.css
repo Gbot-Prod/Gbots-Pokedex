@@ -6830,3 +6830,17 @@ img.animatedSmall {
     background: radial-gradient(circle at 35% 30%, #f3e8ff, #c084fc 60%, #7e22ce);
     box-shadow: 0 0 12px rgba(192, 132, 252, 0.7);
 }
+
+/* Surprise me: the slots flicker through random sprites while the dice roll */
+.teamSlot.rolling img {
+    width: 72px;
+    height: 72px;
+    filter: blur(1px) brightness(1.1);
+    animation: diceJitter 0.18s steps(2) infinite;
+}
+
+@keyframes diceJitter {
+    50% {
+        transform: translateY(-4px) rotate(6deg);
+    }
+}

@@ -43,7 +43,6 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [ ] Balance history: a tiny sparkline next to the meter of the last 10 balance scores, so improvements show over time
 - [ ] Saved teams step 3: rename a saved team in place (double-click / Rename link) and reorder by dragging
 - [ ] Surprise me step 2: options — "only my region" (limit to the selected region) and "keep my partner" (always include the trainer card partner)
-- [ ] Surprise me step 3: show the dice rolling (a quick shuffle of sprites through the slots) before the team lands; instant under reduced motion
 - [ ] Strategist badge step 2: tiers like the other badges (bronze 80, silver 90, gold 100)
 - [ ] Trainer card stat: "Best team balance" as a seventh stat tile next to Team members
 - [ ] Surprise me in the quiz: "Guess the balance" — show a random six, guess its score within 10 for a point
@@ -454,3 +453,4 @@ Bold, fun additions. Everything here must respect prefers-reduced-motion, dark m
 - [x] Team card step 4: include the balance score as a big gauge in the top-right corner of the shareable team card (2026-11-01) — the team card shows the balance score as a half-ring gauge in the top-right corner (fill and hue follow the score, 'BALANCE' under the number; left off when type data couldn't load)
 - [x] Team ideas: a "Surprise me" button that builds a 90+ balance team from Pokémon you've seen (random search like the one used to find test teams) (2026-11-01) — '🎲 Surprise me' builds six from Pokémon you've seen: the 18 type lists give each seen Pokémon's types, bestLineUp (unit-tested) keeps the best-balanced of 400 random line-ups (live: 82–88/100), loaded through changeTeam so Undo works; with fewer than six seen it says so
 - [x] Balance badge: a "Master strategist" badge on the trainer card for building a 90+ team (2026-11-01) — a ninth badge, 🧠 Master strategist (purple), earned by building a team with balance 90+; the team builder records the best balance reached (pokedex:best-balance:v1) and re-checks badges, so the usual badge toast announces it
+- [x] Surprise me step 3: show the dice rolling (a quick shuffle of sprites through the slots) before the team lands; instant under reduced motion (2026-11-01) — before the surprise team lands, all six slots flicker through random seen sprites (7 frames, 90 ms, jittering and slightly blurred) — skipped under reduced motion

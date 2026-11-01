@@ -225,11 +225,38 @@ async function surpriseTeam() {
             const { id, name, types } = candidates[index];
             return { id, name, label: slugs?.get(id) ? speciesDisplayName(slugs.get(id)) : formatName(name), types };
         });
+        await rollDice(candidates);
         changeTeam(members, "🎲 A surprise team, balance " + score + " / 100");
     } catch {
         statusElement.textContent = "Couldn't load the type data — try again when you're online";
     } finally {
         button.disabled = false;
+    }
+}
+
+// The dice rolling: random seen Pokémon flicker through all six slots for a moment before the
+// chosen team lands (skipped under reduced motion).
+async function rollDice(candidates) {
+    if (reducedMotion.matches) {
+        return;
+    }
+    const slots = Array.from({ length: TEAM_SIZE }, () => {
+        const slot = document.createElement("li");
+        slot.className = "teamSlot rolling";
+        slot.setAttribute("aria-hidden", "true");
+        const sprite = document.createElement("img");
+        sprite.alt = "";
+        sprite.width = 72;
+        sprite.height = 72;
+        slot.append(sprite);
+        return slot;
+    });
+    slotsElement.replaceChildren(...slots);
+    for (let frame = 0; frame < 7; frame++) {
+        for (const slot of slots) {
+            setSmallSprite(slot.firstChild, candidates[Math.floor(Math.random() * candidates.length)].id);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 90));
     }
 }
 
